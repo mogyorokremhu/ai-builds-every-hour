@@ -6,11 +6,13 @@ import random
 from .entities import Entity
 
 
-def attack(attacker: Entity, defender: Entity, rng: random.Random) -> tuple[int, str]:
-    """Resolve one melee attack. Returns (damage, message)."""
+def attack(attacker: Entity, defender: Entity, rng: random.Random, bonus: int = 0) -> tuple[int, str]:
+    """Resolve one melee attack (``bonus`` adds flat damage, e.g. sneak attacks).
+
+    Returns (damage, message)."""
     assert attacker.fighter and defender.fighter
     roll = rng.randint(-1, 2)
-    damage = max(0, attacker.fighter.power + roll - defender.fighter.defense)
+    damage = max(0, attacker.fighter.power + roll + bonus - defender.fighter.defense)
     dealt = defender.fighter.take_damage(damage)
     a = "You" if "player" in attacker.tags else f"The {attacker.name}"
     d = "you" if "player" in defender.tags else f"the {defender.name}"

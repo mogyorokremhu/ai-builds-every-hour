@@ -73,6 +73,7 @@ class Entity:
     on_hit: tuple[str, int, int, float] | None = None  # (status, turns, power, chance)
     spell: str | None = None    # key into ai.SPELLS for casters
     ai_state: dict[str, Any] = field(default_factory=dict)
+    asleep: bool = False        # sleeping monsters ignore you until noise wakes them
 
     @property
     def confused(self) -> int:
@@ -117,6 +118,10 @@ MONSTER_TEMPLATES: dict[str, dict] = {
                           weight=10, ai="caster", spell="hex of slowness"),
     "fire beetle": dict(glyph="b", color="bright_red", hp=16, power=4, defense=3, xp=30, min_depth=3,
                         weight=12, speed=70, on_hit=("burning", 3, 2, 0.4)),
+    "myconid": dict(glyph="m", color="bright_magenta", hp=12, power=3, defense=1, xp=26, min_depth=4,
+                    weight=8, speed=80, on_hit=("confused", 3, 0, 0.35)),
+    "magma hound": dict(glyph="h", color="bright_red", hp=14, power=5, defense=1, xp=40, min_depth=7,
+                        weight=10, ai="pack", speed=140, pack=(2, 3), on_hit=("burning", 3, 2, 0.3)),
     "cave troll": dict(glyph="T", color="magenta", hp=22, power=6, defense=2, xp=55, min_depth=4, weight=8),
 }
 

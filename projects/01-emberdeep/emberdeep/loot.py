@@ -14,6 +14,9 @@ LOOT_TABLE: list[tuple[str, int, int, int]] = [
     ("confusion scroll", 1, 99, 10),
     ("teleport scroll", 2, 99, 6),
     ("fireball scroll", 3, 99, 9),
+    ("torch", 1, 99, 9),
+    ("ration", 1, 99, 9),
+    ("glowcap", 3, 99, 4),
     ("dagger", 1, 3, 6),
     ("leather armor", 1, 4, 6),
     ("sword", 3, 99, 5),
@@ -26,13 +29,15 @@ LOOT_TABLE: list[tuple[str, int, int, int]] = [
 ]
 
 
-def table_for(depth: int) -> list[tuple[str, int]]:
-    return [(k, w) for k, lo, hi, w in LOOT_TABLE if lo <= depth <= hi]
+def table_for(depth: int, bias: dict[str, float] | None = None) -> list[tuple[str, float]]:
+    """Weighted pool for ``depth``; ``bias`` multiplies the weight of specific items (themes)."""
+    bias = bias or {}
+    return [(k, w * bias.get(k, 1.0)) for k, lo, hi, w in LOOT_TABLE if lo <= depth <= hi]
 
 
-def roll_loot(depth: int, rng: random.Random) -> Item:
+def roll_loot(depth: int, rng: random.Random, bias: dict[str, float] | None = None) -> Item:
     """Pick a random item appropriate for ``depth``."""
-    pool = table_for(depth)
+    pool = table_for(depth, bias)
     keys, weights = zip(*pool)
     return make_item(rng.choices(keys, weights=weights)[0])
 

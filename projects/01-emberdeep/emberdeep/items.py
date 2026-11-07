@@ -21,7 +21,7 @@ class Item:
     name: str
     glyph: str
     color: str
-    kind: str                       # potion | scroll | weapon | armor | ring
+    kind: str                       # potion | scroll | weapon | armor | ring | tool | food
     effect: str | None = None       # heal | haste | lightning | fireball | confuse | teleport
     targeting: str | None = TARGET_NONE
     magnitude: int = 0              # healing amount / damage / turns
@@ -65,13 +65,18 @@ class Item:
             bits.append(f"haste for {self.magnitude} turns")
         elif self.effect == "teleport":
             bits.append("random teleport")
+        elif self.effect == "refuel":
+            bits.append(f"+{self.magnitude} torch fuel")
+        elif self.effect == "eat":
+            bits.append(f"+{self.magnitude} food")
         return ", ".join(bits)
 
 
 def plural(name: str) -> str:
     """Pluralise 'potion of healing' -> 'potions of healing'."""
     head, sep, tail = name.partition(" of ")
-    return f"{head}s{sep}{tail}" if sep else f"{name}s"
+    suffix = "es" if head.endswith(("ch", "sh", "s", "x")) else "s"
+    return f"{head}{suffix}{sep}{tail}"
 
 
 def _c(key: str, name: str, glyph: str, color: str, kind: str, **kw) -> Item:
@@ -95,6 +100,13 @@ ITEM_TEMPLATES: dict[str, Item] = {
                            effect="confuse", targeting=TARGET_CELL, magnitude=8, range=8, stackable=True),
     "teleport scroll": _c("teleport scroll", "scroll of teleportation", "?", "bright_cyan", "scroll",
                           effect="teleport", stackable=True),
+    # supplies
+    "torch": _c("torch", "torch", "(", "bright_yellow", "tool", effect="refuel", magnitude=700,
+                stackable=True),
+    "ration": _c("ration", "food ration", "%", "yellow", "food", effect="eat", magnitude=1200,
+                 stackable=True),
+    "glowcap": _c("glowcap", "glowcap mushroom", "%", "bright_green", "food", effect="eat",
+                  magnitude=450, stackable=True),
     # weapons
     "dagger": _c("dagger", "dagger", "/", "bright_white", "weapon", slot="weapon", power_bonus=1),
     "sword": _c("sword", "sword", "/", "bright_cyan", "weapon", slot="weapon", power_bonus=3),
