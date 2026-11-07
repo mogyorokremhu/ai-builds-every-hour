@@ -2,15 +2,18 @@
 
 A dependency-free terminal roguelike written in pure Python. Descend through
 procedurally generated, ever-hotter caverns, fight monsters, gather loot and
-try to reach the Ember Heart at depth 10.
+try to reach the Ember Heart at depth 10 — slay its guardian and carry the Heart away.
 
-**Status:** in development (built hourly, see [ROADMAP.md](ROADMAP.md))
+**Status:** in development — fully playable and winnable (built hourly, see [ROADMAP.md](ROADMAP.md))
 
 ## Run
 ```bash
 cd projects/01-emberdeep
-python -m emberdeep          # random seed
+python -m emberdeep          # random seed (resumes your saved game if there is one)
 python -m emberdeep 1234     # fixed seed
+python -m emberdeep --daily  # today's shared daily dungeon (--daily=2026-11-07 replays a day)
+python -m emberdeep --new    # ignore the saved game
+python -m emberdeep --scores # print the hall of fame
 python -m unittest discover -s tests -t .   # tests
 ```
 
@@ -26,7 +29,7 @@ python -m emberdeep --text   # force text mode
 ## Controls (curses)
 | Key | Action |
 |---|---|
-| arrows · `hjkl yubn` · numpad | move / attack |
+| arrows · `hjkl yubn` · numpad | move / attack (bump a closed door to open it) |
 | `.` `5` `s` | wait |
 | `g` `,` | pick up |
 | `i` + letter | use an item (scrolls may open the targeting cursor; eat food, light torches) |
@@ -37,7 +40,9 @@ python -m emberdeep --text   # force text mode
 | `m` | message history (scroll with `j`/`k`, PgUp/PgDn) |
 | `S` | search for hidden traps (radius 2) |
 | `p` | pray at an altar (once each) |
-| `?` | help · `Q` quit |
+| `c` | close an adjacent door (asks for a direction if there are several) |
+| `H` | hall of fame |
+| `?` | help · `Q` save & quit |
 
 Targeting: move the cursor, `Tab` jumps between enemies, `Enter`/`f` fires, `Esc` cancels.
 When you level up a popup asks for your boon (`v` / `m` / `g`).
@@ -45,7 +50,7 @@ When you level up a popup asks for your boon (`v` / `m` / `g`).
 ## Controls (text mode)
 Type keys then Enter (chainable, e.g. `ddddw`): `w a s d` move · `q e z c` diagonals ·
 `.` wait · `g` pick up · `i` inventory · `u<letter>` use/equip · `r<letter>` drop ·
-`>` descend · `f` search · `p` pray · `+v`/`+m`/`+g` level-up boon · `x` quit
+`>` descend · `f` search · `p` pray · `k` close door · `+v`/`+m`/`+g` level-up boon · `x` save & quit
 (statuses appear in brackets on the status line)
 
 ## Items
@@ -58,6 +63,7 @@ Type keys then Enter (chainable, e.g. `ddddw`): `w a s d` move · `q e z c` diag
 | `=` | rings of strength, protection, vitality |
 | `(` | torch (refuels your light) |
 | `%` | food ration, glowcap mushroom (fungal caves) |
+| `*` | the Ember Heart — the goal of the game |
 
 Loot gets better with depth (see `loot.py`) and each theme favours some items.
 
@@ -74,6 +80,7 @@ Loot gets better with depth (see `loot.py`) and each theme favours some items.
 | `m` | myconid | slow (80), spores may confuse you (fungal caves) |
 | `h` | magma hound | **pack**, fast (140), burning bite (magma halls) |
 | `T` | cave troll | chases, hits hard |
+| `&` | **Ember Guardian** | the final boss (depth 10) — see below |
 
 Monsters path with A*, remember where they last saw you and walk there to search.
 **Energy system:** every creature gains energy proportional to its speed; it acts each
@@ -86,6 +93,7 @@ right next to you may wake. Attacking a sleeping monster is a **sneak attack** (
 
 **Status effects:** burning and poisoned deal damage each action, confused creatures
 stumble randomly, slowed halves speed, hasted doubles it (haste and slow cancel).
+Fire creatures (imps, fire beetles, magma hounds) are immune to burning.
 
 ## Progression & survival
 * **Levels:** XP from kills fills a level bar. Each level-up asks you to pick a boon —
@@ -102,7 +110,7 @@ stumble randomly, slowed halves speed, hasted doubles it (haste and slow cancel)
 | 1–3 | the Old Cellars | rooms & corridors or BSP halls with doors, rubble; rats & kobolds |
 | 4–6 | the Fungal Caves | cellular-automata caves with glowing fungus; spiders & myconids |
 | 7–9 | the Magma Halls | BSP halls broken by lava pools (never cutting the level apart); fire beasts |
-| 10+ | the Ember Heart | a molten cavern |
+| 10 | the Ember Heart | the final arena: no stairs, the guardian's sanctum ringed by lava |
 
 **Special rooms:** treasury (good loot, sleeping guards), shrine (altar `_`: pray once for a
 full heal and a permanent blessing), trap room (bait on a trapped floor), library (scrolls).
@@ -111,31 +119,63 @@ full heal and a permanent blessing), trap room (bait on a trapped floor), librar
 hidden until you notice them (when adjacent) or search (`S`). Stepping onto a known trap
 needs a second deliberate move. Monsters never trigger traps.
 
+**Doors:** BSP levels have doors. Closed doors (`+`) block movement and sight — bump into one
+to open it (`'`), press `c` to close it again. Monsters open doors when they hunt you, but a
+closed door hides you from anything on the other side — handy for breaking line of sight.
+
+## The Ember Guardian
+Depth 10 is a hand-shaped arena: a wide molten cavern with basalt pillars for cover and
+the guardian's sanctum inside a ring of lava crossed by three narrow bridges. The
+**Ember Guardian** (`&`, 110 HP) is immune to fire and confusion and fights in phases:
+
+1. **Awakened** — melee and *magma burst* (ranged, sets you alight).
+2. **Kindled** (≤ 66 % HP) — summons magma hounds, fire beetles and imps; *fire nova*
+   scorches everything within two tiles.
+3. **Enraged** (≤ 33 % HP) — faster (140) and stronger, abilities come more often.
+
+When it dies its servants crumble and it leaves the **Ember Heart** (`*`). Pick it up to win.
+
+## Saves, scores & the daily run
+* **Save & quit** with `Q` (curses) or `x` (text mode). Starting the game again resumes the
+  run — and deletes the save (**permadeath**: no reloading after a bad fight). Dying or
+  winning deletes it too. The save is plain JSON and includes the random generator's state,
+  so a resumed game continues exactly as it would have.
+* Every finished run is written to a **morgue file** (character, equipment, pack, kills by
+  monster, last messages and a map dump) and scored into the **hall of fame**
+  (depth × 150 + XP + kills, plus a big victory bonus that is larger for faster wins).
+* **Daily run** (`--daily`): the seed comes from the UTC date, so everyone gets the same
+  dungeon that day. Only your first daily attempt is ranked; repeats are marked practice.
+* Files live in `$EMBERDEEP_HOME` (default `~/.emberdeep`): `save.json`, `scores.json`, `morgue/`.
+
 ## Architecture
 | Module | Purpose |
 |---|---|
 | `geometry.py` | Rect, Bresenham lines, distances |
-| `tiles.py` / `gamemap.py` | Tile types and the map with visibility memory |
+| `tiles.py` / `gamemap.py` | Tile types (incl. open/closed doors) and the map with visibility memory |
 | `dungeon.py` | Room-and-corridor generator |
 | `gen_bsp.py` / `gen_caves.py` | BSP generator with doors, cellular-automata caves |
 | `levelgen.py` / `themes.py` | Theme-driven level assembly, decorations (lava kept connectable) |
+| `boss.py` | Boss arena generator and the Ember Guardian's phased AI |
+| `save.py` | JSON save/load with RNG state, permadeath helpers, data directory |
+| `scores.py` / `morgue.py` / `daily.py` | Hall of fame, morgue files + run finishing, daily seeds |
 | `vaults.py` / `traps.py` | Special rooms, shrines & prayer; trap placement, detection, effects |
 | `progression.py` / `resources.py` | XP levels & boons; torch fuel and hunger |
 | `fov.py` | Recursive shadowcasting field of view |
-| `entities.py` | Entities, fighters (with equipment bonuses), monster templates |
+| `entities.py` | Entities, fighters (with equipment bonuses), monster templates, immunities |
 | `items.py` | Item data + templates (potions, scrolls, supplies, weapons, armor, rings) |
 | `inventory.py` / `equipment.py` | a–z stacking inventory, weapon/armor/ring slots |
 | `loot.py` | Depth-aware loot tables with theme bias |
 | `targeting.py` | Projectile paths, blast areas, targeting cursor |
 | `combat.py` | Melee resolution (with sneak-attack bonus) |
 | `pathfinding.py` | A*, Dijkstra maps, flee (safety) maps |
-| `ai.py` | Monster behaviours (chase/coward/caster/pack), spells, sleeping & waking |
+| `ai.py` | Monster behaviours (chase/coward/caster/pack), spells, sleeping & waking, doors |
 | `status.py` | Status effects with ticking, stacking and speed multipliers |
 | `look.py` | Look-mode cell descriptions |
 | `messages.py` | Colour-aware message log with stacking |
-| `game.py` | Turn logic + energy system, levels, item effects, statuses (renderer-independent) |
+| `game.py` | Turn logic + energy system, levels, item effects, statuses, victory (renderer-independent) |
 | `hud.py` / `colors.py` / `keys.py` | Sidebar content, colour table, key bindings |
 | `ui_curses.py` | Real-time curses interface (testable through a fake screen) |
 | `render_ascii.py` | Text renderer for text mode |
 
-Tests: 132 unit tests, including full UI runs against a fake curses screen.
+Tests: 173 unit tests, including full UI runs against a fake curses screen and
+save/load determinism checks (a loaded game must replay identically to the original).

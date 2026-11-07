@@ -57,3 +57,24 @@
 - Tests: 86 → 132 (new `tests/test_progression.py`); 60-game random bot fuzz across all themes, no crashes;
   real pty smoke test; verified from a fresh clone after pushing
 - mini/ascii-animations (new): fire, starfield, Game of Life, spinning torus, plasma, digital rain
+
+## 2026-11-07 23:00 UTC — hour 5: Emberdeep endgame — Ember Guardian boss, save/load + permadeath, hall of fame, morgue, daily seed, doors
+- Emberdeep Phase 6 complete:
+  - `boss.py`: depth 10 is a hand-shaped arena (molten cavern, basalt pillars, lava-ringed sanctum with
+    three bridges, no stairs). The **Ember Guardian** fights in 3 phases: magma burst, summoned fire
+    creatures, fire nova, enrage (speed 140, +2 power). Killing it drops the Ember Heart; picking it up wins
+  - Victory state (`game.victory`, victory screen), fire immunity for fire creatures, boss immune to
+    burning and confusion, kill counts per monster
+  - `save.py`: full JSON save/load including the RNG state (a loaded game replays identically — tested),
+    atomic writes, corrupt/old-save detection, permadeath (save consumed on load, deleted on death/victory)
+  - `scores.py`: hall of fame (top 50, `H` in game, `--scores`), score formula with victory/speed bonus
+  - `morgue.py`: morgue file per finished run (character, boons, gear, pack, kills, last messages, map dump)
+    and `finish_run()` used by both front-ends
+  - `daily.py`: `--daily` / `--daily=YYYY-MM-DD` seed from the UTC date; repeat daily attempts are unranked
+  - CLI rewritten: resume save automatically, `--new`, `--scores`, `--daily`, unknown-argument help
+- Phase 5 leftover: doors open/close — closed doors block movement and sight, bump to open, `c` to close
+  (`k` in text mode), monsters open doors while hunting, BSP levels get a mix of open and closed doors
+- Tests: 132 → 173 (new `tests/test_endgame.py`, `tests/test_save.py`); 40-game random bot fuzz with save
+  round-trips; 12 scripted boss fights (strong hero wins 9/12); real pty smoke test of save → resume;
+  verified from a fresh clone after pushing
+- mini/drawings: Koch snowflake, dragon curve, Hilbert curve, ASCII mountains, Lissajous figures, Julia sets

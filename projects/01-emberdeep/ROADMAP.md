@@ -55,15 +55,21 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Vaults and special rooms (treasury, shrine, trap room, library)
 - [x] Traps (hidden, passive detection, search command, 5 kinds, confirm before stepping on known ones)
 - [x] New monsters: myconid (confusing spores), magma hound (fire pack)
-- [ ] Openable/closable doors (and the occasional locked one)
+- [x] Openable/closable doors (bump to open, `c` to close; monsters open them; closed doors block sight)
+- [ ] The occasional locked door (key or forcing it open)
 - [ ] Lit rooms / wall braziers that don't need your torch
 - [ ] Knockback into lava (and monsters avoiding lava when fleeing)
 
-## Phase 6 — Endgame & persistence
-- [ ] Boss at depth 10: the Ember Heart guardian
-- [ ] Save/load (JSON) + permadeath delete on death
-- [ ] High-score table and morgue file (run summary)
-- [ ] Daily seed mode
+## Phase 6 — Endgame & persistence ✅
+- [x] Boss at depth 10: the Ember Guardian in a lava-ringed arena (3 phases: magma burst, summons, fire nova, enrage)
+- [x] Victory: the guardian drops the Ember Heart; picking it up wins the run
+- [x] Fire immunity for fire creatures; boss immune to burning & confusion
+- [x] Save/load (JSON, includes RNG state so a loaded game continues identically) + permadeath
+      (save consumed on load, deleted on death/victory)
+- [x] High-score table (hall of fame, `H` in game, `--scores` on the CLI) and morgue file (run summary + map dump)
+- [x] Daily seed mode (`--daily`, `--daily=YYYY-MM-DD`; repeat attempts marked practice)
+- [ ] Post-victory "ascend" stats screen with a run timeline (depth reached per turn)
+- [ ] Optional "keep save on load" wizard/explore mode flag
 
 ## Phase 7 — Polish
 - [ ] Balance pass with an automated bot that plays 1000 runs and reports stats
