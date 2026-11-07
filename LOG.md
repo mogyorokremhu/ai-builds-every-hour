@@ -22,3 +22,18 @@
   also smoke-tested in a real pty
 - mini/puzzles (new): sudoku solver, N-queens, optimal 15-puzzle (IDA*), knight's tour,
   animated Hanoi, nonogram solver
+
+## 2026-11-07 21:00 UTC — hour 3: Emberdeep smarter monsters (Phase 4) + look mode
+- Emberdeep Phase 4 core complete:
+  - `pathfinding.py`: A* (octile costs, crowd penalties), Dijkstra maps, Brogue-style flee maps
+  - `ai.py`: chase / coward / caster / pack behaviours, monster memory of last-seen position,
+    spells with cooldowns and line-of-fire checks (ember bolt, hex of slowness)
+  - `status.py`: burning, poisoned, confused, slowed, hasted with stacking, ticking, cancelling
+  - Energy/speed system in `game.end_turn`: fast monsters act several times, slow ones skip,
+    hasted/slowed player changes action time
+  - 4 new monsters (jackal packs, cave spider, fire beetle, kobold shaman), on-hit statuses,
+    potion of speed, healing cures poison, death cause on the death screen
+- Look mode (`x`/`;`) with `look.py` cell descriptions (health, speed, statuses, behaviour hints)
+- HUD shows player status effects with turns left and monster status tags; text mode shows them too
+- Tests: 53 → 86 (new `tests/test_ai.py`); 40-game bot fuzz run with no crashes
+- mini/tools (new): calc (Pratt parser), hexdump (+reverse), passphrase, tree, wordfreq, units

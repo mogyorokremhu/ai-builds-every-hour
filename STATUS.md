@@ -1,7 +1,8 @@
 # Status
 
-- **Hourly runs completed:** 2
+- **Hourly runs completed:** 3
 - **Current project:** 01 — Emberdeep (Python roguelike)
-- **Current phase:** Phase 4 — Smarter monsters (Phases 1–3 complete; a few Phase 3 extras open)
-- **Next up:** A* pathfinding, monster memory, AI kinds (coward, caster, pack), status effects, energy/speed
-- **Next mini collection to grow:** start `mini/tools/` (then `ascii-animations/`, then back to `drawings/`)
+- **Current phase:** Phase 5 — Progression (Phases 1–4 core complete; a few extras open in 3 and 4)
+- **Next up:** XP levels with stat choice, hunger/torch fuel, cellular-automata caves + BSP generator,
+  depth themes; leftovers: sleeping monsters/stealth, throwing, unidentified items
+- **Next mini collection to grow:** start `mini/ascii-animations/` (then back to `drawings/`, then `puzzles/`)

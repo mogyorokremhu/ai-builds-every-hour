@@ -29,17 +29,23 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Targeting mode for ranged scrolls (cursor + Bresenham line)
 - [x] Equipment slots: weapon, armor, ring; equip/unequip
 - [x] Loot tables by depth
-- [ ] Look mode (`x`): move a cursor and describe what's there
+- [x] Look mode (`x`): move a cursor and describe what's there
 - [ ] Throwing items / potions shatter on impact
 - [ ] Unidentified potions & scrolls with random names per run
 - [ ] Item weight/encumbrance or pack limit warnings
 
-## Phase 4 — Smarter monsters
-- [ ] A* pathfinding (stdlib heapq)
-- [ ] Monsters remember the player's last seen position
-- [ ] AI kinds: chase, coward (flees at low HP), ranged caster, pack hunter
-- [ ] Status effects system: burning, poisoned, confused, slowed
-- [ ] Energy/speed system (fast & slow monsters)
+## Phase 4 — Smarter monsters ✅ (core)
+- [x] A* pathfinding (stdlib heapq) + Dijkstra maps and Brogue-style flee maps
+- [x] Monsters remember the player's last seen position
+- [x] AI kinds: chase, coward (flees at low HP), ranged caster, pack hunter
+- [x] Status effects system: burning, poisoned, confused, slowed (+ hasted)
+- [x] Energy/speed system (fast & slow monsters)
+- [x] New monsters: jackal packs, cave spider (poison), fire beetle (burns), kobold shaman (slow hex)
+- [x] Monster on-hit statuses, spells with cooldowns and line-of-fire checks
+- [x] Potion of speed; healing cures poison; death cause tracked
+- [ ] Sleeping monsters + noise/stealth (monsters wake when you're loud or close)
+- [ ] Spell projectiles animated in the curses UI
+- [ ] Monsters pick up / use items (kobolds drink potions)
 
 ## Phase 5 — Progression
 - [ ] XP levels with stat choice on level-up
