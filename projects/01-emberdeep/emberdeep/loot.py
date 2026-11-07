@@ -9,6 +9,7 @@ from .items import Item, make_item
 LOOT_TABLE: list[tuple[str, int, int, int]] = [
     ("healing potion", 1, 99, 35),
     ("greater healing potion", 4, 99, 12),
+    ("speed potion", 2, 99, 6),
     ("lightning scroll", 1, 99, 12),
     ("confusion scroll", 1, 99, 10),
     ("teleport scroll", 2, 99, 6),

@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+from .status import StatusSet
 
 if TYPE_CHECKING:  # pragma: no cover
     from .equipment import Equipment
@@ -57,14 +59,33 @@ class Entity:
     y: int
     fighter: Fighter | None = None
     blocks: bool = True
-    ai: str | None = None  # "chase" for now; more AI kinds coming
+    ai: str | None = None  # chase | coward | caster | pack (see ai.py)
     xp_value: int = 0
     tags: set[str] = field(default_factory=set)
     color: str = "white"
     item: "Item | None" = None
     inventory: "Inventory | None" = None
     equipment: "Equipment | None" = None
-    confused: int = 0  # turns of confusion left
+    statuses: StatusSet = field(default_factory=StatusSet)
+    speed: int = 100            # 100 = normal; 200 acts twice per normal turn
+    energy: int = 0             # accumulates speed; acts at ENERGY_PER_ACTION
+    memory: tuple[int, int] | None = None  # last place the player was seen
+    on_hit: tuple[str, int, int, float] | None = None  # (status, turns, power, chance)
+    spell: str | None = None    # key into ai.SPELLS for casters
+    ai_state: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def confused(self) -> int:
+        """Turns of confusion left (backed by the status system)."""
+        return self.statuses.turns("confused")
+
+    @confused.setter
+    def confused(self, turns: int) -> None:
+        self.statuses.set_turns("confused", turns)
+
+    @property
+    def effective_speed(self) -> int:
+        return max(1, int(self.speed * self.statuses.speed_multiplier()))
 
     @property
     def pos(self) -> tuple[int, int]:
@@ -79,10 +100,23 @@ class Entity:
         self.y += dy
 
 
+#: Monster templates. Optional keys: ai (default "chase"), speed (default 100),
+#: on_hit (status, turns, power, chance), spell (see ai.SPELLS), max_depth.
 MONSTER_TEMPLATES: dict[str, dict] = {
-    "rat": dict(glyph="r", color="yellow", hp=4, power=2, defense=0, xp=5, min_depth=1, weight=40),
-    "kobold": dict(glyph="k", color="green", hp=8, power=3, defense=0, xp=12, min_depth=1, weight=30),
-    "ember imp": dict(glyph="i", color="red", hp=10, power=4, defense=1, xp=20, min_depth=2, weight=20),
+    "rat": dict(glyph="r", color="yellow", hp=4, power=2, defense=0, xp=5, min_depth=1, weight=40,
+                max_depth=4),
+    "kobold": dict(glyph="k", color="green", hp=8, power=3, defense=0, xp=12, min_depth=1, weight=30,
+                   ai="coward"),
+    "jackal": dict(glyph="j", color="yellow", hp=5, power=2, defense=0, xp=8, min_depth=2, weight=18,
+                   ai="pack", speed=150, pack=(2, 4)),
+    "ember imp": dict(glyph="i", color="red", hp=10, power=4, defense=1, xp=20, min_depth=2, weight=20,
+                      ai="caster", spell="ember bolt"),
+    "cave spider": dict(glyph="s", color="bright_green", hp=9, power=3, defense=1, xp=22, min_depth=3,
+                        weight=14, speed=120, on_hit=("poisoned", 5, 1, 0.5)),
+    "kobold shaman": dict(glyph="k", color="bright_cyan", hp=9, power=2, defense=0, xp=28, min_depth=3,
+                          weight=10, ai="caster", spell="hex of slowness"),
+    "fire beetle": dict(glyph="b", color="bright_red", hp=16, power=4, defense=3, xp=30, min_depth=3,
+                        weight=12, speed=70, on_hit=("burning", 3, 2, 0.4)),
     "cave troll": dict(glyph="T", color="magenta", hp=22, power=6, defense=2, xp=55, min_depth=4, weight=8),
 }
 
@@ -95,9 +129,12 @@ def make_monster(kind: str, x: int, y: int) -> Entity:
         x=x,
         y=y,
         fighter=Fighter(t["hp"], t["hp"], t["power"], t["defense"]),
-        ai="chase",
+        ai=t.get("ai", "chase"),
         xp_value=t["xp"],
         color=t["color"],
+        speed=t.get("speed", 100),
+        on_hit=t.get("on_hit"),
+        spell=t.get("spell"),
     )
 
 

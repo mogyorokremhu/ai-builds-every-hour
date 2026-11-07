@@ -38,3 +38,8 @@ class MessageLog:
 
     def __len__(self) -> int:
         return len(self._msgs)
+
+
+def a_an(name: str) -> str:
+    """Prefix a noun with the right indefinite article: 'an ember imp', 'a rat'."""
+    return f"{'an' if name[:1].lower() in 'aeiou' else 'a'} {name}"

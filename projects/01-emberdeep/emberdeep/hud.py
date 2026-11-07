@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .status import STATUS_INFO
+
 if TYPE_CHECKING:  # pragma: no cover
     from .game import Game
 
@@ -40,8 +42,11 @@ def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
         (f"Defense {f.defense}", "white"),
         (f"XP      {game.xp}", "white"),
         (f"Turn    {game.turn}", "white"),
-        ("", "white"),
     ]
+    for name in p.statuses.names():
+        label, color = STATUS_INFO[name][0], STATUS_INFO[name][1]
+        lines.append((f"* {label} ({p.statuses.turns(name)})", color))
+    lines.append(("", "white"))
     eq = p.equipment
     if eq is not None:
         for slot, item in eq.slots.items():
@@ -53,8 +58,9 @@ def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
     for m in mons[:max_monsters]:
         mf = m.fighter
         label = f"{m.glyph} {m.name}"
-        if m.confused:
-            label += " (?)"
+        tags = "".join(STATUS_INFO[n][0][0] for n in m.statuses.names())
+        if tags:
+            label += f" [{tags}]"
         lines.append((label[:width], m.color))
         lines.append(("  " + bar(mf.hp, mf.max_hp, min(10, width - 4)), hp_color(mf.hp, mf.max_hp)))
     if len(mons) > max_monsters:
