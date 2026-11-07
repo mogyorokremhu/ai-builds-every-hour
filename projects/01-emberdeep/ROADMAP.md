@@ -43,17 +43,21 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] New monsters: jackal packs, cave spider (poison), fire beetle (burns), kobold shaman (slow hex)
 - [x] Monster on-hit statuses, spells with cooldowns and line-of-fire checks
 - [x] Potion of speed; healing cures poison; death cause tracked
-- [ ] Sleeping monsters + noise/stealth (monsters wake when you're loud or close)
+- [x] Sleeping monsters + noise/stealth (monsters wake when you're loud or close; sneak attacks)
 - [ ] Spell projectiles animated in the curses UI
 - [ ] Monsters pick up / use items (kobolds drink potions)
 
-## Phase 5 — Progression
-- [ ] XP levels with stat choice on level-up
-- [ ] Hunger/torch fuel resource
-- [ ] Unique depth themes (cellars, fungal caves, magma halls)
-- [ ] Alternative generators: cellular-automata caves, BSP
-- [ ] Vaults and special rooms (treasury, shrine, trap room)
-- [ ] Traps (hidden, detectable)
+## Phase 5 — Progression ✅ (core)
+- [x] XP levels with stat choice on level-up (Vitality / Might / Guard + auto HP)
+- [x] Hunger/torch fuel resource (torch shrinks FOV, starvation damage, rations/glowcaps/torches)
+- [x] Unique depth themes (cellars, fungal caves, magma halls, ember heart) with colours, decor, fauna bias
+- [x] Alternative generators: cellular-automata caves, BSP (with doors)
+- [x] Vaults and special rooms (treasury, shrine, trap room, library)
+- [x] Traps (hidden, passive detection, search command, 5 kinds, confirm before stepping on known ones)
+- [x] New monsters: myconid (confusing spores), magma hound (fire pack)
+- [ ] Openable/closable doors (and the occasional locked one)
+- [ ] Lit rooms / wall braziers that don't need your torch
+- [ ] Knockback into lava (and monsters avoiding lava when fleeing)
 
 ## Phase 6 — Endgame & persistence
 - [ ] Boss at depth 10: the Ember Heart guardian
