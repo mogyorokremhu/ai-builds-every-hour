@@ -13,20 +13,26 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] ASCII renderer + playable text-mode entry point
 - [x] Unit tests for core systems
 
-## Phase 2 — Real-time interface
-- [ ] curses UI with instant key input (fallback to text mode on Windows without curses)
-- [ ] Colors per tile/entity, dim colors for remembered tiles
-- [ ] Sidebar: HP bar, stats, visible monsters list
-- [ ] Message log panel with scrollback screen
-- [ ] Help screen (`?`)
+## Phase 2 — Real-time interface ✅
+- [x] curses UI with instant key input (fallback to text mode on Windows without curses)
+- [x] Colors per tile/entity, dim colors for remembered tiles
+- [x] Sidebar: HP bar, stats, visible monsters list
+- [x] Message log panel with scrollback screen
+- [x] Help screen (`?`)
+- [x] Scrolling camera so the map fits small terminals
+- [x] Fake-screen test harness that drives the whole UI with scripted keys
 
-## Phase 3 — Items & inventory
-- [ ] Item entity type + pickup (`g`) and drop
-- [ ] Inventory screen with letters a–z
-- [ ] Healing potions, scrolls (lightning, fireball, confusion, teleport)
-- [ ] Targeting mode for ranged scrolls (cursor + Bresenham line)
-- [ ] Equipment slots: weapon, armor, ring; equip/unequip
-- [ ] Loot tables by depth
+## Phase 3 — Items & inventory ✅
+- [x] Item entity type + pickup (`g`) and drop
+- [x] Inventory screen with letters a–z
+- [x] Healing potions, scrolls (lightning, fireball, confusion, teleport)
+- [x] Targeting mode for ranged scrolls (cursor + Bresenham line)
+- [x] Equipment slots: weapon, armor, ring; equip/unequip
+- [x] Loot tables by depth
+- [ ] Look mode (`x`): move a cursor and describe what's there
+- [ ] Throwing items / potions shatter on impact
+- [ ] Unidentified potions & scrolls with random names per run
+- [ ] Item weight/encumbrance or pack limit warnings
 
 ## Phase 4 — Smarter monsters
 - [ ] A* pathfinding (stdlib heapq)

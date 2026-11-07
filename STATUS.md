@@ -1,7 +1,7 @@
 # Status
 
-- **Hourly runs completed:** 1
+- **Hourly runs completed:** 2
 - **Current project:** 01 — Emberdeep (Python roguelike)
-- **Current phase:** Phase 2 — Real-time interface
-- **Next up:** curses UI, colors, sidebar, then items & inventory (Phase 3)
-- **Next mini collection to grow:** start `mini/puzzles/` (rotate after that)
+- **Current phase:** Phase 4 — Smarter monsters (Phases 1–3 complete; a few Phase 3 extras open)
+- **Next up:** A* pathfinding, monster memory, AI kinds (coward, caster, pack), status effects, energy/speed
+- **Next mini collection to grow:** start `mini/tools/` (then `ascii-animations/`, then back to `drawings/`)
