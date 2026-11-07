@@ -26,6 +26,14 @@ class GameMap:
     def walkable(self, x: int, y: int) -> bool:
         return self.get(x, y).walkable
 
+    def passable(self, x: int, y: int) -> bool:
+        """Walkable, or a closed door a creature could open (used for pathing/connectivity)."""
+        t = self.get(x, y)
+        return t.walkable or t.name == "door"
+
+    def is_closed_door(self, x: int, y: int) -> bool:
+        return self.get(x, y).name == "door"
+
     def transparent(self, x: int, y: int) -> bool:
         return self.get(x, y).transparent
 

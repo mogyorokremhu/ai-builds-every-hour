@@ -90,7 +90,7 @@ def generate(width: int, height: int, rng: random.Random, fill: float = 0.45,
 
 
 def bfs_distances(gmap: GameMap, start: Pos) -> dict[Pos, int]:
-    """Step distances over walkable tiles (8-connectivity)."""
+    """Step distances over passable tiles (8-connectivity; closed doors count)."""
     dist = {start: 0}
     q = deque([start])
     while q:
@@ -98,7 +98,7 @@ def bfs_distances(gmap: GameMap, start: Pos) -> dict[Pos, int]:
         for dy in (-1, 0, 1):
             for dx in (-1, 0, 1):
                 n = (x + dx, y + dy)
-                if n not in dist and gmap.walkable(*n):
+                if n not in dist and gmap.passable(*n):
                     dist[n] = dist[(x, y)] + 1
                     q.append(n)
     return dist

@@ -24,11 +24,11 @@ def step_cost(dx: int, dy: int) -> int:
 
 
 def neighbors(gmap: GameMap, pos: Pos) -> Iterable[tuple[Pos, int]]:
-    """Walkable neighbouring cells with their step cost."""
+    """Passable neighbouring cells (closed doors count: monsters open them) with step cost."""
     x, y = pos
     for dx, dy in DIRECTIONS:
         nx, ny = x + dx, y + dy
-        if gmap.walkable(nx, ny):
+        if gmap.passable(nx, ny):
             yield (nx, ny), step_cost(dx, dy)
 
 
@@ -69,7 +69,7 @@ def astar(
         cx, cy = current
         for dx, dy in DIRECTIONS:
             nxt = (cx + dx, cy + dy)
-            if nxt != goal and not gmap.walkable(*nxt):
+            if nxt != goal and not gmap.passable(*nxt):
                 continue
             new_cost = cost_so_far[current] + step_cost(dx, dy)
             if extra_cost is not None and nxt != goal:

@@ -69,7 +69,7 @@ def place(game: "Game", cells: list[Pos], count: int, kind: str | None = None) -
     placed: list[Trap] = []
     gmap = game.gmap
     free = [c for c in cells if c not in game.traps and c != game.player.pos and c != gmap.stairs
-            and gmap.walkable(*c) and gmap.get(*c).name != "door"
+            and gmap.walkable(*c) and gmap.get(*c).name not in ("door", "open door")
             and chebyshev(c, game.player.pos) > 2]
     game.rng.shuffle(free)
     for x, y in free[:count]:

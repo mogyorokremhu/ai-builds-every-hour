@@ -17,6 +17,7 @@ TILE_COLORS: dict[str, tuple[str, str]] = {
     "wall": ("yellow", "blue"),
     "floor": ("white", "blue"),
     "door": ("bright_yellow", "blue"),
+    "open door": ("yellow", "blue"),
     "stairs down": ("bright_white", "blue"),
     "fungus": ("bright_green", "green"),
     "lava": ("bright_red", "red"),

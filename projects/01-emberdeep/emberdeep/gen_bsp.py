@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from .dungeon import carve_room, carve_tunnel
 from .gamemap import GameMap
 from .geometry import Rect
-from .tiles import DOOR, FLOOR, STAIRS_DOWN
+from .tiles import DOOR, DOOR_NAMES, FLOOR, OPEN_DOOR, STAIRS_DOWN
 
 
 @dataclass
@@ -67,6 +67,10 @@ def any_room(node: Node, rng: random.Random) -> Rect:
     return rng.choice(rooms)
 
 
+#: Fraction of generated doors that start open.
+OPEN_CHANCE = 0.25
+
+
 def place_doors(gmap: GameMap, rooms: list[Rect], rng: random.Random, chance: float = 0.6) -> int:
     """Turn corridor openings in room walls into doors. Returns the number placed."""
     placed = 0
@@ -81,10 +85,10 @@ def place_doors(gmap: GameMap, rooms: list[Rect], rng: random.Random, chance: fl
             ax, ay = along
             if gmap.walkable(x - ax, y - ay) or gmap.walkable(x + ax, y + ay):
                 continue  # wide opening, not a doorway
-            if any(gmap.get(x + dx, y + dy).name == "door" for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            if any(gmap.get(x + dx, y + dy).name in DOOR_NAMES for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
                 continue
             if rng.random() < chance:
-                gmap.set(x, y, DOOR)
+                gmap.set(x, y, OPEN_DOOR if rng.random() < OPEN_CHANCE else DOOR)
                 placed += 1
     return placed
 
