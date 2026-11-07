@@ -13,6 +13,7 @@ from .game import Game
 from .hud import sidebar
 from .items import TARGET_CELL, Item
 from .look import describe_cell
+from .progression import CHOICES
 from .targeting import Cursor, blast_area, projectile_path
 
 try:
@@ -94,11 +95,15 @@ class CursesUI:
                 if mx >= gmap.width:
                     break
                 tile = gmap.tiles[my][mx]
-                lit, remembered = TILE_COLORS.get(tile.name, ("white", "blue"))
+                lit, remembered = g.theme.tile_colors(tile.name, TILE_COLORS.get(tile.name, ("white", "blue")))
+                glyph = tile.glyph
+                trap = g.known_trap_at(mx, my)
+                if trap is not None:
+                    glyph, lit = "^", trap.color
                 if gmap.visible[my][mx]:
-                    self.put(sy, sx, tile.glyph, lit)
+                    self.put(sy, sx, glyph, lit)
                 elif gmap.explored[my][mx]:
-                    self.put(sy, sx, tile.glyph, remembered, dim=True)
+                    self.put(sy, sx, glyph, remembered, dim=True)
 
         def order(e) -> int:
             return 2 if e.is_player else 1 if e.blocks else 0
@@ -106,7 +111,7 @@ class CursesUI:
         for e in sorted(g.entities, key=order):
             sx, sy = e.x - ox, e.y - oy
             if 0 <= sx < view_w and 0 <= sy < view_h and gmap.visible[e.y][e.x]:
-                self.put(sy, sx, e.glyph, e.color)
+                self.put(sy, sx, e.glyph, e.color, dim=e.asleep)
 
         if cursor is not None:
             overlay: set[tuple[int, int]] = (
@@ -144,7 +149,9 @@ class CursesUI:
         for e in sorted(g.entities, key=lambda e: e.blocks, reverse=True):
             if e.pos == (x, y) and g.gmap.visible[y][x]:
                 return e.glyph
-        return g.gmap.tiles[y][x].glyph if g.gmap.explored[y][x] else " "
+        if not g.gmap.explored[y][x]:
+            return " "
+        return "^" if g.known_trap_at(x, y) else g.gmap.tiles[y][x].glyph
 
     # ---- main loop --------------------------------------------------------
     def run(self) -> None:
@@ -153,6 +160,9 @@ class CursesUI:
             if self.game.game_over:
                 self.death_screen()
                 return
+            if self.game.pending_levels:
+                self.level_up()
+                continue
             self.handle(self.screen.getch())
 
     def handle(self, key: int) -> None:
@@ -170,6 +180,10 @@ class CursesUI:
             g.pickup()
         elif cmd == "descend":
             g.descend()
+        elif cmd == "search":
+            g.search()
+        elif cmd == "pray":
+            g.pray()
         elif cmd == "help":
             self.show_text(keys.HELP_TEXT)
         elif cmd == "messages":
@@ -304,6 +318,26 @@ class CursesUI:
             else:
                 return
 
+    def level_up(self) -> None:
+        """Ask the player to pick a boon for each pending level-up (Esc postpones nothing)."""
+        g = self.game
+        lines: list[tuple[str, str]] = [
+            (f"You reached level {g.level}!", "bright_green"),
+            ("", "white"),
+        ]
+        for key, choice in CHOICES.items():
+            lines.append((f"{key}) {choice.label:<9} {choice.description}", "bright_white"))
+        lines += [("", "white"), ("Every level also grants +2 max HP.", "white")]
+        while g.pending_levels:
+            self.draw()
+            self.show_box(lines)
+            key = self.screen.getch()
+            if 0 <= key < 256 and chr(key) in CHOICES:
+                g.choose_level_up(chr(key))
+            elif key == ord("Q"):
+                self.running = False
+                return
+
     def death_screen(self) -> None:
         g = self.game
         self.show_box([
@@ -311,7 +345,7 @@ class CursesUI:
             ("", "white"),
             (f"Cause:         {g.death_cause or 'unknown'}", "white"),
             (f"Depth reached: {g.depth}", "white"),
-            (f"Experience:    {g.xp}", "white"),
+            (f"Level:         {g.level} ({g.xp} XP)", "white"),
             (f"Kills:         {g.kills}", "white"),
             (f"Turns:         {g.turn}", "white"),
             (f"Seed:          {g.seed}", "white"),
