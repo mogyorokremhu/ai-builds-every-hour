@@ -5,9 +5,10 @@ Drawing only goes through a tiny "screen" interface (``getmaxyx``, ``erase``, ``
 """
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Callable, Iterable, Protocol
 
-from . import keys
+from . import keys, scores
 from .colors import TILE_COLORS, ColorTable
 from .game import Game
 from .hud import sidebar
@@ -43,11 +44,16 @@ def camera_offset(target: int, view: int, size: int) -> int:
 
 
 class CursesUI:
-    def __init__(self, screen: Screen, game: Game, colors: ColorTable | None = None) -> None:
+    def __init__(self, screen: Screen, game: Game, colors: ColorTable | None = None,
+                 on_finish: Callable[[Game], list[str]] | None = None, home: Path | None = None) -> None:
+        """``on_finish`` records a finished run and returns extra lines for the end screen
+        (score, rank, morgue file); ``home`` is where the hall of fame is read from."""
         self.screen = screen
         self.game = game
         self.colors = colors or ColorTable(enabled=False)
         self.running = True
+        self.on_finish = on_finish
+        self.home = home
 
     # ---- low-level drawing ---------------------------------------------
     def size(self) -> tuple[int, int]:
@@ -158,7 +164,11 @@ class CursesUI:
         while self.running:
             self.draw(footer="? for help")
             if self.game.game_over:
-                self.death_screen()
+                extra = self.on_finish(self.game) if self.on_finish else []
+                if self.game.victory:
+                    self.victory_screen(extra)
+                else:
+                    self.death_screen(extra)
                 return
             if self.game.pending_levels:
                 self.level_up()
@@ -184,6 +194,10 @@ class CursesUI:
             g.search()
         elif cmd == "pray":
             g.pray()
+        elif cmd == "close":
+            self.close_door()
+        elif cmd == "scores":
+            self.hall_of_fame()
         elif cmd == "help":
             self.show_text(keys.HELP_TEXT)
         elif cmd == "messages":
@@ -202,6 +216,24 @@ class CursesUI:
             item = self.choose_item("Equip/remove which item?", lambda it: it.is_equipment)
             if item is not None:
                 g.toggle_equip(item)
+
+    def close_door(self) -> None:
+        g = self.game
+        doors = g.closable_doors()
+        if len(doors) <= 1:
+            g.close_door()
+            return
+        self.draw(footer="Close which door? (direction, Esc cancels)")
+        key = self.screen.getch()
+        if key in keys.MOVE_KEYS:
+            g.close_door(*keys.MOVE_KEYS[key])
+
+    def hall_of_fame(self) -> None:
+        if self.home is None:
+            self.game.say("The hall of fame is not available.")
+            return
+        table = scores.format_table(scores.load_scores(self.home), limit=max(1, self.size()[0] - 4))
+        self.show_text(["EMBERDEEP — hall of fame", ""] + table + ["", "Press any key."])
 
     def use_item(self, item: Item) -> None:
         if item.targeting == TARGET_CELL:
@@ -338,7 +370,25 @@ class CursesUI:
                 self.running = False
                 return
 
-    def death_screen(self) -> None:
+    def victory_screen(self, extra: list[str] | None = None) -> None:
+        g = self.game
+        lines: list[tuple[str, str]] = [
+            ("*** VICTORY ***", "bright_yellow"),
+            ("", "white"),
+            ("You lift the Ember Heart from the cooling slag.", "bright_red"),
+            ("Its warmth will light the world above for an age.", "bright_red"),
+            ("", "white"),
+            (f"Level:         {g.level} ({g.xp} XP)", "white"),
+            (f"Kills:         {g.kills}", "white"),
+            (f"Turns:         {g.turn}", "white"),
+            (f"Seed:          {g.seed}", "white"),
+        ]
+        lines += [(t, "bright_cyan") for t in extra or []]
+        lines += [("", "white"), ("Press any key.", "white")]
+        self.show_box(lines)
+        self.screen.getch()
+
+    def death_screen(self, extra: list[str] | None = None) -> None:
         g = self.game
         self.show_box([
             ("You have perished in Emberdeep.", "bright_red"),
@@ -349,17 +399,18 @@ class CursesUI:
             (f"Kills:         {g.kills}", "white"),
             (f"Turns:         {g.turn}", "white"),
             (f"Seed:          {g.seed}", "white"),
+        ] + [(t, "bright_cyan") for t in extra or []] + [
             ("", "white"),
             ("Press any key.", "white"),
         ])
         self.screen.getch()
 
 
-def play(seed: int | None = None) -> Game:  # pragma: no cover - needs a real terminal
-    """Run the curses UI in the current terminal."""
+def play(game: Game, on_finish: Callable[[Game], list[str]] | None = None,
+         home: Path | None = None) -> Game:  # pragma: no cover - needs a real terminal
+    """Run the curses UI for ``game`` in the current terminal."""
     if curses is None:
         raise RuntimeError("curses is not available on this platform")
-    game = Game(seed)
 
     def _main(stdscr) -> None:
         try:
@@ -369,7 +420,7 @@ def play(seed: int | None = None) -> Game:  # pragma: no cover - needs a real te
         stdscr.keypad(True)
         if hasattr(curses, "set_escdelay"):
             curses.set_escdelay(25)
-        CursesUI(stdscr, game, ColorTable()).run()
+        CursesUI(stdscr, game, ColorTable(), on_finish=on_finish, home=home).run()
 
     curses.wrapper(_main)
     return game
