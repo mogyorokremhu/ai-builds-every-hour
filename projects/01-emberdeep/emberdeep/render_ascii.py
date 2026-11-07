@@ -1,7 +1,8 @@
-"""Plain-text renderer: turns a Game into a printable frame."""
+"""Plain-text renderer: turns a Game into a printable frame (used by text mode and tests)."""
 from __future__ import annotations
 
 from .game import Game
+from .hud import bar
 
 
 def render(game: Game, log_lines: int = 5) -> str:
@@ -14,11 +15,26 @@ def render(game: Game, log_lines: int = 5) -> str:
             elif gmap.explored[y][x]:
                 g = gmap.tiles[y][x].glyph
                 grid[y][x] = ":" if g == "." else g  # dim remembered floor
-    # corpses first so living things draw on top
-    for e in sorted(game.entities, key=lambda e: e.blocks):
+    # items, then corpses, then the living
+    def order(e) -> int:
+        return 2 if e.is_player else 1 if e.blocks else 0
+
+    for e in sorted(game.entities, key=order):
         if gmap.visible[e.y][e.x]:
             grid[e.y][e.x] = e.glyph
     f = game.player.fighter
-    status = f"HP {f.hp}/{f.max_hp}  Depth {game.depth}  XP {game.xp}  Turn {game.turn}  Seed {game.seed}"
+    status = (f"HP {f.hp}/{f.max_hp} [{bar(f.hp, f.max_hp, 10, '#', '-')}]  Pow {f.power} Def {f.defense}  "
+              f"Depth {game.depth}  XP {game.xp}  Turn {game.turn}")
     lines = ["".join(r) for r in grid] + [status, "-" * gmap.width] + game.log.last(log_lines)
     return "\n".join(lines)
+
+
+def render_inventory(game: Game) -> str:
+    inv, eq = game.player.inventory, game.player.equipment
+    if not len(inv):
+        return "Your pack is empty."
+    out = ["Inventory:"]
+    for letter, it in inv.listing():
+        worn = " (equipped)" if eq.is_equipped(it) else ""
+        out.append(f"  {letter}) {it.display_name}{worn}  {it.describe()}")
+    return "\n".join(out)
