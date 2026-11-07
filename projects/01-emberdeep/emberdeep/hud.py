@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .resources import TORCH_MAX
 from .status import STATUS_INFO
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -28,21 +29,38 @@ def hp_color(current: int, maximum: int) -> str:
     return "bright_red"
 
 
+def torch_color(fuel: int) -> str:
+    ratio = fuel / TORCH_MAX
+    if ratio > 0.5:
+        return "bright_yellow"
+    if ratio > 0.2:
+        return "yellow"
+    return "bright_red"
+
+
 def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
     """Build the sidebar as a list of (text, colour) lines."""
     p = game.player
     f = p.fighter
+    res = game.resources
+    into, span = game.progression.progress
     lines: list[Line] = [
         ("EMBERDEEP", "bright_red"),
-        (f"Depth {game.depth}", "bright_yellow"),
+        (f"Depth {game.depth}: {game.theme.name.replace('the ', '')}", "bright_yellow"),
         ("", "white"),
         (f"HP {f.hp}/{f.max_hp}", hp_color(f.hp, f.max_hp)),
         (bar(f.hp, f.max_hp, width - 2), hp_color(f.hp, f.max_hp)),
+        (f"Level {game.level}  XP {game.xp}", "bright_white"),
+        (bar(into, span, width - 2, "▰", "▱"), "bright_cyan"),
         (f"Power   {f.power}", "white"),
         (f"Defense {f.defense}", "white"),
-        (f"XP      {game.xp}", "white"),
+        (f"Torch   {res.torch_label}", torch_color(res.torch)),
+        (bar(res.torch, TORCH_MAX, width - 2, "▮", "▯"), torch_color(res.torch)),
+        (f"Food    {res.hunger_label}", res.hunger_color),
         (f"Turn    {game.turn}", "white"),
     ]
+    if game.pending_levels:
+        lines.insert(7, (f"** {game.pending_levels} level-up(s)! **", "bright_green"))
     for name in p.statuses.names():
         label, color = STATUS_INFO[name][0], STATUS_INFO[name][1]
         lines.append((f"* {label} ({p.statuses.turns(name)})", color))
@@ -58,7 +76,7 @@ def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
     for m in mons[:max_monsters]:
         mf = m.fighter
         label = f"{m.glyph} {m.name}"
-        tags = "".join(STATUS_INFO[n][0][0] for n in m.statuses.names())
+        tags = ("z" if m.asleep else "") + "".join(STATUS_INFO[n][0][0] for n in m.statuses.names())
         if tags:
             label += f" [{tags}]"
         lines.append((label[:width], m.color))

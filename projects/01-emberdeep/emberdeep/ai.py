@@ -11,7 +11,8 @@ Every monster has an ``ai`` kind:
   has gathered, then rushes in together.
 
 All behaviours share: confusion (random stumbling), memory of the player's last seen
-position, and A* movement that routes around other monsters.
+position, and A* movement that routes around other monsters. Sleeping monsters do
+nothing until noise or proximity wakes them (see :func:`wake_chance`).
 """
 from __future__ import annotations
 
@@ -197,8 +198,28 @@ BEHAVIOURS: dict[str, Callable[["Game", "Entity", bool], None]] = {
 }
 
 
+def wake_chance(game: "Game", m: "Entity") -> float:
+    """Chance a sleeping monster wakes this action, from player noise and proximity."""
+    from .game import NOISE_RANGE
+
+    d = chebyshev(m.pos, game.player.pos)
+    chance = 0.0
+    if game.noise and d <= game.noise * NOISE_RANGE:
+        chance += min(0.9, 0.12 * game.noise)
+    if game.gmap.visible[m.y][m.x]:
+        chance += 0.2 if d <= 2 else 0.06 if d <= 5 else 0.015
+    return min(1.0, chance)
+
+
 def take_turn(game: "Game", m: "Entity") -> None:
     """Run one action for monster ``m``."""
+    if m.asleep:
+        if game.rng.random() < wake_chance(game, m):
+            m.asleep = False
+            m.memory = game.player.pos
+            if game.gmap.visible[m.y][m.x]:
+                game.say(f"The {m.name} wakes up!", "bright_yellow")
+        return
     if m.confused > 0:
         wander(game, m)
         return
@@ -213,6 +234,8 @@ def take_turn(game: "Game", m: "Entity") -> None:
 
 def describe_ai(m: "Entity") -> str:
     """Short behaviour hint for look mode."""
+    if m.asleep:
+        return "It is asleep."
     if m.ai == "coward":
         return "It looks skittish." if not m.ai_state.get("fleeing") else "It is fleeing!"
     if m.ai == "caster":

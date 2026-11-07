@@ -4,7 +4,8 @@ Uses the real-time curses interface when available (Linux/macOS terminals), othe
 falls back to the line-based text mode. Pass ``--text`` to force text mode.
 
 Text-mode controls (type then Enter, chainable): w/a/s/d move, q/e/z/c diagonals,
-. wait, g pick up, i inventory, u<letter> use/equip, r<letter> drop, > descend, x quit.
+. wait, g pick up, i inventory, u<letter> use/equip, r<letter> drop, > descend, x quit,
+f search for traps, p pray at an altar, +v/+m/+g choose a level-up boon.
 """
 from __future__ import annotations
 
@@ -33,6 +34,13 @@ def run_text_command(game: Game, cmd: str) -> bool:
             game.descend()
         elif ch == "g":
             game.pickup()
+        elif ch == "f":
+            game.search()
+        elif ch == "p":
+            game.pray()
+        elif ch == "+":
+            if not game.choose_level_up(next(chars, "")):
+                game.say("Use +v, +m or +g when you have a level-up.")
         elif ch == "i":
             print(render_inventory(game))
         elif ch in "ur":
@@ -60,7 +68,8 @@ def text_main(seed: int | None) -> None:
     while True:
         print("\n" * 2 + render(game))
         if game.game_over:
-            print(f"\nYou died on depth {game.depth} with {game.xp} XP.")
+            print(f"\nYou died on depth {game.depth} at level {game.level} ({game.xp} XP): "
+                  f"{game.death_cause or 'unknown'}.")
             return
         try:
             cmd = input("> ").strip().lower()

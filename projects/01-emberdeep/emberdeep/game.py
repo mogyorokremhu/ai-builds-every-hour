@@ -3,18 +3,26 @@ from __future__ import annotations
 
 import random
 
-from . import ai, dungeon, loot
+from . import ai, levelgen, loot, traps, vaults
 from .combat import attack
 from .entities import MONSTER_TEMPLATES, Entity, make_monster, make_player
 from .fov import compute_fov
 from .geometry import chebyshev
 from .items import TARGET_CELL, Item, make_item, make_item_entity
 from .messages import MessageLog, a_an
+from .progression import CHOICES, Progression
+from .resources import Resources
 from .status import STATUS_INFO
 from .targeting import blast_area, projectile_path
+from .themes import Theme, theme_for_depth
 
 MAP_W, MAP_H = 70, 24
-FOV_RADIUS = 8
+FOV_RADIUS = 8           # radius with a bright torch (see resources.TORCH_STAGES)
+SLEEP_CHANCE = 0.45      # chance a freshly spawned monster (or pack) is asleep
+
+#: Noise made by player actions: monsters within ``noise * NOISE_RANGE`` may hear it.
+NOISE = {"move": 1, "wait": 0, "attack": 4, "pickup": 1, "item": 2, "loud": 8, "search": 0}
+NOISE_RANGE = 2
 ENERGY_PER_ACTION = 100  # a creature acts each time its energy reaches this
 ACTION_COST = 100        # time a normal-speed action takes
 
@@ -29,11 +37,19 @@ class Game:
         self.log = MessageLog()
         self.depth = 0
         self.turn = 0
-        self.xp = 0
         self.kills = 0
         self.player = make_player(0, 0)
+        self.progression = Progression()
+        self.resources = Resources()
         self.death_cause: str | None = None
         self.entities: list[Entity] = []
+        self.traps: dict[tuple[int, int], traps.Trap] = {}
+        self.special_rooms: list[vaults.SpecialRoom] = []
+        self.altars: dict[tuple[int, int], bool] = {}
+        self.theme: Theme = theme_for_depth(1)
+        self.generator = "rooms"
+        self.noise = 0
+        self._trap_confirm: tuple[int, int] | None = None
         self.new_level()
         self.say("You descend into Emberdeep. Find the stairs (>).", C_MAGIC)
 
@@ -41,33 +57,60 @@ class Game:
         self.log.add(text, color, self.turn)
 
     # ---- level setup -------------------------------------------------
+    @property
+    def xp(self) -> int:
+        return self.progression.xp
+
+    @property
+    def level(self) -> int:
+        return self.progression.level
+
     def new_level(self) -> None:
         self.depth += 1
-        self.gmap, rooms = dungeon.generate(MAP_W, MAP_H, self.rng)
-        self.player.x, self.player.y = rooms[0].center
+        old_theme = self.theme
+        self.theme = theme_for_depth(self.depth)
+        layout = levelgen.generate_level(MAP_W, MAP_H, self.rng, self.theme)
+        self.gmap, self.generator = layout.gmap, layout.generator
+        self.player.x, self.player.y = layout.start
         self.entities = [self.player]
-        for room in rooms[1:]:
-            for _ in range(self.rng.randint(0, 2 + self.depth // 2)):
-                spots = [p for p in room.inner() if not self.blocking_at(*p)]
-                if spots:
-                    kind = self.pick_monster()
-                    lo, hi = MONSTER_TEMPLATES[kind].get("pack", (1, 1))
-                    for _ in range(self.rng.randint(lo, hi)):
-                        spots = [p for p in room.inner() if not self.blocking_at(*p)]
-                        if not spots:
-                            break
-                        x, y = self.rng.choice(spots)
-                        self.entities.append(make_monster(kind, x, y))
-        for room in rooms:
+        self.traps, self.special_rooms, self.altars = {}, [], {}
+        self._trap_confirm = None
+        for area in layout.areas[1:]:
+            self._spawn_monsters(area)
+        for area in layout.areas:
             for _ in range(loot.items_per_room(self.depth, self.rng)):
-                spots = [p for p in room.inner() if not self.items_at(*p) and p != self.player.pos]
+                spots = [p for p in area if not self.items_at(*p) and p != self.player.pos
+                         and p != self.gmap.stairs]
                 if spots:
                     x, y = self.rng.choice(spots)
-                    self.place_item(loot.roll_loot(self.depth, self.rng), x, y)
+                    self.place_item(loot.roll_loot(self.depth, self.rng, self.theme.loot_bias), x, y)
+        if layout.rooms:
+            vaults.furnish(self, layout.rooms)
+        loose = [p for area in layout.areas[1:] for p in area]
+        traps.place(self, loose, traps.traps_for_depth(self.depth, self.rng))
+        if self.depth > 1 and self.theme is not old_theme:
+            self.say(self.theme.intro, C_MAGIC)
         self.update_fov()
 
+    def _spawn_monsters(self, area: list[tuple[int, int]]) -> None:
+        for _ in range(self.rng.randint(0, 2 + self.depth // 2)):
+            if not [p for p in area if not self.blocking_at(*p)]:
+                return
+            kind = self.pick_monster()
+            lo, hi = MONSTER_TEMPLATES[kind].get("pack", (1, 1))
+            asleep = self.rng.random() < SLEEP_CHANCE
+            for _ in range(self.rng.randint(lo, hi)):
+                spots = [p for p in area if not self.blocking_at(*p) and p != self.gmap.stairs]
+                if not spots:
+                    break
+                x, y = self.rng.choice(spots)
+                m = make_monster(kind, x, y)
+                m.asleep = asleep
+                self.entities.append(m)
+
     def pick_monster(self) -> str:
-        pool = [(k, t["weight"]) for k, t in MONSTER_TEMPLATES.items()
+        bias = self.theme.monster_bias
+        pool = [(k, t["weight"] * bias.get(k, 1.0)) for k, t in MONSTER_TEMPLATES.items()
                 if t["min_depth"] <= self.depth <= t.get("max_depth", 99)]
         kinds, weights = zip(*pool)
         return self.rng.choices(kinds, weights=weights)[0]
@@ -110,8 +153,16 @@ class Game:
     def game_over(self) -> bool:
         return not self.player.fighter.alive
 
+    @property
+    def fov_radius(self) -> int:
+        return self.resources.fov_radius
+
     def update_fov(self) -> None:
-        compute_fov(self.gmap, self.player.x, self.player.y, FOV_RADIUS)
+        compute_fov(self.gmap, self.player.x, self.player.y, self.fov_radius)
+
+    def known_trap_at(self, x: int, y: int) -> "traps.Trap | None":
+        t = self.traps.get((x, y))
+        return t if t is not None and not t.hidden else None
 
     # ---- movement & combat --------------------------------------------
     def player_move(self, dx: int, dy: int) -> bool:
@@ -124,17 +175,39 @@ class Game:
         tx, ty = self.player.x + dx, self.player.y + dy
         target = self.blocking_at(tx, ty)
         if target and target.fighter:
-            _, msg = attack(self.player, target, self.rng)
+            self.noise = NOISE["attack"]
+            bonus = 0
+            if target.asleep:
+                bonus = self.player.fighter.power
+                target.asleep = False
+                self.say(f"You strike the sleeping {target.name}!", C_GOOD)
+            _, msg = attack(self.player, target, self.rng, bonus)
             self.say(msg)
             if not target.fighter.alive:
                 self.on_kill(target)
         elif self.gmap.walkable(tx, ty):
+            known = self.known_trap_at(tx, ty)
+            if known is not None and self._trap_confirm != (tx, ty) and not self.player.confused:
+                self._trap_confirm = (tx, ty)
+                self.say(f"There is a {known.name} there. Move again to step on it.", C_BAD)
+                return False
+            self._trap_confirm = None
             self.player.move(dx, dy)
+            self.noise = NOISE["move"]
             here = self.items_at(tx, ty)
             if len(here) == 1:
                 self.say(f"You see here {here[0].item.display_name}.")
             elif here:
                 self.say(f"There are {len(here)} items here.")
+            if self.gmap.get(tx, ty).name == "altar":
+                used = self.altars.get((tx, ty), True)
+                self.say("The altar is cold." if used else "An altar. Press p to pray.", C_MAGIC)
+            vaults.check_enter(self)
+            trap = self.traps.get((tx, ty))
+            if trap is not None:
+                traps.trigger(self, trap)
+                if self.game_over:
+                    return True
         elif self.player.confused:
             self.say("You bump into the wall.")  # a confused stumble still costs the turn
         else:
@@ -143,9 +216,45 @@ class Game:
         return True
 
     def player_wait(self) -> None:
-        if self.player.fighter.hp < self.player.fighter.max_hp and self.turn % 3 == 0:
-            self.player.fighter.heal(1)
+        f = self.player.fighter
+        if f.hp < f.max_hp and self.turn % 3 == 0 and self.resources.can_regenerate:
+            f.heal(1)
+        self.noise = NOISE["wait"]
         self.end_turn()
+
+    def search(self) -> None:
+        """Spend a turn searching carefully for hidden traps nearby."""
+        found = traps.search(self)
+        for t in found:
+            self.say(f"You find a {t.name}!", C_ITEM)
+        if not found:
+            self.say("You search carefully but find nothing.")
+        self.noise = NOISE["search"]
+        self.end_turn()
+
+    def pray(self) -> bool:
+        if vaults.pray(self):
+            self.end_turn()
+            return True
+        return False
+
+    # ---- progression ----------------------------------------------------
+    def gain_xp(self, amount: int) -> None:
+        gained = self.progression.gain(amount)
+        if gained:
+            self.say(f"Welcome to level {self.progression.level}! Choose a boon.", C_GOOD)
+
+    @property
+    def pending_levels(self) -> int:
+        return self.progression.pending
+
+    def choose_level_up(self, key: str) -> bool:
+        """Spend a pending level-up on choice ``key`` (see progression.CHOICES)."""
+        if key not in CHOICES or self.progression.pending <= 0:
+            return False
+        choice = self.progression.apply(key, self.player.fighter)
+        self.say(f"{choice.label}: {choice.description}.", C_GOOD)
+        return True
 
     def descend(self) -> bool:
         if self.player.pos != self.gmap.stairs:
@@ -161,11 +270,13 @@ class Game:
         monster.statuses = type(monster.statuses)()
         monster.memory = None
         monster.name = f"{monster.name} corpse"
-        self.xp += monster.xp_value
+        monster.asleep = False
         self.kills += 1
+        self.gain_xp(monster.xp_value)
 
     def damage_monster(self, monster: Entity, amount: int, how: str) -> None:
         dealt = monster.fighter.take_damage(amount)
+        monster.asleep = False
         msg = f"The {monster.name} is {how} for {dealt}."
         if not monster.fighter.alive:
             msg += f" The {monster.name} dies!"
@@ -192,6 +303,7 @@ class Game:
             self.say(f"You pick up {ent.item.display_name} ({letter}).", C_ITEM)
             picked = True
         if picked:
+            self.noise = NOISE["pickup"]
             self.end_turn()
         return picked
 
@@ -243,7 +355,28 @@ class Game:
         if not handler(item, target):
             return False
         self.player.inventory.take_one(item)
+        self.noise = NOISE["loud"] if item.effect in ("fireball", "lightning") else NOISE["item"]
         self.end_turn()
+        return True
+
+    def _effect_eat(self, item: Item, _target) -> bool:
+        res = self.resources
+        if res.food >= 2300:
+            self.say("You are too full to eat.")
+            return False
+        res.eat(item.magnitude)
+        self.say(f"You eat the {item.name}. {'Delicious!' if item.key == 'ration' else 'It tastes earthy.'}",
+                 C_GOOD)
+        return True
+
+    def _effect_refuel(self, item: Item, _target) -> bool:
+        res = self.resources
+        if res.torch >= 1400:
+            self.say("Your torch is already burning brightly.")
+            return False
+        res.refuel(item.magnitude)
+        self.say("You light a fresh torch from the embers of the old one.", C_ITEM)
+        self.update_fov()
         return True
 
     def _effect_heal(self, item: Item, _target) -> bool:
@@ -312,7 +445,7 @@ class Game:
         self.say(f"The {m.name}'s eyes glaze over.", C_MAGIC)
         return True
 
-    def _effect_teleport(self, item: Item, _target) -> bool:
+    def _effect_teleport(self, item: Item | None, _target) -> bool:
         spots = [(x, y) for y in range(self.gmap.height) for x in range(self.gmap.width)
                  if self.gmap.walkable(x, y) and not self.blocking_at(x, y)
                  and chebyshev((x, y), self.player.pos) > FOV_RADIUS]
@@ -336,7 +469,12 @@ class Game:
         self.tick_statuses(self.player)
         if self.game_over:
             return
+        self.tick_resources()
+        if self.game_over:
+            return
         self.update_fov()
+        for t in traps.passive_detect(self):
+            self.say(f"You notice a {t.name}.", C_ITEM)
         elapsed = cost * 100 // self.player.effective_speed
         for m in self.monsters:
             if not m.fighter.alive:
@@ -349,7 +487,19 @@ class Game:
                     self.tick_statuses(m)
             if self.game_over:
                 break
+        self.noise = 0
         self.update_fov()
+
+    def tick_resources(self) -> None:
+        events = self.resources.tick()
+        for text, color in events.messages:
+            self.say(text, color)
+        if events.starve_damage:
+            self.player.fighter.take_damage(events.starve_damage)
+            self.say("Hunger gnaws at you.", C_BAD)
+            if not self.player.fighter.alive:
+                self.death_cause = "starved to death"
+                self.say("You die...", C_BAD)
 
     def tick_statuses(self, e: Entity) -> None:
         """Apply damage-over-time and expire statuses for one creature action."""

@@ -15,6 +15,8 @@ def render(game: Game, log_lines: int = 5) -> str:
             elif gmap.explored[y][x]:
                 g = gmap.tiles[y][x].glyph
                 grid[y][x] = ":" if g == "." else g  # dim remembered floor
+            if grid[y][x] != " " and game.known_trap_at(x, y):
+                grid[y][x] = "^"
     # items, then corpses, then the living
     def order(e) -> int:
         return 2 if e.is_player else 1 if e.blocks else 0
@@ -24,7 +26,11 @@ def render(game: Game, log_lines: int = 5) -> str:
             grid[e.y][e.x] = e.glyph
     f = game.player.fighter
     status = (f"HP {f.hp}/{f.max_hp} [{bar(f.hp, f.max_hp, 10, '#', '-')}]  Pow {f.power} Def {f.defense}  "
-              f"Depth {game.depth}  XP {game.xp}  Turn {game.turn}")
+              f"Depth {game.depth}  Lv {game.level} XP {game.xp}  Turn {game.turn}\n"
+              f"Torch {game.resources.torch_label}  Food {game.resources.hunger_label}  "
+              f"[{game.theme.name}]")
+    if game.pending_levels:
+        status += "  ** LEVEL UP: +v vitality, +m might, +g guard **"
     effects = game.player.statuses.labels()
     if effects:
         status += "  [" + " ".join(label for label, _ in effects) + "]"

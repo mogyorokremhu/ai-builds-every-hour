@@ -39,6 +39,8 @@ def speed_word(e: "Entity") -> str:
 
 def describe_creature(e: "Entity") -> str:
     bits = [f"{'You' if e.is_player else a_an(e.name).capitalize()} ({health_word(e)}"]
+    if e.asleep:
+        bits.append(", asleep")
     sp = speed_word(e)
     if sp:
         bits.append(f", {sp}")
@@ -61,6 +63,7 @@ def describe_cell(game: "Game", x: int, y: int) -> list[str]:
     if not gmap.visible[y][x]:
         return [f"You remember {_article(tile.name)} here."]
     lines: list[str] = []
+    trap = game.known_trap_at(x, y)
     for e in game.entities:
         if e.pos != (x, y):
             continue
@@ -73,7 +76,12 @@ def describe_cell(game: "Game", x: int, y: int) -> list[str]:
     for e in game.entities:
         if e.pos == (x, y) and e.fighter is not None and not e.fighter.alive and not e.is_player:
             lines.append(a_an(e.name))
-    lines.append(_article(tile.name).capitalize() + ".")
+    if trap is not None:
+        lines.append(f"A {trap.name}.")
+    if (x, y) in game.altars:
+        lines.append("An altar " + ("(spent)." if game.altars[(x, y)] else "(you may pray here)."))
+    else:
+        lines.append(_article(tile.name).capitalize() + ".")
     return lines
 
 
