@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import random
 
-from . import ai, levelgen, loot, traps, vaults
+from . import ai, boss, levelgen, loot, traps, vaults
 from .combat import attack
 from .entities import MONSTER_TEMPLATES, Entity, make_monster, make_player
 from .fov import compute_fov
@@ -15,13 +15,14 @@ from .resources import Resources
 from .status import STATUS_INFO
 from .targeting import blast_area, projectile_path
 from .themes import Theme, theme_for_depth
+from .tiles import DOOR, OPEN_DOOR
 
 MAP_W, MAP_H = 70, 24
 FOV_RADIUS = 8           # radius with a bright torch (see resources.TORCH_STAGES)
 SLEEP_CHANCE = 0.45      # chance a freshly spawned monster (or pack) is asleep
 
 #: Noise made by player actions: monsters within ``noise * NOISE_RANGE`` may hear it.
-NOISE = {"move": 1, "wait": 0, "attack": 4, "pickup": 1, "item": 2, "loud": 8, "search": 0}
+NOISE = {"move": 1, "wait": 0, "attack": 4, "pickup": 1, "item": 2, "loud": 8, "search": 0, "door": 2}
 NOISE_RANGE = 2
 ENERGY_PER_ACTION = 100  # a creature acts each time its energy reaches this
 ACTION_COST = 100        # time a normal-speed action takes
@@ -31,8 +32,14 @@ C_INFO, C_GOOD, C_BAD, C_ITEM, C_MAGIC = "white", "bright_green", "bright_red", 
 
 
 class Game:
-    def __init__(self, seed: int | None = None) -> None:
+    """A whole run. ``mode`` is ``"normal"`` or ``"daily:YYYY-MM-DD"`` (see daily.py)."""
+
+    def __init__(self, seed: int | None = None, mode: str = "normal") -> None:
         self.seed = seed if seed is not None else random.randrange(1 << 30)
+        self.mode = mode
+        self.victory = False
+        self.kill_counts: dict[str, int] = {}
+        self.max_depth = 0
         self.rng = random.Random(self.seed)
         self.log = MessageLog()
         self.depth = 0
@@ -67,14 +74,28 @@ class Game:
 
     def new_level(self) -> None:
         self.depth += 1
+        self.max_depth = max(self.max_depth, self.depth)
         old_theme = self.theme
         self.theme = theme_for_depth(self.depth)
-        layout = levelgen.generate_level(MAP_W, MAP_H, self.rng, self.theme)
+        final = self.depth >= boss.BOSS_DEPTH
+        if final:
+            layout, sanctum = boss.build_arena(MAP_W, MAP_H, self.rng)
+        else:
+            layout = levelgen.generate_level(MAP_W, MAP_H, self.rng, self.theme)
         self.gmap, self.generator = layout.gmap, layout.generator
         self.player.x, self.player.y = layout.start
         self.entities = [self.player]
         self.traps, self.special_rooms, self.altars = {}, [], {}
         self._trap_confirm = None
+        if final:
+            boss.populate(self, sanctum)
+            for area in layout.areas:
+                if area and self.rng.random() < 0.5:
+                    self.place_item(loot.roll_loot(self.depth, self.rng), *self.rng.choice(area))
+            self.say(self.theme.intro, C_MAGIC)
+            self.say("No stairs lead further down. The Ember Guardian waits beyond the lava.", C_BAD)
+            self.update_fov()
+            return
         for area in layout.areas[1:]:
             self._spawn_monsters(area)
         for area in layout.areas:
@@ -150,8 +171,13 @@ class Game:
         return None
 
     @property
-    def game_over(self) -> bool:
+    def dead(self) -> bool:
         return not self.player.fighter.alive
+
+    @property
+    def game_over(self) -> bool:
+        """The run has ended: the player died or carried off the Ember Heart."""
+        return self.victory or not self.player.fighter.alive
 
     @property
     def fov_radius(self) -> int:
@@ -185,6 +211,8 @@ class Game:
             self.say(msg)
             if not target.fighter.alive:
                 self.on_kill(target)
+        elif self.gmap.is_closed_door(tx, ty):
+            self.open_door(tx, ty, self.player)
         elif self.gmap.walkable(tx, ty):
             known = self.known_trap_at(tx, ty)
             if known is not None and self._trap_confirm != (tx, ty) and not self.player.confused:
@@ -212,6 +240,49 @@ class Game:
             self.say("You bump into the wall.")  # a confused stumble still costs the turn
         else:
             return False
+        self.end_turn()
+        return True
+
+    # ---- doors ------------------------------------------------------------
+    def open_door(self, x: int, y: int, who: Entity) -> None:
+        """Open the closed door at (x, y) (player bump or a monster on the prowl)."""
+        self.gmap.set(x, y, OPEN_DOOR)
+        if who.is_player:
+            self.say("You open the door.")
+            self.noise = NOISE["door"]
+        elif self.gmap.visible[who.y][who.x] or self.gmap.visible[y][x]:
+            self.say(f"The {who.name} opens a door.", "bright_yellow")
+        if who.is_player:
+            self.update_fov()
+
+    def closable_doors(self) -> list[tuple[int, int]]:
+        """Adjacent open doors with nothing standing or lying in the doorway."""
+        px, py = self.player.pos
+        return [(px + dx, py + dy) for dx, dy in ai.DIRS8
+                if self.gmap.get(px + dx, py + dy).name == "open door"
+                and not self.blocking_at(px + dx, py + dy) and not self.items_at(px + dx, py + dy)]
+
+    def close_door(self, dx: int | None = None, dy: int | None = None) -> bool:
+        """Close the open door in direction (dx, dy), or the only adjacent one if omitted."""
+        if self.game_over:
+            return False
+        doors = self.closable_doors()
+        if dx is not None and dy is not None:
+            target = (self.player.x + dx, self.player.y + dy)
+            if target not in doors:
+                if self.gmap.get(*target).name == "open door":
+                    self.say("Something is in the way.")
+                else:
+                    self.say("There is no open door there.")
+                return False
+        elif len(doors) == 1:
+            target = doors[0]
+        else:
+            self.say("There is no open door next to you." if not doors else "Which door? (give a direction)")
+            return False
+        self.gmap.set(*target, DOOR)
+        self.say("You close the door.")
+        self.noise = NOISE["door"]
         self.end_turn()
         return True
 
@@ -257,6 +328,9 @@ class Game:
         return True
 
     def descend(self) -> bool:
+        if self.gmap.stairs is None:
+            self.say("There is no way further down. Only the Ember Heart remains.")
+            return False
         if self.player.pos != self.gmap.stairs:
             self.say("There are no stairs here.")
             return False
@@ -265,6 +339,8 @@ class Game:
         return True
 
     def on_kill(self, monster: Entity) -> None:
+        self.kill_counts[monster.name] = self.kill_counts.get(monster.name, 0) + 1
+        is_boss = "boss" in monster.tags
         monster.glyph, monster.blocks, monster.ai = "%", False, None
         monster.color = "red"
         monster.statuses = type(monster.statuses)()
@@ -273,6 +349,15 @@ class Game:
         monster.asleep = False
         self.kills += 1
         self.gain_xp(monster.xp_value)
+        if is_boss:
+            monster.tags.discard("boss")
+            self.place_item(make_item("ember heart"), monster.x, monster.y)
+            self.say("The Ember Guardian crumbles into cooling slag. Its burning heart remains!", C_GOOD)
+            for m in self.monsters:
+                if "minion" in m.tags:
+                    m.fighter.hp = 0
+                    self.on_kill(m)
+            self.say("Its summoned servants collapse into ash.", C_GOOD)
 
     def damage_monster(self, monster: Entity, amount: int, how: str) -> None:
         dealt = monster.fighter.take_damage(amount)
@@ -302,9 +387,13 @@ class Game:
             letter = inv.letter_of(stored)
             self.say(f"You pick up {ent.item.display_name} ({letter}).", C_ITEM)
             picked = True
+            if ent.item.key == "ember heart":
+                self.victory = True
+                self.say("The Ember Heart pulses in your hands. You have conquered Emberdeep!", C_GOOD)
         if picked:
             self.noise = NOISE["pickup"]
-            self.end_turn()
+            if not self.victory:  # the run ends the moment you hold the Heart
+                self.end_turn()
         return picked
 
     def drop(self, item: Item) -> bool:
@@ -441,6 +530,9 @@ class Game:
         if m is None:
             self.say("There is no creature there.")
             return False
+        if m.immune_to("confused"):
+            self.say(f"The {m.name} shrugs off the confusion.", C_BAD)
+            return True
         m.confused = item.magnitude
         self.say(f"The {m.name}'s eyes glaze over.", C_MAGIC)
         return True
@@ -530,6 +622,8 @@ class Game:
                 self.say(f"The {e.name} is no longer {adj}.")
 
     def apply_status(self, e: Entity, name: str, turns: int, power: int = 0) -> None:
+        if e.immune_to(name):
+            return
         new = e.statuses.add(name, turns, power)
         if not new:
             return

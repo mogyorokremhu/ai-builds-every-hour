@@ -96,13 +96,17 @@ class Entity:
     def is_player(self) -> bool:
         return "player" in self.tags
 
+    def immune_to(self, status: str) -> bool:
+        return f"immune:{status}" in self.tags
+
     def move(self, dx: int, dy: int) -> None:
         self.x += dx
         self.y += dy
 
 
 #: Monster templates. Optional keys: ai (default "chase"), speed (default 100),
-#: on_hit (status, turns, power, chance), spell (see ai.SPELLS), max_depth.
+#: on_hit (status, turns, power, chance), spell (see ai.SPELLS), max_depth,
+#: immune (statuses that can't affect it, stored as ``immune:<name>`` tags), tags.
 MONSTER_TEMPLATES: dict[str, dict] = {
     "rat": dict(glyph="r", color="yellow", hp=4, power=2, defense=0, xp=5, min_depth=1, weight=40,
                 max_depth=4),
@@ -111,17 +115,22 @@ MONSTER_TEMPLATES: dict[str, dict] = {
     "jackal": dict(glyph="j", color="yellow", hp=5, power=2, defense=0, xp=8, min_depth=2, weight=18,
                    ai="pack", speed=150, pack=(2, 4)),
     "ember imp": dict(glyph="i", color="red", hp=10, power=4, defense=1, xp=20, min_depth=2, weight=20,
-                      ai="caster", spell="ember bolt"),
+                      ai="caster", spell="ember bolt", immune=("burning",)),
     "cave spider": dict(glyph="s", color="bright_green", hp=9, power=3, defense=1, xp=22, min_depth=3,
                         weight=14, speed=120, on_hit=("poisoned", 5, 1, 0.5)),
     "kobold shaman": dict(glyph="k", color="bright_cyan", hp=9, power=2, defense=0, xp=28, min_depth=3,
                           weight=10, ai="caster", spell="hex of slowness"),
     "fire beetle": dict(glyph="b", color="bright_red", hp=16, power=4, defense=3, xp=30, min_depth=3,
-                        weight=12, speed=70, on_hit=("burning", 3, 2, 0.4)),
+                        weight=12, speed=70, on_hit=("burning", 3, 2, 0.4), immune=("burning",)),
     "myconid": dict(glyph="m", color="bright_magenta", hp=12, power=3, defense=1, xp=26, min_depth=4,
                     weight=8, speed=80, on_hit=("confused", 3, 0, 0.35)),
     "magma hound": dict(glyph="h", color="bright_red", hp=14, power=5, defense=1, xp=40, min_depth=7,
-                        weight=10, ai="pack", speed=140, pack=(2, 3), on_hit=("burning", 3, 2, 0.3)),
+                        weight=10, ai="pack", speed=140, pack=(2, 3), on_hit=("burning", 3, 2, 0.3),
+                        immune=("burning",)),
+    # the final boss (never spawned randomly: see boss.py)
+    "Ember Guardian": dict(glyph="&", color="bright_red", hp=110, power=8, defense=3, xp=400, min_depth=99,
+                           weight=0, ai="boss", spell="magma burst", immune=("burning", "confused"),
+                           tags=("boss",)),
     "cave troll": dict(glyph="T", color="magenta", hp=22, power=6, defense=2, xp=55, min_depth=4, weight=8),
 }
 
@@ -140,6 +149,7 @@ def make_monster(kind: str, x: int, y: int) -> Entity:
         speed=t.get("speed", 100),
         on_hit=t.get("on_hit"),
         spell=t.get("spell"),
+        tags=set(t.get("tags", ())) | {f"immune:{s}" for s in t.get("immune", ())},
     )
 
 

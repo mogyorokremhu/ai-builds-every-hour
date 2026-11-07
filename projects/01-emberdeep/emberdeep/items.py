@@ -21,7 +21,7 @@ class Item:
     name: str
     glyph: str
     color: str
-    kind: str                       # potion | scroll | weapon | armor | ring | tool | food
+    kind: str                       # potion | scroll | weapon | armor | ring | tool | food | artifact
     effect: str | None = None       # heal | haste | lightning | fireball | confuse | teleport
     targeting: str | None = TARGET_NONE
     magnitude: int = 0              # healing amount / damage / turns
@@ -69,6 +69,8 @@ class Item:
             bits.append(f"+{self.magnitude} torch fuel")
         elif self.effect == "eat":
             bits.append(f"+{self.magnitude} food")
+        elif self.kind == "artifact":
+            bits.append("the burning heart of the deep")
         return ", ".join(bits)
 
 
@@ -107,6 +109,8 @@ ITEM_TEMPLATES: dict[str, Item] = {
                  stackable=True),
     "glowcap": _c("glowcap", "glowcap mushroom", "%", "bright_green", "food", effect="eat",
                   magnitude=450, stackable=True),
+    # the goal of the game: dropped by the Ember Guardian
+    "ember heart": _c("ember heart", "Ember Heart", "*", "bright_red", "artifact"),
     # weapons
     "dagger": _c("dagger", "dagger", "/", "bright_white", "weapon", slot="weapon", power_bonus=1),
     "sword": _c("sword", "sword", "/", "bright_cyan", "weapon", slot="weapon", power_bonus=3),

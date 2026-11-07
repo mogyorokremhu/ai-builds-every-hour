@@ -9,10 +9,11 @@ Every monster has an ``ai`` kind:
   line of fire (see :data:`SPELLS`).
 * ``pack``   — howls to alert pack-mates, lurks at a distance until enough of the pack
   has gathered, then rushes in together.
+* ``boss``   — the Ember Guardian (registered by :mod:`emberdeep.boss`).
 
 All behaviours share: confusion (random stumbling), memory of the player's last seen
-position, and A* movement that routes around other monsters. Sleeping monsters do
-nothing until noise or proximity wakes them (see :func:`wake_chance`).
+position, and A* movement that routes around other monsters and opens closed doors.
+Sleeping monsters do nothing until noise or proximity wakes them (see :func:`wake_chance`).
 """
 from __future__ import annotations
 
@@ -55,6 +56,16 @@ def move_towards(game: "Game", m: "Entity", goal: tuple[int, int]) -> bool:
     nx, ny = path[0]
     if game.blocking_at(nx, ny) is not None:
         return False
+    return step_into(game, m, nx, ny)
+
+
+def step_into(game: "Game", m: "Entity", nx: int, ny: int) -> bool:
+    """Move ``m`` onto (nx, ny), or open the closed door there (which takes the action)."""
+    if game.gmap.is_closed_door(nx, ny):
+        game.open_door(nx, ny, m)
+        return True
+    if not game.gmap.walkable(nx, ny):
+        return False
     m.move(nx - m.x, ny - m.y)
     return True
 
@@ -65,8 +76,7 @@ def step_away(game: "Game", m: "Entity", threat: tuple[int, int]) -> bool:
     step = downhill_step(game.gmap, m.pos, field, blocked=lambda x, y: game.blocking_at(x, y) is not None)
     if step is None:
         return False
-    m.move(*step)
-    return True
+    return step_into(game, m, m.x + step[0], m.y + step[1])
 
 
 def wander(game: "Game", m: "Entity") -> None:
@@ -236,6 +246,10 @@ def describe_ai(m: "Entity") -> str:
     """Short behaviour hint for look mode."""
     if m.asleep:
         return "It is asleep."
+    if m.ai == "boss":
+        from .boss import describe
+
+        return describe(m)
     if m.ai == "coward":
         return "It looks skittish." if not m.ai_state.get("fleeing") else "It is fleeing!"
     if m.ai == "caster":
