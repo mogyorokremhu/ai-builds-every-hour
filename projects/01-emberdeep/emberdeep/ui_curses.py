@@ -12,6 +12,7 @@ from .colors import TILE_COLORS, ColorTable
 from .game import Game
 from .hud import sidebar
 from .items import TARGET_CELL, Item
+from .look import describe_cell
 from .targeting import Cursor, blast_area, projectile_path
 
 try:
@@ -74,7 +75,8 @@ class CursesUI:
         return view_w, view_h
 
     # ---- frame ------------------------------------------------------------
-    def draw(self, cursor: Cursor | None = None, item: Item | None = None, footer: str = "") -> None:
+    def draw(self, cursor: Cursor | None = None, item: Item | None = None, footer: str = "",
+             show_path: bool = True) -> None:
         g = self.game
         gmap = g.gmap
         self.screen.erase()
@@ -107,7 +109,8 @@ class CursesUI:
                 self.put(sy, sx, e.glyph, e.color)
 
         if cursor is not None:
-            overlay: set[tuple[int, int]] = set(projectile_path(gmap, g.player.pos, cursor.pos))
+            overlay: set[tuple[int, int]] = (
+                set(projectile_path(gmap, g.player.pos, cursor.pos)) if show_path else set())
             if item is not None and item.radius:
                 path = projectile_path(gmap, g.player.pos, cursor.pos)
                 center = path[-1] if path else g.player.pos
@@ -171,6 +174,8 @@ class CursesUI:
             self.show_text(keys.HELP_TEXT)
         elif cmd == "messages":
             self.message_history()
+        elif cmd == "look":
+            self.look()
         elif cmd == "inventory":
             item = self.choose_item("Use which item?")
             if item is not None:
@@ -236,6 +241,22 @@ class CursesUI:
             elif key in keys.MOVE_KEYS:
                 cur.move(*keys.MOVE_KEYS[key])
 
+    def look(self) -> None:
+        """Free-moving cursor that describes whatever it rests on. Esc/Enter leaves."""
+        g = self.game
+        p = g.player.pos
+        cur = Cursor(p, p[0], p[1], max(g.gmap.width, g.gmap.height), g.gmap.width, g.gmap.height)
+        while True:
+            desc = " | ".join(describe_cell(g, *cur.pos))
+            self.draw(cursor=cur, footer=f"Look: {desc}  (Esc to leave)", show_path=False)
+            key = self.screen.getch()
+            if key in keys.MOVE_KEYS:
+                cur.move(*keys.MOVE_KEYS[key])
+            elif key == keys.TAB:
+                cur.cycle([m.pos for m in g.visible_monsters()] + [e.pos for e in g.visible_items()])
+            else:
+                return
+
     def show_box(self, lines: Iterable[tuple[str, str]]) -> None:
         lines = list(lines)
         rows, cols = self.size()
@@ -288,6 +309,7 @@ class CursesUI:
         self.show_box([
             ("You have perished in Emberdeep.", "bright_red"),
             ("", "white"),
+            (f"Cause:         {g.death_cause or 'unknown'}", "white"),
             (f"Depth reached: {g.depth}", "white"),
             (f"Experience:    {g.xp}", "white"),
             (f"Kills:         {g.kills}", "white"),

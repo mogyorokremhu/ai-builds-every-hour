@@ -22,7 +22,7 @@ class Item:
     glyph: str
     color: str
     kind: str                       # potion | scroll | weapon | armor | ring
-    effect: str | None = None       # heal | lightning | fireball | confuse | teleport
+    effect: str | None = None       # heal | haste | lightning | fireball | confuse | teleport
     targeting: str | None = TARGET_NONE
     magnitude: int = 0              # healing amount / damage / turns
     radius: int = 0                 # area of effect (fireball)
@@ -61,6 +61,8 @@ class Item:
                 bits.append(f"radius {self.radius}")
         elif self.effect == "confuse":
             bits.append(f"confuses for {self.magnitude} turns")
+        elif self.effect == "haste":
+            bits.append(f"haste for {self.magnitude} turns")
         elif self.effect == "teleport":
             bits.append("random teleport")
         return ", ".join(bits)
@@ -82,6 +84,8 @@ ITEM_TEMPLATES: dict[str, Item] = {
                          effect="heal", magnitude=12, stackable=True),
     "greater healing potion": _c("greater healing potion", "potion of greater healing", "!", "bright_magenta",
                                  "potion", effect="heal", magnitude=30, stackable=True),
+    "speed potion": _c("speed potion", "potion of speed", "!", "bright_yellow", "potion",
+                       effect="haste", magnitude=15, stackable=True),
     "lightning scroll": _c("lightning scroll", "scroll of lightning", "?", "bright_yellow", "scroll",
                            effect="lightning", targeting=TARGET_AUTO, magnitude=14, range=7, stackable=True),
     "fireball scroll": _c("fireball scroll", "scroll of fireball", "?", "red", "scroll",

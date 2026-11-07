@@ -25,6 +25,9 @@ def render(game: Game, log_lines: int = 5) -> str:
     f = game.player.fighter
     status = (f"HP {f.hp}/{f.max_hp} [{bar(f.hp, f.max_hp, 10, '#', '-')}]  Pow {f.power} Def {f.defense}  "
               f"Depth {game.depth}  XP {game.xp}  Turn {game.turn}")
+    effects = game.player.statuses.labels()
+    if effects:
+        status += "  [" + " ".join(label for label, _ in effects) + "]"
     lines = ["".join(r) for r in grid] + [status, "-" * gmap.width] + game.log.last(log_lines)
     return "\n".join(lines)
 
