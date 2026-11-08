@@ -29,3 +29,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `bulls_cows.py` | Bulls and Cows solver: filters the candidate pool by feedback; `--solve`, `--stats N` |
 | `rush_hour_lite.py` | Rush Hour on a 6x6 board: BFS for the fewest car moves |
 | `kenken_check.py` | 4x4 KenKen solver: row permutations checked against cage arithmetic |
+| `latin_square.py` | Latin squares: random generation, completing partial squares (MRV backtracking), counting reduced squares |
+| `josephus.py` | Josephus problem: O(n) survivor recurrence plus full elimination order |
+| `collatz_search.py` | Longest Collatz chain below a limit using a memo table; `--path N` |
