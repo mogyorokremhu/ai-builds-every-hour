@@ -64,14 +64,15 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 ## Phase 6½ — Follow-ups found while building Phase 6
 - [ ] Fog-aware replays/spectating: toggle "show all" for hot-seat review
 - [ ] AI scouting under fog (send fast units to explore when no enemy is seen)
-- [ ] Ability animations (arrow rain, fireball burst) and floating damage numbers per victim
+- [x] Floating damage/heal numbers per victim (`effects.js`)
+- [ ] Ability animations (arrow rain, fireball burst)
 - [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
 
 ## Phase 7 — Campaign & presentation
 - [ ] Skirmish setup screen (map size, seed, armies, starting gold, turn limit; AI level selectors done)
 - [ ] Short campaign of 5 scenarios with carried-over veterans
-- [ ] WebAudio sound effects synthesised in code (no asset files)
-- [ ] Animations: attack lunges (done), damage numbers, death fades
+- [x] WebAudio sound effects synthesised in code (no asset files) — `sound.js`, Sound checkbox
+- [x] Animations: attack lunges, floating damage/heal numbers, death fades (`effects.js`)
 - [ ] Keyboard controls (E/U/N/Tab/Esc done) + accessibility pass (focus, high-contrast palette)
 - [ ] Mobile/touch support
 

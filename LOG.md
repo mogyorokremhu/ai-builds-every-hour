@@ -200,3 +200,10 @@
   now starts a fogged battle and raises a shield wall with the 1 key
 - mini/puzzles +6: Klotski (BFS, 116 slides), Skyscrapers, Futoshiki, Kakuro (+ random generator), Sokoban
   (fewest-push A*, playable), Minesweeper (logical auto-solver, ~90% win rate on intermediate)
+
+## 2026-11-08 12:00 UTC — hour 12: Hexfall effects & sound, 3 tools
+- Hexfall: `effects.js` diffs unit HP snapshots into floating damage/heal numbers and death fades (staggered per hex);
+  `sound.js` synthesises hit/crit/heal/death/etc. with WebAudio from data recipes; wired into attacks, abilities and
+  AI actions via `withFx`; Sound checkbox. Roadmap ticks: sound, damage numbers, death fades
+- Tests 128 → 136 (`effects`, `sound`)
+- mini/tools +3: `cipher.py` (Caesar/Vigènere/Atbash + cracker), `slug.py` (case converter), `ageof.py` (calendar date difference)

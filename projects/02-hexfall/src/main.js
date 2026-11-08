@@ -3,7 +3,7 @@
 // combat log, damage previews, undo and saves; unit abilities with target previews, status
 // effects, weather forecast and optional fog of war.
 import { Game, SIDES } from "./game.js";
-import { drawMap, drawUnits, fitLayout, hexAtPixel, hexCenter } from "./render.js";
+import { drawMap, drawUnits, fitLayout, hexAtPixel, hexCenter, SIDE_COLORS } from "./render.js";
 import { routeTo } from "./movement.js";
 import { terrain, TERRAIN } from "./terrain.js";
 import { terrainCounts } from "./mapgen.js";
@@ -15,6 +15,8 @@ import { AIPlayer, DIFFICULTY } from "./ai.js";
 import { ownedVillages, income } from "./economy.js";
 import { upcoming } from "./timeofday.js";
 import { moveAnimation, lungeAnimation, animatedPosition, finished } from "./animate.js";
+import { play, sfxFor, setMuted } from "./sound.js";
+import { snapshotUnits, diffEffects, drawEffects, effectsDone } from "./effects.js";
 import { serialize, deserialize, saveToSlot, loadFromSlot } from "./save.js";
 import { ABILITIES, abilitiesOf, abilityPreview, abilityStatus } from "./abilities.js";
 import { weatherForecast } from "./weather.js";
@@ -31,10 +33,11 @@ const seedInput = $("seed");
 const symInput = $("sym");
 const fogInput = $("fog");
 const weatherInput = $("weather");
+$("sound").addEventListener("change", (e) => setMuted(!e.target.checked));
 
 const state = {
   game: null, cam: null, viewport: { width: 0, height: 0 }, miniLayout: null,
-  selected: null, area: null, hover: null, anims: [], busy: false,
+  selected: null, area: null, hover: null, anims: [], fx: [], busy: false,
   ability: null, // ability id being aimed by the selected unit
   ai: { red: null, blue: null }, // AIPlayer per side, null = human
 };
@@ -70,6 +73,7 @@ function setGame(game) {
   state.selected = state.area = null;
   state.cam = null;
   state.anims = [];
+  state.fx = [];
   resize();
   const counts = terrainCounts(game.map);
   $("legend").innerHTML = Object.entries(counts)
@@ -171,6 +175,7 @@ function draw(now = performance.now()) {
   for (const a of state.anims) positions.set(a.unitId, animatedPosition(a, now, layout));
   const isVisible = viewer ? (u) => g.isVisible(viewer, u) : null;
   drawUnits(ctx, g.units, layout, { selected: state.selected, positions, activeSide: g.side, isVisible });
+  drawEffects(ctx, state.fx, now ?? performance.now(), layout, SIDE_COLORS);
   drawMinimap();
 }
 
@@ -188,14 +193,16 @@ function drawMinimap() {
   mctx.strokeRect(r.x * sx, r.y * sy, r.w * sx, r.h * sy);
 }
 
-function animate(anims) {
+function animate(anims, fx = []) {
   return new Promise((resolve) => {
     state.anims = anims;
+    state.fx = fx;
     state.busy = true;
     const frame = (now) => {
       draw(now);
-      if (state.anims.every((a) => finished(a, now))) {
+      if (state.anims.every((a) => finished(a, now)) && effectsDone(state.fx, now)) {
         state.anims = [];
+        state.fx = [];
         state.busy = false;
         draw();
         resolve();
@@ -430,7 +437,7 @@ async function runAi() {
         if (key(t) !== key(a.from)) await animate([lungeAnimation(u.id, a.from, t, performance.now())]);
       }
       if (state.game !== game) break;
-      player.play(g, a);
+      await withFx(() => player.play(g, a));
       refresh();
       if (a.type !== "hold") await sleep(a.type === "recruit" ? 200 : 120);
     }
@@ -439,6 +446,18 @@ async function runAi() {
     autosave();
     refresh();
   }
+}
+
+/** Run a state change, then play floating numbers / death fades for whatever HP it changed. */
+async function withFx(change) {
+  const before = snapshotUnits(state.game.units);
+  const result = change();
+  const fx = diffEffects(before, state.game.units, performance.now());
+  if (fx.length) {
+    play(sfxFor(fx));
+    await animate([], fx);
+  }
+  return result;
 }
 
 // ---------------------------------------------------------------- actions
@@ -488,7 +507,7 @@ async function doAttack(u, target) {
     if (route) await animate([moveAnimation(u.id, route, performance.now())]);
   }
   await animate([lungeAnimation(u.id, plan.from, target, performance.now())]);
-  g.attack(u, target);
+  await withFx(() => g.attack(u, target));
   select(null);
   autosave();
   refresh();
@@ -497,7 +516,7 @@ async function doAttack(u, target) {
 async function doAbility(u, id, target) {
   const g = state.game;
   if (key(target) !== key(u)) await animate([lungeAnimation(u.id, u, target, performance.now())]);
-  g.useAbility(u, id, target);
+  await withFx(() => g.useAbility(u, id, target));
   select(null);
   autosave();
   refresh();
