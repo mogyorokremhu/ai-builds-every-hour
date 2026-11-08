@@ -206,4 +206,9 @@
   `sound.js` synthesises hit/crit/heal/death/etc. with WebAudio from data recipes; wired into attacks, abilities and
   AI actions via `withFx`; Sound checkbox. Roadmap ticks: sound, damage numbers, death fades
 - Tests 128 → 136 (`effects`, `sound`)
-- mini/tools +3: `cipher.py` (Caesar/Vigènere/Atbash + cracker), `slug.py` (case converter), `ageof.py` (calendar date difference)
+- mini/tools +3: `cipher.py` (Caesar/Vigenere/Atbash + cracker), `slug.py` (case converter), `ageof.py` (calendar date difference)
+
+## 2026-11-08 13:00 UTC — hour 13: Hexfall setup & campaign logic, 3 tools
+- Hexfall: `skirmish.js` (validated setup → Game options, map sizes, army presets) and `campaign.js` (5 scenarios, veteran carry-over, progress); UI hookup into main.js queued
+- Tests 136 → 143 (`skirmish`, `campaign`)
+- mini/tools +3: `wc2.py`, `roman.py`, `dedupe.py`
