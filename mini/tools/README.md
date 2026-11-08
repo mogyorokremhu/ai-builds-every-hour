@@ -27,6 +27,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `wc2.py` | Lines / words / chars / bytes / longest line for files or stdin |
 | `roman.py` | Integer ↔ Roman numeral converter (1..3999, round-trip self-tested) |
 | `dedupe.py` | Remove repeated lines keeping first occurrences (`-c` counts, `-i` ignore case) |
+| `uniqwords.py` | Distinct words from files/stdin in first-seen order (`-s` sort, `-i` ignore case) |
+| `epoch.py` | Unix timestamp (s or ms) ↔ ISO date converter, `now` |
+| `histo.py` | Text histogram of numbers with adjustable bins (`-b`) |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
