@@ -24,6 +24,8 @@ export const TERRAIN = Object.freeze({
   river: { id: "river", name: "River", cost: 3, defense: -10, blocksSight: false, height: 0, color: "#3d78b0" },
   bridge: { id: "bridge", name: "Bridge", cost: 1, defense: 0, blocksSight: false, height: 1, color: "#9b7b52" },
   village: { id: "village", name: "Village", cost: 1, defense: 30, blocksSight: true, height: 1, color: "#c98a4b" },
+  castle: { id: "castle", name: "Castle", cost: 1, defense: 35, blocksSight: false, height: 1, color: "#9a9184" },
+  keep: { id: "keep", name: "Keep", cost: 1, defense: 45, blocksSight: true, height: 2, color: "#7c7368" },
   road: { id: "road", name: "Road", cost: 0.5, defense: 0, blocksSight: false, height: 1, color: "#b9a37a" },
 });
 

@@ -1,12 +1,13 @@
 {
   "name": "hexfall",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Hex-grid tactics game for the browser — vanilla ES modules, no build step",
   "type": "module",
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "serve": "python3 -m http.server 8000"
+    "serve": "python3 -m http.server 8000",
+    "selfplay": "node tools/selfplay.mjs --games 20"
   },
   "license": "MIT"
 }

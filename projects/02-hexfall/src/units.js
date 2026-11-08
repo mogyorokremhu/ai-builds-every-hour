@@ -12,7 +12,8 @@
  * @property {number} defense    flat damage reduction per hit
  * @property {number} mp         move points per turn
  * @property {number} cost       recruit cost in gold
- * @property {string[]} traits   rule tags: mounted, antiCavalry, magic, healer, ...
+ * @property {string[]} traits   rule tags: mounted, antiCavalry, magic, healer, skirmisher, ...
+ * @property {"lawful"|"neutral"|"chaotic"} alignment  lawful units fight better by day, chaotic by night
  * @property {string} perk       perk gained when promoted to veteran
  * @property {string} blurb
  */
@@ -20,34 +21,39 @@
 /** @type {Record<string, UnitType>} */
 export const UNIT_TYPES = Object.freeze({
   spearman: {
-    id: "spearman", name: "Spearman", glyph: "S", hp: 34, attack: 9, ranged: 0, range: 1, defense: 2,
+    id: "spearman", alignment: "lawful", name: "Spearman", glyph: "S", hp: 34, attack: 9, ranged: 0, range: 1, defense: 2,
     mp: 5, cost: 14, traits: ["antiCavalry"], perk: "phalanx",
     blurb: "Cheap line infantry. Spears deal ×1.5 damage to mounted units.",
   },
   swordsman: {
-    id: "swordsman", name: "Swordsman", glyph: "W", hp: 40, attack: 11, ranged: 0, range: 1, defense: 3,
+    id: "swordsman", alignment: "lawful", name: "Swordsman", glyph: "W", hp: 40, attack: 11, ranged: 0, range: 1, defense: 3,
     mp: 5, cost: 17, traits: [], perk: "blademaster",
     blurb: "Tough, hard-hitting melee fighter.",
   },
   archer: {
-    id: "archer", name: "Archer", glyph: "A", hp: 28, attack: 4, ranged: 8, range: 3, defense: 1,
+    id: "archer", alignment: "neutral", name: "Archer", glyph: "A", hp: 28, attack: 4, ranged: 8, range: 3, defense: 1,
     mp: 5, cost: 15, traits: [], perk: "longshot",
     blurb: "Shoots up to 3 hexes (4 from high ground). Needs a clear line of sight.",
   },
   cavalry: {
-    id: "cavalry", name: "Cavalry", glyph: "C", hp: 38, attack: 10, ranged: 0, range: 1, defense: 2,
+    id: "cavalry", alignment: "lawful", name: "Cavalry", glyph: "C", hp: 38, attack: 10, ranged: 0, range: 1, defense: 2,
     mp: 8, cost: 20, traits: ["mounted"], perk: "outrider",
     blurb: "Fast raider. Forests and swamps cost it 1 extra move point.",
   },
   mage: {
-    id: "mage", name: "Mage", glyph: "M", hp: 24, attack: 3, ranged: 11, range: 2, defense: 0,
+    id: "mage", alignment: "chaotic", name: "Mage", glyph: "M", hp: 24, attack: 3, ranged: 11, range: 2, defense: 0,
     mp: 5, cost: 20, traits: ["magic"], perk: "arcanist",
     blurb: "Fragile caster. Magic ignores terrain defence.",
   },
   healer: {
-    id: "healer", name: "Healer", glyph: "H", hp: 26, attack: 4, ranged: 0, range: 1, defense: 1,
+    id: "healer", alignment: "lawful", name: "Healer", glyph: "H", hp: 26, attack: 4, ranged: 0, range: 1, defense: 1,
     mp: 5, cost: 16, traits: ["healer"], perk: "medic",
     blurb: "Heals adjacent allies at the start of each of its turns.",
+  },
+  rogue: {
+    id: "rogue", alignment: "chaotic", name: "Rogue", glyph: "R", hp: 30, attack: 8, ranged: 0, range: 1, defense: 1,
+    mp: 6, cost: 15, traits: ["skirmisher"], perk: "backstab",
+    blurb: "Night raider. Skirmisher: ignores enemy zones of control.",
   },
 });
 
@@ -58,6 +64,7 @@ export const PERKS = Object.freeze({
   longshot: { name: "Longshot", text: "+1 range", apply: (u) => { u.bonus.range += 1; } },
   outrider: { name: "Outrider", text: "+1 move point", apply: (u) => { u.bonus.mp += 1; } },
   arcanist: { name: "Arcanist", text: "+3 ranged attack", apply: (u) => { u.bonus.ranged += 3; } },
+  backstab: { name: "Backstab", text: "+2 melee attack, +1 move point", apply: (u) => { u.bonus.attack += 2; u.bonus.mp += 1; } },
   medic: { name: "Medic", text: "heals 4 more", apply: (u) => { u.bonus.heal += 4; } },
   elite: { name: "Elite", text: "+1 attack, +1 defence", apply: (u) => {
     u.bonus.attack += 1;
@@ -132,6 +139,9 @@ export function describeUnit(u) {
   if (u.perks.length) parts.push(u.perks.map((p) => PERKS[p].name).join(", "));
   return parts.join(" · ");
 }
+
+/** Unit types a side may recruit at its keep. */
+export const RECRUITABLE = Object.freeze(Object.keys(UNIT_TYPES));
 
 /** The army each side gets in a default skirmish. */
 export const DEFAULT_ARMY = Object.freeze(["swordsman", "spearman", "archer", "cavalry", "mage", "healer"]);

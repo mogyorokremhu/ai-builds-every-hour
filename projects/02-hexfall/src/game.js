@@ -3,7 +3,11 @@ import { generate } from "./mapgen.js";
 import { HexMap } from "./map.js";
 import { RNG } from "./rng.js";
 import { key, distance, neighbors } from "./hex.js";
-import { createUnit, maxMp, maxHp, healAmount, unitType, DEFAULT_ARMY } from "./units.js";
+import { createUnit, maxMp, maxHp, healAmount, unitType, DEFAULT_ARMY, RECRUITABLE, UNIT_TYPES } from "./units.js";
+import {
+  DEFAULT_RULES, capture, income, holdTarget, ownedVillages, recruitHexes, recruitProblem, score,
+} from "./economy.js";
+import { timeOfDay } from "./timeofday.js";
 import { movementArea, routeTo, destinations, enemyZoc } from "./movement.js";
 import { attackKind, forecast, resolveAttack } from "./combat.js";
 
@@ -12,7 +16,8 @@ export const SIDES = Object.freeze([
   { id: "blue", name: "Blue" },
 ]);
 export const VILLAGE_HEAL = 8;
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
+const CHEAPEST = Math.min(...Object.values(UNIT_TYPES).map((t) => t.cost));
 
 export class Game {
   /**
@@ -20,8 +25,9 @@ export class Game {
    * @param {HexMap} init.map
    * @param {Array<Array<{q:number,r:number}>>} init.spawns  deployment zone per side
    * @param {number} [init.seed]
+   * @param {object} [init.rules]  overrides for DEFAULT_RULES (gold, income, objectives)
    */
-  constructor({ map, spawns, villages = [], seed = 1 }) {
+  constructor({ map, spawns, villages = [], seed = 1, rules = {} }) {
     this.map = map;
     this.spawns = spawns;
     this.villages = villages;
@@ -34,6 +40,11 @@ export class Game {
     this.winner = null;        // side id once decided
     this.log = [];             // {turn, side, text}
     this.history = [];         // undo stack of moves since the last irreversible action
+    this.rules = { ...DEFAULT_RULES, ...rules };
+    this.sideIds = SIDES.map((s) => s.id);
+    this.gold = SIDES.map(() => this.rules.startGold);
+    this.hold = SIDES.map(() => 0); // consecutive own turn starts holding enough villages
+    this.endReason = null;     // "rout" | "hold" | "turns" once decided
   }
 
   /**
@@ -43,7 +54,7 @@ export class Game {
   static create(opts = {}) {
     const seed = opts.seed ?? 1;
     const gen = generate({ seed, symmetric: opts.symmetric ?? false, ...(opts.map ?? {}) });
-    const game = new Game({ map: gen.map, spawns: gen.spawns, villages: gen.villages, seed });
+    const game = new Game({ map: gen.map, spawns: gen.spawns, villages: gen.villages, seed, rules: opts.rules });
     const armies = opts.armies ?? [DEFAULT_ARMY, DEFAULT_ARMY];
     armies.forEach((army, i) => game.deploy(SIDES[i].id, army));
     game.say(`Battle begins on map ${seed}. ${SIDES[0].name} moves first.`);
@@ -113,10 +124,17 @@ export class Game {
     if (!route) throw new Error(`unit ${unit.id} cannot reach ${key(dest)}`);
     if (route.length === 1) return route;
     const node = area.get(key(dest));
-    this.history.push({ id: unit.id, q: unit.q, r: unit.r, mp: unit.mp });
+    const entry = { id: unit.id, q: unit.q, r: unit.r, mp: unit.mp };
+    this.history.push(entry);
     unit.q = dest.q;
     unit.r = dest.r;
     unit.mp = node.zoc ? 0 : Math.max(0, unit.mp - node.cost);
+    const prev = capture(this, unit.side, dest);
+    if (prev !== undefined) {
+      entry.capturedFrom = prev;     // undo gives the village back
+      unit.mp = 0;                   // capturing a village ends the move
+      this.say(`${SIDES[this.active].name} captures a village${prev ? ` from ${this.sideName(prev)}` : ""} (${ownedVillages(this, unit.side).length} held).`);
+    }
     return route;
   }
 
@@ -129,6 +147,7 @@ export class Game {
     const last = this.history.pop();
     if (!last) return false;
     const u = this.unitById(last.id);
+    if ("capturedFrom" in last) this.map.get(u).owner = last.capturedFrom;
     Object.assign(u, { q: last.q, r: last.r, mp: last.mp });
     return true;
   }
@@ -176,13 +195,94 @@ export class Game {
     return res;
   }
 
+  sideName(id) {
+    return SIDES.find((s) => s.id === id)?.name ?? id;
+  }
+
+  /** Current time of day (dawn, morning, ... second watch). */
+  timeOfDay() {
+    return timeOfDay(this.turn);
+  }
+
+  /** Can side index `i` still field an army (units left, or gold and a keep to recruit)? */
+  canFight(i) {
+    if (this.unitsOf(SIDES[i].id).length) return true;
+    return this.gold[i] >= CHEAPEST && recruitHexes(this, i).length > 0;
+  }
+
+  /** Declare the result once. `winner` may be "draw". */
+  finish(winner, reason, text) {
+    if (this.winner) return;
+    this.winner = winner;
+    this.endReason = reason;
+    this.history = [];
+    this.say(text);
+  }
+
   checkWinner() {
-    const alive = SIDES.filter((s) => this.unitsOf(s.id).length > 0);
+    const alive = SIDES.filter((_s, i) => this.canFight(i));
     if (alive.length === 1 && !this.winner) {
-      this.winner = alive[0].id;
-      this.say(`${alive[0].name} wins — the enemy army is routed!`);
+      this.finish(alive[0].id, "rout", `${alive[0].name} wins — the enemy army is routed!`);
     }
     return this.winner;
+  }
+
+  // ------------------------------------------------------------ economy
+
+  /** Why the active side cannot recruit `type` now ("" = it can). */
+  recruitProblem(type) {
+    if (this.winner) return "the battle is over";
+    if (!RECRUITABLE.includes(type)) return `cannot recruit ${type}`;
+    return recruitProblem(this, this.active, type);
+  }
+
+  /** Free hexes where the active side can place recruits. */
+  recruitHexes() {
+    return this.winner ? [] : recruitHexes(this, this.active);
+  }
+
+  /**
+   * Recruit a `type` unit for the active side on `at` (default: the free castle hex nearest
+   * the enemy). Costs gold; the recruit cannot move or attack until the next turn.
+   */
+  recruit(type, at = null) {
+    const problem = this.recruitProblem(type);
+    if (problem) throw new Error(`cannot recruit ${type}: ${problem}`);
+    const hexes = this.recruitHexes();
+    let hex;
+    if (at) {
+      hex = hexes.find((h) => h.q === at.q && h.r === at.r);
+      if (!hex) throw new Error(`cannot recruit on ${key(at)}`);
+    } else {
+      const foe = this.spawns[(this.active + 1) % SIDES.length]?.[0];
+      hex = foe ? hexes.slice().sort((a, b) => distance(a, foe) - distance(b, foe))[0] : hexes[0];
+    }
+    const u = createUnit(this.nextId++, type, this.side, hex);
+    u.mp = 0;
+    u.acted = true;
+    this.units.push(u);
+    this.gold[this.active] -= unitType(type).cost;
+    this.history = [];
+    this.say(`${SIDES[this.active].name} recruits a ${unitType(type).name.toLowerCase()} (${this.gold[this.active]} gold left).`);
+    return u;
+  }
+
+  /** Battle score of a side (used when the turn limit is reached). */
+  score(side) {
+    return score(this, side);
+  }
+
+  /** Villages needed for a hold victory (0 = disabled). */
+  holdTarget() {
+    return holdTarget(this);
+  }
+
+  /** Turn limit reached: the higher score wins. */
+  decideOnScore() {
+    const [a, b] = SIDES.map((s) => this.score(s.id).total);
+    const text = `Turn limit reached — score ${SIDES[0].name} ${a} : ${b} ${SIDES[1].name}.`;
+    if (a === b) this.finish("draw", "turns", `${text} The battle is a draw.`);
+    else this.finish(a > b ? SIDES[0].id : SIDES[1].id, "turns", `${text} ${a > b ? SIDES[0].name : SIDES[1].name} wins on points!`);
   }
 
   /** End the active side's turn and start the next side's (healing, fresh move points). */
@@ -190,13 +290,38 @@ export class Game {
     if (this.winner) return;
     this.history = [];
     this.active = (this.active + 1) % SIDES.length;
-    if (this.active === 0) this.turn += 1;
-    this.say(`Turn ${this.turn}: ${SIDES[this.active].name} to move.`);
+    if (this.active === 0) {
+      if (this.rules.turnLimit && this.turn >= this.rules.turnLimit) {
+        this.decideOnScore();
+        return;
+      }
+      this.turn += 1;
+    }
+    this.say(`Turn ${this.turn} (${this.timeOfDay().name}): ${SIDES[this.active].name} to move.`);
     this.startTurn();
   }
 
-  /** Start-of-turn upkeep for the active side: villages and healers heal, units refresh. */
+  /**
+   * Start-of-turn upkeep for the active side: income, the village hold count (and hold
+   * victory), village and healer healing, fresh move points.
+   */
   startTurn() {
+    const gained = income(this, this.side);
+    this.gold[this.active] += gained;
+    const held = ownedVillages(this, this.side).length;
+    const target = this.holdTarget();
+    if (target && held >= target) {
+      this.hold[this.active] += 1;
+      const left = this.rules.holdTurns - this.hold[this.active];
+      if (left <= 0) {
+        this.finish(this.side, "hold", `${SIDES[this.active].name} wins — ${held} villages held for ${this.rules.holdTurns} turns!`);
+        return;
+      }
+      this.say(`${SIDES[this.active].name} holds ${held}/${this.villages.length} villages: ${left} more turn${left === 1 ? "" : "s"} to victory.`);
+    } else {
+      this.hold[this.active] = 0;
+    }
+    this.say(`${SIDES[this.active].name} collects ${gained} gold (${this.gold[this.active]} total).`);
     const mine = this.unitsOf(this.side);
     const heals = new Map();
     for (const u of mine) {
@@ -235,16 +360,24 @@ export class Game {
       turn: this.turn,
       active: this.active,
       winner: this.winner,
+      endReason: this.endReason,
+      rules: this.rules,
+      gold: this.gold,
+      hold: this.hold,
       log: this.log,
     };
   }
 
   static fromJSON(data) {
-    if (!data || data.version !== SAVE_VERSION) throw new Error("unsupported save version");
-    const g = new Game({ map: HexMap.fromJSON(data.map), spawns: data.spawns, villages: data.villages, seed: data.seed });
+    if (!data || ![1, SAVE_VERSION].includes(data.version)) throw new Error("unsupported save version");
+    const g = new Game({ map: HexMap.fromJSON(data.map), spawns: data.spawns, villages: data.villages, seed: data.seed, rules: data.rules });
     g.rng.state = data.rng >>> 0;
     g.units = structuredClone(data.units);
     Object.assign(g, { nextId: data.nextId, turn: data.turn, active: data.active, winner: data.winner, log: structuredClone(data.log) });
+    // version 1 saves predate the economy: they keep the default starting gold
+    if (data.gold) g.gold = [...data.gold];
+    if (data.hold) g.hold = [...data.hold];
+    g.endReason = data.endReason ?? (data.winner ? "rout" : null);
     return g;
   }
 }
