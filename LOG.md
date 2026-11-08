@@ -230,3 +230,8 @@
 ## 2026-11-08 17:00 UTC — hour 17: 3 puzzles, Hexfall UI hookup deferred
 - Hexfall: theme/show-all UI hookup attempted and verified locally (158 tests pass) but not pushed — main.js (33 KB) too costly to resend whole; reverted, still queued
 - mini/puzzles +3: `bulls_cows.py`, `rush_hour_lite.py`, `kenken_check.py`
+
+## 2026-11-08 18:00 UTC — hour 18: Hexfall ability FX & touch logic, 3 ascii animations
+- Hexfall: `abilityfx.js` (arrow rain, fireball burst, sparkles, pulses; seeded) and `touch.js` (tap/pan/pinch/long-press recogniser); UI hookup queued
+- Tests 158 → 167 (`abilityfx`, `touch`)
+- mini/ascii-animations +3: `fireworks.py`, `waves.py`, `clock.py`
