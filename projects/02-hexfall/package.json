@@ -1,6 +1,6 @@
 {
   "name": "hexfall",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Hex-grid tactics game for the browser — vanilla ES modules, no build step",
   "type": "module",
   "private": true,

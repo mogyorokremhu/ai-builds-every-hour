@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>⬡ Hexfall</h1>
-    <p class="tag">hex-grid tactics · villages, recruits, day &amp; night, AI opponent</p>
+    <p class="tag">hex-grid tactics · villages, recruits, abilities, day &amp; night, weather, fog of war, AI opponent</p>
     <p id="turn" class="turn red" aria-live="polite"></p>
   </header>
   <section class="controls">
@@ -17,6 +17,8 @@
     <button id="newgame">New battle</button>
     <button id="random">Random map</button>
     <label><input id="sym" type="checkbox" style="width:auto"> Symmetric</label>
+    <label title="Sides only see what their units see; hidden enemies can ambush you"><input id="fog" type="checkbox" style="width:auto"> Fog of war</label>
+    <label title="Rain, fog and storms from turn 4 on"><input id="weather" type="checkbox" style="width:auto" checked> Weather</label>
     <label>Red <select id="redai"><option value="human">Human</option><option value="easy">AI easy</option><option value="normal">AI normal</option><option value="hard">AI hard</option></select></label>
     <label>Blue <select id="blueai"><option value="human">Human</option><option value="easy">AI easy</option><option value="normal" selected>AI normal</option><option value="hard">AI hard</option></select></label>
     <span class="sep"></span>
@@ -38,6 +40,7 @@
     <aside>
       <div id="daynight" class="daynight" aria-label="Day/night cycle, next six turns"></div>
       <div id="economy" class="economy"></div>
+      <div id="abilities" class="abilities" aria-label="Abilities of the selected unit" hidden></div>
       <h2>Recruit at your keep</h2>
       <div id="recruit" class="recruit"></div>
       <h2>Armies</h2>
@@ -54,7 +57,9 @@
     <kbd>U</kbd> undo move, <kbd>N</kbd>/<kbd>Tab</kbd> next unit, <kbd>Esc</kbd> deselect. Wheel zooms, drag pans.
     Entering a hex next to an enemy (its zone of control) ends your move. Moving onto a village captures it
     (+2 gold per turn); recruit on the green castle hexes around your keep. Lawful units fight 25% better by day,
-    chaotic ones by night.</footer>
+    chaotic ones by night. Every unit has an ability (buttons under the economy panel, keys <kbd>1</kbd>–<kbd>9</kbd>):
+    charge, volley, fireball, heal, shield wall, rally, envenom — purple rings mark their targets. Rain dulls arrows
+    and douses fires, fog shortens sight and range.</footer>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
