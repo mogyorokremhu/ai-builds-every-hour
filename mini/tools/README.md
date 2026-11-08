@@ -11,9 +11,11 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `tree.py` | Directory tree with human-readable sizes, depth limit and size sorting |
 | `wordfreq.py` | Word-frequency bar chart plus text statistics (stopword filtering) |
 | `units.py` | Unit converter with dimensional analysis (`km/h`, `kg*m/s^2`, `kWh`) and temperatures |
-| `linediff.py` | Myers O(ND) line diff printed as a coloured unified diff with hunks (`-U n`, diff-style exit code) |
-| `csvview.py` | CSV as a boxed, aligned table: delimiter sniffing, `--sort`, `--where`, `--cols`, `--stats` |
-| `jsonq.py` | Tiny jq: `.a[0].b`, `[]` iteration, `[?age>30]` filters, pipes (`length`, `uniq`, `sum`…), colours |
-| `baseconv.py` | Number in every base at once (hex/oct/bin/base36, roman numerals, bytes, two's complement) |
-| `cronnext.py` | Explains a cron expression in English and lists its next run times (names, steps, `@daily`) |
-| `mdtoc.py` | Markdown table of contents with GitHub-style anchors; `--write` updates it in place |
+| `jsonq.py` | JSON pretty-printer/minifier/validator with caret error locations and `users[*].name` path queries |
+| `cronx.py` | Explains a cron expression in English and lists its next run times (names, steps, `@daily`, dom/dow OR rule) |
+| `difftool.py` | Line diff built on Myers' O(ND) algorithm: coloured unified hunks or side-by-side view, `-w` |
+| `csvview.py` | CSV as an aligned box/Markdown table with `--where` filters, numeric-aware `--sort` and `--stats` |
+| `bases.py` | Number in every base: hex/octal/grouped binary, base 36, two's complement, Roman numerals, bit ruler |
+| `timer.py` | Countdown / stopwatch / pomodoro with big block digits, progress bar and a bell |
+
+Most tools also accept `--selftest` to run their built-in checks.

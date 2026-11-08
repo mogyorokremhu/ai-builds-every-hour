@@ -1,13 +1,18 @@
-"""Pretty-print CSV files as aligned tables, with sorting, filtering and column stats.
+#!/usr/bin/env python3
+"""csvview — show a CSV file as an aligned table, with sorting, filtering and stats.
 
-    python csvview.py data.csv                       # boxed table
-    python csvview.py data.csv --sort age --desc     # sort by a column (numbers sort numerically)
-    python csvview.py data.csv --where "city=Pécs"   # keep rows whose column matches
-    python csvview.py data.csv --cols name,age       # pick columns
-    python csvview.py data.csv --stats               # per-column summary
-    python csvview.py --demo                         # built-in sample
+Usage:
+    python csvview.py FILE [--sort COL[:desc]] [--where 'COL OP VALUE'] [--cols a,b,c]
+                           [--head N] [--stats] [--md] [--delim ';']
 
-The delimiter is sniffed (comma, semicolon, tab, pipe). Numeric columns are right-aligned.
+* ``--where``  filters rows; OP is one of ``= != < <= > >= ~`` (``~`` = contains,
+               case-insensitive). Numbers compare numerically. Repeatable (AND).
+* ``--sort``   sorts numerically when every value in the column is a number.
+* ``--stats``  per-column summary: type, non-empty count, distinct, min/max/mean.
+* ``--md``     print a Markdown table instead of a box-drawn one.
+
+The delimiter is sniffed automatically unless ``--delim`` is given. Numbers are
+right-aligned, text left-aligned; ``-`` reads from standard input.
 """
 from __future__ import annotations
 
@@ -15,136 +20,161 @@ import csv
 import io
 import statistics
 import sys
-import unicodedata
 
-DEMO = """name;city;age;score
-Anna;Budapest;34;88.5
-Bence;Pécs;27;92
-Csilla;Szeged;41;79.25
-Dávid;Budapest;19;95
-Emese;Győr;30;
-Ferenc;Pécs;52;67.5
-"""
+OPS = {"=", "!=", "<", "<=", ">", ">=", "~"}
 
 
-def to_number(s: str) -> float | None:
+def num(s: str) -> float | None:
     try:
-        return float(s.replace(",", ".")) if s.strip() else None
+        return float(s.replace(",", "")) if s.strip() else None
     except ValueError:
         return None
 
 
-def width(s: str) -> int:
-    """Display width (wide East Asian characters take two cells)."""
-    return sum(2 if unicodedata.east_asian_width(ch) in "WF" else 1 for ch in s)
+def is_numeric(values: list[str]) -> bool:
+    filled = [v for v in values if v.strip()]
+    return bool(filled) and all(num(v) is not None for v in filled)
 
 
-def read(text: str) -> tuple[list[str], list[list[str]]]:
-    try:
-        dialect = csv.Sniffer().sniff(text[:4096], delimiters=",;\t|")
-    except csv.Error:
-        dialect = csv.excel
-    rows = [r for r in csv.reader(io.StringIO(text), dialect) if r]
+def parse_where(expr: str) -> tuple[str, str, str]:
+    for op in sorted(OPS, key=len, reverse=True):
+        if f" {op} " in expr:
+            col, val = expr.split(f" {op} ", 1)
+            return col.strip(), op, val.strip()
+    raise ValueError(f"can't parse filter {expr!r} (use 'col op value', ops: {' '.join(sorted(OPS))})")
+
+
+def matches(cell: str, op: str, val: str) -> bool:
+    a, b = num(cell), num(val)
+    if op == "~":
+        return val.lower() in cell.lower()
+    if a is not None and b is not None:
+        x, y = a, b
+    else:
+        x, y = cell, val  # type: ignore[assignment]
+    return {"=": x == y, "!=": x != y, "<": x < y, "<=": x <= y, ">": x > y, ">=": x >= y}[op]
+
+
+def load(text: str, delim: str | None = None) -> tuple[list[str], list[list[str]]]:
+    if delim is None:
+        try:
+            delim = csv.Sniffer().sniff(text[:4096], delimiters=",;\t|").delimiter
+        except csv.Error:
+            delim = ","
+    rows = list(csv.reader(io.StringIO(text), delimiter=delim))
     if not rows:
         return [], []
     header, body = rows[0], rows[1:]
-    n = len(header)
-    body = [(r + [""] * n)[:n] for r in body]
+    width = len(header)
+    body = [(r + [""] * width)[:width] for r in body if any(c.strip() for c in r)]
     return header, body
 
 
-def is_numeric(col: list[str]) -> bool:
-    vals = [v for v in col if v.strip()]
-    return bool(vals) and all(to_number(v) is not None for v in vals)
+def column(header: list[str], name: str) -> int:
+    if name in header:
+        return header.index(name)
+    low = [h.lower() for h in header]
+    if name.lower() in low:
+        return low.index(name.lower())
+    if name.isdigit() and int(name) < len(header):
+        return int(name)
+    raise SystemExit(f"no column {name!r}; columns are: {', '.join(header)}")
 
 
-def table(header: list[str], rows: list[list[str]]) -> list[str]:
-    cols = list(zip(*([header] + rows))) if rows else [(h,) for h in header]
-    widths = [max(width(v) for v in col) for col in cols]
-    numeric = [is_numeric(list(col[1:])) for col in cols]
+def table(header: list[str], rows: list[list[str]], md: bool = False) -> list[str]:
+    numeric = [is_numeric([r[i] for r in rows]) for i in range(len(header))]
+    widths = [max([len(h)] + [len(r[i]) for r in rows]) for i, h in enumerate(header)]
 
-    def fmt(row: list[str]) -> str:
-        cells = []
-        for v, w, num in zip(row, widths, numeric):
-            pad = " " * (w - width(v))
-            cells.append(pad + v if num else v + pad)
-        return "│ " + " │ ".join(cells) + " │"
+    def fmt(cells: list[str]) -> list[str]:
+        return [c.rjust(w) if n else c.ljust(w) for c, w, n in zip(cells, widths, numeric)]
 
-    line = lambda l, m, r: l + m.join("─" * (w + 2) for w in widths) + r  # noqa: E731
-    out = [line("┌", "┬", "┐"), fmt(header), line("├", "┼", "┤")]
-    out += [fmt(r) for r in rows]
+    if md:
+        out = ["| " + " | ".join(fmt(header)) + " |",
+               "|" + "|".join(("-" * (w + 1) + ":") if n else ("-" * (w + 2)) for w, n in zip(widths, numeric)) + "|"]
+        out += ["| " + " | ".join(fmt(r)) + " |" for r in rows]
+        return out
+    line = lambda l, m, r: l + m.join("─" * (w + 2) for w in widths) + r
+    out = [line("┌", "┬", "┐"), "│ " + " │ ".join(h.center(w) for h, w in zip(header, widths)) + " │",
+           line("├", "┼", "┤")]
+    out += ["│ " + " │ ".join(fmt(r)) + " │" for r in rows]
     out.append(line("└", "┴", "┘"))
     return out
 
 
-def stats(header: list[str], rows: list[list[str]]) -> list[str]:
+def stats(header: list[str], rows: list[list[str]]) -> list[list[str]]:
     out = []
     for i, h in enumerate(header):
-        col = [r[i] for r in rows]
-        filled = [v for v in col if v.strip()]
-        if is_numeric(col):
-            nums = [to_number(v) for v in filled]
-            out.append(f"{h}: n={len(nums)} min={min(nums):g} max={max(nums):g} "
-                       f"mean={statistics.fmean(nums):.3g} median={statistics.median(nums):g}"
-                       + (f" missing={len(col) - len(filled)}" if len(filled) < len(col) else ""))
+        vals = [r[i] for r in rows]
+        filled = [v for v in vals if v.strip()]
+        if is_numeric(vals):
+            ns = [num(v) for v in filled]
+            out.append([h, "number", str(len(filled)), str(len(set(filled))), f"{min(ns):g}", f"{max(ns):g}",
+                        f"{statistics.fmean(ns):.4g}"])
         else:
-            counts: dict[str, int] = {}
-            for v in filled:
-                counts[v] = counts.get(v, 0) + 1
-            top = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:3]
-            out.append(f"{h}: {len(counts)} distinct; top " + ", ".join(f"{k} ({n})" for k, n in top))
+            top = max(sorted(set(filled)), key=filled.count) if filled else ""
+            out.append([h, "text", str(len(filled)), str(len(set(filled))), "", "", f"most common: {top}"])
     return out
 
 
-def apply(header, rows, sort=None, desc=False, where=None, cols=None):
-    if where:
-        key, _, val = where.partition("=")
-        i = header.index(key)
-        rows = [r for r in rows if r[i].lower() == val.lower()]
-    if sort:
-        i = header.index(sort)
-        if is_numeric([r[i] for r in rows]):
-            rows = sorted(rows, key=lambda r: (to_number(r[i]) is None, to_number(r[i]) or 0), reverse=desc)
-        else:
-            rows = sorted(rows, key=lambda r: r[i].lower(), reverse=desc)
-    if cols:
-        idx = [header.index(c) for c in cols.split(",")]
-        header = [header[i] for i in idx]
-        rows = [[r[i] for i in idx] for r in rows]
-    return header, rows
-
-
 def main(argv: list[str]) -> int:
-    opts: dict[str, str | bool] = {}
+    if not argv or argv[0] in ("-h", "--help"):
+        print(__doc__)
+        return 0
+    opts: dict[str, list[str]] = {}
     files = []
     it = iter(argv)
     for a in it:
-        if a in ("--sort", "--where", "--cols"):
-            opts[a[2:]] = next(it, "")
-        elif a in ("--desc", "--stats", "--demo"):
-            opts[a[2:]] = True
+        if a in ("--sort", "--where", "--cols", "--head", "--delim"):
+            opts.setdefault(a, []).append(next(it))
+        elif a.startswith("--"):
+            opts[a] = []
         else:
             files.append(a)
-    if files:
-        with open(files[0], encoding="utf-8-sig") as fh:
-            text = fh.read()
-    elif opts.get("demo") or sys.stdin.isatty():
-        text = DEMO
-    else:
-        text = sys.stdin.read()
-    header, rows = read(text)
-    try:
-        header, rows = apply(header, rows, opts.get("sort"), bool(opts.get("desc")), opts.get("where"),
-                             opts.get("cols"))
-    except ValueError as exc:
-        print(f"unknown column: {exc}", file=sys.stderr)
-        return 2
-    print("\n".join(table(header, rows)))
-    print(f"{len(rows)} row(s)")
-    if opts.get("stats"):
-        print("\n".join(stats(header, rows)))
+    text = sys.stdin.read() if files[0] == "-" else open(files[0], encoding="utf-8-sig").read()
+    header, rows = load(text, opts.get("--delim", [None])[0])
+    for expr in opts.get("--where", []):
+        col, op, val = parse_where(expr)
+        i = column(header, col)
+        rows = [r for r in rows if matches(r[i], op, val)]
+    for spec in opts.get("--sort", []):
+        name, _, order = spec.partition(":")
+        i = column(header, name)
+        if is_numeric([r[i] for r in rows]):
+            key = lambda r: (num(r[i]) is None, num(r[i]) or 0.0)
+        else:
+            key = lambda r: r[i].lower()
+        rows.sort(key=key, reverse=order == "desc")
+    if "--cols" in opts:
+        idx = [column(header, c) for c in opts["--cols"][0].split(",")]
+        header = [header[i] for i in idx]
+        rows = [[r[i] for i in idx] for r in rows]
+    if "--stats" in opts:
+        print("\n".join(table(["column", "type", "filled", "distinct", "min", "max", "mean / note"],
+                              stats(header, rows), "--md" in opts)))
+        return 0
+    total = len(rows)
+    if "--head" in opts:
+        rows = rows[: int(opts["--head"][0])]
+    print("\n".join(table(header, rows, "--md" in opts)))
+    print(f"{len(rows)} of {total} rows")
     return 0
 
 
+def _selftest() -> None:
+    h, rows = load("name;age;city\nAda;36;London\nLinus;28;Helsinki\nGrace;85;New York\n")
+    assert h == ["name", "age", "city"] and len(rows) == 3
+    assert is_numeric([r[1] for r in rows]) and not is_numeric([r[0] for r in rows])
+    assert parse_where("age >= 30") == ("age", ">=", "30")
+    assert [r[0] for r in rows if matches(r[1], ">", "30")] == ["Ada", "Grace"]
+    assert matches("New York", "~", "york")
+    t = table(h, rows)
+    assert t[0].startswith("┌") and "│  36 │" in t[3] and t[3].endswith("│")
+    assert stats(h, rows)[1][4:6] == ["28", "85"]
+    print("selftest ok")
+
+
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    if sys.argv[1:] == ["--selftest"]:
+        _selftest()
+    else:
+        sys.exit(main(sys.argv[1:]))

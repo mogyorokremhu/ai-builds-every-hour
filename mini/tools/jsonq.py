@@ -1,168 +1,153 @@
-"""A tiny jq-like JSON query tool with a hand-written path language.
+#!/usr/bin/env python3
+"""jsonq — pretty-print, validate, minify and query JSON (a tiny dependency-free ``jq``).
 
-    python jsonq.py data.json                         # pretty-print with colours
-    python jsonq.py data.json '.users[0].name'        # index into objects/arrays
-    python jsonq.py data.json '.users[].email'        # [] iterates
-    python jsonq.py data.json '.users[?age>30].name'  # filter: ?key op value (= != > < >= <=)
-    python jsonq.py data.json '.users | length'       # pipes: length, keys, sort, uniq, sum, first, last
-    echo '{"a":[1,2,3]}' | python jsonq.py - '.a | sum'
-    python jsonq.py --demo '.team[?role=dev].name'
+Usage:
+    python jsonq.py FILE [QUERY] [--min] [--sort] [--keys] [--indent N]
+    cat data.json | python jsonq.py - 'users[0].name'
 
-Results are printed one per line (JSON-encoded, like ``jq -c`` when not a terminal).
+Queries are dotted paths with indexes and wildcards:
+    users            the "users" field
+    users[2].email   index into a list
+    users[-1]        negative indexes count from the end
+    users[*].name    map over every element (returns a list)
+    meta."odd key"   quoted keys may contain dots and spaces
+
+Invalid JSON is reported with the line, column and a caret under the offending spot.
+``--keys`` lists the keys (or indexes) of the result instead of printing it.
 """
 from __future__ import annotations
 
 import json
-import re
 import sys
-from typing import Any, Iterator
+from typing import Any
 
-DEMO = {
-    "project": "ai-builds-every-hour",
-    "team": [
-        {"name": "Ada", "role": "dev", "age": 36, "langs": ["python", "c"]},
-        {"name": "Grace", "role": "lead", "age": 45, "langs": ["cobol"]},
-        {"name": "Linus", "role": "dev", "age": 29, "langs": ["c", "shell"]},
-    ],
-    "stars": 42,
-}
-
-STEP = re.compile(r"""\.(?P<key>[A-Za-z_][\w-]*)|\[(?P<idx>-?\d+)\]|\[\](?P<all>)|\["(?P<qkey>[^"]*)"\]
-                      |\[\?(?P<fkey>[\w-]+)\s*(?P<op>==|!=|>=|<=|=|>|<)\s*(?P<val>[^\]]+)\]""", re.X)
-
-OPS = {
-    "=": lambda a, b: a == b, "==": lambda a, b: a == b, "!=": lambda a, b: a != b,
-    ">": lambda a, b: a > b, "<": lambda a, b: a < b, ">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b,
-}
+WILD = object()
 
 
 class QueryError(Exception):
     pass
 
 
-def literal(text: str) -> Any:
-    text = text.strip()
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        return text.strip("'\"")
-
-
-def walk(values: Iterator[Any], path: str) -> Iterator[Any]:
-    pos = 0
-    path = path.strip()
-    if path in ("", "."):
-        yield from values
-        return
-    steps = []
-    while pos < len(path):
-        m = STEP.match(path, pos)
-        if not m:
-            raise QueryError(f"bad path near {path[pos:]!r}")
-        steps.append(m)
-        pos = m.end()
-    for m in steps:
-        values = _apply(values, m)
-    yield from values
-
-
-def _apply(values: Iterator[Any], m: re.Match) -> Iterator[Any]:
-    for v in values:
-        if m.group("key") is not None or m.group("qkey") is not None:
-            k = m.group("key") if m.group("key") is not None else m.group("qkey")
-            if isinstance(v, dict) and k in v:
-                yield v[k]
-        elif m.group("idx") is not None:
-            i = int(m.group("idx"))
-            if isinstance(v, list) and -len(v) <= i < len(v):
-                yield v[i]
-        elif m.group("all") is not None:
-            if isinstance(v, list):
-                yield from v
-            elif isinstance(v, dict):
-                yield from v.values()
+def parse_query(q: str) -> list[Any]:
+    """'a.b[0][*]."c d"' -> ['a', 'b', 0, WILD, 'c d']"""
+    out: list[Any] = []
+    i, n = 0, len(q)
+    while i < n:
+        ch = q[i]
+        if ch == ".":
+            i += 1
+        elif ch == "[":
+            j = q.find("]", i)
+            if j < 0:
+                raise QueryError(f"unclosed '[' at {i}")
+            inner = q[i + 1:j].strip()
+            if inner == "*":
+                out.append(WILD)
+            else:
+                try:
+                    out.append(int(inner))
+                except ValueError:
+                    out.append(inner.strip("\"'"))
+            i = j + 1
+        elif ch in "\"'":
+            j = q.find(ch, i + 1)
+            if j < 0:
+                raise QueryError(f"unclosed quote at {i}")
+            out.append(q[i + 1:j])
+            i = j + 1
         else:
-            want = literal(m.group("val"))
-            op = OPS[m.group("op")]
-            items = v if isinstance(v, list) else [v]
-            for it in items:
-                if isinstance(it, dict) and m.group("fkey") in it:
-                    try:
-                        if op(it[m.group("fkey")], want):
-                            yield it
-                    except TypeError:
-                        continue
+            j = i
+            while j < n and q[j] not in ".[":
+                j += 1
+            out.append(q[i:j])
+            i = j
+    return out
 
 
-def pipe(values: list[Any], fn: str) -> list[Any]:
-    fn = fn.strip()
-    flat = lambda: [x for v in values for x in (v if isinstance(v, list) else [v])]  # noqa: E731
-    if fn == "length":
-        return [len(v) if isinstance(v, (list, dict, str)) else 0 for v in values]
-    if fn == "keys":
-        return [sorted(v) for v in values if isinstance(v, dict)]
-    if fn == "sort":
-        return [sorted(flat())]
-    if fn == "uniq":
-        out: list[Any] = []
-        for x in flat():
-            if x not in out:
-                out.append(x)
-        return [out]
-    if fn == "sum":
-        return [sum(x for x in flat() if isinstance(x, (int, float)))]
-    if fn == "count":
-        return [len(values)]
-    if fn == "first":
-        return values[:1]
-    if fn == "last":
-        return values[-1:]
-    if fn.startswith("."):
-        return list(walk(iter(values), fn))
-    raise QueryError(f"unknown function {fn!r}")
+def run_query(data: Any, steps: list[Any], path: str = "$") -> Any:
+    if not steps:
+        return data
+    step, rest = steps[0], steps[1:]
+    if step is WILD:
+        if isinstance(data, dict):
+            items = list(data.values())
+        elif isinstance(data, list):
+            items = data
+        else:
+            raise QueryError(f"{path} is not a list or object; can't use [*]")
+        return [run_query(v, rest, f"{path}[*]") for v in items]
+    if isinstance(step, int):
+        if not isinstance(data, list):
+            raise QueryError(f"{path} is not a list; can't index [{step}]")
+        try:
+            return run_query(data[step], rest, f"{path}[{step}]")
+        except IndexError:
+            raise QueryError(f"{path}[{step}] is out of range (length {len(data)})") from None
+    if not isinstance(data, dict):
+        raise QueryError(f"{path} is not an object; no key {step!r}")
+    if step not in data:
+        close = [k for k in data if k.lower() == step.lower()]
+        hint = f" (did you mean {close[0]!r}?)" if close else ""
+        raise QueryError(f"{path} has no key {step!r}{hint}")
+    return run_query(data[step], rest, f"{path}.{step}")
 
 
-def query(data: Any, q: str) -> list[Any]:
-    parts = q.split("|")
-    values = list(walk(iter([data]), parts[0]))
-    for fn in parts[1:]:
-        values = pipe(values, fn)
-    return values
-
-
-def colorize(text: str) -> str:
-    pat = re.compile(r'("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false|null)\b|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)')
-
-    def sub(m: re.Match) -> str:
-        if m.group(1):
-            return (f"\033[34m{m.group(1)}\033[0m{m.group(2)}" if m.group(2) else f"\033[32m{m.group(1)}\033[0m")
-        if m.group(3):
-            return f"\033[35m{m.group(3)}\033[0m"
-        return f"\033[33m{m.group(4)}\033[0m"
-
-    return pat.sub(sub, text)
+def describe_error(text: str, err: json.JSONDecodeError) -> str:
+    lines = text.splitlines() or [""]
+    line = lines[min(err.lineno, len(lines)) - 1]
+    return f"invalid JSON: {err.msg} at line {err.lineno}, column {err.colno}\n  {line}\n  {' ' * (err.colno - 1)}^"
 
 
 def main(argv: list[str]) -> int:
-    if not argv:
+    if not argv or argv[0] in ("-h", "--help"):
         print(__doc__)
-        return 2
-    if argv[0] == "--demo":
-        data, q = DEMO, (argv[1] if len(argv) > 1 else ".")
-    else:
-        src = sys.stdin.read() if argv[0] == "-" else open(argv[0], encoding="utf-8").read()
-        data, q = json.loads(src), (argv[1] if len(argv) > 1 else ".")
+        return 0
+    args = [a for a in argv if not a.startswith("--")]
+    flags = [a for a in argv if a.startswith("--")]
+    indent = 2
+    if "--indent" in argv:
+        idx = argv.index("--indent")
+        indent = int(argv[idx + 1])
+        args.remove(argv[idx + 1])
+    src = args[0]
+    text = sys.stdin.read() if src == "-" else open(src, encoding="utf-8").read()
     try:
-        results = query(data, q)
-    except QueryError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 2
-    tty = sys.stdout.isatty()
-    for r in results:
-        text = json.dumps(r, indent=2 if tty else None, ensure_ascii=False)
-        print(colorize(text) if tty else text)
-    return 0 if results else 1
+        data = json.loads(text)
+    except json.JSONDecodeError as err:
+        print(describe_error(text, err), file=sys.stderr)
+        return 1
+    if len(args) > 1:
+        try:
+            data = run_query(data, parse_query(args[1]))
+        except QueryError as exc:
+            print(f"query error: {exc}", file=sys.stderr)
+            return 2
+    if "--keys" in flags:
+        keys = list(data) if isinstance(data, dict) else list(range(len(data))) if isinstance(data, list) else []
+        print("\n".join(map(str, keys)))
+        return 0
+    if "--min" in flags:
+        print(json.dumps(data, separators=(",", ":"), sort_keys="--sort" in flags, ensure_ascii=False))
+    else:
+        print(json.dumps(data, indent=indent, sort_keys="--sort" in flags, ensure_ascii=False))
+    return 0
+
+
+def _selftest() -> None:
+    doc = {"users": [{"name": "Ada", "tags": ["x"]}, {"name": "Linus", "tags": []}], "meta": {"a.b": 1}}
+    assert parse_query('users[0].name') == ["users", 0, "name"]
+    assert run_query(doc, parse_query("users[*].name")) == ["Ada", "Linus"]
+    assert run_query(doc, parse_query("users[-1].name")) == "Linus"
+    assert run_query(doc, parse_query('meta."a.b"')) == 1
+    try:
+        run_query(doc, parse_query("Users"))
+    except QueryError as e:
+        assert "did you mean 'users'" in str(e)
+    print("selftest ok")
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    if sys.argv[1:] == ["--selftest"]:
+        _selftest()
+    else:
+        sys.exit(main(sys.argv[1:]))
