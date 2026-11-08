@@ -3,6 +3,7 @@ import { toPixel, corners, fromPixel, key, SQRT3 } from "./hex.js";
 import { terrain } from "./terrain.js";
 import { fromOffset } from "./hex.js";
 import { unitType, maxHp, maxMp } from "./units.js";
+import { activeStatuses, STATUS } from "./status.js";
 
 export const SIDE_COLORS = Object.freeze({ red: "#d0473f", blue: "#3f74d0" });
 
@@ -136,6 +137,31 @@ function decorate(ctx, t, c, s) {
       }
       break;
     }
+    case "ruins": {
+      // broken wall stubs and a fallen arch
+      ctx.fillStyle = "#6a6358";
+      for (const [dx, dy, h] of [[-0.38, 0.05, 0.32], [-0.12, -0.08, 0.45], [0.18, 0.02, 0.25], [0.36, -0.04, 0.38]]) {
+        ctx.fillRect(c.x + dx * s, c.y + (dy - h + 0.25) * s, 0.14 * s, h * s);
+      }
+      ctx.strokeStyle = "#5a544a";
+      ctx.lineWidth = Math.max(1, s / 12);
+      ctx.beginPath();
+      ctx.arc(c.x - 0.05 * s, c.y + 0.05 * s, 0.2 * s, Math.PI * 1.05, Math.PI * 1.6);
+      ctx.stroke();
+      ctx.fillStyle = "#7d7568";
+      ctx.fillRect(c.x - 0.45 * s, c.y + 0.3 * s, 0.9 * s, 0.07 * s);
+      break;
+    }
+    case "ford": {
+      // stepping stones across the water
+      ctx.fillStyle = "#c9c0a8";
+      for (const [dx, dy] of [[-0.4, 0.15], [-0.15, -0.05], [0.12, 0.12], [0.38, -0.08]]) {
+        ctx.beginPath();
+        ctx.ellipse(c.x + dx * s, c.y + dy * s, 0.12 * s, 0.08 * s, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      break;
+    }
     case "river":
     case "water":
     case "shallows": {
@@ -180,7 +206,9 @@ export function drawFlag(ctx, c, s, color) {
  * @param {import("./map.js").HexMap} map
  * @param {object} layout from fitLayout
  * @param {object} [overlay] {reach: Map, path: Hex[], hover: Hex, spawns: Hex[][], selected: Hex,
- *   tint: css colour laid over the terrain (time of day), recruit: Hex[] free recruit hexes}
+ *   tint: css colour laid over the terrain (time of day), weatherTint: css colour (rain, fog...),
+ *   recruit: Hex[] free recruit hexes, abilityTargets: Hex[], blast: Hex[] (fireball preview),
+ *   visible: Set<key>|null and explored: Set<key>|null (fog of war for the viewing side)}
  */
 export function drawMap(ctx, map, layout, overlay = {}) {
   const s = layout.size;
@@ -200,10 +228,23 @@ export function drawMap(ctx, map, layout, overlay = {}) {
       ctx.fill();
     }
     decorate(ctx, t, c, s);
+    if (t.fire > 0) drawFire(ctx, c, s, t.fire);
   }
-  if (overlay.tint) {
-    ctx.fillStyle = overlay.tint;
+  for (const tint of [overlay.tint, overlay.weatherTint]) {
+    if (!tint) continue;
+    ctx.fillStyle = tint;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }
+  if (overlay.visible) {
+    // fog of war: explored-but-unseen hexes are dimmed, never-seen ones nearly black
+    for (const t of map) {
+      const k = key(t);
+      if (overlay.visible.has(k)) continue;
+      const c = hexCenter(t, layout);
+      tracePath(ctx, corners(c.x, c.y, s));
+      ctx.fillStyle = overlay.explored?.has(k) ? "rgba(10,12,16,0.5)" : "rgba(8,9,12,0.92)";
+      ctx.fill();
+    }
   }
   for (const h of overlay.recruit ?? []) outline(ctx, hexCenter(h, layout), s, "#7ddc6a", 2, [2, 3]);
   const zoneColors = [SIDE_COLORS.red, SIDE_COLORS.blue];
@@ -233,9 +274,39 @@ export function drawMap(ctx, map, layout, overlay = {}) {
   if (overlay.targets) {
     for (const h of overlay.targets) outline(ctx, hexCenter(h, layout), s, "#ff5a4a", 3);
   }
+  for (const h of overlay.abilityTargets ?? []) outline(ctx, hexCenter(h, layout), s, "#c78bff", 3, [5, 3]);
+  if (overlay.blast?.length) {
+    ctx.fillStyle = "rgba(255,120,40,0.35)";
+    for (const h of overlay.blast) {
+      if (!map.has(h)) continue;
+      const c = hexCenter(h, layout);
+      tracePath(ctx, corners(c.x, c.y, s - 1));
+      ctx.fill();
+    }
+  }
   if (overlay.attackFrom) outline(ctx, hexCenter(overlay.attackFrom, layout), s, "#ffb04a", 2, [3, 3]);
   if (overlay.selected) outline(ctx, hexCenter(overlay.selected, layout), s, "#ffffff", 3);
   if (overlay.hover && map.has(overlay.hover)) outline(ctx, hexCenter(overlay.hover, layout), s, "rgba(255,255,255,0.7)", 2);
+}
+
+/** Flames on a burning hex (taller while it has more turns left). */
+export function drawFire(ctx, c, s, turns) {
+  ctx.save();
+  const h = 0.25 + Math.min(3, turns) * 0.08;
+  for (const [dx, k] of [[-0.25, 0.8], [0, 1.1], [0.25, 0.9]]) {
+    const x = c.x + dx * s, base = c.y + 0.3 * s, top = base - h * k * s;
+    ctx.fillStyle = "rgba(255,110,30,0.9)";
+    ctx.beginPath();
+    ctx.moveTo(x - 0.12 * s, base);
+    ctx.quadraticCurveTo(x - 0.1 * s, top + 0.1 * s, x, top);
+    ctx.quadraticCurveTo(x + 0.1 * s, top + 0.1 * s, x + 0.12 * s, base);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,220,90,0.9)";
+    ctx.beginPath();
+    ctx.ellipse(x, base - 0.07 * s, 0.05 * s, 0.1 * s * k, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
 }
 
 function outline(ctx, c, s, color, width, dash = []) {
@@ -251,14 +322,17 @@ function outline(ctx, c, s, color, width, dash = []) {
 /**
  * Draw unit tokens: a disc in the side colour with the type letter, an HP bar of pips
  * (one pip per 10% of max HP), veteran stars, and a dimmed look once a unit is spent.
+ * Status effects are drawn as small icons above the token.
  * @param {object} [opts] {selected: unit id, positions: Map<id, {x, y}> for animated units,
- *                        activeSide: side id (its spent units are dimmed)}
+ *                        activeSide: side id (its spent units are dimmed),
+ *                        isVisible: (unit) => boolean (fog of war: hidden units are skipped)}
  */
 export function drawUnits(ctx, units, layout, opts = {}) {
   const s = layout.size;
   const r = s * 0.55;
   for (const u of units) {
     if (u.hp <= 0) continue;
+    if (opts.isVisible && !opts.isVisible(u)) continue;
     const c = opts.positions?.get(u.id) ?? hexCenter(u, layout);
     const exhausted = opts.activeSide === u.side && (u.acted || u.mp <= 0);
     ctx.save();
@@ -291,6 +365,12 @@ export function drawUnits(ctx, units, layout, opts = {}) {
       ctx.fillStyle = "#ffd75a";
       ctx.font = `${Math.round(r * 0.7)}px system-ui, sans-serif`;
       ctx.fillText("★", c.x - r * 0.9 + (i - 1) * r * 0.6, c.y + r * 0.9);
+    }
+    // status icons above the HP bar
+    const st = activeStatuses(u);
+    if (st.length && s >= 12) {
+      ctx.font = `${Math.round(r * 0.62)}px system-ui, sans-serif`;
+      st.forEach((id, i) => ctx.fillText(STATUS[id].icon, c.x - ((st.length - 1) * r * 0.36) + i * r * 0.72, c.y - r - s * 0.48));
     }
     // move points left (small dot, active side only)
     if (opts.activeSide === u.side && u.mp > 0 && u.mp < maxMp(u)) {
