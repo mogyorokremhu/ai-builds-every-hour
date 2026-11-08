@@ -69,8 +69,8 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
 
 ## Phase 7 — Campaign & presentation
-- [ ] Skirmish setup screen (map size, seed, armies, starting gold, turn limit; AI level selectors done)
-- [ ] Short campaign of 5 scenarios with carried-over veterans
+- [ ] Skirmish setup screen (AI level selectors done; `skirmish.js` logic + tests done — UI panel in main.js queued)
+- [ ] Short campaign of 5 scenarios with carried-over veterans (`campaign.js` logic + tests done — UI hookup queued)
 - [x] WebAudio sound effects synthesised in code (no asset files) — `sound.js`, Sound checkbox
 - [x] Animations: attack lunges, floating damage/heal numbers, death fades (`effects.js`)
 - [ ] Keyboard controls (E/U/N/Tab/Esc done) + accessibility pass (focus, high-contrast palette)
