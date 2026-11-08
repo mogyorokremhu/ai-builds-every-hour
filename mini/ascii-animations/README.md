@@ -24,6 +24,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [fireworks.py](fireworks.py) | Rockets rise and explode into gravity-bound, fading particles |
 | [waves.py](waves.py) | Parallax sine-wave ocean under a starry sky and moon |
 | [clock.py](clock.py) | Big block-font digital clock with a blinking colon (`--time` freezes it) |
+| [matrix_rain.py](matrix_rain.py) | Falling character columns with random trails |
+| [bouncing_ball.py](bouncing_ball.py) | Gravity bounce with a fading trail |
+| [life_glider.py](life_glider.py) | Conway's Life on a torus: glider plus blinker |
 
 ```bash
 python fire.py

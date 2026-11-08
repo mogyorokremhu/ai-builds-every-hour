@@ -62,10 +62,10 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Ability UI: buttons + number keys, purple target rings, fireball blast preview, result tooltip
 
 ## Phase 6½ — Follow-ups found while building Phase 6
-- [ ] Fog-aware spectating: "Show all" toggle for hot-seat review (logic in `spectate.js` ✅, UI hookup queued)
+- [x] Fog-aware spectating: "Show all" toggle for hot-seat review (`spectate.js`, `showall.js`, `spectate-hook.js`)
 - [x] AI scouting under fog (`scouting.js`: frontier hexes become AI goals while no enemy is seen)
 - [x] Floating damage/heal numbers per victim (`effects.js`)
-- [ ] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hookup into main.js queued
+- [ ] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hookup needs `layout` exposed from main.js (small main.js edit)
 - [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
 
 ## Phase 7 — Campaign & presentation
@@ -74,7 +74,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] WebAudio sound effects synthesised in code (no asset files) — `sound.js`, Sound checkbox
 - [x] Animations: attack lunges, floating damage/heal numbers, death fades (`effects.js`)
 - [x] Colour themes: default / high contrast / colour-blind safe (`palette.js`, `theme-hook.js` Theme select, saved in localStorage)
-- [ ] Keyboard controls (E/U/N/Tab/Esc done) + remaining accessibility: focus trap in menu dialog
+- [x] Keyboard controls (E/U/N/Tab/Esc) + focus trap in menu dialog (`focustrap.js`, `focus-hook.js`)
 - [x] Mobile/touch support (`touch.js` recogniser + `touch-hook.js` replaying gestures as mouse/wheel events)
 
 ## Phase 8 — Polish
