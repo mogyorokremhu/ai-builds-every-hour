@@ -20,6 +20,7 @@ from typing import Any
 
 from .entities import Entity, Fighter
 from .equipment import SLOTS, Equipment
+from .fx import new_queue
 from .gamemap import GameMap
 from .geometry import Rect
 from .identify import Identification
@@ -31,6 +32,7 @@ from .resources import Resources
 from .status import StatusSet
 from .themes import theme_for_depth
 from .tiles import TILES_BY_CODE
+from .timeline import Timeline
 from .traps import Trap
 from .vaults import SpecialRoom
 
@@ -155,6 +157,7 @@ def to_dict(game) -> dict[str, Any]:
                           for s in game.special_rooms],
         "altars": [[x, y, used] for (x, y), used in game.altars.items()],
         "ident": game.ident.to_dict(),
+        "timeline": game.timeline.to_list(),
     }
 
 
@@ -195,12 +198,17 @@ def from_dict(data: dict[str, Any]):
                            for kind, x, y, w, h, visited in data["special_rooms"]]
         g.altars = {(x, y): used for x, y, used in data["altars"]}
         g.ident = Identification.from_dict(data.get("ident"))
+        g.timeline = Timeline.from_list(data.get("timeline"))
     except (KeyError, TypeError, ValueError, IndexError) as exc:
         raise SaveError(f"corrupt save: {exc!r}") from None
     if "player" not in g.player.tags:
         raise SaveError("corrupt save: first entity is not the player")
     g.theme = theme_for_depth(g.depth)
     g.noise = 0
+    g.fx = new_queue()
+    from .encumbrance import state
+
+    g.burden = "burdened" if state(g.player) != "unburdened" else "unburdened"
     g._trap_confirm = None
     g._force_confirm = None
     from .lighting import compute_lit
@@ -226,8 +234,11 @@ def has_save(path: Path | None = None) -> bool:
     return (path or save_path()).is_file()
 
 
-def load_game(path: Path | None = None, consume: bool = True):
-    """Load a saved run. With ``consume`` (the default) the file is deleted after reading."""
+def load_game(path: Path | None = None, consume: bool | None = None):
+    """Load a saved run. With ``consume`` the file is deleted after reading (permadeath).
+
+    By default (``consume=None``) normal runs are consumed and explore-mode runs keep
+    their save, so you can reload after dying (see explore.py)."""
     path = path or save_path()
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -236,6 +247,8 @@ def load_game(path: Path | None = None, consume: bool = True):
     except (OSError, json.JSONDecodeError) as exc:
         raise SaveError(f"unreadable save: {exc}") from None
     game = from_dict(data)
+    if consume is None:
+        consume = game.mode != "explore"
     if consume:
         delete_save(path)
     game.say("Welcome back to Emberdeep.", "bright_cyan")

@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 
 from . import daily, save, scores
 from .progression import CHOICES
+from .timeline import depth_chart, summary_lines
 
 if TYPE_CHECKING:  # pragma: no cover
     from .game import Game
@@ -48,7 +49,8 @@ def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
         "EMBERDEEP — morgue file",
         "=" * 40,
         f"Date:     {when.replace(microsecond=0).isoformat()}",
-        f"Seed:     {game.seed}" + (f"  (daily run {daily.mode_date(game.mode)})" if daily.is_daily(game.mode) else ""),
+        f"Seed:     {game.seed}" + (f"  (daily run {daily.mode_date(game.mode)})" if daily.is_daily(game.mode)
+                                     else "  (explore mode)" if game.mode == "explore" else ""),
         "",
         "VICTORY! You carried off the Ember Heart." if game.victory
         else f"You died on depth {game.depth}: {game.death_cause or 'unknown causes'}.",
@@ -87,6 +89,11 @@ def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
         lines.append(f"{n:>4}  {name}")
     if not game.kill_counts:
         lines.append("(none — a pacifist run?)")
+    if hasattr(game, "timeline"):
+        game.record_end()
+        lines += ["", "Timeline", "-" * 40]
+        lines += depth_chart(game.timeline, game.turn, width=48, height=6, max_depth=game.max_depth)
+        lines += [""] + summary_lines(game.timeline, game.turn, limit=40)
     lines += ["", "Last messages", "-" * 40]
     lines += [f"[{m.turn:>5}] {m.full_text}" for m in game.log.entries(15)]
     lines += ["", "Map", "-" * 40] + map_dump(game)
@@ -129,5 +136,6 @@ def finish_run(game: "Game", directory: Path | None = None) -> RunSummary:
     path = write_morgue(game, directory, when)
     entry = scores.entry_for(game, when)
     rank = scores.add_score(directory, entry)
-    save.delete_save(save.save_path(directory))
+    if game.mode != "explore":  # explore mode keeps its save so you can reload
+        save.delete_save(save.save_path(directory))
     return RunSummary(entry.score, rank, entry.ranked, path)
