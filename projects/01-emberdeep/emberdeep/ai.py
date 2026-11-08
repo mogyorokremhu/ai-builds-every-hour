@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Callable
 
+from . import scavenge
 from .geometry import chebyshev
 from .pathfinding import astar, downhill_step, flee_map
 from .targeting import projectile_path
@@ -132,7 +133,7 @@ def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
             return
         hunt(game, m, sees)
         return
-    if hurt and m.ai_state.get("potion") and game.rng.random() < 0.6:
+    if hurt and scavenge.has_potion(m) and game.rng.random() < 0.6:
         drink_potion(game, m)
         return
     if hurt:
@@ -147,7 +148,8 @@ def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
 
 def drink_potion(game: "Game", m: "Entity") -> None:
     """A monster quaffs the healing potion it carries (kobolds)."""
-    m.ai_state.pop("potion", None)
+    if not m.ai_state.pop("potion", None):
+        scavenge.use_potion(m)
     healed = m.fighter.heal(12)
     if game.gmap.visible[m.y][m.x]:
         game.say(f"The {m.name} drinks a potion of healing! (+{healed})", "bright_yellow")
@@ -250,12 +252,11 @@ def take_turn(game: "Game", m: "Entity") -> None:
     sees = game.monster_sees_player(m)
     if sees:
         m.memory = game.player.pos
-    elif m.memory is None:
-        if "scavenger" in m.tags:
-            from .scavenge import scavenge
-
-            scavenge(game, m)  # nothing to hunt: go after loot instead
-        return  # dormant: nothing to hunt
+    if scavenge.try_pickup(game, m):
+        return
+    if not sees and m.memory is None:
+        scavenge.forage(game, m)
+        return  # dormant: nothing to hunt (scavengers go looking for loot)
     BEHAVIOURS.get(m.ai or "chase", act_chase)(game, m, sees)
 
 
@@ -267,12 +268,6 @@ def describe_ai(m: "Entity") -> str:
         from .boss import describe
 
         return describe(m)
-    if "scavenger" in m.tags:
-        from .scavenge import describe
-
-        loot = describe(m)
-        if loot:
-            return loot
     if m.ai == "coward":
         return "It looks skittish." if not m.ai_state.get("fleeing") else "It is fleeing!"
     if m.ai == "caster":

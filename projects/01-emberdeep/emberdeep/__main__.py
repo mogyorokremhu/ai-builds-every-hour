@@ -1,4 +1,4 @@
-"""Run with:  python -m emberdeep [seed] [--text] [--daily[=YYYY-MM-DD]] [--new] [--scores] [--explore]
+"""Run with:  python -m emberdeep [seed] [--text] [--daily[=YYYY-MM-DD]] [--explore] [--new] [--scores]
 
 Uses the real-time curses interface when available (Linux/macOS terminals), otherwise
 falls back to the line-based text mode. Pass ``--text`` to force text mode.
@@ -6,16 +6,15 @@ falls back to the line-based text mode. Pass ``--text`` to force text mode.
 * A saved game is resumed automatically (and the save deleted: permadeath). ``--new``
   ignores it; quitting saves again.
 * ``--daily`` plays today's shared dungeon; ``--daily=2026-11-07`` replays a past day.
+* ``--explore`` starts an explore-mode run: death only knocks you out, the save is kept
+  when loaded, and the run is never ranked.
 * ``--scores`` prints the hall of fame and exits.
-* ``--explore`` starts a practice run: its save survives loading (reload after death),
-  wizard powers are unlocked (``W``) and the run is recorded unranked.
 * Files live in ``$EMBERDEEP_HOME`` (default ``~/.emberdeep``).
 
 Text-mode controls (type then Enter, chainable): w/a/s/d move, q/e/z/c diagonals,
 . wait, g pick up, i inventory, u<letter> use/equip, r<letter> drop, > descend,
-x save & quit, f search for traps, p pray at an altar, k close an adjacent door,
-+v/+m/+g choose a level-up boon, t<letter> throw at the nearest enemy,
-T show the run timeline, W<letter> wizard power (explore mode).
+x save & quit, f search for traps, p pray at an altar, k close an adjacent door, l timeline,
++v/+m/+g choose a level-up boon, t<letter> throw at the nearest enemy.
 Bump into a closed door (+) to open it (a locked one needs an iron key, or force).
 """
 from __future__ import annotations
@@ -24,11 +23,10 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import daily, explore, save, scores
+from . import daily, effects, explore, save, scores
 from .game import Game
 from .morgue import finish_run
 from .render_ascii import render, render_inventory
-from .timeline import depth_chart, summary_lines
 
 KEYS = {
     "w": (0, -1), "s": (0, 1), "a": (-1, 0), "d": (1, 0),
@@ -66,12 +64,8 @@ def run_text_command(game: Game, cmd: str) -> bool:
                 game.say("Use +v, +m or +g when you have a level-up.")
         elif ch == "i":
             print(render_inventory(game))
-        elif ch == "T":
-            game.record_end()
-            print("\n".join(depth_chart(game.timeline, game.turn, max_depth=game.max_depth)
-                            + summary_lines(game.timeline, game.turn)))
-        elif ch == "W":
-            explore.wizard(game, next(chars, ""))
+        elif ch == "l":
+            print("\n".join(game.timeline.report(game.turn, 50, limit=20)))
         elif ch == "t":
             item = game.player.inventory.get(next(chars, ""))
             foes = game.visible_monsters()
@@ -96,6 +90,7 @@ def run_text_command(game: Game, cmd: str) -> bool:
                     game.say("No target in view.")
             else:
                 game.use(item)
+        effects.drain(game)  # text mode has no animations
         if game.game_over:
             break
     return True
@@ -118,10 +113,10 @@ def parse_args(argv: list[str]) -> Options:
             opts.text = True
         elif a == "--new":
             opts.new = True
-        elif a == "--scores":
-            opts.scores = True
         elif a == "--explore":
             opts.explore = True
+        elif a == "--scores":
+            opts.scores = True
         elif a == "--daily":
             opts.daily = ""
         elif a.startswith("--daily="):
@@ -136,12 +131,14 @@ def parse_args(argv: list[str]) -> Options:
 def start_game(opts: Options, home: Path) -> Game:
     """Resume the saved run when appropriate, otherwise start a new one."""
     path = save.save_path(home)
-    if opts.daily is not None and opts.explore:
-        raise SystemExit("--daily and --explore can't be combined")
     if opts.daily is not None:
         day = daily.parse_date(opts.daily) if opts.daily else daily.today()
         game = Game(daily.daily_seed(day), mode=daily.daily_mode(day))
         game.say(f"Daily run for {day.isoformat()}: everyone gets this dungeon today.", "bright_cyan")
+        return game
+    if opts.explore:
+        game = Game(opts.seed, mode=explore.MODE)
+        game.say("Explore mode: death is not the end, and nothing is ranked.", "bright_cyan")
         return game
     if opts.seed is None and not opts.new and save.has_save(path):
         try:
@@ -149,10 +146,6 @@ def start_game(opts: Options, home: Path) -> Game:
         except save.SaveError as exc:
             print(f"Could not load the saved game ({exc}); starting a new one.")
             save.delete_save(path)
-    if opts.explore:
-        game = Game(opts.seed, mode=explore.EXPLORE_MODE)
-        game.say("Explore mode: your save survives loading, W opens wizard powers. Unranked.", "bright_magenta")
-        return game
     return Game(opts.seed)
 
 
@@ -175,9 +168,11 @@ def text_main(game: Game, home: Path) -> list[str]:
             else:
                 print(f"\nYou died on depth {game.depth} at level {game.level} ({game.xp} XP): "
                       f"{game.death_cause or 'unknown'}.")
+            game.conclude()
+            print("\n" + "\n".join(game.timeline.report(game.turn, 50, limit=25)))
             return end_session(game, home, recorded=False)
         try:
-            cmd = input("> ").strip()
+            cmd = input("> ").strip().lower()
         except EOFError:
             return end_session(game, home, recorded=False)
         if not run_text_command(game, cmd):

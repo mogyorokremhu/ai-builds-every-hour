@@ -18,7 +18,7 @@ import math
 import random
 from typing import TYPE_CHECKING
 
-from . import ai, fx
+from . import ai
 from .entities import make_monster
 from .gamemap import GameMap
 from .gen_caves import bfs_distances, sectors
@@ -148,8 +148,10 @@ def fire_nova(game: "Game", m: "Entity") -> None:
     """Burst of flame around the guardian. Hurts everything nearby that isn't fireproof."""
     phase = m.ai_state.get("phase", 1)
     game.say(f"The {m.name} erupts in a nova of flame!", "bright_red")
+    from . import effects
+
     area = blast_area(game.gmap, m.pos, NOVA_RADIUS)
-    fx.emit(game, "blast", [m.pos] + [c for c in area if c != m.pos], "*", "bright_red")
+    effects.push(game, effects.Effect("blast", [m.pos] + [c for c in area if c != m.pos], "bright_red", "^"))
     for cell in area:
         if cell == m.pos:
             continue
@@ -183,6 +185,7 @@ def act_boss(game: "Game", m: "Entity", sees: bool) -> None:
     if phase > st.get("phase", 1):
         st["phase"] = phase
         game.say(PHASE_MESSAGES[phase], "bright_red")
+        game.timeline.add(game.turn, game.depth, "boss", f"The {m.name} entered phase {phase}")
         if phase == 3:
             m.speed = ENRAGE_SPEED
             m.fighter.base_power += ENRAGE_POWER

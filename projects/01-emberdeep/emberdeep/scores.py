@@ -89,12 +89,13 @@ def save_scores(directory: Path, entries: list[ScoreEntry]) -> None:
 def add_score(directory: Path, entry: ScoreEntry) -> int:
     """Insert ``entry``; returns its 1-based rank, or 0 if it didn't make the table.
 
-    A daily run is unranked if a run with the same daily mode is already recorded.
+    A daily run is unranked if a run with the same daily mode is already recorded;
+    explore-mode runs are never ranked.
     """
     entries = load_scores(directory)
-    if entry.mode == "explore":
-        entry.ranked = False
     if daily.is_daily(entry.mode) and any(e.mode == entry.mode for e in entries):
+        entry.ranked = False
+    if entry.mode == "explore":
         entry.ranked = False
     entries.append(entry)
     entries.sort(key=lambda e: -e.score)

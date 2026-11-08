@@ -18,9 +18,9 @@ from dataclasses import asdict, fields
 from pathlib import Path
 from typing import Any
 
+from . import explore
 from .entities import Entity, Fighter
 from .equipment import SLOTS, Equipment
-from .fx import new_queue
 from .gamemap import GameMap
 from .geometry import Rect
 from .identify import Identification
@@ -31,8 +31,8 @@ from .progression import Progression
 from .resources import Resources
 from .status import StatusSet
 from .themes import theme_for_depth
-from .tiles import TILES_BY_CODE
 from .timeline import Timeline
+from .tiles import TILES_BY_CODE
 from .traps import Trap
 from .vaults import SpecialRoom
 
@@ -103,11 +103,12 @@ def _decode_entity(d: dict[str, Any]) -> Entity:
         inv = Inventory(d["inventory"]["capacity"])
         inv.items = [_decode_item(i) for i in d["inventory"]["items"]]
         e.inventory = inv
-        eq = Equipment()
-        for slot, idx in d.get("equipment", {}).items():
-            if slot in SLOTS and idx is not None:
-                eq.slots[slot] = inv.items[idx]
-        e.equipment = eq
+        if "equipment" in d:  # monsters (scavengers) carry a pack but wear nothing
+            eq = Equipment()
+            for slot, idx in d["equipment"].items():
+                if slot in SLOTS and idx is not None:
+                    eq.slots[slot] = inv.items[idx]
+            e.equipment = eq
     return e
 
 
@@ -157,7 +158,8 @@ def to_dict(game) -> dict[str, Any]:
                           for s in game.special_rooms],
         "altars": [[x, y, used] for (x, y), used in game.altars.items()],
         "ident": game.ident.to_dict(),
-        "timeline": game.timeline.to_list(),
+        "timeline": game.timeline.to_dict(),
+        "explore_deaths": list(game.explore_deaths),
     }
 
 
@@ -198,17 +200,15 @@ def from_dict(data: dict[str, Any]):
                            for kind, x, y, w, h, visited in data["special_rooms"]]
         g.altars = {(x, y): used for x, y, used in data["altars"]}
         g.ident = Identification.from_dict(data.get("ident"))
-        g.timeline = Timeline.from_list(data.get("timeline"))
+        g.timeline = Timeline.from_dict(data.get("timeline"))
+        g.explore_deaths = list(data.get("explore_deaths", []))
     except (KeyError, TypeError, ValueError, IndexError) as exc:
         raise SaveError(f"corrupt save: {exc!r}") from None
     if "player" not in g.player.tags:
         raise SaveError("corrupt save: first entity is not the player")
     g.theme = theme_for_depth(g.depth)
     g.noise = 0
-    g.fx = new_queue()
-    from .encumbrance import state
-
-    g.burden = "burdened" if state(g.player) != "unburdened" else "unburdened"
+    g.effects = []
     g._trap_confirm = None
     g._force_confirm = None
     from .lighting import compute_lit
@@ -234,11 +234,9 @@ def has_save(path: Path | None = None) -> bool:
     return (path or save_path()).is_file()
 
 
-def load_game(path: Path | None = None, consume: bool | None = None):
-    """Load a saved run. With ``consume`` the file is deleted after reading (permadeath).
-
-    By default (``consume=None``) normal runs are consumed and explore-mode runs keep
-    their save, so you can reload after dying (see explore.py)."""
+def load_game(path: Path | None = None, consume: bool = True):
+    """Load a saved run. With ``consume`` (the default) the file is deleted after reading —
+    except for explore-mode runs, whose saves are kept (no permadeath)."""
     path = path or save_path()
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -247,9 +245,7 @@ def load_game(path: Path | None = None, consume: bool | None = None):
     except (OSError, json.JSONDecodeError) as exc:
         raise SaveError(f"unreadable save: {exc}") from None
     game = from_dict(data)
-    if consume is None:
-        consume = game.mode != "explore"
-    if consume:
+    if consume and not explore.is_explore(game.mode):
         delete_save(path)
     game.say("Welcome back to Emberdeep.", "bright_cyan")
     return game
