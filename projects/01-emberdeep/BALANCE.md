@@ -1,52 +1,66 @@
 # Emberdeep balance report
 
-Automated bot runs: **200** (seeds 1–200), 455s wall time
+Automated bot runs: **1000** (seeds 1–1000), 3025s wall time
 
 | Metric | Value |
 |---|---|
-| Victories | 106 (53.0%) |
+| Victories | 270 (27.0%) |
 | Timeouts (bot got stuck) | 0 |
-| Mean deepest depth | 8.51 |
-| Mean character level | 11.98 |
-| Mean turns | 4329 |
-| Mean kills | 250.1 |
-| Mean potions / scrolls used | 22.3 / 19.8 |
-| Runs that used an iron key | 143 |
+| Mean deepest depth | 8.45 |
+| Mean character level | 11.70 |
+| Mean turns | 3928 |
+| Mean kills | 240.8 |
+| Mean potions / scrolls used | 17.4 / 20.8 |
+| Runs that used an iron key | 767 |
 
 ## Deepest depth reached
 
 | Depth | Runs | Share | |
 |---|---|---|---|
-| 2 | 3 | 1.5% | █ |
-| 3 | 7 | 3.5% | █ |
-| 4 | 16 | 8.0% | ███ |
-| 5 | 8 | 4.0% | ██ |
-| 6 | 6 | 3.0% | █ |
-| 7 | 15 | 7.5% | ███ |
-| 8 | 8 | 4.0% | ██ |
-| 9 | 5 | 2.5% | █ |
-| 10 | 132 | 66.0% | ██████████████████████████ |
+| 2 | 7 | 0.7% | █ |
+| 3 | 21 | 2.1% | █ |
+| 4 | 79 | 7.9% | ███ |
+| 5 | 41 | 4.1% | ██ |
+| 6 | 42 | 4.2% | ██ |
+| 7 | 115 | 11.5% | █████ |
+| 8 | 62 | 6.2% | ██ |
+| 9 | 36 | 3.6% | █ |
+| 10 | 597 | 59.7% | ████████████████████████ |
 
 ## How runs ended
 
 | Cause | Runs |
 |---|---|
-| victory | 106 |
-| burned to death | 17 |
-| killed by magma hound | 15 |
-| starved to death | 13 |
-| killed by ember imp | 10 |
-| killed by Ember Guardian | 9 |
-| killed by cave troll | 7 |
-| incinerated by the Ember Guardian | 5 |
-| killed by jackal | 3 |
-| killed by kobold | 3 |
-| succumbed to poison | 3 |
-| killed by myconid | 2 |
-| killed by fire beetle | 2 |
-| drank liquid fire | 2 |
-| killed by poison dart | 1 |
-| burned by a fire trap | 1 |
+| victory | 270 |
+| killed by Ember Guardian | 168 |
+| burned to death | 164 |
+| killed by magma hound | 102 |
+| succumbed to poison | 67 |
+| killed by ember imp | 53 |
+| killed by cave troll | 43 |
+| starved to death | 37 |
+| incinerated by the Ember Guardian | 32 |
+| drank liquid fire | 14 |
+| killed by kobold | 12 |
+| killed by jackal | 11 |
+| killed by fire beetle | 10 |
+| killed by cave spider | 9 |
+| killed by myconid | 3 |
+| burned by a fire trap | 2 |
+
+## Hour 7: the 1000-run sweep
+
+Run after encumbrance, scavenging kobolds, explore mode and the run timeline landed. The
+bot now has to manage its load (it drops the heaviest spare item when burdened), which costs
+it speed in the late game. **27.0% wins over 1000 seeds** — inside the 25–40% target band,
+so no numbers were changed. Observations for future tuning:
+
+* 60% of runs reach depth 10; the Ember Guardian (melee + incineration) ends a third of those.
+  That is the intended final exam, but if humans find it too hard, `ENRAGE_POWER` is the
+  first knob to turn.
+* Fire is the biggest killer overall (burned to death + magma hounds + imps ≈ 32% of runs).
+  Fire resistance gear would be a natural future addition.
+* Starvation is rare (3.7%), so the food clock is about right for a thorough player.
 
 ## Tuning history (hour 6)
 
@@ -65,12 +79,12 @@ bolts set the player alight half the time. Changes made from the bot's numbers:
 | Healing potion loot weight | 35 → 28 |
 
 After the caster, spawn and XP changes the bot jumped to ~62% wins (60 seeds), so the
-Guardian and the healing supply were tightened again; the report above is the result. The bot is thorough (it clears
-every level), so a human usually sees fewer fights but also less XP. Target for the next
-pass: a bot win rate around 25–40%, with deaths spread across all three themes.
+Guardian and the healing supply were tightened again, giving 53% wins over 200 seeds. The bot is
+thorough (it clears every level), so a human usually sees fewer fights but also less XP.
+Target band: a bot win rate around 25–40%, with deaths spread across all three themes.
 
 Regenerate with:
 
 ```bash
-python -m emberdeep.bot 200 report.md   # then compare with the numbers above
+python -m emberdeep.bot 1000 report.md   # ~50 min on 2 cores; compare with the numbers above
 ```
