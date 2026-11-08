@@ -102,3 +102,24 @@
 - Tests: 173 → 224 (new `tests/test_features.py`); real pty curses smoke test; text-mode smoke test
 - mini/puzzles: Lights Out (GF(2) elimination), Mastermind (Knuth minimax), peg solitaire (symmetry-pruned
   DFS), cryptarithm solver, magic squares of any order, water jugs (BFS)
+
+## 2026-11-08 03:00 UTC — hour 7: Emberdeep polish — encumbrance, scavenging kobolds, run timeline, explore mode, spell animation, 1000-run sweep
+- Emberdeep: every remaining Phase 3–6 item is done
+  - `encumbrance.py`: item weights, capacity 40 + 4 × base power, burdened (¾ speed) above it, hard limit
+    at 1.5×; pack-slot warnings as the 26 letters run out; `Load`/`Pack` in the sidebar, weights in the inventory
+  - `scavenge.py`: kobolds and shamans walk to loot when idle — brandish better weapons (+power), stash
+    healing potions to drink later, fill a sack; it all spills on death (keys and the Heart are left alone)
+  - `timeline.py`: descents, level-ups, first kill of each monster, boss kill and the ending are recorded;
+    `T` shows a depth-over-time ASCII chart + events; the end screen offers it as "the story of your run" (`T`); also a
+    morgue section; saved with the game (old saves load with an empty timeline)
+  - `explore.py` + `--explore`: the save survives loading (reload after death), unranked `[explore]` scores,
+    wizard powers on `W` (map level, heal, identify all, jump to stairs, descend, conjure an item)
+  - `fx.py`: spells and projectiles are recorded as effects and animated by the curses UI — ember bolts and
+    thrown items fly with a trail, lightning flashes along its line, fireballs/potions/fire nova bloom ring by ring
+  - `screenshot.py`: renders the real curses UI into an in-memory screen → new `SCREENSHOTS.md`
+  - Balance bot manages its load; **1000-run sweep: 27.0% wins** (inside the 25–40% target band) → BALANCE.md
+- Tests: 224 → 271 (new `tests/test_polish.py`, `tests/test_cli.py`); line coverage 95% (coverage.py);
+  real pty curses smoke test of explore mode, wizard menu and timeline; text-mode smoke test;
+  verified from a fresh clone after pushing
+- mini/tools: Myers line diff, CSV table viewer, jq-lite JSON query, base converter (roman, two's complement),
+  cron explainer + next runs, Markdown TOC generator
