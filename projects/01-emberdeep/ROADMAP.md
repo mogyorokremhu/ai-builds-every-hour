@@ -32,7 +32,7 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Look mode (`x`): move a cursor and describe what's there
 - [x] Throwing items (`t`) / potions shatter on impact (liquid fire, venom, healing, speed)
 - [x] Unidentified potions & scrolls with random names per run (risky blind reads, morgue discoveries)
-- [ ] Item weight/encumbrance or pack limit warnings
+- [x] Item weight/encumbrance (burdened = ¾ speed, hard limit at 1.5×, capacity grows with Might) + pack-slot warnings
 
 ## Phase 4 — Smarter monsters ✅ (core)
 - [x] A* pathfinding (stdlib heapq) + Dijkstra maps and Brogue-style flee maps
@@ -44,9 +44,9 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Monster on-hit statuses, spells with cooldowns and line-of-fire checks
 - [x] Potion of speed; healing cures poison; death cause tracked
 - [x] Sleeping monsters + noise/stealth (monsters wake when you're loud or close; sneak attacks)
-- [ ] Spell projectiles animated in the curses UI
+- [x] Spell projectiles animated in the curses UI (bolts with trails, lightning beams, ring-by-ring blasts; `fx.py`)
 - [x] Monsters use items: kobolds may carry a healing potion, drink it when hurt, drop it on death
-- [ ] Monsters pick up items lying on the floor
+- [x] Monsters pick up items lying on the floor (kobold scavengers: brandish weapons, stash potions, sacks spill on death)
 
 ## Phase 5 — Progression ✅ (core)
 - [x] XP levels with stat choice on level-up (Vitality / Might / Guard + auto HP)
@@ -69,12 +69,14 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
       (save consumed on load, deleted on death/victory)
 - [x] High-score table (hall of fame, `H` in game, `--scores` on the CLI) and morgue file (run summary + map dump)
 - [x] Daily seed mode (`--daily`, `--daily=YYYY-MM-DD`; repeat attempts marked practice)
-- [ ] Post-victory "ascend" stats screen with a run timeline (depth reached per turn)
-- [ ] Optional "keep save on load" wizard/explore mode flag
+- [x] Post-run "story of your run" screen with a timeline + ASCII depth chart (`T` any time; also in the morgue)
+- [x] `--explore` mode: save kept on load, unranked `[explore]` scores, wizard powers (`W`: map, heal, identify, stairs, descend, conjure)
 
 ## Phase 7 — Polish
 - [x] New items: potions of liquid fire & venom, warhammer, iron keys; dagger throw bonus
 - [x] Balance bot (`python -m emberdeep.bot N report.md`, parallel) + first balance pass from a 200-run report (BALANCE.md)
-- [ ] Full 1000-run sweep after the remaining features land; keep the bot win rate in a target band
-- [ ] Full docs + gameplay GIF/ASCII screenshots
-- [ ] Final cleanup, type-check, 80%+ test coverage
+- [x] Full 1000-run sweep after the remaining features land: 27.0% bot wins, inside the 25–40% band (BALANCE.md)
+- [x] Docs for every system + ASCII screenshots of the real UI (`python -m emberdeep.screenshot` → SCREENSHOTS.md)
+- [x] 80%+ test coverage (95% line coverage with `coverage.py`; new CLI/text-mode tests)
+- [ ] Type-check clean under mypy (167 Optional-access warnings: add typed player accessors)
+- [ ] Final cleanup pass (dead code, docstrings) and finishing touches
