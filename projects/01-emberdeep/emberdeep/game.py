@@ -3,11 +3,12 @@ from __future__ import annotations
 
 import random
 
-from . import ai, boss, levelgen, loot, traps, vaults
+from . import ai, boss, knockback, levelgen, lighting, locks, loot, throwing, traps, vaults
 from .combat import attack
 from .entities import MONSTER_TEMPLATES, Entity, make_monster, make_player
 from .fov import compute_fov
 from .geometry import chebyshev
+from .identify import Identification
 from .items import TARGET_CELL, Item, make_item, make_item_entity
 from .messages import MessageLog, a_an
 from .progression import CHOICES, Progression
@@ -20,6 +21,8 @@ from .tiles import DOOR, OPEN_DOOR
 MAP_W, MAP_H = 70, 24
 FOV_RADIUS = 8           # radius with a bright torch (see resources.TORCH_STAGES)
 SLEEP_CHANCE = 0.45      # chance a freshly spawned monster (or pack) is asleep
+MONSTERS_PER_AREA = 2    # spawn groups per area: randint(0, this + depth // 3) (balance-tuned)
+KOBOLD_POTION_CHANCE = 0.3  # kobolds sometimes carry a healing potion (and drink it when hurt)
 
 #: Noise made by player actions: monsters within ``noise * NOISE_RANGE`` may hear it.
 NOISE = {"move": 1, "wait": 0, "attack": 4, "pickup": 1, "item": 2, "loud": 8, "search": 0, "door": 2}
@@ -41,6 +44,10 @@ class Game:
         self.kill_counts: dict[str, int] = {}
         self.max_depth = 0
         self.rng = random.Random(self.seed)
+        # appearances use their own generator so identification never shifts the dungeon
+        self.ident = Identification.roll(random.Random(self.seed ^ 0x1DE1))
+        self.lit: frozenset[tuple[int, int]] = frozenset()
+        self._force_confirm: tuple[int, int] | None = None
         self.log = MessageLog()
         self.depth = 0
         self.turn = 0
@@ -87,6 +94,11 @@ class Game:
         self.entities = [self.player]
         self.traps, self.special_rooms, self.altars = {}, [], {}
         self._trap_confirm = None
+        self._force_confirm = None
+        protected = {layout.start} | ({self.gmap.stairs} if self.gmap.stairs else set())
+        lighting.place_braziers(self.gmap, self.rng, lighting.braziers_for_theme(self.theme.key, self.rng),
+                                protected)
+        self.lit = lighting.compute_lit(self.gmap)
         if final:
             boss.populate(self, sanctum)
             for area in layout.areas:
@@ -107,6 +119,7 @@ class Game:
                     self.place_item(loot.roll_loot(self.depth, self.rng, self.theme.loot_bias), x, y)
         if layout.rooms:
             vaults.furnish(self, layout.rooms)
+            locks.furnish_locks(self, layout.rooms, layout.start)
         loose = [p for area in layout.areas[1:] for p in area]
         traps.place(self, loose, traps.traps_for_depth(self.depth, self.rng))
         if self.depth > 1 and self.theme is not old_theme:
@@ -114,7 +127,7 @@ class Game:
         self.update_fov()
 
     def _spawn_monsters(self, area: list[tuple[int, int]]) -> None:
-        for _ in range(self.rng.randint(0, 2 + self.depth // 2)):
+        for _ in range(self.rng.randint(0, MONSTERS_PER_AREA + self.depth // 3)):
             if not [p for p in area if not self.blocking_at(*p)]:
                 return
             kind = self.pick_monster()
@@ -127,6 +140,8 @@ class Game:
                 x, y = self.rng.choice(spots)
                 m = make_monster(kind, x, y)
                 m.asleep = asleep
+                if kind == "kobold" and self.rng.random() < KOBOLD_POTION_CHANCE:
+                    m.ai_state["potion"] = True
                 self.entities.append(m)
 
     def pick_monster(self) -> str:
@@ -137,6 +152,7 @@ class Game:
         return self.rng.choices(kinds, weights=weights)[0]
 
     def place_item(self, item: Item, x: int, y: int) -> Entity:
+        self.ident.mask(item)
         ent = make_item_entity(item, x, y)
         # items go first so monsters/player draw over them
         self.entities.insert(1, ent)
@@ -184,7 +200,15 @@ class Game:
         return self.resources.fov_radius
 
     def update_fov(self) -> None:
-        compute_fov(self.gmap, self.player.x, self.player.y, self.fov_radius)
+        compute_fov(self.gmap, self.player.x, self.player.y, self.fov_radius, self.lit or None)
+
+    def monster_sees_player(self, m: Entity) -> bool:
+        """A monster spots you if you can see it *and* you're in its light: within your own
+        torchlight, or standing in a brazier-lit area. Lurking in the dark keeps you hidden
+        from creatures you can only see because *they* stand in the light."""
+        if not self.gmap.visible[m.y][m.x]:
+            return False
+        return chebyshev(m.pos, self.player.pos) <= self.fov_radius or self.player.pos in self.lit
 
     def known_trap_at(self, x: int, y: int) -> "traps.Trap | None":
         t = self.traps.get((x, y))
@@ -207,10 +231,17 @@ class Game:
                 bonus = self.player.fighter.power
                 target.asleep = False
                 self.say(f"You strike the sleeping {target.name}!", C_GOOD)
-            _, msg = attack(self.player, target, self.rng, bonus)
+            dealt, msg = attack(self.player, target, self.rng, bonus)
             self.say(msg)
             if not target.fighter.alive:
                 self.on_kill(target)
+            else:
+                weapon = self.player.equipment.slots.get("weapon")
+                if dealt > 0 and weapon is not None and weapon.knockback \
+                        and self.rng.random() < weapon.knockback:
+                    knockback.shove(self, self.player, target)
+        elif self.gmap.get(tx, ty).name == "locked door":
+            return locks.bump_locked(self, tx, ty)
         elif self.gmap.is_closed_door(tx, ty):
             self.open_door(tx, ty, self.player)
         elif self.gmap.walkable(tx, ty):
@@ -347,6 +378,8 @@ class Game:
         monster.memory = None
         monster.name = f"{monster.name} corpse"
         monster.asleep = False
+        if monster.ai_state.pop("potion", False):
+            self.place_item(make_item("healing potion"), monster.x, monster.y)
         self.kills += 1
         self.gain_xp(monster.xp_value)
         if is_boss:
@@ -368,7 +401,61 @@ class Game:
             self.on_kill(monster)
         self.say(msg, C_MAGIC)
 
+    # ---- identification --------------------------------------------------
+    def all_items(self) -> list[Item]:
+        """Every item in the pack and on the floor of this level."""
+        return list(self.player.inventory.items) + [e.item for e in self.entities if e.item is not None]
+
+    def identify_kind(self, key: str) -> bool:
+        """Learn what ``key`` items are. Returns True if it wasn't known before."""
+        new = self.ident.identify(key, self.all_items())
+        if new:
+            for e in self.entities:
+                if e.item is not None and e.item.key == key:
+                    e.name = e.item.display_name
+        return new
+
+    def _blind_target(self, item: Item) -> tuple[int, int] | None:
+        """Where an unidentified targeted scroll goes off: the nearest foe in range, if any."""
+        for m in self.visible_monsters():
+            if chebyshev(m.pos, self.player.pos) <= item.range:
+                return m.pos
+        return None
+
+    def _use_unknown(self, item: Item, handler) -> None:
+        """Read/quaff an unidentified item: it always takes effect (for better or worse)."""
+        appearance = item.shown_name
+        self.identify_kind(item.key)
+        ok = True
+        if item.targeting == TARGET_CELL:
+            target = self._blind_target(item)
+            if target is None and item.effect == "fireball":
+                target = self.player.pos
+            if target is None:
+                if item.effect == "confuse":
+                    self.say("The runes swim before your eyes...", C_MAGIC)
+                    self.apply_status(self.player, "confused", 4)
+                else:
+                    self.say("The scroll crumbles to dust.")
+            else:
+                ok = handler(item, target)
+        else:
+            ok = handler(item, None)
+        if not ok:
+            self.say("Nothing seems to happen.")
+        self.say(f"The {appearance} was {a_an(item.name)}.", C_MAGIC)
+
     # ---- items --------------------------------------------------------
+    def throw(self, item: Item, target: tuple[int, int]) -> bool:
+        """Throw one ``item`` at ``target`` (see throwing.py). Returns True if a turn passed."""
+        if self.game_over or not any(i is item for i in self.player.inventory.items):
+            return False
+        if not throwing.throw(self, item, target):
+            return False
+        if not self.game_over:
+            self.end_turn()
+        return True
+
     def pickup(self) -> bool:
         here = self.items_at(*self.player.pos)
         if not here:
@@ -438,6 +525,13 @@ class Game:
         if handler is None:
             self.say(f"You can't use the {item.name}.")
             return False
+        if not item.identified:
+            self._use_unknown(item, handler)
+            self.player.inventory.take_one(item)
+            self.noise = NOISE["item"]
+            if not self.game_over:
+                self.end_turn()
+            return True
         if item.targeting == TARGET_CELL and target is None:
             self.say("That needs a target.")
             return False
@@ -445,7 +539,24 @@ class Game:
             return False
         self.player.inventory.take_one(item)
         self.noise = NOISE["loud"] if item.effect in ("fireball", "lightning") else NOISE["item"]
-        self.end_turn()
+        if not self.game_over:
+            self.end_turn()
+        return True
+
+    def _effect_firebomb(self, item: Item, _target) -> bool:
+        self.say(f"You drink the {item.name}. It burns all the way down!", C_BAD)
+        dealt = self.player.fighter.take_damage(item.magnitude // 2)
+        self.say(f"You take {dealt} damage.", C_BAD)
+        if not self.player.fighter.alive:
+            self.death_cause = "drank liquid fire"
+            self.say("You die...", C_BAD)
+            return True
+        self.apply_status(self.player, "burning", 4, 1)
+        return True
+
+    def _effect_venom(self, item: Item, _target) -> bool:
+        self.say(f"You drink the {item.name}. You feel very sick.", C_BAD)
+        self.apply_status(self.player, "poisoned", item.magnitude, 1)
         return True
 
     def _effect_eat(self, item: Item, _target) -> bool:
@@ -643,6 +754,10 @@ class Game:
             else:
                 self.on_kill(target)
             return
+        if dealt > 0 and "knockback" in m.tags and self.rng.random() < knockback.TROLL_SHOVE_CHANCE:
+            knockback.shove(self, m, target)
+            if self.game_over:
+                return
         if dealt > 0 and m.on_hit is not None:
             name, turns, power, chance = m.on_hit
             if self.rng.random() < chance:

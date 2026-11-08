@@ -22,6 +22,7 @@ from .entities import Entity, Fighter
 from .equipment import SLOTS, Equipment
 from .gamemap import GameMap
 from .geometry import Rect
+from .identify import Identification
 from .inventory import Inventory
 from .items import Item
 from .messages import Message, MessageLog
@@ -29,7 +30,7 @@ from .progression import Progression
 from .resources import Resources
 from .status import StatusSet
 from .themes import theme_for_depth
-from .tiles import TILES_BY_GLYPH
+from .tiles import TILES_BY_CODE
 from .traps import Trap
 from .vaults import SpecialRoom
 
@@ -111,7 +112,7 @@ def _decode_entity(d: dict[str, Any]) -> Entity:
 def _gmap(g: GameMap) -> dict[str, Any]:
     return {
         "width": g.width, "height": g.height,
-        "tiles": ["".join(t.glyph for t in row) for row in g.tiles],
+        "tiles": ["".join(t.save_code for t in row) for row in g.tiles],
         "explored": ["".join("1" if v else "0" for v in row) for row in g.explored],
         "stairs": list(g.stairs) if g.stairs else None,
     }
@@ -120,7 +121,7 @@ def _gmap(g: GameMap) -> dict[str, Any]:
 def _decode_gmap(d: dict[str, Any]) -> GameMap:
     g = GameMap(d["width"], d["height"])
     try:
-        g.tiles = [[TILES_BY_GLYPH[ch] for ch in row] for row in d["tiles"]]
+        g.tiles = [[TILES_BY_CODE[ch] for ch in row] for row in d["tiles"]]
     except KeyError as exc:
         raise SaveError(f"unknown tile glyph {exc}") from None
     g.explored = [[ch == "1" for ch in row] for row in d["explored"]]
@@ -153,6 +154,7 @@ def to_dict(game) -> dict[str, Any]:
         "special_rooms": [[s.kind, s.rect.x, s.rect.y, s.rect.w, s.rect.h, s.visited]
                           for s in game.special_rooms],
         "altars": [[x, y, used] for (x, y), used in game.altars.items()],
+        "ident": game.ident.to_dict(),
     }
 
 
@@ -192,6 +194,7 @@ def from_dict(data: dict[str, Any]):
         g.special_rooms = [SpecialRoom(kind, Rect(x, y, w, h), visited)
                            for kind, x, y, w, h, visited in data["special_rooms"]]
         g.altars = {(x, y): used for x, y, used in data["altars"]}
+        g.ident = Identification.from_dict(data.get("ident"))
     except (KeyError, TypeError, ValueError, IndexError) as exc:
         raise SaveError(f"corrupt save: {exc!r}") from None
     if "player" not in g.player.tags:
@@ -199,6 +202,10 @@ def from_dict(data: dict[str, Any]):
     g.theme = theme_for_depth(g.depth)
     g.noise = 0
     g._trap_confirm = None
+    g._force_confirm = None
+    from .lighting import compute_lit
+
+    g.lit = compute_lit(g.gmap)
     g.update_fov()
     return g
 

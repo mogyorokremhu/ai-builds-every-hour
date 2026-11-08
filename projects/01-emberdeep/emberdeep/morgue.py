@@ -78,6 +78,10 @@ def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
             lines.append(f"{letter}) {it.display_name}" + (f"  ({desc})" if desc else ""))
     else:
         lines.append("(empty)")
+    found = game.ident.discoveries() if hasattr(game, "ident") else []
+    if found:
+        lines += ["", "Discoveries", "-" * 40]
+        lines += [f"{look:<36} {name}" for look, name in found]
     lines += ["", f"Kills ({game.kills})", "-" * 40]
     for name, n in sorted(game.kill_counts.items(), key=lambda kv: (-kv[1], kv[0])):
         lines.append(f"{n:>4}  {name}")

@@ -29,12 +29,13 @@ if TYPE_CHECKING:  # pragma: no cover
 
 #: Spells used by casters. ``status`` is (name, turns, power, chance) or None.
 SPELLS: dict[str, dict] = {
-    "ember bolt": dict(range=6, cooldown=3, damage=4, status=("burning", 3, 1, 0.5),
+    "ember bolt": dict(range=6, cooldown=4, damage=4, status=("burning", 3, 1, 0.35),
                        verb="hurls an ember bolt at", color="bright_red"),
     "hex of slowness": dict(range=7, cooldown=6, damage=0, status=("slowed", 6, 0, 1.0),
                             verb="chants a hex of slowness at", color="cyan"),
 }
 
+CASTER_KITE_CHANCE = 0.6  # chance a caster backs away when you get close (balance-tuned)
 COWARD_THRESHOLD = 0.35   # flee below this fraction of max HP
 PACK_ALERT_RADIUS = 8
 PACK_GATHER = 2           # pack members (incl. self) near the player before rushing in
@@ -131,6 +132,9 @@ def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
             return
         hunt(game, m, sees)
         return
+    if hurt and m.ai_state.get("potion") and game.rng.random() < 0.6:
+        drink_potion(game, m)
+        return
     if hurt:
         if not m.ai_state.get("fleeing"):
             m.ai_state["fleeing"] = True
@@ -139,6 +143,15 @@ def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
             return
         # cornered: fight back
     hunt(game, m, sees)
+
+
+def drink_potion(game: "Game", m: "Entity") -> None:
+    """A monster quaffs the healing potion it carries (kobolds)."""
+    m.ai_state.pop("potion", None)
+    healed = m.fighter.heal(12)
+    if game.gmap.visible[m.y][m.x]:
+        game.say(f"The {m.name} drinks a potion of healing! (+{healed})", "bright_yellow")
+        game.identify_kind("healing potion")
 
 
 def act_caster(game: "Game", m: "Entity", sees: bool) -> None:
@@ -155,8 +168,8 @@ def act_caster(game: "Game", m: "Entity", sees: bool) -> None:
         game.cast_spell(m, m.spell or "ember bolt")
         m.ai_state["cooldown"] = spell["cooldown"]
         return
-    if dist <= 2 and step_away(game, m, player.pos):
-        return  # keep casting distance
+    if dist <= 2 and game.rng.random() < CASTER_KITE_CHANCE and step_away(game, m, player.pos):
+        return  # keep casting distance (casters aren't perfect at it)
     if dist <= 1:
         game.monster_attack(m, player)
         return
@@ -233,8 +246,8 @@ def take_turn(game: "Game", m: "Entity") -> None:
     if m.confused > 0:
         wander(game, m)
         return
-    # FOV is symmetric for our purposes: if the player sees the monster, it sees them
-    sees = game.gmap.visible[m.y][m.x]
+    # FOV is symmetric for our purposes (if you see it, it sees you) unless you lurk in the dark
+    sees = game.monster_sees_player(m)
     if sees:
         m.memory = game.player.pos
     elif m.memory is None:
