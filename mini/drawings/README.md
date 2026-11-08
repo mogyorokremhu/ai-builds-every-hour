@@ -23,3 +23,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_moon.py` | Today's (or any date's) Moon phase with limb shading; `--month` shows the next 30 days |
 | `ascii_spirograph.py` | Hypotrochoid/epitrochoid gallery, or your own `R r d [--epi]` |
 | `ascii_penrose.py` | Penrose P3 rhombus tiling from subdivided Robinson triangles (`python ascii_penrose.py 6`) |
+| `ascii_sine_waves.py` | Three sine waves and their interference sum |
+| `ascii_checker_zoom.py` | Rotating, zooming checkerboard frames side by side |
+| `ascii_rose.py` | Rhodonea rose curves for any `k`, including fractions (`python ascii_rose.py 5/3`) |
