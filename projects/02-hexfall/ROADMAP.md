@@ -49,15 +49,23 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Difficulty levels; AI vs AI self-play harness in node for balance testing (`tools/selfplay.mjs`)
 - [x] Influence maps (threat/control) and terrain-aware distance fields shared across AI decisions
 - [x] AI plays in the browser with animations; either side can be Human or AI (spectator mode)
-- [ ] AI endgame awareness: play for score near the turn limit, contest enemy holds harder
-- [ ] AI keeps a reserve of units guarding its villages against raiders
+- [x] AI endgame awareness: play for score near the turn limit, contest enemy holds harder
+- [x] AI keeps a reserve of units guarding its villages against raiders
 
-## Phase 6 — Abilities & variety
-- [ ] Unit abilities: charge (cavalry), volley (archers), fireball (mage, area), heal, shield wall
-- [ ] Status effects: slowed, poisoned, rallied
-- [ ] Fog of war with shadowcast-style hex line of sight
-- [ ] Weather (rain lowers ranged accuracy, fog shortens sight)
-- [ ] More terrain: ruins, fords, burning fields (bridges ✅, castles/keeps ✅)
+## Phase 6 — Abilities & variety ✅
+- [x] Unit abilities: charge (cavalry), volley (archers), fireball (mage, area), heal, shield wall — plus rally (swordsman) and envenom (rogue); cooldowns
+- [x] Status effects: slowed, poisoned, rallied, braced (icons on tokens, roster, unit panel)
+- [x] Fog of war with height-aware hex line of sight, explored memory and ambushes
+- [x] Weather (rain lowers ranged damage, fog shortens sight and reach, storms; seeded fronts, forecast strip)
+- [x] More terrain: ruins, fords, burning fields that spread and burn out (bridges ✅, castles/keeps ✅)
+- [x] AI uses abilities (previews scored in gold units) and plays under fog of war
+- [x] Ability UI: buttons + number keys, purple target rings, fireball blast preview, result tooltip
+
+## Phase 6½ — Follow-ups found while building Phase 6
+- [ ] Fog-aware replays/spectating: toggle "show all" for hot-seat review
+- [ ] AI scouting under fog (send fast units to explore when no enemy is seen)
+- [ ] Ability animations (arrow rain, fireball burst) and floating damage numbers per victim
+- [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
 
 ## Phase 7 — Campaign & presentation
 - [ ] Skirmish setup screen (map size, seed, armies, starting gold, turn limit; AI level selectors done)

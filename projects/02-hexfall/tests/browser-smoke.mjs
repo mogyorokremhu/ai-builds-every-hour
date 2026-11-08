@@ -94,8 +94,28 @@ const attacks = g.log.filter((l) => /hits|shoots|blasts/.test(l.text)).length;
 await page.click("#save");
 await page.click("#load");
 const text = await page.textContent("#info");
+
+// fog of war + abilities: a fresh hot-seat battle with fog, then a shield wall via key "1"
+await page.selectOption("#blueai", "human");
+await page.check("#fog");
+await page.waitForFunction(() => window.hexfall.state.game.rules.fog && window.hexfall.state.game.turn === 1);
+const fogInfo = await page.evaluate(() => {
+  const g = window.hexfall.state.game;
+  return { hidden: g.hiddenIds("red").size, roster: document.getElementById("roster").textContent };
+});
+if (!fogInfo.hidden) throw new Error("fog of war hides nothing at the start");
+if (!/seen/.test(fogInfo.roster)) throw new Error("the roster does not hide unseen enemies");
+const spear = (await game()).units.find((u) => u.side === "red" && u.type === "spearman");
+await clickHex(spear);
+const buttons = await page.$$("#abilities button:not([disabled])");
+if (!buttons.length) throw new Error("no ability button for the spearman");
+await page.keyboard.press("1");
+await page.waitForFunction(() => !window.hexfall.state.busy);
+if (!(await game()).log.some((l) => /shield wall/.test(l.text))) throw new Error("shield wall was not used");
+const braced = (await game()).units.find((u) => u.id === spear.id).status.braced;
+if (!braced) throw new Error("the spearman is not braced");
 await page.screenshot({ path: process.env.SHOT ?? "/tmp/hexfall-smoke.png" });
 await browser.close();
 if (errors.length) throw new Error("page errors:\n" + errors.join("\n"));
 if (!attacks) throw new Error("no attacks happened");
-console.log(`ok: turn ${g.turn}, ${g.units.length} units left, ${attacks} attacks, winner ${g.winner ?? "none"}; ${text}`);
+console.log(`ok: turn ${g.turn}, ${g.units.length} units left, ${attacks} attacks, winner ${g.winner ?? "none"}; ${text}; fog hid ${fogInfo.hidden} enemies; shield wall used`);
