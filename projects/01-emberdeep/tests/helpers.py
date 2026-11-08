@@ -14,6 +14,7 @@ class FakeScreen:
         self.keys = [ord(k) if isinstance(k, str) else k for k in keys]
         self.erase()
         self.frames = 0
+        self.snapshots: list[str] = []  # screen text each time a key was read
 
     def getmaxyx(self) -> tuple[int, int]:
         return self.rows, self.cols
@@ -33,7 +34,12 @@ class FakeScreen:
         self.frames += 1
 
     def getch(self) -> int:
+        self.snapshots.append(self.text())
         return self.keys.pop(0) if self.keys else ord("Q")
+
+    def seen(self, text: str) -> bool:
+        """True if ``text`` was on screen at any key prompt (or is on it now)."""
+        return any(text in snap for snap in self.snapshots) or text in self.text()
 
     def text(self) -> str:
         return "\n".join("".join(r) for r in self.buf)
