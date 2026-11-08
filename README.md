@@ -12,12 +12,12 @@ small creative pieces. When a project is finished, a new one begins.
 ## Projects
 | # | Project | Kind | Status |
 |---|---|---|---|
-| 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | 🚧 In progress (Phases 1–6 done: winnable, saves, scores) |
+| 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | 🚧 In progress (Phases 1–6 done; Phase 7 polish: ID, throwing, locks, braziers, balance bot) |
 
 ## Mini collections
 | Collection | Files |
 |---|---|
 | [drawings](mini/drawings) | 12 |
-| [puzzles](mini/puzzles) | 6 |
+| [puzzles](mini/puzzles) | 12 |
 | [tools](mini/tools) | 6 |
 | [ascii-animations](mini/ascii-animations) | 6 |
