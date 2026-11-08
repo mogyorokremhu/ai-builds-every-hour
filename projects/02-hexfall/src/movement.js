@@ -25,7 +25,8 @@ export function enemyZoc(game, side) {
 /**
  * Where can `unit` go this turn?
  * - enemy units block their hex; friendly units can be passed through but not stopped on;
- * - entering a hex in an enemy zone of control (adjacent to an enemy) ends the move there;
+ * - entering a hex in an enemy zone of control (adjacent to an enemy) ends the move there
+ *   (skirmishers ignore zones of control);
  * - a unit that has not moved yet may always take one step onto passable ground, even if
  *   the step costs more than its move points.
  * @param {object} game  anything with `map` and `units`
@@ -35,7 +36,7 @@ export function movementArea(game, unit) {
   const { map } = game;
   const budget = unit.mp;
   const occupant = new Map(game.units.filter((u) => u.hp > 0).map((u) => [key(u), u]));
-  const zoc = enemyZoc(game, unit.side);
+  const zoc = hasTrait(unit, "skirmisher") ? new Set() : enemyZoc(game, unit.side);
   const start = { q: unit.q, r: unit.r };
   const best = new Map([[key(start), { hex: start, cost: 0, prev: null, zoc: false, canStop: true }]]);
   if (budget <= 0) return best;

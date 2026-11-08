@@ -1,6 +1,7 @@
 // Combat: attack options, damage rules, exact forecasts and seeded resolution.
 import { distance, neighbors, key } from "./hex.js";
 import { hasLineOfSight } from "./sight.js";
+import { todMultiplier } from "./timeofday.js";
 import {
   meleeAttack, rangedAttack, attackRange, defenseOf, hasTrait, gainXp, unitType,
 } from "./units.js";
@@ -52,15 +53,17 @@ export function flankers(game, attacker, target) {
 
 /**
  * Modifiers for one strike, before the random roll.
- * @returns {{base:number, flank:number, terrain:number, bonus:number, multiplier:number, armor:number}}
+ * The time of day scales lawful/chaotic attackers (±25%); games without a turn counter count as dawn.
+ * @returns {{base:number, flank:number, terrain:number, bonus:number, time:number, multiplier:number, armor:number}}
  */
 export function strikeModifiers(game, attacker, defender, kind) {
   const base = kind === "melee" ? meleeAttack(attacker) : rangedAttack(attacker);
   const flank = kind === "melee" ? Math.min(MAX_FLANK, flankers(game, attacker, defender)) * FLANK_BONUS : 0;
   const terrainDef = hasTrait(attacker, "magic") ? 0 : (game.map.terrainAt(defender)?.defense ?? 0);
   const bonus = kind === "melee" && hasTrait(attacker, "antiCavalry") && hasTrait(defender, "mounted") ? ANTI_CAVALRY : 1;
-  const multiplier = (1 + flank) * (1 - terrainDef / 100) * bonus;
-  return { base, flank, terrain: terrainDef, bonus, multiplier, armor: defenseOf(defender) };
+  const time = todMultiplier(unitType(attacker).alignment ?? "neutral", game.turn ?? 1);
+  const multiplier = (1 + flank) * (1 - terrainDef / 100) * bonus * time;
+  return { base, flank, terrain: terrainDef, bonus, time, multiplier, armor: defenseOf(defender) };
 }
 
 /** Damage for each of the five rolls (index-aligned with ROLLS); always at least 1. */
