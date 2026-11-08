@@ -21,6 +21,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `baseconv.py` | Lighter twin of `bases.py`: one number shown in many bases, bytes and Roman numerals (`--from N`) |
 | `cronnext.py` | Lighter twin of `cronx.py`: cron expression in English + next runs (`-n`, `--from`) |
 | `linediff.py` | Lighter twin of `difftool.py`: Myers diff as a coloured unified diff (`-U`, `--demo`) |
+| `cipher.py` | Caesar / ROT13 / Vigenère / Atbash, plus a Caesar cracker ranked by letter frequency and common words |
+| `slug.py` | Slug, snake, kebab, camel, Pascal, title and CONSTANT case (accents folded, camelCase split); `--all` |
+| `ageof.py` | Calendar difference between dates (years/months/days, weeks, weekday, next anniversary; Feb 29 aware) |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
