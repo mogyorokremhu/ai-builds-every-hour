@@ -63,7 +63,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 
 ## Phase 6½ — Follow-ups found while building Phase 6
 - [ ] Fog-aware replays/spectating: toggle "show all" for hot-seat review
-- [ ] AI scouting under fog (send fast units to explore when no enemy is seen)
+- [x] AI scouting under fog (`scouting.js`: frontier hexes become AI goals while no enemy is seen)
 - [x] Floating damage/heal numbers per victim (`effects.js`)
 - [ ] Ability animations (arrow rain, fireball burst)
 - [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
