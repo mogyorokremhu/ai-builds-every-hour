@@ -8,7 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Callable, Iterable, Protocol
 
-from . import keys, scores
+from . import explore, fx, keys, scores
 from .colors import TILE_COLORS, ColorTable
 from .game import Game
 from .hud import sidebar
@@ -17,6 +17,7 @@ from .look import describe_cell
 from .progression import CHOICES
 from .targeting import Cursor, blast_area, projectile_path
 from .throwing import THROW_RANGE
+from .timeline import depth_chart, summary_lines
 
 try:
     import curses
@@ -27,6 +28,7 @@ except ImportError:  # pragma: no cover - platform dependent
 
 SIDEBAR_W = 24
 LOG_H = 6
+FRAME_MS = 35       # delay between animation frames
 
 
 class Screen(Protocol):  # pragma: no cover - typing only
@@ -46,15 +48,22 @@ def camera_offset(target: int, view: int, size: int) -> int:
 
 class CursesUI:
     def __init__(self, screen: Screen, game: Game, colors: ColorTable | None = None,
-                 on_finish: Callable[[Game], list[str]] | None = None, home: Path | None = None) -> None:
+                 on_finish: Callable[[Game], list[str]] | None = None, home: Path | None = None,
+                 delay: Callable[[int], object] | None = None) -> None:
         """``on_finish`` records a finished run and returns extra lines for the end screen
-        (score, rank, morgue file); ``home`` is where the hall of fame is read from."""
+        (score, rank, morgue file); ``home`` is where the hall of fame is read from;
+        ``delay(ms)`` pauses between animation frames (``curses.napms``; a no-op in tests)."""
         self.screen = screen
         self.game = game
         self.colors = colors or ColorTable(enabled=False)
         self.running = True
         self.on_finish = on_finish
         self.home = home
+        self.delay = delay or (lambda ms: None)
+        self.animate = True
+        self.origin = (0, 0)
+        self.view = (0, 0)
+        self.fx_frames = 0  # animation frames shown (for tests)
 
     # ---- low-level drawing ---------------------------------------------
     def size(self) -> tuple[int, int]:
@@ -92,6 +101,7 @@ class CursesUI:
         focus = cursor.pos if cursor else g.player.pos
         ox = camera_offset(focus[0], view_w, gmap.width)
         oy = camera_offset(focus[1], view_h, gmap.height)
+        self.origin, self.view = (ox, oy), (view_w, view_h)
 
         for sy in range(view_h):
             my = oy + sy
@@ -175,6 +185,29 @@ class CursesUI:
                 self.level_up()
                 continue
             self.handle(self.screen.getch())
+            self.play_fx()
+
+    # ---- animation --------------------------------------------------------
+    def play_fx(self) -> None:
+        """Animate the spells and projectiles of the last action (see fx.py)."""
+        effects = fx.drain(self.game)
+        if not self.animate or not effects:
+            return
+        g = self.game
+        for eff in effects:
+            if not any(g.gmap.visible[y][x] for x, y in eff.cells if g.gmap.in_bounds(x, y)):
+                continue  # happened out of sight
+            for frame in fx.frames(eff):
+                self.draw(footer="? for help")
+                ox, oy = self.origin
+                vw, vh = self.view
+                for x, y, glyph, color in frame:
+                    if g.gmap.in_bounds(x, y) and g.gmap.visible[y][x] and 0 <= x - ox < vw and 0 <= y - oy < vh:
+                        self.put(y - oy, x - ox, glyph, color)
+                self.screen.refresh()
+                self.fx_frames += 1
+                self.delay(FRAME_MS)
+        self.draw(footer="? for help")
 
     def handle(self, key: int) -> None:
         g = self.game
@@ -199,6 +232,10 @@ class CursesUI:
             self.close_door()
         elif cmd == "scores":
             self.hall_of_fame()
+        elif cmd == "timeline":
+            self.timeline_screen()
+        elif cmd == "wizard":
+            self.wizard()
         elif cmd == "help":
             self.show_text(keys.HELP_TEXT)
         elif cmd == "messages":
@@ -236,6 +273,31 @@ class CursesUI:
         key = self.screen.getch()
         if key in keys.MOVE_KEYS:
             g.close_door(*keys.MOVE_KEYS[key])
+
+    def wizard(self) -> None:
+        g = self.game
+        if not explore.is_explore(g.mode):
+            g.say("Wizard powers only work in explore mode (--explore).")
+            return
+        self.show_box([(t, "bright_magenta" if i == 0 else "white") for i, t in enumerate(explore.menu_lines())])
+        key = self.screen.getch()
+        if 0 <= key < 256 and chr(key) in explore.COMMANDS:
+            explore.wizard(g, chr(key))
+
+    def timeline_lines(self, final: bool) -> list[str]:
+        g = self.game
+        if final:
+            g.record_end()
+        rows, cols = self.size()
+        title = "EMBERDEEP — the story of your run" if final else "EMBERDEEP — your run so far"
+        chart = depth_chart(g.timeline, g.turn, width=max(10, min(60, cols - 10)), height=6,
+                            max_depth=max(g.max_depth, 1))
+        room = max(3, rows - len(chart) - 7)
+        return [title, ""] + chart + [""] + summary_lines(g.timeline, g.turn, limit=room) + ["", "Press any key."]
+
+    def timeline_screen(self, final: bool = False) -> None:
+        """Depth-over-time chart and notable events (the post-run "ascend" screen)."""
+        self.show_text(self.timeline_lines(final))
 
     def hall_of_fame(self) -> None:
         if self.home is None:
@@ -368,8 +430,8 @@ class CursesUI:
             (f"You reached level {g.level}!", "bright_green"),
             ("", "white"),
         ]
-        for key, choice in CHOICES.items():
-            lines.append((f"{key}) {choice.label:<9} {choice.description}", "bright_white"))
+        for letter, choice in CHOICES.items():
+            lines.append((f"{letter}) {choice.label:<9} {choice.description}", "bright_white"))
         lines += [("", "white"), ("Every level also grants +2 max HP.", "white")]
         while g.pending_levels:
             self.draw()
@@ -395,9 +457,14 @@ class CursesUI:
             (f"Seed:          {g.seed}", "white"),
         ]
         lines += [(t, "bright_cyan") for t in extra or []]
-        lines += [("", "white"), ("Press any key.", "white")]
+        lines += [("", "white"), ("Press T for the story of your run, any other key to leave.", "white")]
         self.show_box(lines)
-        self.screen.getch()
+        self.end_prompt()
+
+    def end_prompt(self) -> None:
+        """After the end screen: ``T`` shows the run's timeline (the "ascend" screen)."""
+        if self.screen.getch() in (ord("T"), ord("t")):
+            self.timeline_screen(final=True)
 
     def death_screen(self, extra: list[str] | None = None) -> None:
         g = self.game
@@ -412,9 +479,9 @@ class CursesUI:
             (f"Seed:          {g.seed}", "white"),
         ] + [(t, "bright_cyan") for t in extra or []] + [
             ("", "white"),
-            ("Press any key.", "white"),
+            ("Press T for the story of your run, any other key to leave.", "white"),
         ])
-        self.screen.getch()
+        self.end_prompt()
 
 
 def play(game: Game, on_finish: Callable[[Game], list[str]] | None = None,
@@ -431,7 +498,7 @@ def play(game: Game, on_finish: Callable[[Game], list[str]] | None = None,
         stdscr.keypad(True)
         if hasattr(curses, "set_escdelay"):
             curses.set_escdelay(25)
-        CursesUI(stdscr, game, ColorTable(), on_finish=on_finish, home=home).run()
+        CursesUI(stdscr, game, ColorTable(), on_finish=on_finish, home=home, delay=curses.napms).run()
 
     curses.wrapper(_main)
     return game
