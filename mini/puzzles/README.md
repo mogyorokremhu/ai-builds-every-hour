@@ -22,4 +22,7 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `futoshiki.py` | Futoshiki inequality grids: candidate propagation, hidden singles, MRV backtracking |
 | `kakuro.py` | Kakuro cross sums with precomputed digit combos per run; `--random` fills a pattern and solves it back |
 | `sokoban.py` | Sokoban: fewest-push A* with dead-square pruning, replay as key strokes, or `--play` |
+| `nim.py` | Nim: XOR best move, play vs perfect opponent, Sprague-Grundy values for subtraction games |
+| `domino_tiling.py` | Counts domino tilings of an m×n board (broken-profile DP, 8×8 = 12,988,816) and draws a random one |
+| `hitori.py` | Hitori solver: backtracking shading with no-touch, duplicate and connectivity checks |
 | `minesweeper.py` | Minesweeper + logical auto-solver (subset rule, exact frontier probabilities); `--games N` win rate |
