@@ -62,7 +62,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Ability UI: buttons + number keys, purple target rings, fireball blast preview, result tooltip
 
 ## Phase 6½ — Follow-ups found while building Phase 6
-- [ ] Fog-aware replays/spectating: toggle "show all" for hot-seat review
+- [ ] Fog-aware spectating: "Show all" toggle for hot-seat review (logic in `spectate.js` ✅, UI hookup queued)
 - [x] AI scouting under fog (`scouting.js`: frontier hexes become AI goals while no enemy is seen)
 - [x] Floating damage/heal numbers per victim (`effects.js`)
 - [ ] Ability animations (arrow rain, fireball burst)
@@ -73,7 +73,8 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Short campaign of 5 scenarios with carried-over veterans (`campaign.js`; Campaign… menu, progress saved in localStorage)
 - [x] WebAudio sound effects synthesised in code (no asset files) — `sound.js`, Sound checkbox
 - [x] Animations: attack lunges, floating damage/heal numbers, death fades (`effects.js`)
-- [ ] Keyboard controls (E/U/N/Tab/Esc done) + accessibility pass (focus, high-contrast palette)
+- [ ] Colour themes: default / high contrast / colour-blind safe (`palette.js` with WCAG contrast checks ✅; Theme select + making `SIDE_COLORS` mutable queued)
+- [ ] Keyboard controls (E/U/N/Tab/Esc done) + remaining accessibility: focus trap in menu dialog
 - [ ] Mobile/touch support
 
 ## Phase 8 — Polish
