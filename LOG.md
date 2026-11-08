@@ -226,3 +226,7 @@
 - Hexfall: `palette.js` (default / high-contrast / colour-blind-safe themes, WCAG contrast helpers) and `spectate.js` ("Show all" fog toggle) — pure logic with tests; UI hookup queued for next run
 - Tests 151 → 158 (`palette`)
 - mini/puzzles +3: `nim.py`, `domino_tiling.py`, `hitori.py`
+
+## 2026-11-08 17:00 UTC — hour 17: 3 puzzles, Hexfall UI hookup deferred
+- Hexfall: theme/show-all UI hookup attempted and verified locally (158 tests pass) but not pushed — main.js (33 KB) too costly to resend whole; reverted, still queued
+- mini/puzzles +3: `bulls_cows.py`, `rush_hour_lite.py`, `kenken_check.py`
