@@ -80,5 +80,6 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 ## Phase 8 — Polish
 - [ ] Browser smoke test in CI-like script form (`tests/browser-smoke.mjs` exists; add screenshots to docs)
 - [ ] Balance pass from AI self-play statistics (document in BALANCE.md)
-- [ ] Hot-seat multiplayer + shareable replay files (deterministic re-simulation)
+- [x] Shareable replay files: deterministic re-simulation (`replay.js`, `tools/replay.mjs record|check`, fingerprint verification)
+- [ ] Replay viewer in the browser (load a file, step/play) and hot-seat multiplayer
 - [ ] Full docs with screenshots; test coverage of all game-logic modules
