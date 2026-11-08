@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hexfall</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>⬡ Hexfall</h1>
+    <p class="tag">hex-grid tactics · map preview (phase 1)</p>
+  </header>
+  <section class="controls">
+    <label>Seed <input id="seed" size="10" value="1"></label>
+    <button id="generate">Generate</button>
+    <button id="random">Random</button>
+    <label><input id="sym" type="checkbox" style="width:auto"> Symmetric</label>
+    <label>Move points <input id="mp" type="number" min="1" max="12" value="4"></label>
+    <button id="zoomreset" title="Show the whole map">Reset zoom</button>
+  </section>
+  <main>
+    <canvas id="board" aria-label="Battle map"></canvas>
+    <canvas id="minimap" aria-label="Minimap (click to jump)"></canvas>
+  </main>
+  <p id="info" class="info">Click a hex to preview movement from it.</p>
+  <p id="legend" class="legend"></p>
+  <footer>Mouse wheel zooms, drag pans, click the minimap to jump. Dashed outlines: deployment zones
+    (red, blue). Roads cost ½ a move point.</footer>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
