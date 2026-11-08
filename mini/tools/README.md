@@ -24,6 +24,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `cipher.py` | Caesar / ROT13 / Vigenère / Atbash, plus a Caesar cracker ranked by letter frequency and common words |
 | `slug.py` | Slug, snake, kebab, camel, Pascal, title and CONSTANT case (accents folded, camelCase split); `--all` |
 | `ageof.py` | Calendar difference between dates (years/months/days, weeks, weekday, next anniversary; Feb 29 aware) |
+| `wc2.py` | Lines / words / chars / bytes / longest line for files or stdin |
+| `roman.py` | Integer ↔ Roman numeral converter (1..3999, round-trip self-tested) |
+| `dedupe.py` | Remove repeated lines keeping first occurrences (`-c` counts, `-i` ignore case) |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
