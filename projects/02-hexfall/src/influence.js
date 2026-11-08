@@ -51,9 +51,12 @@ export function strikeMap(game, attackers, turn = game.turn ?? 1) {
   return out;
 }
 
-/** Enemy threat against `side`: what its opponents could bring to each hex on their next turn. */
-export function threatMap(game, side) {
-  return strikeMap(game, game.units.filter((u) => u.side !== side), (game.turn ?? 1) + (game.active === 0 ? 0 : 1));
+/**
+ * Enemy threat against `side`: what its opponents could bring to each hex on their next turn.
+ * `seen` filters the enemies taken into account (fog of war: only the ones `side` can see).
+ */
+export function threatMap(game, side, seen = () => true) {
+  return strikeMap(game, game.units.filter((u) => u.side !== side && seen(u)), (game.turn ?? 1) + (game.active === 0 ? 0 : 1));
 }
 
 /**

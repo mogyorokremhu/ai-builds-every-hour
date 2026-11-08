@@ -19,6 +19,8 @@ export const DEFAULTS = Object.freeze({
   roads: true,
   symmetric: false,   // point-mirrored map (fair for competitive play)
   rivers: 2,          // rivers flowing downhill from the high ground
+  ruins: 2,           // ruined forts in no-man's-land (cover that blocks sight)
+  fords: 2,           // shallow river crossings (cheaper than wading)
 });
 
 const RIVER_STOP = new Set(["water", "shallows", "river"]);
@@ -207,6 +209,9 @@ function tryGenerate(opts, rng) {
     villages = placeVillages(map, region, spawns, opts.villages, rng, taken);
   }
   if (opts.roads) layRoads(map, [a, ...villages.slice().sort((x, y) => toOffset(x).col - toOffset(y).col), b]);
+  const half = opts.symmetric ? (h) => firstHalf(h, map.cols, map.rows) : () => true;
+  placeRuins(map, region, spawns, villages, opts.symmetric ? Math.ceil(opts.ruins / 2) : opts.ruins, rng, half);
+  placeFords(map, opts.symmetric ? Math.ceil(opts.fords / 2) : opts.fords, rng, half);
   if (opts.castles) for (const zone of spawns) buildCastle(map, zone);
   if (opts.symmetric) mirrorMap(map);
   return { map, spawns, villages };
@@ -225,6 +230,50 @@ function placeVillages(map, region, spawns, count, rng, taken, allowed = () => t
     if (spawnHexes.some((s) => distance(s, h) < 3)) continue;
     map.set(h, "village");
     out.push(h);
+  }
+  return out;
+}
+
+/**
+ * Ruins: old forts on open ground well away from deployment zones and villages (≥ 4 hexes),
+ * at least 5 hexes apart. They give cover and block sight like a village, but pay no income.
+ * @returns {Array<{q:number,r:number}>}
+ */
+export function placeRuins(map, region, spawns, villages, count, rng, allowed = () => true) {
+  const out = [];
+  if (count <= 0) return out;
+  const spawnHexes = spawns.flat();
+  const candidates = rng.shuffle([...region].map(fromKey).filter((h) => {
+    const id = map.terrainAt(h).id;
+    return (id === "plains" || id === "hills") && allowed(h);
+  }));
+  for (const h of candidates) {
+    if (out.length >= count) break;
+    if (spawnHexes.some((s) => distance(s, h) < 4) || villages.some((v) => distance(v, h) < 3)) continue;
+    if (out.some((o) => distance(o, h) < 5)) continue;
+    map.set(h, "ruins");
+    out.push(h);
+  }
+  return out;
+}
+
+/**
+ * Fords: river hexes turned into shallow crossings (2 MP instead of 3, a smaller defence
+ * penalty). Never next to a bridge or another ford.
+ * @returns {Array<{q:number,r:number}>}
+ */
+export function placeFords(map, count, rng, allowed = () => true) {
+  const out = [];
+  if (count <= 0) return out;
+  const rivers = rng.shuffle([...map].filter((t) => t.terrain === "river" && allowed(t)));
+  for (const t of rivers) {
+    if (out.length >= count) break;
+    const ns = map.neighbors(t).map((n) => map.terrainAt(n).id);
+    if (ns.includes("bridge") || ns.includes("ford")) continue;
+    // a crossing needs dry land on two sides
+    if (ns.filter((id) => Number.isFinite(terrain(id).cost) && !["river", "water", "shallows"].includes(id)).length < 2) continue;
+    map.set(t, "ford");
+    out.push({ q: t.q, r: t.r });
   }
   return out;
 }

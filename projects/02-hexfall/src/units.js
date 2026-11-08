@@ -15,6 +15,8 @@
  * @property {string[]} traits   rule tags: mounted, antiCavalry, magic, healer, skirmisher, ...
  * @property {"lawful"|"neutral"|"chaotic"} alignment  lawful units fight better by day, chaotic by night
  * @property {string} perk       perk gained when promoted to veteran
+ * @property {string[]} abilities special actions (see abilities.js)
+ * @property {number} [sight]    sight radius under fog of war (default 4)
  * @property {string} blurb
  */
 
@@ -22,37 +24,37 @@
 export const UNIT_TYPES = Object.freeze({
   spearman: {
     id: "spearman", alignment: "lawful", name: "Spearman", glyph: "S", hp: 34, attack: 9, ranged: 0, range: 1, defense: 2,
-    mp: 5, cost: 14, traits: ["antiCavalry"], perk: "phalanx",
+    mp: 5, cost: 14, traits: ["antiCavalry"], perk: "phalanx", abilities: ["shieldwall"],
     blurb: "Cheap line infantry. Spears deal ×1.5 damage to mounted units.",
   },
   swordsman: {
     id: "swordsman", alignment: "lawful", name: "Swordsman", glyph: "W", hp: 40, attack: 11, ranged: 0, range: 1, defense: 3,
-    mp: 5, cost: 17, traits: [], perk: "blademaster",
+    mp: 5, cost: 17, traits: [], perk: "blademaster", abilities: ["rally"],
     blurb: "Tough, hard-hitting melee fighter.",
   },
   archer: {
     id: "archer", alignment: "neutral", name: "Archer", glyph: "A", hp: 28, attack: 4, ranged: 8, range: 3, defense: 1,
-    mp: 5, cost: 15, traits: [], perk: "longshot",
+    mp: 5, cost: 15, traits: [], perk: "longshot", abilities: ["volley"], sight: 5,
     blurb: "Shoots up to 3 hexes (4 from high ground). Needs a clear line of sight.",
   },
   cavalry: {
     id: "cavalry", alignment: "lawful", name: "Cavalry", glyph: "C", hp: 38, attack: 10, ranged: 0, range: 1, defense: 2,
-    mp: 8, cost: 20, traits: ["mounted"], perk: "outrider",
+    mp: 8, cost: 20, traits: ["mounted"], perk: "outrider", abilities: ["charge"], sight: 5,
     blurb: "Fast raider. Forests and swamps cost it 1 extra move point.",
   },
   mage: {
     id: "mage", alignment: "chaotic", name: "Mage", glyph: "M", hp: 24, attack: 3, ranged: 11, range: 2, defense: 0,
-    mp: 5, cost: 20, traits: ["magic"], perk: "arcanist",
+    mp: 5, cost: 20, traits: ["magic"], perk: "arcanist", abilities: ["fireball"],
     blurb: "Fragile caster. Magic ignores terrain defence.",
   },
   healer: {
     id: "healer", alignment: "lawful", name: "Healer", glyph: "H", hp: 26, attack: 4, ranged: 0, range: 1, defense: 1,
-    mp: 5, cost: 16, traits: ["healer"], perk: "medic",
+    mp: 5, cost: 16, traits: ["healer"], perk: "medic", abilities: ["heal"],
     blurb: "Heals adjacent allies at the start of each of its turns.",
   },
   rogue: {
     id: "rogue", alignment: "chaotic", name: "Rogue", glyph: "R", hp: 30, attack: 8, ranged: 0, range: 1, defense: 1,
-    mp: 6, cost: 15, traits: ["skirmisher"], perk: "backstab",
+    mp: 6, cost: 15, traits: ["skirmisher"], perk: "backstab", abilities: ["envenom"], sight: 5,
     blurb: "Night raider. Skirmisher: ignores enemy zones of control.",
   },
 });
@@ -90,7 +92,7 @@ export function createUnit(id, type, side, h) {
   return {
     id, type, side, q: h.q, r: h.r,
     hp: t.hp, mp: t.mp, acted: false, xp: 0, level: 1, kills: 0,
-    perks: [],
+    perks: [], status: {}, cd: {}, moved: false,
     bonus: { hp: 0, attack: 0, ranged: 0, range: 0, defense: 0, mp: 0, heal: 0 },
   };
 }

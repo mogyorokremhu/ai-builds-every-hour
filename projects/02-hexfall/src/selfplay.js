@@ -17,6 +17,7 @@ export function runMatch(opts = {}) {
   const players = { red: new AIPlayer("red", { difficulty: dr, seed }), blue: new AIPlayer("blue", { difficulty: db, seed: seed * 7 + 3 }) };
   const recruits = {};
   const kills = {};
+  const abilities = {};
   const maxTurns = opts.maxTurns ?? (game.rules.turnLimit || 60) + 1;
   let guard = 0;
   while (!game.winner && game.turn <= maxTurns && guard++ < maxTurns * 4) {
@@ -26,6 +27,11 @@ export function runMatch(opts = {}) {
       if (a.type === "end") break;
       const res = p.play(game, a);
       if (a.type === "recruit") recruits[a.unitType] = (recruits[a.unitType] ?? 0) + 1;
+      if (a.type === "ability" && res) {
+        abilities[a.ability] = (abilities[a.ability] ?? 0) + 1;
+        const user = game.unitById(a.unitId);
+        if (user) for (const id of res.killed) if (id !== a.unitId) kills[user.type] = (kills[user.type] ?? 0) + 1;
+      }
       if (a.type === "attack" && res) {
         const attacker = game.unitById(a.unitId);
         for (const id of res.killed) {
@@ -40,7 +46,7 @@ export function runMatch(opts = {}) {
   for (const u of game.units) survivors[u.side] = (survivors[u.side] ?? 0) + 1;
   return {
     seed, winner: game.winner, reason: game.endReason, turns: game.turn,
-    units: survivors, recruits, kills,
+    units: survivors, recruits, kills, abilities,
     villages: Object.fromEntries(["red", "blue"].map((s) => [s, game.villages.filter((v) => game.map.get(v)?.owner === s).length])),
     game,
   };
@@ -55,6 +61,7 @@ export function runSeries({ games = 20, start = 1, ...opts } = {}) {
   const reasons = {};
   const recruits = {};
   const kills = {};
+  const abilities = {};
   let turns = 0;
   const results = [];
   for (let s = start; s < start + games; s++) {
@@ -65,8 +72,9 @@ export function runSeries({ games = 20, start = 1, ...opts } = {}) {
     turns += r.turns;
     for (const [k, v] of Object.entries(r.recruits)) recruits[k] = (recruits[k] ?? 0) + v;
     for (const [k, v] of Object.entries(r.kills)) kills[k] = (kills[k] ?? 0) + v;
+    for (const [k, v] of Object.entries(r.abilities)) abilities[k] = (abilities[k] ?? 0) + v;
   }
-  return { games, wins, reasons, avgTurns: turns / games, recruits, kills, results };
+  return { games, wins, reasons, avgTurns: turns / games, recruits, kills, abilities, results };
 }
 
 /** A plain-text report of a runSeries() result. */
@@ -82,5 +90,7 @@ export function formatReport(series, label = "") {
   for (const t of [...types].sort()) {
     lines.push(`  ${unitType(t).name.padEnd(12)} ${String(series.recruits[t] ?? 0).padStart(9)}  ${String(series.kills[t] ?? 0).padStart(5)}`);
   }
+  const used = Object.entries(series.abilities ?? {});
+  if (used.length) lines.push(`  abilities used: ${used.sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(", ")}`);
   return lines.join("\n");
 }
