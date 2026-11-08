@@ -11,6 +11,7 @@ import { threatMap, distanceField } from "./influence.js";
 import { alignmentBonus, timeOfDay } from "./timeofday.js";
 import { ABILITIES, abilitiesOf, abilityTargets, abilityPreview, POISON_TURNS } from "./abilities.js";
 import { POISON_DAMAGE } from "./status.js";
+import { scoutGoals } from "./scouting.js";
 
 /**
  * Difficulty presets.
@@ -32,7 +33,6 @@ export const RECRUIT_MIX = Object.freeze({
 
 const valueRate = (u) => unitType(u).cost / maxHp(u);
 
-/** An AI controller for one side. Keep one per side for the whole battle. */
 export class AIPlayer {
   /**
    * @param {string} side  side id it plays ("red" / "blue")
@@ -173,6 +173,7 @@ export class AIPlayer {
   /**
    * Per-decision shared data: threat map, distance fields to goals, endgame state and the
    * villages that need guarding. Under fog of war only the enemies this side sees count.
+   * While no enemy is in view the unexplored frontier becomes a goal (scouting).
    */
   context(game) {
     const seen = (u) => !game.isVisible || game.isVisible(this.side, u);
@@ -180,7 +181,8 @@ export class AIPlayer {
     const foes = game.units.filter((u) => u.side !== this.side && u.hp > 0 && seen(u));
     const villagesToTake = game.villages.filter((v) => game.map.get(v)?.owner !== this.side);
     const foeKeep = game.spawns[(game.active + 1) % 2]?.[0];
-    const goals = [...foes, ...villagesToTake, ...(foeKeep ? [foeKeep] : [])];
+    const scouts = scoutGoals(game, this.side);
+    const goals = [...foes, ...villagesToTake, ...scouts, ...(foeKeep && !scouts.length ? [foeKeep] : [])];
     const safe = [
       ...game.villages.filter((v) => game.map.get(v)?.owner === this.side || !game.map.get(v)?.owner),
       ...game.unitsOf(this.side).filter((u) => hasTrait(u, "healer")).flatMap((u) => neighbors(u)),
