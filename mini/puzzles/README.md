@@ -17,3 +17,9 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `cryptarithm.py` | SEND + MORE = MONEY style solver with weighted sums and bound pruning |
 | `magic_square.py` | Magic squares of any order: Siamese, doubly-even and Strachey constructions |
 | `water_jugs.py` | Shortest pour sequence for jug puzzles via BFS (any number of jugs) |
+| `klotski.py` | Klotski sliding blocks: BFS over shape-canonical states, optimal 116-slide solution |
+| `skyscrapers.py` | Skyscrapers (visibility clues) via row permutations + column prefix pruning; `--random N` |
+| `futoshiki.py` | Futoshiki inequality grids: candidate propagation, hidden singles, MRV backtracking |
+| `kakuro.py` | Kakuro cross sums with precomputed digit combos per run; `--random` fills a pattern and solves it back |
+| `sokoban.py` | Sokoban: fewest-push A* with dead-square pruning, replay as key strokes, or `--play` |
+| `minesweeper.py` | Minesweeper + logical auto-solver (subset rule, exact frontier probabilities); `--games N` win rate |
