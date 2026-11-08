@@ -61,3 +61,13 @@ select { background: #1f242a; color: var(--fg); border: 1px solid var(--line); b
 .recruit { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 10px; }
 .rbtn { padding: 3px 6px; font-size: 12.5px; text-align: left; }
 .rbtn small { color: var(--accent); float: right; }
+
+/* abilities, weather */
+.abilities { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+.abtn { font-size: 13px; padding: 4px 8px; border: 1px solid #6b4fa0; background: #2a2236; color: #eee; border-radius: 4px; cursor: pointer; }
+.abtn small { opacity: 0.7; margin-left: 4px; }
+.abtn.on { background: #6b4fa0; box-shadow: 0 0 0 2px #c78bff; }
+.abtn:disabled { opacity: 0.45; cursor: default; }
+.daynight .tod small { font-size: 10px; margin-left: 1px; }
+.daynight { flex-wrap: wrap; }
+.daynight .wx { flex-basis: 100%; margin: 2px 0 0; font-size: 13px; opacity: 0.9; }
