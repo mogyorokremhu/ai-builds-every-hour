@@ -174,3 +174,29 @@
   from the panel and waits for the AI to play Blue's turn
 - mini/drawings +6: Voronoi cells, Barnsley fern (chaos game), Truchet arcs, Moon phase (any date, 30-day strip),
   spirograph gallery, Penrose P3 tiling
+
+## 2026-11-08 11:00 UTC — hours 10–11: Hexfall Phase 6 (abilities, status effects, weather, fog of war, fire), 6 puzzles
+- (hour 10 pushed only its first part: `status.js`, `weather.js`, `fog.js`, ruins/ford/fire terrain and fire-aware
+  movement; this run wired everything in)
+- Hexfall Phase 6 ✅
+  - `abilities.js`: seven abilities with targets, cooldowns, previews and seeded resolution — charge (×1.5 both ways
+    after moving), volley (75% splash on the target's neighbours, slows), fireball (area blast with friendly fire,
+    sets dry plains/forests burning), heal (+12, cures poison), shield wall (braced), rally (+20%), envenom (poison)
+  - `combat.js`: strikes fold in statuses, weather (ranged damage/reach) and ability multipliers; forecasts and
+    `resolveAttack` take `{mult, counter}`; shared XP `award()`
+  - `game.js`: `useAbility`, poison/fire damage and cures at turn start, status/cooldown ticks, slowed MP,
+    fire spread + burn-out each round (forest → plains, rain douses), fog of war (`visible`, `isVisible`,
+    explored memory, hidden enemies untargetable, **ambushes** stop moves and clear undo), save format v3
+  - Map generator places **ruins** and **fords** (mirrored on symmetric maps)
+  - AI: scores every ability target from every reachable hex (friendly fire 1.5× against), only sees what its side
+    sees under fog, **endgame awareness** (careful when leading, village-hungry when trailing, breaks enemy holds),
+    **village guards** against nearby raiders; self-play reports ability usage
+  - UI: ability buttons + keys 1–9, purple target rings, fireball blast preview, ability result tooltip,
+    status icons on tokens/roster/unit panel, burning hexes, ruins/ford drawings, weather tint + forecast strip,
+    Fog of war / Weather checkboxes, fogged board + minimap + roster ("n seen")
+  - Self-play with abilities: normal vs normal 55/45 over 20 games (avg 15 turns, 19 decided by holds);
+    hard vs easy only 6/10 now (was ~80%) — an ability balance pass is queued in the roadmap
+- Tests 89 → 128 (`abilities`, `status`, `weather`, `fog`, `ai-abilities`, `mapgen-features` suites); browser smoke test
+  now starts a fogged battle and raises a shield wall with the 1 key
+- mini/puzzles +6: Klotski (BFS, 116 slides), Skyscrapers, Futoshiki, Kakuro (+ random generator), Sokoban
+  (fewest-push A*, playable), Minesweeper (logical auto-solver, ~90% win rate on intermediate)
