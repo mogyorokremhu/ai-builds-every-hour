@@ -16,27 +16,28 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Map symmetry option for fair competitive maps (point-mirrored generation, `Symmetric` checkbox)
 - [x] Camera: zoom and pan for big maps (wheel + drag, clamped), minimap with viewport box and click-to-jump
 
-## Phase 2 — Units & turns
-- [ ] Unit types: spearman, swordsman, archer, cavalry, mage, healer (HP, attack, defence, MP, range, cost)
-- [ ] Two sides, deployment on spawn zones, unit roster panel
-- [ ] Turn system: select unit → move → act → end turn; undo last move
-- [ ] Zone of control (entering a hex next to an enemy ends movement)
-- [ ] Units drawn as tokens with HP pips and side colours; selection, move animation
-- [ ] Game state object fully serialisable (save/load to localStorage + export JSON)
+## Phase 2 — Units & turns ✅
+- [x] Unit types: spearman, swordsman, archer, cavalry, mage, healer (HP, attack, defence, MP, range, cost, traits)
+- [x] Two sides, deployment on spawn zones, unit roster panel (click to focus)
+- [x] Turn system: select unit → move (several times while MP lasts) → act → end turn; undo moves step by step
+- [x] Zone of control (entering a hex next to an enemy ends movement); pass through friends, enemies block
+- [x] Units drawn as tokens with HP pips, side colours, veteran stars; selection, eased move animation
+- [x] Game state object fully serialisable (save/load to localStorage, autosave + resume, export/import JSON)
 
-## Phase 3 — Combat
-- [ ] Attack resolution: damage = attack × modifiers − defence, terrain defence, randomness from the seeded RNG
-- [ ] Ranged attacks with line of sight (forests/villages/mountains block); high ground +1 range
-- [ ] Counter-attacks for melee units; flanking bonus (attackers on several sides)
-- [ ] Damage preview tooltip before attacking (expected damage, kill chance)
-- [ ] Experience and promotions (veteran units gain a perk)
-- [ ] Combat log panel
+## Phase 3 — Combat ✅
+- [x] Attack resolution: damage = attack × modifiers × roll (±20%, seeded) − armour; terrain defence; spears ×1.5 vs mounts; magic ignores terrain
+- [x] Ranged attacks with line of sight (forests/villages block unless you stand higher, mountains always); high ground +1 range
+- [x] Counter-attacks (same kind, if the defender can reach); flanking +10% per extra adjacent ally (max 3)
+- [x] Damage preview tooltip before attacking (exact forecast over all 25 outcomes: damage range, kill & death chance)
+- [x] Experience and promotions (veteran: type perk; elite: +1/+1; +15% HP and full heal per level)
+- [x] Combat log panel
 
 ## Phase 4 — Economy & objectives
+- [ ] Village ownership drawn on the map (side-coloured flags) and counted in the roster header
 - [ ] Capture villages (move onto them); income per village per turn
 - [ ] Recruit units at your keep with gold
-- [ ] Healing in villages; healer adjacency heal
-- [ ] Victory conditions: rout the enemy, hold villages for N turns, or turn limit with score
+- [x] Healing in villages (+8); healer adjacency heal (+4, medic perk +8) at the start of your turn
+- [ ] Victory conditions: rout the enemy (done), hold villages for N turns, or turn limit with score
 - [ ] Day/night cycle affecting lawful/chaotic units
 
 ## Phase 5 — AI opponent
@@ -57,11 +58,12 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [ ] Skirmish setup screen (map size, seed, armies, AI level)
 - [ ] Short campaign of 5 scenarios with carried-over veterans
 - [ ] WebAudio sound effects synthesised in code (no asset files)
-- [ ] Animations: attack lunges, damage numbers, death fades
-- [ ] Keyboard controls + accessibility pass (focus, high-contrast palette)
+- [ ] Animations: attack lunges (done), damage numbers, death fades
+- [ ] Keyboard controls (E/U/N/Tab/Esc done) + accessibility pass (focus, high-contrast palette)
 - [ ] Mobile/touch support
 
 ## Phase 8 — Polish
+- [ ] Browser smoke test in CI-like script form (`tests/browser-smoke.mjs` exists; add screenshots to docs)
 - [ ] Balance pass from AI self-play statistics (document in BALANCE.md)
 - [ ] Hot-seat multiplayer + shareable replay files (deterministic re-simulation)
 - [ ] Full docs with screenshots; test coverage of all game-logic modules

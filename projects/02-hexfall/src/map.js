@@ -84,7 +84,9 @@ export class HexMap {
       rows.push(line);
     }
     const owners = [...this].filter((t) => t.owner).map((t) => [t.q, t.r, t.owner]);
-    return { cols: this.cols, rows: this.rows, terrain: rows, owners };
+    // elevation (used for shading) in tile order, as whole percent
+    const elevation = [...this].map((t) => Math.round(t.elevation * 100));
+    return { cols: this.cols, rows: this.rows, terrain: rows, owners, elevation };
   }
 
   static fromJSON(data) {
@@ -97,6 +99,7 @@ export class HexMap {
       });
     });
     for (const [q, r, owner] of data.owners ?? []) m.get({ q, r }).owner = owner;
+    if (data.elevation) [...m].forEach((t, i) => { t.elevation = (data.elevation[i] ?? 50) / 100; });
     return m;
   }
 

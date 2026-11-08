@@ -9,24 +9,44 @@
 <body>
   <header>
     <h1>⬡ Hexfall</h1>
-    <p class="tag">hex-grid tactics · map preview (phase 1)</p>
+    <p class="tag">hex-grid tactics · hot-seat battle (phase 3)</p>
+    <p id="turn" class="turn red" aria-live="polite"></p>
   </header>
   <section class="controls">
     <label>Seed <input id="seed" size="10" value="1"></label>
-    <button id="generate">Generate</button>
-    <button id="random">Random</button>
+    <button id="newgame">New battle</button>
+    <button id="random">Random map</button>
     <label><input id="sym" type="checkbox" style="width:auto"> Symmetric</label>
-    <label>Move points <input id="mp" type="number" min="1" max="12" value="4"></label>
+    <span class="sep"></span>
+    <button id="undo" title="Undo last move (U)">Undo</button>
+    <button id="endturn" class="primary" title="End turn (E)">End turn</button>
+    <span class="sep"></span>
+    <button id="save">Save</button>
+    <button id="load">Load</button>
+    <button id="export">Export</button>
+    <label class="file">Import<input id="import" type="file" accept=".json,application/json"></label>
     <button id="zoomreset" title="Show the whole map">Reset zoom</button>
   </section>
-  <main>
-    <canvas id="board" aria-label="Battle map"></canvas>
-    <canvas id="minimap" aria-label="Minimap (click to jump)"></canvas>
-  </main>
-  <p id="info" class="info">Click a hex to preview movement from it.</p>
+  <div class="layout">
+    <main>
+      <canvas id="board" aria-label="Battle map"></canvas>
+      <canvas id="minimap" aria-label="Minimap (click to jump)"></canvas>
+      <div id="tip" class="tip" hidden></div>
+    </main>
+    <aside>
+      <h2>Armies</h2>
+      <ul id="roster" class="roster"></ul>
+      <h2>Battle log</h2>
+      <ol id="log" class="log"></ol>
+    </aside>
+  </div>
+  <p id="unitinfo" class="unitinfo"></p>
+  <p id="info" class="info"></p>
   <p id="legend" class="legend"></p>
-  <footer>Mouse wheel zooms, drag pans, click the minimap to jump. Dashed outlines: deployment zones
-    (red, blue). Roads cost ½ a move point.</footer>
+  <footer>Click one of your units, then a yellow hex to move or a red-ringed enemy to attack (it steps
+    next to melee targets by itself). Hover an enemy for the damage forecast. Keys: <kbd>E</kbd> end turn,
+    <kbd>U</kbd> undo move, <kbd>N</kbd>/<kbd>Tab</kbd> next unit, <kbd>Esc</kbd> deselect. Wheel zooms, drag pans.
+    Entering a hex next to an enemy (its zone of control) ends your move.</footer>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

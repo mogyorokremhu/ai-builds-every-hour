@@ -2,6 +2,7 @@
 import { toPixel, corners, fromPixel, key, SQRT3 } from "./hex.js";
 import { terrain } from "./terrain.js";
 import { fromOffset } from "./hex.js";
+import { unitType, maxHp, maxMp } from "./units.js";
 
 export const SIDE_COLORS = Object.freeze({ red: "#d0473f", blue: "#3f74d0" });
 
@@ -180,6 +181,10 @@ export function drawMap(ctx, map, layout, overlay = {}) {
     });
     ctx.stroke();
   }
+  if (overlay.targets) {
+    for (const h of overlay.targets) outline(ctx, hexCenter(h, layout), s, "#ff5a4a", 3);
+  }
+  if (overlay.attackFrom) outline(ctx, hexCenter(overlay.attackFrom, layout), s, "#ffb04a", 2, [3, 3]);
   if (overlay.selected) outline(ctx, hexCenter(overlay.selected, layout), s, "#ffffff", 3);
   if (overlay.hover && map.has(overlay.hover)) outline(ctx, hexCenter(overlay.hover, layout), s, "rgba(255,255,255,0.7)", 2);
 }
@@ -192,6 +197,61 @@ function outline(ctx, c, s, color, width, dash = []) {
   tracePath(ctx, corners(c.x, c.y, s - 2));
   ctx.stroke();
   ctx.restore();
+}
+
+/**
+ * Draw unit tokens: a disc in the side colour with the type letter, an HP bar of pips
+ * (one pip per 10% of max HP), veteran stars, and a dimmed look once a unit is spent.
+ * @param {object} [opts] {selected: unit id, positions: Map<id, {x, y}> for animated units,
+ *                        activeSide: side id (its spent units are dimmed)}
+ */
+export function drawUnits(ctx, units, layout, opts = {}) {
+  const s = layout.size;
+  const r = s * 0.55;
+  for (const u of units) {
+    if (u.hp <= 0) continue;
+    const c = opts.positions?.get(u.id) ?? hexCenter(u, layout);
+    const exhausted = opts.activeSide === u.side && (u.acted || u.mp <= 0);
+    ctx.save();
+    ctx.globalAlpha = exhausted ? 0.62 : 1;
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    ctx.beginPath();
+    ctx.ellipse(c.x, c.y + r * 0.85, r * 0.9, r * 0.32, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = SIDE_COLORS[u.side] ?? "#888";
+    ctx.strokeStyle = opts.selected === u.id ? "#ffffff" : "#15181c";
+    ctx.lineWidth = opts.selected === u.id ? Math.max(2, s / 8) : Math.max(1, s / 14);
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = `bold ${Math.round(r * 1.05)}px system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(unitType(u).glyph, c.x, c.y + 1);
+    // HP pips
+    const pips = 10, filled = Math.ceil((u.hp / maxHp(u)) * pips);
+    const pw = (r * 2) / pips;
+    for (let i = 0; i < pips; i++) {
+      ctx.fillStyle = i < filled ? (filled <= 3 ? "#ff5a4a" : filled <= 6 ? "#f0c05a" : "#7ddc6a") : "#2a2f36";
+      ctx.fillRect(c.x - r + i * pw + 0.5, c.y - r - s * 0.22, pw - 1, Math.max(2, s * 0.12));
+    }
+    // veteran stars
+    for (let i = 1; i < (u.level ?? 1); i++) {
+      ctx.fillStyle = "#ffd75a";
+      ctx.font = `${Math.round(r * 0.7)}px system-ui, sans-serif`;
+      ctx.fillText("★", c.x - r * 0.9 + (i - 1) * r * 0.6, c.y + r * 0.9);
+    }
+    // move points left (small dot, active side only)
+    if (opts.activeSide === u.side && u.mp > 0 && u.mp < maxMp(u)) {
+      ctx.fillStyle = "#f0c05a";
+      ctx.beginPath();
+      ctx.arc(c.x + r * 0.85, c.y + r * 0.75, Math.max(2, r * 0.18), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
 }
 
 export { key };
