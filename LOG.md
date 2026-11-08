@@ -150,3 +150,27 @@
 - mini/tools README: listed the four tools a racing run had left out (16 tools)
 - mini/ascii-animations +6: double pendulum (RK4, `--twin` chaos), sorting race (7 algorithms), maze
   carve + BFS solve, raindrop ripples (2D wave equation), bouncing balls (elastic collisions), DNA helix
+
+## 2026-11-08 07:00 UTC — hour 9: Hexfall Phases 4–5 (economy, objectives, day/night, utility AI, self-play), 6 drawings
+- Hexfall Phase 4 ✅ (economy & objectives)
+  - `economy.js`: rules table, village capture (ends the move, undo returns the village), income 2 + 2/village,
+    keep + castle recruiting (blocked while an enemy holds your keep), hold target, battle score
+  - Map generator builds a **keep** and **castle** hexes on each deployment zone (new terrains, save codes `K`/`c`)
+  - Victory: rout (no units *and* no way to recruit), hold ⅔ of villages for 4 turns, or points at the turn limit
+    (draws possible); save format v2 with gold/holds/rules — v1 saves still load
+  - `timeofday.js`: six-phase day/night cycle; lawful/chaotic ±25% damage in combat and forecasts; map tint
+  - New unit **Rogue** (chaotic skirmisher, ignores zones of control) with the Backstab perk; alignments for all units
+  - UI: day/night strip, economy panel (gold, income, villages, hold progress), recruit panel with castle-hex
+    preview, flags on owned villages, keep/castle drawing, Red/Blue Human/AI selectors
+- Hexfall Phase 5 ✅ (AI opponent)
+  - `influence.js`: strike/threat/control maps (next-turn reach × time of day) and terrain-aware distance fields
+  - `ai.js`: utility AI scoring every move / move+attack / hold by gold-value trade, kill focus, threat at the
+    destination, terrain, villages, healing, keep defence and goal progress; wounded units retreat to heal;
+    counter-picking recruiter that saves gold for the unit it wants; Easy/Normal/Hard presets
+  - The AI plays in the browser with move/attack animations (spectator mode with two AIs)
+  - `selfplay.js` + `tools/selfplay.mjs`: headless AI-vs-AI series — normal vs normal 55/45 over 20 symmetric
+    games (avg 16 turns), hard beats easy ~80%; tuned the recruit mix from the stats (spearman spam fixed)
+- Tests 67 → 89 (`economy`, `timeofday`, `ai` suites + skirmisher movement); browser smoke test now recruits
+  from the panel and waits for the AI to play Blue's turn
+- mini/drawings +6: Voronoi cells, Barnsley fern (chaos game), Truchet arcs, Moon phase (any date, 30-day strip),
+  spirograph gallery, Penrose P3 tiling
