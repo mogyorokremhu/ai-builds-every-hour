@@ -24,6 +24,7 @@ import time
 from collections import Counter
 from dataclasses import dataclass
 
+from . import encumbrance
 from .game import Game
 from .geometry import chebyshev
 from .items import Item
@@ -144,6 +145,12 @@ class Bot:
             torch = self.find(lambda it: it.effect == "refuel")
             if torch is not None and g.use(torch):
                 return True
+        if encumbrance.state(self.p) != encumbrance.UNBURDENED and not g.visible_monsters():
+            junk = encumbrance.heaviest_spare(self.p)
+            if junk is not None and g.drop(junk):
+                self.ignored.add(self.p.pos)  # don't pick it straight back up
+                self.stats["dropped"] += 1
+                return True
         if not g.visible_monsters():
             # read unknown scrolls when it's safe-ish, to learn what they are
             scroll = self.find(lambda it: it.kind == "scroll" and not it.identified)
@@ -199,7 +206,10 @@ class Bot:
     def loot(self) -> bool:
         g = self.game
         here = g.items_at(*self.p.pos)
-        if here and self.p.inventory.can_add(here[0].item):
+        if here and any(e.item.kind == "artifact" for e in here):
+            return g.pickup()
+        if here and self.p.pos not in self.ignored and self.p.inventory.can_add(here[0].item) \
+                and encumbrance.can_lift(self.p, here[0].item):
             return g.pickup()
         inv = self.p.inventory
         goal = self.loot_goal

@@ -92,6 +92,8 @@ def add_score(directory: Path, entry: ScoreEntry) -> int:
     A daily run is unranked if a run with the same daily mode is already recorded.
     """
     entries = load_scores(directory)
+    if entry.mode == "explore":
+        entry.ranked = False
     if daily.is_daily(entry.mode) and any(e.mode == entry.mode for e in entries):
         entry.ranked = False
     entries.append(entry)
@@ -115,5 +117,7 @@ def format_table(entries: list[ScoreEntry], limit: int = 10, mode: str | None = 
         tag = ""
         if daily.is_daily(e.mode):
             tag = f" [daily {daily.mode_date(e.mode)}{'' if e.ranked else ', practice'}]"
+        elif e.mode == "explore":
+            tag = " [explore]"
         out.append(f"{i:>2}  {e.score:>6}  {e.depth:>5}  {e.level:>2}  {e.turns:>6}  {outcome}{tag}")
     return out

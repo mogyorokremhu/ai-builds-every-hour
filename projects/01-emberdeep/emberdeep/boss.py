@@ -18,7 +18,7 @@ import math
 import random
 from typing import TYPE_CHECKING
 
-from . import ai
+from . import ai, fx
 from .entities import make_monster
 from .gamemap import GameMap
 from .gen_caves import bfs_distances, sectors
@@ -148,7 +148,9 @@ def fire_nova(game: "Game", m: "Entity") -> None:
     """Burst of flame around the guardian. Hurts everything nearby that isn't fireproof."""
     phase = m.ai_state.get("phase", 1)
     game.say(f"The {m.name} erupts in a nova of flame!", "bright_red")
-    for cell in blast_area(game.gmap, m.pos, NOVA_RADIUS):
+    area = blast_area(game.gmap, m.pos, NOVA_RADIUS)
+    fx.emit(game, "blast", [m.pos] + [c for c in area if c != m.pos], "*", "bright_red")
+    for cell in area:
         if cell == m.pos:
             continue
         target = game.blocking_at(*cell)
