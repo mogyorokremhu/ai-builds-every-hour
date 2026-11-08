@@ -38,11 +38,13 @@ BLESSINGS = ("might", "guard", "vigor")
 
 @dataclass
 class SpecialRoom:
+    """A special room (vault) on the level, of a given kind, and whether it has been entered."""
     kind: str
     rect: Rect
     visited: bool = False
 
     def contains(self, x: int, y: int) -> bool:
+        """True if (x, y) is inside the room."""
         return self.rect.contains(x, y)
 
 
@@ -52,6 +54,7 @@ def _free(game: "Game", room: Rect) -> list[tuple[int, int]]:
 
 
 def pick_kind(game: "Game") -> str:
+    """Pick a random vault kind available at the current depth, by weight."""
     pool = [(k, w) for k, (w, lo, _) in VAULT_KINDS.items() if game.depth >= lo]
     kinds, weights = zip(*pool)
     return game.rng.choices(kinds, weights=weights)[0]
@@ -130,7 +133,7 @@ def pray(game: "Game") -> bool:
         game.say("The altar is cold and silent.", C_INFO)
         return False
     game.altars[pos] = True
-    f = game.player.fighter
+    f = game.player.fight
     f.hp = f.max_hp
     for name in ("burning", "poisoned", "slowed", "confused"):
         game.player.statuses.remove(name)

@@ -22,6 +22,7 @@ OPPOSITES = {"slowed": "hasted", "hasted": "slowed"}
 
 @dataclass
 class Status:
+    """One active status effect: its name, turns left and per-tick power."""
     name: str
     turns: int
     power: int = 0  # damage per tick for damaging statuses
@@ -36,10 +37,12 @@ class TickResult:
 
     @property
     def total_damage(self) -> int:
+        """Sum of all damage dealt by this tick."""
         return sum(d for _, d in self.damage)
 
 
 class StatusSet:
+    """The set of status effects on a creature, at most one of each kind."""
     def __init__(self) -> None:
         self._s: dict[str, Status] = {}
 
@@ -67,16 +70,20 @@ class StatusSet:
         return False
 
     def remove(self, name: str) -> None:
+        """Remove status ``name`` if present."""
         self._s.pop(name, None)
 
     def has(self, name: str) -> bool:
+        """True if status ``name`` is active."""
         return name in self._s
 
     def turns(self, name: str) -> int:
+        """Turns left on status ``name`` (0 if inactive)."""
         s = self._s.get(name)
         return s.turns if s else 0
 
     def set_turns(self, name: str, turns: int) -> None:
+        """Set the turns left on ``name``, adding it if needed or removing it when ``turns`` <= 0."""
         if turns <= 0:
             self._s.pop(name, None)
         elif name in self._s:
@@ -98,6 +105,7 @@ class StatusSet:
         return res
 
     def speed_multiplier(self) -> float:
+        """Speed factor from haste (x2) and slow (x0.5)."""
         m = 1.0
         if "hasted" in self._s:
             m *= 2.0
@@ -110,6 +118,7 @@ class StatusSet:
         return [(STATUS_INFO[n][0], STATUS_INFO[n][1]) for n in STATUS_INFO if n in self._s]
 
     def names(self) -> list[str]:
+        """Names of the active statuses, in ``STATUS_INFO`` order."""
         return [n for n in STATUS_INFO if n in self._s]
 
     def __len__(self) -> int:

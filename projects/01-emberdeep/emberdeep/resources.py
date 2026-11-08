@@ -34,6 +34,7 @@ STARVE_INTERVAL = 8  # turns between starvation damage ticks
 
 
 def torch_stage(fuel: int) -> tuple[int, str]:
+    """The (sight radius, label) of the torch stage for ``fuel``."""
     for minimum, radius, label in TORCH_STAGES:
         if fuel >= minimum:
             return radius, label
@@ -41,6 +42,7 @@ def torch_stage(fuel: int) -> tuple[int, str]:
 
 
 def hunger_stage(food: int) -> tuple[str, str]:
+    """The (label, colour) of the hunger stage for ``food``."""
     for minimum, label, color in HUNGER_STAGES:
         if food >= minimum:
             return label, color
@@ -56,6 +58,7 @@ class TickEvents:
 
 
 class Resources:
+    """The player's torch fuel and food, which burn down by one each turn."""
     def __init__(self, torch: int = TORCH_MAX, food: int = FOOD_MAX - 200) -> None:
         self.torch = torch
         self.food = food
@@ -63,18 +66,22 @@ class Resources:
 
     @property
     def fov_radius(self) -> int:
+        """Sight radius granted by the current torch stage."""
         return torch_stage(self.torch)[0]
 
     @property
     def torch_label(self) -> str:
+        """Label of the current torch stage."""
         return torch_stage(self.torch)[1]
 
     @property
     def hunger_label(self) -> str:
+        """Label of the current hunger stage."""
         return hunger_stage(self.food)[0]
 
     @property
     def hunger_color(self) -> str:
+        """HUD colour of the current hunger stage."""
         return hunger_stage(self.food)[1]
 
     @property
@@ -83,6 +90,7 @@ class Resources:
         return self.food >= HUNGER_STAGES[1][0]
 
     def tick(self, turns: int = 1) -> TickEvents:
+        """Burn ``turns`` of fuel and food, reporting stage-change messages and starvation damage."""
         events = TickEvents(messages=[])
         for _ in range(turns):
             old_torch, old_food = torch_stage(self.torch)[1], hunger_stage(self.food)[0]
@@ -102,11 +110,13 @@ class Resources:
         return events
 
     def refuel(self, amount: int) -> int:
+        """Add up to ``amount`` torch fuel (capped at max); return the amount added."""
         added = max(0, min(amount, TORCH_MAX - self.torch))
         self.torch += added
         return added
 
     def eat(self, amount: int) -> int:
+        """Add up to ``amount`` food (capped at max); return the amount added."""
         added = max(0, min(amount, FOOD_MAX - self.food))
         self.food += added
         return added

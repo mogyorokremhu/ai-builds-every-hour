@@ -37,12 +37,12 @@ class FakeScreen:
         self.snapshots.append(self.text())
         return self.keys.pop(0) if self.keys else ord("Q")
 
+    def seen(self, text: str) -> bool:
+        """True if ``text`` was on screen at any key prompt (or is on it now)."""
+        return any(text in snap for snap in self.snapshots) or text in self.text()
+
     def text(self) -> str:
         return "\n".join("".join(r) for r in self.buf)
-
-    def seen(self, needle: str) -> bool:
-        """Was ``needle`` on screen at any key prompt (or right now)?"""
-        return any(needle in t for t in self.snapshots + [self.text()])
 
 
 def arena(seed: int = 1, w: int = 20, h: int = 12) -> Game:

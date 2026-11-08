@@ -24,6 +24,7 @@ VICTORY_BONUS = 5000
 
 @dataclass
 class ScoreEntry:
+    """One hall-of-fame record of a finished run."""
     score: int
     outcome: str        # "victory" or the death cause
     depth: int
@@ -38,6 +39,7 @@ class ScoreEntry:
 
     @property
     def won(self) -> bool:
+        """True if the run ended in victory."""
         return self.outcome == "victory"
 
 
@@ -50,6 +52,7 @@ def compute_score(game: "Game") -> int:
 
 
 def entry_for(game: "Game", when: _dt.datetime | None = None) -> ScoreEntry:
+    """Build the score entry for a finished ``game``, stamped with ``when`` (default now, UTC)."""
     when = when or _dt.datetime.now(_dt.timezone.utc)
     return ScoreEntry(
         score=compute_score(game),
@@ -60,6 +63,7 @@ def entry_for(game: "Game", when: _dt.datetime | None = None) -> ScoreEntry:
 
 
 def scores_path(directory: Path) -> Path:
+    """Path of the hall-of-fame file in ``directory``."""
     return directory / SCORES_NAME
 
 
@@ -80,6 +84,7 @@ def load_scores(directory: Path) -> list[ScoreEntry]:
 
 
 def save_scores(directory: Path, entries: list[ScoreEntry]) -> None:
+    """Write ``entries`` to the hall-of-fame file atomically (via a temp file)."""
     path = scores_path(directory)
     tmp = path.with_suffix(".tmp")
     tmp.write_text(json.dumps([asdict(e) for e in entries], indent=1), encoding="utf-8")
@@ -89,13 +94,12 @@ def save_scores(directory: Path, entries: list[ScoreEntry]) -> None:
 def add_score(directory: Path, entry: ScoreEntry) -> int:
     """Insert ``entry``; returns its 1-based rank, or 0 if it didn't make the table.
 
-    A daily run is unranked if a run with the same daily mode is already recorded;
-    explore-mode runs are never ranked.
+    A daily run is unranked if a run with the same daily mode is already recorded.
     """
     entries = load_scores(directory)
-    if daily.is_daily(entry.mode) and any(e.mode == entry.mode for e in entries):
-        entry.ranked = False
     if entry.mode == "explore":
+        entry.ranked = False
+    if daily.is_daily(entry.mode) and any(e.mode == entry.mode for e in entries):
         entry.ranked = False
     entries.append(entry)
     entries.sort(key=lambda e: -e.score)

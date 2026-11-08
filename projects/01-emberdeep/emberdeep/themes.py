@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class Theme:
+    """A depth band's look and feel: generators, colours, decoration and spawn/loot biases."""
     key: str
     name: str
     min_depth: int
@@ -56,6 +57,7 @@ THEMES: tuple[Theme, ...] = (
 
 
 def theme_for_depth(depth: int) -> Theme:
+    """The deepest theme whose ``min_depth`` is at most ``depth``."""
     chosen = THEMES[0]
     for theme in THEMES:
         if depth >= theme.min_depth:

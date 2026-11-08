@@ -11,8 +11,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from . import daily, explore, save, scores
+from . import daily, save, scores
 from .progression import CHOICES
+from .timeline import depth_chart, summary_lines
 
 if TYPE_CHECKING:  # pragma: no cover
     from .game import Game
@@ -42,14 +43,14 @@ def map_dump(game: "Game") -> list[str]:
 def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
     """The full morgue text for ``game``."""
     when = when or _dt.datetime.now(_dt.timezone.utc)
-    f = game.player.fighter
+    f = game.player.fight
     p = game.player
     lines = [
         "EMBERDEEP — morgue file",
         "=" * 40,
         f"Date:     {when.replace(microsecond=0).isoformat()}",
         f"Seed:     {game.seed}" + (f"  (daily run {daily.mode_date(game.mode)})" if daily.is_daily(game.mode)
-                                    else "  (explore mode, unranked)" if explore.is_explore(game.mode) else ""),
+                                     else "  (explore mode)" if game.mode == "explore" else ""),
         "",
         "VICTORY! You carried off the Ember Heart." if game.victory
         else f"You died on depth {game.depth}: {game.death_cause or 'unknown causes'}.",
@@ -70,11 +71,11 @@ def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
         lines.append("Statuses: " + ", ".join(effects))
     lines += [f"Torch:    {game.resources.torch_label}   Food: {game.resources.hunger_label}", ""]
     lines += ["Equipment", "-" * 40]
-    for slot, item in p.equipment.slots.items():
+    for slot, item in p.gear.slots.items():
         lines.append(f"{slot.title():<7} {item.name if item else '-'}")
     lines += ["", "Pack", "-" * 40]
-    if len(p.inventory):
-        for letter, it in p.inventory.listing():
+    if len(p.pack):
+        for letter, it in p.pack.listing():
             desc = it.describe()
             lines.append(f"{letter}) {it.display_name}" + (f"  ({desc})" if desc else ""))
     else:
@@ -88,12 +89,11 @@ def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
         lines.append(f"{n:>4}  {name}")
     if not game.kill_counts:
         lines.append("(none — a pacifist run?)")
-    deaths = getattr(game, "explore_deaths", [])
-    if deaths:
-        lines += ["", f"Explore-mode rescues ({len(deaths)})", "-" * 40] + [f"- {d}" for d in deaths]
-    timeline = getattr(game, "timeline", None)
-    if timeline is not None and timeline.events:
-        lines += ["", "-" * 40] + timeline.report(game.turn, 50)
+    if hasattr(game, "timeline"):
+        game.record_end()
+        lines += ["", "Timeline", "-" * 40]
+        lines += depth_chart(game.timeline, game.turn, width=48, height=6, max_depth=game.max_depth)
+        lines += [""] + summary_lines(game.timeline, game.turn, limit=40)
     lines += ["", "Last messages", "-" * 40]
     lines += [f"[{m.turn:>5}] {m.full_text}" for m in game.log.entries(15)]
     lines += ["", "Map", "-" * 40] + map_dump(game)
@@ -101,6 +101,7 @@ def build_morgue(game: "Game", when: _dt.datetime | None = None) -> str:
 
 
 def write_morgue(game: "Game", directory: Path, when: _dt.datetime | None = None) -> Path:
+    """Write a morgue file for ``game`` under ``directory`` with a unique name; return its path."""
     when = when or _dt.datetime.now(_dt.timezone.utc)
     folder = directory / MORGUE_DIR
     folder.mkdir(parents=True, exist_ok=True)
@@ -116,12 +117,14 @@ def write_morgue(game: "Game", directory: Path, when: _dt.datetime | None = None
 
 @dataclass
 class RunSummary:
+    """The end-of-run result: score, hall-of-fame rank and morgue file."""
     score: int
     rank: int
     ranked: bool
     morgue: Path
 
     def lines(self) -> list[str]:
+        """Summary lines for the end-of-run screen."""
         out = [f"Score:         {self.score}"]
         if self.rank:
             out.append(f"Hall of fame:  #{self.rank}" + ("" if self.ranked else " (practice run)"))
@@ -132,10 +135,10 @@ class RunSummary:
 def finish_run(game: "Game", directory: Path | None = None) -> RunSummary:
     """Record a finished run: morgue file + high score, and delete any save (permadeath)."""
     directory = directory or save.data_dir()
-    game.conclude()
     when = _dt.datetime.now(_dt.timezone.utc)
     path = write_morgue(game, directory, when)
     entry = scores.entry_for(game, when)
     rank = scores.add_score(directory, entry)
-    save.delete_save(save.save_path(directory))
+    if game.mode != "explore":  # explore mode keeps its save so you can reload
+        save.delete_save(save.save_path(directory))
     return RunSummary(entry.score, rank, entry.ranked, path)

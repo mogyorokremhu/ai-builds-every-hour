@@ -32,11 +32,22 @@ FRAME_MS = 35       # delay between animation frames
 
 
 class Screen(Protocol):  # pragma: no cover - typing only
-    def getmaxyx(self) -> tuple[int, int]: ...
-    def erase(self) -> None: ...
-    def addstr(self, y: int, x: int, text: str, attr: int = 0) -> None: ...
-    def refresh(self) -> None: ...
-    def getch(self) -> int: ...
+    """The subset of the curses window API the UI uses."""
+    def getmaxyx(self) -> tuple[int, int]:
+        """Return the screen size as (rows, cols)."""
+        ...
+    def erase(self) -> None:
+        """Clear the screen."""
+        ...
+    def addstr(self, y: int, x: int, text: str, attr: int = 0) -> None:
+        """Write ``text`` at (y, x) with attribute ``attr``."""
+        ...
+    def refresh(self) -> None:
+        """Flush drawing to the terminal."""
+        ...
+    def getch(self) -> int:
+        """Block for a key press and return its code."""
+        ...
 
 
 def camera_offset(target: int, view: int, size: int) -> int:
@@ -47,6 +58,7 @@ def camera_offset(target: int, view: int, size: int) -> int:
 
 
 class CursesUI:
+    """The curses front-end: draws the game and turns key presses into game actions."""
     def __init__(self, screen: Screen, game: Game, colors: ColorTable | None = None,
                  on_finish: Callable[[Game], list[str]] | None = None, home: Path | None = None,
                  delay: Callable[[int], object] | None = None) -> None:
@@ -67,10 +79,12 @@ class CursesUI:
 
     # ---- low-level drawing ---------------------------------------------
     def size(self) -> tuple[int, int]:
+        """The screen size as (rows, cols)."""
         return self.screen.getmaxyx()
 
     def put(self, y: int, x: int, text: str, color: str = "white", dim: bool = False,
             reverse: bool = False) -> None:
+        """Write ``text`` at (y, x) in ``color``, clipped to the screen; curses errors are ignored."""
         rows, cols = self.size()
         if y < 0 or y >= rows or x >= cols or not text:
             return
@@ -86,6 +100,7 @@ class CursesUI:
             pass
 
     def layout(self) -> tuple[int, int]:
+        """The map viewport size (width, height) that fits beside the sidebar and above the log."""
         rows, cols = self.size()
         view_w = max(10, min(self.game.gmap.width, cols - SIDEBAR_W - 1))
         view_h = max(5, min(self.game.gmap.height, rows - LOG_H - 1))
@@ -94,6 +109,7 @@ class CursesUI:
     # ---- frame ------------------------------------------------------------
     def draw(self, cursor: Cursor | None = None, item: Item | None = None, footer: str = "",
              show_path: bool = True) -> None:
+        """Redraw the whole screen: map, entities, targeting overlay, sidebar, log and ``footer``."""
         g = self.game
         gmap = g.gmap
         self.screen.erase()
@@ -123,6 +139,7 @@ class CursesUI:
                     self.put(sy, sx, glyph, remembered, dim=True)
 
         def order(e) -> int:
+            """Draw order: items first, then corpses, then living creatures and the player."""
             return 2 if e.is_player else 1 if e.blocks else 0
 
         for e in sorted(g.entities, key=order):
@@ -162,6 +179,7 @@ class CursesUI:
         self.screen.refresh()
 
     def glyph_at(self, x: int, y: int) -> str:
+        """The glyph shown at map cell (x, y): a visible entity, else the remembered tile or trap."""
         g = self.game
         for e in sorted(g.entities, key=lambda e: e.blocks, reverse=True):
             if e.pos == (x, y) and g.gmap.visible[y][x]:
@@ -172,6 +190,7 @@ class CursesUI:
 
     # ---- main loop --------------------------------------------------------
     def run(self) -> None:
+        """Main loop: draw, handle level-ups and keys, play effects, and show the end screen."""
         while self.running:
             self.draw(footer="? for help")
             if self.game.game_over:
@@ -210,6 +229,7 @@ class CursesUI:
         self.draw(footer="? for help")
 
     def handle(self, key: int) -> None:
+        """Dispatch one key press to a move, wait or command."""
         g = self.game
         if key in keys.MOVE_KEYS:
             g.player_move(*keys.MOVE_KEYS[key])
@@ -264,6 +284,7 @@ class CursesUI:
                 g.toggle_equip(item)
 
     def close_door(self) -> None:
+        """Close an adjacent open door, asking for a direction when there are several."""
         g = self.game
         doors = g.closable_doors()
         if len(doors) <= 1:
@@ -275,6 +296,7 @@ class CursesUI:
             g.close_door(*keys.MOVE_KEYS[key])
 
     def wizard(self) -> None:
+        """Show the explore-mode wizard menu and run the chosen power."""
         g = self.game
         if not explore.is_explore(g.mode):
             g.say("Wizard powers only work in explore mode (--explore).")
@@ -285,6 +307,7 @@ class CursesUI:
             explore.wizard(g, chr(key))
 
     def timeline_lines(self, final: bool) -> list[str]:
+        """Lines for the run-timeline screen; ``final`` records the run's end first."""
         g = self.game
         if final:
             g.record_end()
@@ -300,6 +323,7 @@ class CursesUI:
         self.show_text(self.timeline_lines(final))
 
     def hall_of_fame(self) -> None:
+        """Show the hall-of-fame table, if a data directory is known."""
         if self.home is None:
             self.game.say("The hall of fame is not available.")
             return
@@ -307,6 +331,7 @@ class CursesUI:
         self.show_text(["EMBERDEEP — hall of fame", ""] + table + ["", "Press any key."])
 
     def use_item(self, item: Item) -> None:
+        """Use ``item``, asking for a target first if it needs a cell."""
         if item.targeting == TARGET_CELL and item.identified:
             target = self.target(item)
             if target is None:
@@ -318,8 +343,9 @@ class CursesUI:
 
     # ---- modal screens ----------------------------------------------------
     def choose_item(self, title: str, allowed: Callable[[Item], bool] = lambda it: True) -> Item | None:
-        inv = self.game.player.inventory
-        eq = self.game.player.equipment
+        """Show the pack filtered by ``allowed`` and return the item picked, or None on cancel."""
+        inv = self.game.player.pack
+        eq = self.game.player.gear
         entries = [(letter, it) for letter, it in inv.listing() if allowed(it)]
         if not entries:
             self.game.say("You have nothing suitable." if len(inv) else "Your pack is empty.")
@@ -377,6 +403,7 @@ class CursesUI:
                 return
 
     def show_box(self, lines: Iterable[tuple[str, str]]) -> None:
+        """Draw a centred bordered box of (text, colour) lines."""
         lines = list(lines)
         rows, cols = self.size()
         w = min(cols - 2, max(len(t) for t, _ in lines) + 4)
@@ -391,6 +418,7 @@ class CursesUI:
         self.screen.refresh()
 
     def show_text(self, text: list[str]) -> None:
+        """Show a full-screen page of text and wait for a key."""
         self.screen.erase()
         for i, line in enumerate(text):
             self.put(i, 1, line, "bright_yellow" if i == 0 else "white")
@@ -398,6 +426,7 @@ class CursesUI:
         self.screen.getch()
 
     def message_history(self) -> None:
+        """Show the scrollable message history until a non-scroll key is pressed."""
         msgs = self.game.log.entries()
         offset = 0
         while True:
@@ -444,6 +473,7 @@ class CursesUI:
                 return
 
     def victory_screen(self, extra: list[str] | None = None) -> None:
+        """Show the victory box with run stats and ``extra`` lines, then the end prompt."""
         g = self.game
         lines: list[tuple[str, str]] = [
             ("*** VICTORY ***", "bright_yellow"),
@@ -467,6 +497,7 @@ class CursesUI:
             self.timeline_screen(final=True)
 
     def death_screen(self, extra: list[str] | None = None) -> None:
+        """Show the death box with cause, run stats and ``extra`` lines, then the end prompt."""
         g = self.game
         self.show_box([
             ("You have perished in Emberdeep.", "bright_red"),

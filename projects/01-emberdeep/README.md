@@ -4,7 +4,7 @@ A dependency-free terminal roguelike written in pure Python. Descend through
 procedurally generated, ever-hotter caverns, fight monsters, gather loot and
 try to reach the Ember Heart at depth 10 — slay its guardian and carry the Heart away.
 
-**Status:** in development — fully playable and winnable (built hourly, see [ROADMAP.md](ROADMAP.md))
+**Status:** ✅ complete — fully playable and winnable; every roadmap phase is done (built hourly over 8 runs, see [ROADMAP.md](ROADMAP.md))
 
 ## Run
 ```bash
@@ -249,5 +249,9 @@ See [SCREENSHOTS.md](SCREENSHOTS.md) for captures of the real UI (made with
 | `ui_curses.py` | Real-time curses interface (testable through a fake screen) |
 | `render_ascii.py` | Text renderer for text mode |
 
-Tests: 271 unit tests, including full UI runs against a fake curses screen and
+Tests: 277 unit tests, including full UI runs against a fake curses screen and
 save/load determinism checks (a loaded game must replay identically to the original).
+
+Code quality: `python -m mypy emberdeep` is clean with strict-optional checking (entities expose
+typed component accessors `fight`, `pack`, `gear` and `thing`), `pyflakes` reports nothing, and
+every public function and class has a docstring — the last two are enforced by `tests/test_typing.py`.

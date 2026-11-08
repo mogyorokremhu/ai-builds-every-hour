@@ -20,6 +20,7 @@ DIRECTIONS: tuple[Pos, ...] = (
 
 
 def step_cost(dx: int, dy: int) -> int:
+    """Movement cost of a step: diagonal or orthogonal."""
     return DIAG_COST if dx and dy else ORTHO_COST
 
 

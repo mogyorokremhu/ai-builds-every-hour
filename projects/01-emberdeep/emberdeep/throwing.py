@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from . import fx
 from .geometry import chebyshev
 from .targeting import blast_area, projectile_path
 
@@ -59,18 +60,15 @@ def throw(game: "Game", item: "Item", target: tuple[int, int]) -> bool:
         game.say(reason)
         return False
     player = game.player
-    eq = player.equipment
+    eq = player.gear
     if eq.is_equipped(item) and item.count <= 1:
         eq.unequip(item)
-        eq.apply_to(player.fighter)
+        eq.apply_to(player.fight)
     shown = item.shown_name
-    one = player.inventory.take_one(item)
+    one = player.pack.take_one(item)
     path, victim = flight(game, target)
     land = path[-1]
-    from . import effects
-
-    glyph = "!" if one.kind == "potion" else one.glyph
-    effects.push(game, effects.Effect("bolt", path, one.color, glyph))
+    fx.emit(game, "bolt", path, one.glyph, one.color)
     game.noise = NOISE["item"]
     if one.kind == "potion":
         game.say(f"The {shown} shatters!", C_MAGIC)
@@ -81,7 +79,7 @@ def throw(game: "Game", item: "Item", target: tuple[int, int]) -> bool:
     if victim is not None:
         if one.is_equipment and one.slot == "weapon":
             raw = 2 + one.power_bonus + one.thrown_damage + game.rng.randint(0, 2)
-            dmg = max(1, raw - victim.fighter.defense)
+            dmg = max(1, raw - victim.fight.defense)
         else:
             dmg = 1
         game.say(f"The {shown} hits the {victim.name}.", C_INFO)
@@ -89,7 +87,7 @@ def throw(game: "Game", item: "Item", target: tuple[int, int]) -> bool:
     elif game.gmap.visible[land[1]][land[0]]:
         game.say(f"The {shown} clatters to the floor.")
     game.place_item(one, *land)
-    if not player.fighter.alive:  # pragma: no cover - defensive
+    if not player.fight.alive:  # pragma: no cover - defensive
         game.say("You die...", C_BAD)
     return True
 
@@ -99,15 +97,18 @@ def _shatter(game: "Game", potion: "Item", at: tuple[int, int], victim: "Entity 
 
     effect = potion.effect
     if effect in ("firebomb", "venom"):
-        for cell in blast_area(game.gmap, at, potion.radius):
+        area = blast_area(game.gmap, at, potion.radius)
+        fx.emit(game, "blast", [at] + [c for c in area if c != at], "*",
+                "bright_red" if effect == "firebomb" else "bright_green")
+        for cell in area:
             who = game.player if cell == game.player.pos else game.monster_at(*cell)
             if who is None:
                 continue
             if effect == "firebomb":
                 if who.is_player:
-                    dealt = who.fighter.take_damage(potion.magnitude // 2)
+                    dealt = who.fight.take_damage(potion.magnitude // 2)
                     game.say(f"The flames lick you for {dealt}!", C_BAD)
-                    if not who.fighter.alive:
+                    if not who.fight.alive:
                         game.death_cause = "burned by liquid fire"
                         game.say("You die...", C_BAD)
                         return
@@ -116,7 +117,7 @@ def _shatter(game: "Game", potion: "Item", at: tuple[int, int], victim: "Entity 
                     game.say(f"The {who.name} basks in the flames.")
                 else:
                     game.damage_monster(who, potion.magnitude, "engulfed in flame")
-                    if who.fighter.alive:
+                    if who.fight.alive:
                         game.apply_status(who, "burning", 3, 2)
             else:
                 game.apply_status(who, "poisoned", potion.magnitude, 2)
@@ -125,7 +126,7 @@ def _shatter(game: "Game", potion: "Item", at: tuple[int, int], victim: "Entity 
         game.say("The liquid splashes harmlessly.")
         return
     if effect == "heal":
-        healed = victim.fighter.heal(potion.magnitude)
+        healed = victim.fight.heal(potion.magnitude)
         game.say(f"The {victim.name} looks healthier (+{healed}).")
     elif effect == "haste":
         game.apply_status(victim, "hasted", potion.magnitude)

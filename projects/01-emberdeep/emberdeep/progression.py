@@ -18,6 +18,7 @@ AUTO_HP_PER_LEVEL = 2
 
 @dataclass(frozen=True)
 class Choice:
+    """A level-up boon and the stat bonuses it grants."""
     key: str
     label: str
     description: str
@@ -48,6 +49,7 @@ def xp_for_level(level: int) -> int:
 
 
 def level_for_xp(xp: int) -> int:
+    """The experience level reached with ``xp`` points (capped at ``MAX_LEVEL``)."""
     level = 1
     while level < MAX_LEVEL and xp >= xp_for_level(level + 1):
         level += 1

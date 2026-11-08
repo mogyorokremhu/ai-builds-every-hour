@@ -78,5 +78,10 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Full 1000-run sweep after the remaining features land: 27.0% bot wins, inside the 25–40% band (BALANCE.md)
 - [x] Docs for every system + ASCII screenshots of the real UI (`python -m emberdeep.screenshot` → SCREENSHOTS.md)
 - [x] 80%+ test coverage (95% line coverage with `coverage.py`; new CLI/text-mode tests)
-- [ ] Type-check clean under mypy (167 Optional-access warnings: add typed player accessors)
-- [ ] Final cleanup pass (dead code, docstrings) and finishing touches
+- [x] Type-check clean under mypy with strict-optional on (typed `Entity.fight/.pack/.gear/.thing` accessors; `mypy.ini`)
+- [x] Final cleanup pass: pyflakes-clean, docstrings on every public definition (enforced by `tests/test_typing.py`),
+  repaired a clobbered hour-7 push (restored the consistent module set, removed the stray `effects.py`/`docs/`)
+
+
+**✅ Complete** — every phase is done (finished in hour 8). Ideas for a someday-sequel: more branches of the
+dungeon, a shop level, ranged monsters with ammo, a second playable class.

@@ -24,23 +24,29 @@ class TextScreen:
         self.erase()
 
     def getmaxyx(self) -> tuple[int, int]:
+        """The fake screen's (rows, cols)."""
         return self.rows, self.cols
 
     def erase(self) -> None:
+        """Blank the buffer."""
         self.buf = [[" "] * self.cols for _ in range(self.rows)]
 
     def addstr(self, y: int, x: int, text: str, attr: int = 0) -> None:
+        """Write ``text`` into the buffer at (y, x), clipping at the edges."""
         for i, ch in enumerate(text):
             if 0 <= y < self.rows and 0 <= x + i < self.cols:
                 self.buf[y][x + i] = ch
 
     def refresh(self) -> None:
+        """No-op: nothing to flush."""
         pass
 
     def getch(self) -> int:
+        """Always return Esc, so any prompt is dismissed."""
         return 27
 
     def text(self) -> str:
+        """The buffer as text, with trailing spaces trimmed."""
         return "\n".join("".join(r).rstrip() for r in self.buf)
 
 
@@ -80,6 +86,7 @@ def capture(game: Game, rows: int = 30, cols: int = 96, view: str = "map") -> st
 
 
 def document(seed: int = 7, actions: int = 900) -> str:
+    """Build the Markdown screenshots document from a bot-played game of ``seed``."""
     g = advance(Game(seed), actions)
     shots = [
         ("Exploring", "The map, the sidebar (HP, XP, torch, food, load, gear, monsters in view) and the "
@@ -98,6 +105,7 @@ def document(seed: int = 7, actions: int = 900) -> str:
 
 
 def main(argv: list[str] | None = None) -> None:  # pragma: no cover - CLI
+    """CLI: write the screenshots document to a file (default ``SCREENSHOTS.md``)."""
     args = list(sys.argv[1:] if argv is None else argv)
     path = args[0] if args else "SCREENSHOTS.md"
     seed = int(args[1]) if len(args) > 1 else 7

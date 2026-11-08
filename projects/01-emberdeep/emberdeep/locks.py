@@ -105,6 +105,7 @@ def furnish_locks(game: "Game", rooms: list[Rect], start: Pos) -> Rect | None:
 
 
 def force_chance(power: int) -> float:
+    """Chance to force a locked door open, growing with ``power`` and capped at 75%."""
     return min(0.75, FORCE_BASE + FORCE_PER_POWER * max(0, power))
 
 
@@ -112,7 +113,7 @@ def bump_locked(game: "Game", x: int, y: int) -> bool:
     """The player bumps the locked door at (x, y). Returns True if a turn was spent."""
     from .game import C_BAD, C_GOOD, C_INFO, NOISE
 
-    inv = game.player.inventory
+    inv = game.player.pack
     key = next((it for it in inv if it.key == "iron key"), None)
     if key is not None:
         inv.take_one(key)
@@ -126,7 +127,7 @@ def bump_locked(game: "Game", x: int, y: int) -> bool:
         game.say("The door is locked. Find an iron key, or bump again to force it.", C_INFO)
         return False
     game.noise = NOISE["loud"]
-    if game.rng.random() < force_chance(game.player.fighter.power):
+    if game.rng.random() < force_chance(game.player.fight.power):
         game.gmap.set(x, y, OPEN_DOOR)
         game._force_confirm = None
         game.say("With a splintering crash you force the door open!", C_GOOD)

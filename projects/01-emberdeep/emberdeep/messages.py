@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Message:
+    """One log line, with its colour, repeat count and the turn it last occurred."""
     text: str
     color: str = "white"
     count: int = 1
@@ -14,14 +15,17 @@ class Message:
 
     @property
     def full_text(self) -> str:
+        """The text with an "(xN)" suffix when repeated."""
         return f"{self.text} (x{self.count})" if self.count > 1 else self.text
 
 
 class MessageLog:
+    """A bounded message log that stacks identical consecutive messages."""
     def __init__(self, capacity: int = 200) -> None:
         self._msgs: deque[Message] = deque(maxlen=capacity)
 
     def add(self, text: str, color: str = "white", turn: int = 0) -> None:
+        """Log ``text``, bumping the repeat count if it matches the latest message."""
         # Stack identical consecutive messages: "The rat bites you. (x3)"
         if self._msgs and self._msgs[-1].text == text:
             self._msgs[-1].count += 1
@@ -30,9 +34,11 @@ class MessageLog:
             self._msgs.append(Message(text, color, 1, turn))
 
     def last(self, n: int) -> list[str]:
+        """The full text of the last ``n`` messages."""
         return [m.full_text for m in list(self._msgs)[-n:]] if n > 0 else []
 
     def entries(self, n: int | None = None) -> list[Message]:
+        """The last ``n`` messages (all of them when ``n`` is None)."""
         msgs = list(self._msgs)
         return msgs if n is None else msgs[-n:] if n > 0 else []
 

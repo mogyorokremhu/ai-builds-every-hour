@@ -13,7 +13,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def health_word(e: "Entity") -> str:
-    f = e.fighter
+    """A word for how hurt ``e`` looks, from its HP fraction."""
+    f = e.fight
     ratio = f.hp / f.max_hp if f.max_hp else 0
     if ratio >= 1:
         return "unhurt"
@@ -25,6 +26,7 @@ def health_word(e: "Entity") -> str:
 
 
 def speed_word(e: "Entity") -> str:
+    """A word for ``e``'s effective speed, or "" for normal speed."""
     s = e.effective_speed
     if s >= 180:
         return "very fast"
@@ -38,6 +40,7 @@ def speed_word(e: "Entity") -> str:
 
 
 def describe_creature(e: "Entity") -> str:
+    """A one-line look description of a creature: health, sleep, speed, statuses and behaviour."""
     bits = [f"{'You' if e.is_player else a_an(e.name).capitalize()} ({health_word(e)}"]
     if e.asleep:
         bits.append(", asleep")
@@ -67,14 +70,14 @@ def describe_cell(game: "Game", x: int, y: int) -> list[str]:
     for e in game.entities:
         if e.pos != (x, y):
             continue
-        if e.fighter is not None and e.fighter.alive and (e.ai or e.is_player):
+        if e.fighter is not None and e.fight.alive and (e.ai or e.is_player):
             lines.append(describe_creature(e))
     for e in game.entities:
         if e.pos == (x, y) and e.item is not None:
-            desc = e.item.describe()
-            lines.append(f"{e.item.display_name}" + (f" ({desc})" if desc else ""))
+            desc = e.thing.describe()
+            lines.append(f"{e.thing.display_name}" + (f" ({desc})" if desc else ""))
     for e in game.entities:
-        if e.pos == (x, y) and e.fighter is not None and not e.fighter.alive and not e.is_player:
+        if e.pos == (x, y) and e.fighter is not None and not e.fight.alive and not e.is_player:
             lines.append(a_an(e.name))
     if trap is not None:
         lines.append(f"A {trap.name}.")

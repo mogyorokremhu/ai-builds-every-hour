@@ -45,15 +45,18 @@ class Cursor:
 
     @property
     def pos(self) -> tuple[int, int]:
+        """The cursor's (x, y) position."""
         return (self.x, self.y)
 
     def move(self, dx: int, dy: int) -> None:
+        """Move the cursor by (dx, dy), clamped to the map and ignored if it leaves range."""
         nx = min(max(self.x + dx, 0), self.width - 1)
         ny = min(max(self.y + dy, 0), self.height - 1)
         if chebyshev(self.origin, (nx, ny)) <= self.max_range:
             self.x, self.y = nx, ny
 
     def jump(self, pos: tuple[int, int]) -> None:
+        """Put the cursor at ``pos`` without range checks."""
         self.x, self.y = pos
 
     def cycle(self, candidates: list[tuple[int, int]]) -> None:

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Tile:
+    """An immutable map tile type: glyph, walkability, transparency and save code."""
     name: str
     glyph: str
     walkable: bool
@@ -14,6 +15,7 @@ class Tile:
 
     @property
     def save_code(self) -> str:
+        """The character used for this tile in save files."""
         return self.code or self.glyph
 
 

@@ -34,6 +34,7 @@ SEARCH_RADIUS = 2
 
 @dataclass
 class Trap:
+    """A trap on the map, hidden until discovered, with a count of times triggered."""
     kind: str
     x: int
     y: int
@@ -42,18 +43,22 @@ class Trap:
 
     @property
     def pos(self) -> Pos:
+        """The trap's (x, y) position."""
         return (self.x, self.y)
 
     @property
     def name(self) -> str:
+        """Display name of the trap kind."""
         return TRAP_KINDS[self.kind][0]
 
     @property
     def color(self) -> str:
+        """Display colour of the trap kind."""
         return TRAP_KINDS[self.kind][1]
 
 
 def roll_kind(depth: int, rng: random.Random) -> str:
+    """Pick a random trap kind available at ``depth``, by weight."""
     pool = [(k, w) for k, (_, _, lo, w) in TRAP_KINDS.items() if depth >= lo]
     kinds, weights = zip(*pool)
     return rng.choices(kinds, weights=weights)[0]
@@ -85,6 +90,7 @@ def passive_detect(game: "Game") -> list[Trap]:
 
 
 def search(game: "Game") -> list[Trap]:
+    """Actively search for hidden traps around the player; return the newly found traps."""
     return _detect(game, SEARCH_RADIUS, SEARCH_CHANCE)
 
 
@@ -107,16 +113,16 @@ def trigger(game: "Game", trap: Trap) -> None:
     p = game.player
     game.say(("You step on a hidden " if was_hidden else "You set off the ") + f"{trap.name}!", C_BAD)
     if trap.kind == "dart":
-        dealt = p.fighter.take_damage(game.rng.randint(1, 3))
+        dealt = p.fight.take_damage(game.rng.randint(1, 3))
         game.say(f"A dart pricks you for {dealt}.", C_BAD)
-        if p.fighter.alive:
+        if p.fight.alive:
             game.apply_status(p, "poisoned", 4 + game.depth // 2, 1)
         else:
             game.death_cause = "killed by a poison dart"
     elif trap.kind == "fire":
-        dealt = p.fighter.take_damage(2 + game.depth // 2)
+        dealt = p.fight.take_damage(2 + game.depth // 2)
         game.say(f"Flames burst from the floor for {dealt}!", C_BAD)
-        if p.fighter.alive:
+        if p.fight.alive:
             game.apply_status(p, "burning", 3, 1)
         else:
             game.death_cause = "burned by a fire trap"

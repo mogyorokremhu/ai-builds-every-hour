@@ -1,119 +1,132 @@
-"""Scavengers: kobolds (and their shamans) pick up items lying on the floor.
+"""Monsters that pick up items lying on the floor.
 
-* A scavenger standing on an item picks it up (that takes its action). It carries at
-  most :data:`CARRY_LIMIT` items in a small pack of its own.
-* When it doesn't see you, it wanders toward shiny things within :data:`SNIFF_RADIUS`.
-* A picked-up **weapon** is wielded: the kobold gains the weapon's power bonus.
-* A picked-up **healing potion** is drunk when the kobold is hurt (see ``ai.drink_potion``).
-* Everything it carries drops when it dies — you get your stuff back.
+Creatures tagged ``scavenger`` (kobolds and their shamans) can't resist shiny things.
+When they have nothing to hunt they walk to items they can see nearby and pick them up:
 
-Artifacts (the Ember Heart) and iron keys are never taken: keys must stay reachable so
-locked rooms remain solvable, and the Heart is far too hot to hold.
+* a **healing potion** is stashed for later — cowardly kobolds drink it when hurt
+  (see :func:`emberdeep.ai.drink_potion`);
+* a **weapon** better than what it already wields is brandished (+power);
+* anything else small goes in its sack.
+
+Everything a scavenger carries falls to the floor when it dies. Carried items are stored
+in ``ai_state["sack"]`` as plain ``[key, count]`` pairs so saves stay JSON. Iron keys and
+the Ember Heart are never taken (that would be too cruel).
 """
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 from .geometry import chebyshev
-from .inventory import Inventory
+from .items import ITEM_TEMPLATES, make_item
 
 if TYPE_CHECKING:  # pragma: no cover
     from .entities import Entity
     from .game import Game
-    from .items import Item
 
-SCAVENGERS = frozenset({"kobold", "kobold shaman"})
-CARRY_LIMIT = 3
-SNIFF_RADIUS = 5
-NEVER_TAKE = frozenset({"artifact"})
-NEVER_TAKE_KEYS = frozenset({"iron key", "ember heart"})
+SCAVENGE_RADIUS = 6       # how far a scavenger notices loot
+MAX_SACK = 3              # items carried besides a potion / weapon
+UNTOUCHABLE_KINDS = ("key", "artifact")
 
 
 def is_scavenger(m: "Entity") -> bool:
-    return m.name in SCAVENGERS and m.ai is not None
+    """True if ``m`` is a scavenger that picks up items."""
+    return "scavenger" in m.tags
 
 
-def wants(item: "Item") -> bool:
-    return item.kind not in NEVER_TAKE and item.key not in NEVER_TAKE_KEYS
-
-
-def carried(m: "Entity") -> list["Item"]:
-    return list(m.inventory.items) if m.inventory is not None else []
-
-
-def has_room(m: "Entity") -> bool:
-    return m.inventory is None or not m.inventory.full
-
-
-def try_pickup(game: "Game", m: "Entity") -> bool:
-    """Pick up a wanted item under ``m``. Returns True if that used the monster's action."""
-    if not is_scavenger(m) or not has_room(m):
+def wants(m: "Entity", item_ent: "Entity") -> bool:
+    """Would ``m`` bother picking up the floor item ``item_ent``?"""
+    it = item_ent.item
+    if it is None or it.kind in UNTOUCHABLE_KINDS:
         return False
-    here = [e for e in game.items_at(*m.pos) if wants(e.item)]
-    if not here:
-        return False
-    ent = here[0]
-    if m.inventory is None:
-        m.inventory = Inventory(CARRY_LIMIT)
-    item = ent.item
-    m.inventory.add(item)
-    game.entities.remove(ent)
-    seen = game.gmap.visible[m.y][m.x]
-    if seen:
-        game.say(f"The {m.name} picks up {item.display_name}.", "yellow")
-    if item.slot == "weapon" and item.power_bonus > 0 and "armed" not in m.ai_state:
-        m.ai_state["armed"] = item.power_bonus
-        m.fighter.bonus_power += item.power_bonus
-        if seen:
-            game.say(f"The {m.name} brandishes the {item.shown_name}!", "bright_red")
-    return True
+    if it.key == "healing potion":
+        return not m.ai_state.get("potion")
+    if it.slot == "weapon":
+        return it.power_bonus > m.ai_state.get("weapon_bonus", 0)
+    return len(m.ai_state.get("sack", [])) < MAX_SACK
 
 
-def has_potion(m: "Entity") -> bool:
-    """Does ``m`` have a healing potion to drink (spawned with one, or picked one up)?"""
-    return bool(m.ai_state.get("potion")) or any(it.key == "healing potion" for it in carried(m))
-
-
-def nearest_loot(game: "Game", m: "Entity") -> tuple[int, int] | None:
-    """The closest wanted floor item within sniffing range, if any."""
-    best: tuple[int, tuple[int, int]] | None = None
+def target_item(game: "Game", m: "Entity") -> "Entity | None":
+    """The nearest wanted item within reach that the monster can see (shares the player's
+    view of the map: a scavenger in the player's sight sees what the player sees)."""
+    best: tuple[int, int, int, "Entity"] | None = None
     for e in game.entities:
-        if e.item is None or not wants(e.item):
+        if e.item is None or chebyshev(e.pos, m.pos) > SCAVENGE_RADIUS or not wants(m, e):
             continue
-        d = chebyshev(e.pos, m.pos)
-        if d <= SNIFF_RADIUS and (best is None or d < best[0]):
-            best = (d, e.pos)
-    return best[1] if best else None
+        if game.blocking_at(*e.pos) not in (None, m):
+            continue
+        key = (chebyshev(e.pos, m.pos), e.y, e.x)
+        if best is None or key < best[:3]:
+            best = (*key, e)
+    return best[3] if best else None
 
 
-def forage(game: "Game", m: "Entity") -> bool:
-    """When idle (not hunting): walk toward loot. Returns True if it moved."""
+def pick_up(game: "Game", m: "Entity", item_ent: "Entity") -> None:
+    """``m`` takes ``item_ent`` from the floor."""
+    it = item_ent.thing
+    game.entities.remove(item_ent)
+    seen = game.gmap.visible[m.y][m.x]
+    shown = it.display_name
+    if it.key == "healing potion" and not m.ai_state.get("potion"):
+        m.ai_state["potion"] = True
+        if it.count > 1:  # keep one, the rest go in the sack
+            m.ai_state.setdefault("sack", []).append([it.key, it.count - 1])
+    elif it.slot == "weapon":
+        old = m.ai_state.get("weapon")
+        if old:
+            m.ai_state.setdefault("sack", []).append([old, 1])
+        m.fight.bonus_power += it.power_bonus - m.ai_state.get("weapon_bonus", 0)
+        m.ai_state["weapon"], m.ai_state["weapon_bonus"] = it.key, it.power_bonus
+        if seen:
+            game.say(f"The {m.name} picks up {shown} and brandishes it!", "bright_yellow")
+        return
+    else:
+        m.ai_state.setdefault("sack", []).append([it.key, it.count])
+    if seen:
+        game.say(f"The {m.name} picks up {shown}.", "bright_yellow")
+
+
+def scavenge(game: "Game", m: "Entity") -> bool:
+    """One idle action: walk to (or pick up) loot. Returns True if the monster acted."""
     from .ai import move_towards
 
-    if not is_scavenger(m) or not has_room(m) or m.ai_state.get("fleeing"):
+    target = target_item(game, m)
+    if target is None:
         return False
-    goal = nearest_loot(game, m)
-    if goal is None or goal == m.pos:
-        return False
-    return move_towards(game, m, goal)
+    if target.pos == m.pos:
+        pick_up(game, m, target)
+        return True
+    return move_towards(game, m, target.pos)
 
 
-def use_potion(m: "Entity") -> bool:
-    """Remove one carried healing potion (it is being drunk). Returns True if one was found."""
-    if m.inventory is None:
-        return False
-    for it in m.inventory.items:
-        if it.key == "healing potion":
-            m.inventory.take_one(it)
-            return True
-    return False
+def carried_items(m: "Entity") -> list[tuple[str, int]]:
+    """Everything ``m`` carries, as (item key, count)."""
+    out: list[tuple[str, int]] = []
+    if m.ai_state.get("weapon"):
+        out.append((m.ai_state["weapon"], 1))
+    out += [(k, n) for k, n in m.ai_state.get("sack", [])]
+    return out
 
 
-def drop_all(game: "Game", m: "Entity") -> list["Item"]:
-    """On death: everything the scavenger carried falls to the floor."""
-    items = carried(m)
-    for it in items:
-        game.place_item(it, m.x, m.y)
-    if m.inventory is not None:
-        m.inventory.items = []
-    return items
+def drop_all(game: "Game", m: "Entity") -> list[str]:
+    """Drop the scavenger's loot where it stands (on death). Returns the keys dropped.
+
+    The carried healing potion is handled separately by :meth:`Game.on_kill`."""
+    dropped: list[str] = []
+    for key, count in carried_items(m):
+        if key not in ITEM_TEMPLATES:
+            continue
+        game.place_item(make_item(key, count), m.x, m.y)
+        dropped.append(key)
+    for k in ("weapon", "weapon_bonus", "sack"):
+        m.ai_state.pop(k, None)
+    return dropped
+
+
+def describe(m: "Entity") -> str:
+    """Look-mode hint about what a scavenger is carrying."""
+    bits = []
+    if m.ai_state.get("weapon"):
+        bits.append(f"wields a {ITEM_TEMPLATES[m.ai_state['weapon']].name}")
+    if m.ai_state.get("sack"):
+        bits.append("carries a bulging sack")
+    return ("It " + " and ".join(bits) + ".") if bits else ""

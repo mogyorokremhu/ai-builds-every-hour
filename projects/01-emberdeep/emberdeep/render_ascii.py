@@ -7,6 +7,7 @@ from .hud import bar
 
 
 def render(game: Game, log_lines: int = 5) -> str:
+    """Render the map, status lines and recent log as plain text."""
     gmap = game.gmap
     grid = [[" "] * gmap.width for _ in range(gmap.height)]
     for y in range(gmap.height):
@@ -20,12 +21,13 @@ def render(game: Game, log_lines: int = 5) -> str:
                 grid[y][x] = "^"
     # items, then corpses, then the living
     def order(e) -> int:
+        """Draw order: items first, then corpses, then living creatures and the player."""
         return 2 if e.is_player else 1 if e.blocks else 0
 
     for e in sorted(game.entities, key=order):
         if gmap.visible[e.y][e.x]:
             grid[e.y][e.x] = e.glyph
-    f = game.player.fighter
+    f = game.player.fight
     status = (f"HP {f.hp}/{f.max_hp} [{bar(f.hp, f.max_hp, 10, '#', '-')}]  Pow {f.power} Def {f.defense}  "
               f"Depth {game.depth}  Lv {game.level} XP {game.xp}  Turn {game.turn}\n"
               f"Torch {game.resources.torch_label}  Food {game.resources.hunger_label}  "
@@ -40,7 +42,8 @@ def render(game: Game, log_lines: int = 5) -> str:
 
 
 def render_inventory(game: Game) -> str:
-    inv, eq = game.player.inventory, game.player.equipment
+    """Plain-text listing of the pack with equipped marks, weights, slots and load."""
+    inv, eq = game.player.pack, game.player.gear
     if not len(inv):
         return "Your pack is empty."
     out = ["Inventory:"]
