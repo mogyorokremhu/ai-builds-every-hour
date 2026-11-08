@@ -17,5 +17,11 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `csvview.py` | CSV as an aligned box/Markdown table with `--where` filters, numeric-aware `--sort` and `--stats` |
 | `bases.py` | Number in every base: hex/octal/grouped binary, base 36, two's complement, Roman numerals, bit ruler |
 | `timer.py` | Countdown / stopwatch / pomodoro with big block digits, progress bar and a bell |
+| `mdtoc.py` | Table of contents for a Markdown file (GitHub-style anchors), printed or written between `<!-- toc -->` markers |
+| `baseconv.py` | Lighter twin of `bases.py`: one number shown in many bases, bytes and Roman numerals (`--from N`) |
+| `cronnext.py` | Lighter twin of `cronx.py`: cron expression in English + next runs (`-n`, `--from`) |
+| `linediff.py` | Lighter twin of `difftool.py`: Myers diff as a coloured unified diff (`-U`, `--demo`) |
+
+(The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
 Most tools also accept `--selftest` to run their built-in checks.

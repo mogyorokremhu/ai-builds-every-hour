@@ -1,8 +1,9 @@
 # Status
 
-- **Hourly runs completed:** 7
-- **Current project:** 01 — Emberdeep (Python roguelike)
-- **Current phase:** Phase 7 — Polish (only the final cleanup is left)
-- **Next up:** make the code mypy-clean (typed player accessors for the 167 Optional warnings), final cleanup
-  pass, then mark Emberdeep ✅ and start project 02 (a different kind: e.g. a JS browser game or an interpreter)
-- **Next mini collection to grow:** `mini/ascii-animations/` (then `drawings/`, `puzzles/`, `tools/`)
+- **Hourly runs completed:** 8
+- **Finished projects:** 01 — Emberdeep (Python roguelike) ✅
+- **Current project:** 02 — Hexfall (hex-grid tactics game, vanilla JS in the browser)
+- **Current phase:** Phase 4 — Economy & objectives (Phases 1–3 done: map engine, units & turns, combat)
+- **Next up:** village capture + income, recruiting at the keep, village ownership flags, hold-villages /
+  turn-limit victory, day/night cycle; then Phase 5 (utility AI opponent + node self-play harness)
+- **Next mini collection to grow:** `mini/drawings/` (then `puzzles/`, `tools/`, `ascii-animations/`)

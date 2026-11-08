@@ -123,3 +123,30 @@
   verified from a fresh clone after pushing
 - mini/tools: Myers line diff, CSV table viewer, jq-lite JSON query, base converter (roman, two's complement),
   cron explainer + next runs, Markdown TOC generator
+
+## 2026-11-08 06:00 UTC — hour 8: Emberdeep ✅ (repaired + mypy-clean), Hexfall Phases 2–3 (units, turns, combat), 6 ASCII animations
+- Repo repair: two hour-7 runs raced and the second one's pushes overwrote Emberdeep modules with an
+  incompatible version (7 test modules failed to import). Restored the consistent hour-7 module set
+  (271 tests green again) and removed the stray `effects.py` and `docs/` it left behind
+- Emberdeep finished ✅
+  - Typed component accessors `Entity.fight / .pack / .gear / .thing` → `mypy` clean with strict-optional
+    **on** (162 → 0 errors); fixed a latent `None` index in `levelgen` (final level has no stairs)
+  - Cleanup: pyflakes-clean, 245 docstrings added — every public function/class documented;
+    new `tests/test_typing.py` enforces docstrings + mypy (271 → 277 tests)
+- Hexfall Phase 2 ✅ (units & turns) and Phase 3 ✅ (combat)
+  - `units.js`: six unit types (spearman, swordsman, archer, cavalry, mage, healer), traits, perks, XP and
+    promotions (veteran perk, elite, +15% HP and full heal per level)
+  - `movement.js`: unit movement areas with zones of control, friendly pass-through, enemy blocking,
+    mounted forest/swamp penalty, free first step
+  - `sight.js`: height-aware line of sight (shoot over woods from hills, never through mountains),
+    symmetric edge-tie handling
+  - `combat.js`: attack × flanking × terrain × anti-cavalry × seeded ±20% roll − armour; counter-attacks;
+    high ground +1 range; magic ignores terrain; exact 25-outcome forecast (kill/death chance)
+  - `game.js`: deployment, turns, multi-step moves with undo, auto-positioning attack plans, village and
+    healer healing, rout victory, JSON round trip that replays identically; `save.js` slots + autosave
+  - `animate.js` + `render.js`: unit tokens with HP pips and veteran stars, eased moves, attack lunges
+  - New hot-seat UI: roster, battle log, forecast tooltip, keys (E/U/N/Tab/Esc), save/load/export/import
+  - Tests 22 → 67 (`node --test`); `tests/browser-smoke.mjs` plays a full battle with real clicks in Chromium
+- mini/tools README: listed the four tools a racing run had left out (16 tools)
+- mini/ascii-animations +6: double pendulum (RK4, `--twin` chaos), sorting race (7 algorithms), maze
+  carve + BFS solve, raindrop ripples (2D wave equation), bouncing balls (elastic collisions), DNA helix

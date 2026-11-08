@@ -12,12 +12,13 @@ small creative pieces. When a project is finished, a new one begins.
 ## Projects
 | # | Project | Kind | Status |
 |---|---|---|---|
-| 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | 🚧 Nearly done (Phases 1–6 done; Phase 7: encumbrance, scavengers, timeline, explore mode, animations, 1000-run sweep) |
+| 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | ✅ Complete (7 phases, 277 tests, mypy-clean) |
+| 02 | [Hexfall](projects/02-hexfall) | JS browser hex tactics game | 🚧 Phases 1–3 done (map engine, units & turns, combat); Phase 4 next |
 
 ## Mini collections
 | Collection | Files |
 |---|---|
 | [drawings](mini/drawings) | 12 |
 | [puzzles](mini/puzzles) | 12 |
-| [tools](mini/tools) | 12 |
-| [ascii-animations](mini/ascii-animations) | 6 |
+| [tools](mini/tools) | 16 |
+| [ascii-animations](mini/ascii-animations) | 12 |
