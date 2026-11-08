@@ -1,6 +1,6 @@
 # Agent Guide — rules for the scheduled AI
 
-This repo is built by an AI on a schedule (every 2 hours). Every run MUST follow this guide.
+This repo is built by an AI on a schedule (every hour). Every run MUST follow this guide.
 Runs should be **moderate and efficient**: steady progress, not huge batches.
 
 ## Each run
