@@ -18,7 +18,7 @@ import math
 import random
 from typing import TYPE_CHECKING
 
-from . import ai
+from . import ai, fx
 from .entities import make_monster
 from .gamemap import GameMap
 from .gen_caves import bfs_distances, sectors
@@ -117,11 +117,13 @@ def populate(game: "Game", sanctum: Pos) -> "Entity":
 
 # ---- behaviour ------------------------------------------------------------
 def phase_for(m: "Entity") -> int:
-    ratio = m.fighter.hp / m.fighter.max_hp
+    """The boss's fight phase (1-3) from its remaining HP fraction."""
+    ratio = m.fight.hp / m.fight.max_hp
     return 3 if ratio <= 1 / 3 else 2 if ratio <= 2 / 3 else 1
 
 
 def minions(game: "Game") -> list["Entity"]:
+    """All living monsters tagged as boss minions."""
     return [e for e in game.monsters if "minion" in e.tags]
 
 
@@ -148,10 +150,8 @@ def fire_nova(game: "Game", m: "Entity") -> None:
     """Burst of flame around the guardian. Hurts everything nearby that isn't fireproof."""
     phase = m.ai_state.get("phase", 1)
     game.say(f"The {m.name} erupts in a nova of flame!", "bright_red")
-    from . import effects
-
     area = blast_area(game.gmap, m.pos, NOVA_RADIUS)
-    effects.push(game, effects.Effect("blast", [m.pos] + [c for c in area if c != m.pos], "bright_red", "^"))
+    fx.emit(game, "blast", [m.pos] + [c for c in area if c != m.pos], "*", "bright_red")
     for cell in area:
         if cell == m.pos:
             continue
@@ -159,10 +159,10 @@ def fire_nova(game: "Game", m: "Entity") -> None:
         if target is None or target.fighter is None:
             continue
         if target.is_player:
-            dmg = max(1, 4 + phase - target.fighter.defense // 2)
-            dealt = target.fighter.take_damage(dmg)
+            dmg = max(1, 4 + phase - target.fight.defense // 2)
+            dealt = target.fight.take_damage(dmg)
             game.say(f"The flames sear you for {dealt}!", "bright_red")
-            if not target.fighter.alive:
+            if not target.fight.alive:
                 game.death_cause = f"incinerated by the {m.name}"
                 game.say("You die...", "bright_red")
                 return
@@ -172,6 +172,7 @@ def fire_nova(game: "Game", m: "Entity") -> None:
 
 
 def act_boss(game: "Game", m: "Entity", sees: bool) -> None:
+    """Boss AI: wake on sight, escalate phases, then summon, nova, cast or melee by cooldown."""
     st = m.ai_state
     for key, default in (("phase", 1), ("cooldown", 0), ("summon", 0), ("nova", 0)):
         st.setdefault(key, default)
@@ -185,10 +186,9 @@ def act_boss(game: "Game", m: "Entity", sees: bool) -> None:
     if phase > st.get("phase", 1):
         st["phase"] = phase
         game.say(PHASE_MESSAGES[phase], "bright_red")
-        game.timeline.add(game.turn, game.depth, "boss", f"The {m.name} entered phase {phase}")
         if phase == 3:
             m.speed = ENRAGE_SPEED
-            m.fighter.base_power += ENRAGE_POWER
+            m.fight.base_power += ENRAGE_POWER
         st["summon"] = 0  # summon right away on a phase change
     for key in ("cooldown", "summon", "nova"):
         st[key] = max(0, st.get(key, 0) - 1)

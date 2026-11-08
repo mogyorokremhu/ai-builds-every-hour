@@ -31,6 +31,7 @@ TRAIL = 1          # bolt trail length (cells behind the head)
 
 @dataclass
 class Effect:
+    """One recorded visual effect: a bolt, beam or blast over ``cells``."""
     kind: str                 # bolt | beam | blast
     cells: list[Cell]         # the path (bolt/beam) or [centre, *area] (blast)
     glyph: str = "*"
@@ -38,6 +39,7 @@ class Effect:
 
 
 def new_queue() -> deque[Effect]:
+    """A new, bounded queue of pending effects."""
     return deque(maxlen=MAX_QUEUED)
 
 

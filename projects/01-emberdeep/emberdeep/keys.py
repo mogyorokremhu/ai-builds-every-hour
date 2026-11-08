@@ -42,8 +42,9 @@ COMMANDS: dict[int, str] = {
     ord("m"): "messages",
     ord("c"): "close",
     ord("H"): "scores",
-    ord("T"): "timeline",
     ord("Q"): "quit",
+    ord("W"): "wizard",
+    ord("T"): "timeline",
 }
 
 HELP_TEXT = [
@@ -65,7 +66,8 @@ HELP_TEXT = [
     "Look around      x or ;  (Tab cycles creatures)",
     "Message history  m  (scroll with j/k, PgUp/PgDn)",
     "Hall of fame     H",
-    "Run timeline     T   (depth-over-time chart + notable events)",
+    "Run timeline     T   (depth chart + notable events so far)",
+    "Wizard powers    W   (explore mode only: --explore)",
     "Help             ?",
     "Save & quit      Q   (the save is deleted when you load it)",
     "",
@@ -81,6 +83,8 @@ HELP_TEXT = [
     "         ! potion  ? scroll  / weapon  [ armor  = ring  ( torch",
     "         * brazier (lights the area)  - iron key",
     "Unknown potions/scrolls are identified when used or thrown.",
+    "Heavy packs slow you down (Load in the sidebar; Might raises capacity).",
+    "Kobolds grab loot lying around — and drop it all when they die.",
     "",
     "Your torch burns down (smaller view) and you grow hungry over time.",
     "Level up by killing monsters: choose Vitality, Might or Guard.",

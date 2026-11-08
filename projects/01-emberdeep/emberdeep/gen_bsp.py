@@ -18,6 +18,7 @@ from .tiles import DOOR, DOOR_NAMES, FLOOR, OPEN_DOOR, STAIRS_DOWN
 
 @dataclass
 class Node:
+    """A node of the BSP tree: a rectangle, optional child halves and the room carved in a leaf."""
     rect: Rect
     left: "Node | None" = None
     right: "Node | None" = None
@@ -26,10 +27,12 @@ class Node:
 
     @property
     def is_leaf(self) -> bool:
+        """True if this node has no children."""
         return self.left is None
 
 
 def split(node: Node, rng: random.Random, min_leaf: int, depth: int = 0) -> None:
+    """Recursively split ``node`` into two halves (no smaller than ``min_leaf``), with random stops."""
     r = node.rect
     if depth > 6:
         return
@@ -57,12 +60,14 @@ def split(node: Node, rng: random.Random, min_leaf: int, depth: int = 0) -> None
 
 
 def leaves(node: Node) -> list[Node]:
+    """All leaf nodes under ``node``."""
     if node.is_leaf:
         return [node]
     return leaves(node.left) + leaves(node.right)  # type: ignore[arg-type]
 
 
 def any_room(node: Node, rng: random.Random) -> Rect:
+    """A random carved room among the leaves under ``node``."""
     rooms = [lf.room for lf in leaves(node) if lf.room is not None]
     return rng.choice(rooms)
 
@@ -115,6 +120,7 @@ def generate(width: int, height: int, rng: random.Random, min_leaf: int = 7,
         rooms.append(room)
 
     def connect(node: Node) -> None:
+        """Join sibling subtrees bottom-up by tunnelling between a room in each half."""
         if node.is_leaf:
             return
         connect(node.left)   # type: ignore[arg-type]

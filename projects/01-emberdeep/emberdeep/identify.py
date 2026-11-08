@@ -71,6 +71,7 @@ class Identification:
         return cls({}, set(maskable_keys()))
 
     def is_known(self, key: str) -> bool:
+        """True if the kind ``key`` is identified (or never masked)."""
         return key in self.known or key not in self.appearances
 
     def mask(self, item: Item) -> Item:
@@ -88,6 +89,7 @@ class Identification:
         return new
 
     def unknown_kinds(self) -> list[str]:
+        """Sorted keys of the maskable kinds not yet identified."""
         return sorted(k for k in self.appearances if k not in self.known)
 
     def discoveries(self) -> list[tuple[str, str]]:
@@ -96,10 +98,12 @@ class Identification:
                 if k in self.appearances]
 
     def to_dict(self) -> dict:
+        """Serialise the appearance table and known kinds for saving."""
         return {"appearances": dict(self.appearances), "known": sorted(self.known)}
 
     @classmethod
     def from_dict(cls, d: dict | None) -> "Identification":
+        """Rebuild from ``to_dict`` output; missing data (old saves) means everything is known."""
         if not d:
             return cls.everything_known()
         return cls(dict(d["appearances"]), set(d["known"]))

@@ -56,6 +56,7 @@ class ColorTable:
                 self.enabled = False
 
     def attr(self, name: str, dim: bool = False, reverse: bool = False) -> int:
+        """The curses attribute for colour ``name`` with optional dim/reverse (0 without curses)."""
         if curses is None:
             return 0
         base, bright = split(name)

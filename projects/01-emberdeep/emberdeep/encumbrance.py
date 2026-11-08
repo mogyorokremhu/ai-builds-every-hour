@@ -46,27 +46,32 @@ def item_weight(item: "Item") -> int:
 
 
 def unit_weight(item: "Item") -> int:
+    """Weight of a single unit of ``item``."""
     return ITEM_WEIGHT.get(item.key, KIND_WEIGHT.get(item.kind, 1))
 
 
 def total_weight(items: Iterable["Item"]) -> int:
+    """Total weight of ``items``, counting full stacks."""
     return sum(item_weight(i) for i in items)
 
 
 def capacity(player: "Entity") -> int:
     """How much ``player`` can carry without being burdened."""
-    return BASE_CAPACITY + CAPACITY_PER_POWER * max(0, player.fighter.base_power)
+    return BASE_CAPACITY + CAPACITY_PER_POWER * max(0, player.fight.base_power)
 
 
 def max_load(player: "Entity") -> int:
+    """The heaviest load ``player`` can carry before becoming overloaded."""
     return int(capacity(player) * OVERLOAD)
 
 
 def carried(player: "Entity") -> int:
-    return total_weight(player.inventory.items)
+    """Total weight of everything in ``player``'s pack."""
+    return total_weight(player.pack.items)
 
 
 def state_for(load: int, cap: int) -> str:
+    """Encumbrance state for a ``load`` against carrying capacity ``cap``."""
     if load <= cap:
         return UNBURDENED
     if load <= int(cap * OVERLOAD):
@@ -75,10 +80,12 @@ def state_for(load: int, cap: int) -> str:
 
 
 def state(player: "Entity") -> str:
+    """The player's current encumbrance state."""
     return state_for(carried(player), capacity(player))
 
 
 def speed_multiplier(player: "Entity") -> float:
+    """Movement-time multiplier from encumbrance (1.0 when unburdened)."""
     return 1.0 if state(player) == UNBURDENED else BURDENED_SPEED
 
 
@@ -95,6 +102,7 @@ def load_label(player: "Entity") -> str:
 
 
 def load_color(player: "Entity") -> str:
+    """HUD colour for the load: red when over capacity, yellow above 80%, else white."""
     load, cap = carried(player), capacity(player)
     if load > cap:
         return "bright_red"
@@ -126,8 +134,8 @@ def slot_warning(free_slots: int) -> tuple[str, str] | None:
 
 def heaviest_spare(player: "Entity") -> "Item | None":
     """The heaviest item that isn't equipped (what a burdened player should drop first)."""
-    eq = player.equipment
-    spare = [i for i in player.inventory.items if not eq.is_equipped(i) and i.kind != "artifact"]
+    eq = player.gear
+    spare = [i for i in player.pack.items if not eq.is_equipped(i) and i.kind != "artifact"]
     if not spare:
         return None
     return max(spare, key=lambda i: (unit_weight(i), item_weight(i)))

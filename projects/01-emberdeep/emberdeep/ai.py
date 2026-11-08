@@ -19,7 +19,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Callable
 
-from . import scavenge
 from .geometry import chebyshev
 from .pathfinding import astar, downhill_step, flee_map
 from .targeting import projectile_path
@@ -50,6 +49,7 @@ DIRS8 = ((-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1))
 def move_towards(game: "Game", m: "Entity", goal: tuple[int, int]) -> bool:
     """Take one A* step toward ``goal``. Returns True if the monster moved."""
     def crowd(x: int, y: int) -> int:
+        """Extra path cost for a cell occupied by a blocking entity."""
         return CROWD_PENALTY if game.blocking_at(x, y) is not None else 0
 
     path = astar(game.gmap, m.pos, goal, extra_cost=crowd, max_nodes=1500)
@@ -116,11 +116,13 @@ def hunt(game: "Game", m: "Entity", sees: bool) -> None:
 
 # ---- behaviours ------------------------------------------------------------
 def act_chase(game: "Game", m: "Entity", sees: bool) -> None:
+    """Chase AI: hunt the player directly."""
     hunt(game, m, sees)
 
 
 def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
-    f = m.fighter
+    """Coward AI: flee (or drink a potion) when badly hurt, recovering out of sight; else hunt."""
+    f = m.fight
     hurt = f.hp <= f.max_hp * COWARD_THRESHOLD
     if not sees:
         if hurt and m.ai_state.get("fleeing"):
@@ -133,7 +135,7 @@ def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
             return
         hunt(game, m, sees)
         return
-    if hurt and scavenge.has_potion(m) and game.rng.random() < 0.6:
+    if hurt and m.ai_state.get("potion") and game.rng.random() < 0.6:
         drink_potion(game, m)
         return
     if hurt:
@@ -148,15 +150,15 @@ def act_coward(game: "Game", m: "Entity", sees: bool) -> None:
 
 def drink_potion(game: "Game", m: "Entity") -> None:
     """A monster quaffs the healing potion it carries (kobolds)."""
-    if not m.ai_state.pop("potion", None):
-        scavenge.use_potion(m)
-    healed = m.fighter.heal(12)
+    m.ai_state.pop("potion", None)
+    healed = m.fight.heal(12)
     if game.gmap.visible[m.y][m.x]:
         game.say(f"The {m.name} drinks a potion of healing! (+{healed})", "bright_yellow")
         game.identify_kind("healing potion")
 
 
 def act_caster(game: "Game", m: "Entity", sees: bool) -> None:
+    """Caster AI: cast its spell when off cooldown with a clear shot, kiting or closing in otherwise."""
     spell = SPELLS[m.spell or "ember bolt"]
     cd = m.ai_state.get("cooldown", 0)
     if cd > 0:
@@ -181,11 +183,13 @@ def act_caster(game: "Game", m: "Entity", sees: bool) -> None:
 
 
 def pack_mates(game: "Game", m: "Entity", radius: int) -> list["Entity"]:
+    """Other pack monsters of the same kind as ``m`` within ``radius`` of it."""
     return [o for o in game.monsters
             if o is not m and o.ai == "pack" and o.name == m.name and chebyshev(o.pos, m.pos) <= radius]
 
 
 def act_pack(game: "Game", m: "Entity", sees: bool) -> None:
+    """Pack AI: alert mates, lurk at the edge of reach until the pack gathers, then rush in."""
     player = game.player
     if sees:
         # howl: share the player's position with the pack
@@ -203,7 +207,7 @@ def act_pack(game: "Game", m: "Entity", sees: bool) -> None:
         hunt(game, m, sees)  # a lone pack animal just attacks
         return
     near = 1 + sum(1 for o in mates if chebyshev(o.pos, player.pos) <= PACK_LURK_DIST + 1)
-    hurt_player = player.fighter.hp <= player.fighter.max_hp // 2
+    hurt_player = player.fight.hp <= player.fight.max_hp // 2
     if near >= min(PACK_GATHER, 1 + len(mates)) or hurt_player or m.ai_state.get("rushing"):
         m.ai_state["rushing"] = True
         hunt(game, m, sees)
@@ -252,11 +256,12 @@ def take_turn(game: "Game", m: "Entity") -> None:
     sees = game.monster_sees_player(m)
     if sees:
         m.memory = game.player.pos
-    if scavenge.try_pickup(game, m):
-        return
-    if not sees and m.memory is None:
-        scavenge.forage(game, m)
-        return  # dormant: nothing to hunt (scavengers go looking for loot)
+    elif m.memory is None:
+        if "scavenger" in m.tags:
+            from .scavenge import scavenge
+
+            scavenge(game, m)  # nothing to hunt: go after loot instead
+        return  # dormant: nothing to hunt
     BEHAVIOURS.get(m.ai or "chase", act_chase)(game, m, sees)
 
 
@@ -268,6 +273,12 @@ def describe_ai(m: "Entity") -> str:
         from .boss import describe
 
         return describe(m)
+    if "scavenger" in m.tags:
+        from .scavenge import describe
+
+        loot = describe(m)
+        if loot:
+            return loot
     if m.ai == "coward":
         return "It looks skittish." if not m.ai_state.get("fleeing") else "It is fleeing!"
     if m.ai == "caster":

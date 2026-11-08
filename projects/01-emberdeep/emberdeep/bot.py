@@ -38,6 +38,7 @@ REST_LIMIT = 60             # max consecutive turns spent resting
 
 @dataclass
 class RunResult:
+    """Outcome and usage statistics of one automated bot run."""
     seed: int
     victory: bool
     depth: int
@@ -52,13 +53,14 @@ class RunResult:
 
 
 class Bot:
+    """A rule-based autoplayer that picks one action per turn by trying rules in priority order."""
     def __init__(self, game: Game) -> None:
         self.game = game
         self.level_turns = 0
         self.depth_seen = game.depth
         self.rest_streak = 0
         self.boon_i = 0
-        self.stats = Counter()
+        self.stats: Counter[str] = Counter()
         self.ignored: set[tuple[int, int]] = set()   # item cells it gave up walking to
         self.route: list[tuple[int, int]] = []       # cached path to the exploration frontier
         self.loot_goal: tuple[int, int] | None = None  # item cell it is walking to
@@ -66,19 +68,24 @@ class Bot:
     # ---- helpers --------------------------------------------------------
     @property
     def p(self):
+        """The game's player entity."""
         return self.game.player
 
     def pack(self) -> list[Item]:
-        return list(self.p.inventory.items)
+        """A snapshot list of the items in the player's pack."""
+        return list(self.p.pack.items)
 
     def find(self, pred) -> Item | None:
+        """The first pack item matching ``pred``, or None."""
         return next((it for it in self.pack() if pred(it)), None)
 
     def hp_frac(self) -> float:
-        f = self.p.fighter
+        """The player's current HP as a fraction of max HP."""
+        f = self.p.fight
         return f.hp / max(1, f.max_hp)
 
     def blocked(self, x: int, y: int) -> bool:
+        """True if a blocking entity or a known trap occupies (x, y)."""
         g = self.game
         return g.blocking_at(x, y) is not None or g.known_trap_at(x, y) is not None
 
@@ -93,6 +100,7 @@ class Bot:
         return self.move(nx - self.p.x, ny - self.p.y)
 
     def move(self, dx: int, dy: int) -> bool:
+        """Try to move the player, repeating once to confirm a trap or locked-door prompt."""
         g = self.game
         if g.player_move(dx, dy):
             return True
@@ -100,6 +108,7 @@ class Bot:
 
     # ---- one decision -----------------------------------------------------
     def act(self) -> None:
+        """Take one turn: handle level changes and level-ups, run the first rule that acts, else wait."""
         g = self.game
         if g.depth != self.depth_seen:
             self.depth_seen, self.level_turns, self.ignored, self.route = g.depth, 0, set(), []
@@ -116,6 +125,7 @@ class Bot:
         g.player_wait()
 
     def survive(self) -> bool:
+        """Emergency rule: heal, gamble on an unknown potion, or teleport when HP is low."""
         g = self.game
         foes = g.visible_monsters()
         frac = self.hp_frac()
@@ -136,6 +146,7 @@ class Bot:
         return False
 
     def upkeep(self) -> bool:
+        """Upkeep rule: eat, refuel the torch, drop excess weight and read unknown scrolls when safe."""
         g, res = self.game, self.game.resources
         if res.food < 350:
             food = self.find(lambda it: it.effect == "eat")
@@ -160,13 +171,15 @@ class Bot:
         return False
 
     def gear(self) -> bool:
-        eq = self.p.equipment
+        """Gear rule: equip the first pack item that scores better than what fills its slot."""
+        eq = self.p.gear
         for it in self.pack():
             if not it.is_equipment or eq.is_equipped(it):
                 continue
             cur = eq.slots.get(it.slot)
 
             def score(x: Item | None) -> float:
+                """Heuristic value of an equipment item (or -1 for an empty slot)."""
                 if x is None:
                     return -1
                 return x.power_bonus * 1.2 + x.defense_bonus * 1.5 + x.hp_bonus * 0.3 + x.knockback * 2
@@ -176,13 +189,14 @@ class Bot:
         return False
 
     def fight(self) -> bool:
+        """Fight rule: use scrolls or bombs on tough foes, melee the weakest adjacent one, or close in."""
         g = self.game
         foes = [m for m in g.visible_monsters() if not m.asleep or chebyshev(m.pos, self.p.pos) <= 3]
         if not foes:
             return False
         near = foes[0]
         dist = chebyshev(near.pos, self.p.pos)
-        tough = near.fighter.hp >= 12 or "boss" in near.tags or near.ai == "caster"
+        tough = near.fight.hp >= 12 or "boss" in near.tags or near.ai == "caster"
         if tough and dist <= 7:
             for eff in ("lightning", "fireball", "confuse"):
                 scroll = self.find(lambda it, e=eff: it.effect == e and it.identified)
@@ -197,28 +211,29 @@ class Bot:
                 return True
         adjacent = [m for m in foes if chebyshev(m.pos, self.p.pos) <= 1]
         if adjacent:
-            weakest = min(adjacent, key=lambda m: m.fighter.hp)
+            weakest = min(adjacent, key=lambda m: m.fight.hp)
             return self.move(weakest.x - self.p.x, weakest.y - self.p.y)
         if near.ai == "caster" or dist <= 6:
             return self.step_to(near.pos)
         return False
 
     def loot(self) -> bool:
+        """Loot rule: pick up items here, or walk to the nearest visible item it can carry."""
         g = self.game
         here = g.items_at(*self.p.pos)
-        if here and any(e.item.kind == "artifact" for e in here):
+        if here and any(e.thing.kind == "artifact" for e in here):
             return g.pickup()
-        if here and self.p.pos not in self.ignored and self.p.inventory.can_add(here[0].item) \
-                and encumbrance.can_lift(self.p, here[0].item):
+        if here and self.p.pos not in self.ignored and self.p.pack.can_add(here[0].thing) \
+                and encumbrance.can_lift(self.p, here[0].thing):
             return g.pickup()
-        inv = self.p.inventory
+        inv = self.p.pack
         goal = self.loot_goal
         if goal is not None and (goal == self.p.pos or goal in self.ignored or (
-                g.gmap.visible[goal[1]][goal[0]] and not any(inv.can_add(e.item) for e in g.items_at(*goal)))):
+                g.gmap.visible[goal[1]][goal[0]] and not any(inv.can_add(e.thing) for e in g.items_at(*goal)))):
             goal = self.loot_goal = None
         if goal is None:
             items = [e for e in g.visible_items() if e.pos not in self.ignored and e.pos != self.p.pos
-                     and g.gmap.walkable(*e.pos) and inv.can_add(e.item)]
+                     and g.gmap.walkable(*e.pos) and inv.can_add(e.thing)]
             if not items:
                 return False
             goal = self.loot_goal = min(items, key=lambda e: chebyshev(e.pos, self.p.pos)).pos
@@ -229,6 +244,7 @@ class Bot:
         return False
 
     def rest(self) -> bool:
+        """Rest rule: wait to regenerate while below 70% HP, up to ``REST_LIMIT`` turns in a row."""
         g = self.game
         if self.hp_frac() >= 0.7 or not g.resources.can_regenerate or self.rest_streak >= REST_LIMIT:
             self.rest_streak = 0 if self.hp_frac() >= 0.7 else self.rest_streak
@@ -270,6 +286,7 @@ class Bot:
         return False
 
     def frontier(self) -> list[tuple[int, int]]:
+        """All unexplored-boundary cells on the current map."""
         gm = self.game.gmap
         return [(x, y) for y in range(1, gm.height - 1) for x in range(1, gm.width - 1)
                 if self.is_frontier(x, y)]
@@ -302,6 +319,7 @@ class Bot:
         return []
 
     def explore(self) -> bool:
+        """Explore rule: follow (or recompute) a path to the nearest frontier cell."""
         g = self.game
         st = g.gmap.stairs
         if self.level_turns > LEVEL_TURN_LIMIT and st is not None and g.gmap.explored[st[1]][st[0]]:
@@ -325,10 +343,11 @@ class Bot:
         return ok
 
     def leave(self) -> bool:
+        """Leave rule: descend via explored stairs, or on the boss level seek the Heart or the boss."""
         g = self.game
         stairs = g.gmap.stairs
         if stairs is None:  # the boss level: go and find the Guardian (or the Heart)
-            heart = next((e for e in g.entities if e.item is not None and e.item.key == "ember heart"), None)
+            heart = next((e for e in g.entities if e.item is not None and e.thing.key == "ember heart"), None)
             if heart is not None:
                 if heart.pos == self.p.pos:
                     return g.pickup()
@@ -419,6 +438,7 @@ def report(results: list[RunResult], seconds: float | None = None) -> str:
 
 
 def main(argv: list[str] | None = None) -> None:  # pragma: no cover - CLI
+    """CLI: run ``n`` bot games (default 100), print the report and optionally write it to a file."""
     args = list(sys.argv[1:] if argv is None else argv)
     n = int(args[0]) if args else 100
     out = args[1] if len(args) > 1 else None

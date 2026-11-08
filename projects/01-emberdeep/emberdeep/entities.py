@@ -26,26 +26,32 @@ class Fighter:
 
     @property
     def max_hp(self) -> int:
+        """Maximum HP including equipment bonuses."""
         return self.base_max_hp + self.bonus_hp
 
     @property
     def power(self) -> int:
+        """Attack power including equipment bonuses."""
         return self.base_power + self.bonus_power
 
     @property
     def defense(self) -> int:
+        """Defense including equipment bonuses."""
         return self.base_defense + self.bonus_defense
 
     @property
     def alive(self) -> bool:
+        """True while HP is above zero."""
         return self.hp > 0
 
     def take_damage(self, amount: int) -> int:
+        """Lose up to ``amount`` HP (never below zero); return the damage actually dealt."""
         dealt = max(0, min(amount, self.hp))
         self.hp -= dealt
         return dealt
 
     def heal(self, amount: int) -> int:
+        """Regain up to ``amount`` HP (capped at max); return the amount actually healed."""
         healed = max(0, min(amount, self.max_hp - self.hp))
         self.hp += healed
         return healed
@@ -53,6 +59,7 @@ class Fighter:
 
 @dataclass
 class Entity:
+    """Anything on the map: the player, a monster or a floor item, built from optional components."""
     name: str
     glyph: str
     x: int
@@ -75,6 +82,40 @@ class Entity:
     ai_state: dict[str, Any] = field(default_factory=dict)
     asleep: bool = False        # sleeping monsters ignore you until noise wakes them
 
+    # -- typed component accessors -------------------------------------------------
+    # The optional components above are ECS-style; these accessors give the type checker
+    # (and the reader) a non-Optional view where the code knows the component exists —
+    # the player and monsters always fight, floor items always carry an item. A missing
+    # component raises the same AttributeError a ``None`` access would have.
+
+    @property
+    def fight(self) -> Fighter:
+        """The fighter component (players and monsters always have one)."""
+        if self.fighter is None:
+            raise AttributeError(f"{self.name} has no fighter component")
+        return self.fighter
+
+    @property
+    def pack(self) -> "Inventory":
+        """The inventory component (the player, scavengers)."""
+        if self.inventory is None:
+            raise AttributeError(f"{self.name} has no inventory component")
+        return self.inventory
+
+    @property
+    def gear(self) -> "Equipment":
+        """The equipment component (the player)."""
+        if self.equipment is None:
+            raise AttributeError(f"{self.name} has no equipment component")
+        return self.equipment
+
+    @property
+    def thing(self) -> "Item":
+        """The item component of a floor item or a carried item entity."""
+        if self.item is None:
+            raise AttributeError(f"{self.name} has no item component")
+        return self.item
+
     @property
     def confused(self) -> int:
         """Turns of confusion left (backed by the status system)."""
@@ -82,24 +123,30 @@ class Entity:
 
     @confused.setter
     def confused(self, turns: int) -> None:
+        """Set the turns of confusion left."""
         self.statuses.set_turns("confused", turns)
 
     @property
     def effective_speed(self) -> int:
+        """Speed after status modifiers (at least 1)."""
         return max(1, int(self.speed * self.statuses.speed_multiplier()))
 
     @property
     def pos(self) -> tuple[int, int]:
+        """The entity's (x, y) position."""
         return (self.x, self.y)
 
     @property
     def is_player(self) -> bool:
+        """True if this entity is the player."""
         return "player" in self.tags
 
     def immune_to(self, status: str) -> bool:
+        """True if this entity is immune to ``status``."""
         return f"immune:{status}" in self.tags
 
     def move(self, dx: int, dy: int) -> None:
+        """Shift the entity by (dx, dy) without any checks."""
         self.x += dx
         self.y += dy
 
@@ -137,6 +184,7 @@ MONSTER_TEMPLATES: dict[str, dict] = {
 
 
 def make_monster(kind: str, x: int, y: int) -> Entity:
+    """Create a monster of ``kind`` at (x, y) from its template."""
     t = MONSTER_TEMPLATES[kind]
     return Entity(
         name=kind,
@@ -155,6 +203,7 @@ def make_monster(kind: str, x: int, y: int) -> Entity:
 
 
 def make_player(x: int, y: int) -> Entity:
+    """Create the player at (x, y) with starting stats, an empty pack and no gear."""
     from .equipment import Equipment
     from .inventory import Inventory
 

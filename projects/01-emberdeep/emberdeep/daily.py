@@ -14,6 +14,7 @@ PREFIX = "daily:"
 
 
 def today() -> _dt.date:
+    """Today's date in UTC."""
     return _dt.datetime.now(_dt.timezone.utc).date()
 
 
@@ -25,10 +26,12 @@ def daily_seed(day: _dt.date | None = None) -> int:
 
 
 def daily_mode(day: _dt.date | None = None) -> str:
+    """The game-mode string for the daily challenge of ``day`` (default today)."""
     return PREFIX + (day or today()).isoformat()
 
 
 def is_daily(mode: str) -> bool:
+    """True if ``mode`` is a daily-challenge mode string."""
     return mode.startswith(PREFIX)
 
 

@@ -12,7 +12,7 @@ import random
 from collections import deque
 
 from .gamemap import GameMap
-from .tiles import FLOOR, WALL
+from .tiles import FLOOR
 
 Pos = tuple[int, int]
 
@@ -29,6 +29,7 @@ def wall_count(grid: list[list[bool]], x: int, y: int, r: int = 1) -> int:
 
 
 def smooth(grid: list[list[bool]], early: bool) -> list[list[bool]]:
+    """One cellular-automaton pass; ``early`` passes also fill open areas to break up big caverns."""
     h, w = len(grid), len(grid[0])
     out = [[True] * w for _ in range(h)]
     for y in range(1, h - 1):

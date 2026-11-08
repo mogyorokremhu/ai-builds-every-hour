@@ -22,6 +22,7 @@ Pos = tuple[int, int]
 
 @dataclass
 class Layout:
+    """A generated level: the map, the player's start, the open areas and any rooms."""
     gmap: GameMap
     start: Pos
     areas: list[list[Pos]]
@@ -30,11 +31,13 @@ class Layout:
 
 
 def open_cells(gmap: GameMap) -> list[Pos]:
+    """All cells whose tile counts as open floor."""
     return [(x, y) for y in range(gmap.height) for x in range(gmap.width)
             if gmap.tiles[y][x].name in FLOOR_LIKE]
 
 
 def reachable(gmap: GameMap, start: Pos) -> set[Pos]:
+    """Cells reachable from ``start`` by walking."""
     return set(gen_caves.bfs_distances(gmap, start))
 
 
@@ -63,7 +66,7 @@ def decorate(layout: Layout, theme: Theme, rng: random.Random) -> int:
     if not kind or amount <= 0:
         return 0
     gmap = layout.gmap
-    protected = {layout.start, gmap.stairs}
+    protected: set[tuple[int, int]] = {p for p in (layout.start, gmap.stairs) if p is not None}
     cells = [c for c in open_cells(gmap) if c not in protected]
     target = int(len(cells) * amount)
     changed = 0
@@ -108,6 +111,7 @@ def decorate(layout: Layout, theme: Theme, rng: random.Random) -> int:
 
 
 def generate_level(width: int, height: int, rng: random.Random, theme: Theme) -> Layout:
+    """Generate a level with a generator picked by ``theme`` weights, then decorate it."""
     keys, weights = zip(*theme.generators)
     kind = rng.choices(keys, weights=weights)[0]
     if kind == "caves":

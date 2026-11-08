@@ -68,6 +68,7 @@ def place_braziers(gmap: GameMap, rng: random.Random, count: int,
 
 
 def braziers(gmap: GameMap) -> list[tuple[int, int]]:
+    """Positions of every brazier on the map."""
     return [(x, y) for y in range(gmap.height) for x in range(gmap.width)
             if gmap.tiles[y][x].name == "brazier"]
 
@@ -91,5 +92,6 @@ def compute_lit(gmap: GameMap) -> frozenset[tuple[int, int]]:
 
 
 def braziers_for_theme(theme_key: str, rng: random.Random) -> int:
+    """A random number of braziers for a theme, from its (low, high) range."""
     lo, hi = BRAZIERS_BY_THEME.get(theme_key, (0, 2))
     return rng.randint(lo, hi)

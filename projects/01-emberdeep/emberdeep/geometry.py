@@ -16,14 +16,17 @@ class Rect:
 
     @property
     def x2(self) -> int:
+        """The exclusive right edge."""
         return self.x + self.w
 
     @property
     def y2(self) -> int:
+        """The exclusive bottom edge."""
         return self.y + self.h
 
     @property
     def center(self) -> tuple[int, int]:
+        """The (integer) centre cell."""
         return (self.x + self.w // 2, self.y + self.h // 2)
 
     def inner(self) -> Iterator[tuple[int, int]]:
@@ -33,6 +36,7 @@ class Rect:
                 yield xx, yy
 
     def intersects(self, other: "Rect", margin: int = 0) -> bool:
+        """True if this rectangle overlaps ``other`` when grown by ``margin`` on every side."""
         return (
             self.x - margin < other.x2
             and self.x2 + margin > other.x
@@ -41,6 +45,7 @@ class Rect:
         )
 
     def contains(self, x: int, y: int) -> bool:
+        """True if (x, y) is inside the rectangle."""
         return self.x <= x < self.x2 and self.y <= y < self.y2
 
 

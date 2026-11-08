@@ -9,6 +9,7 @@ from .tiles import FLOOR, STAIRS_DOWN
 
 
 def carve_room(gmap: GameMap, room: Rect) -> None:
+    """Set every inner cell of ``room`` to floor."""
     for x, y in room.inner():
         gmap.set(x, y, FLOOR)
 

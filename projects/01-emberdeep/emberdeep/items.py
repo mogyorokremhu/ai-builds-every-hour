@@ -17,6 +17,7 @@ TARGET_CELL = "cell"    # player picks a cell with the targeting cursor (firebal
 
 @dataclass
 class Item:
+    """An item's stats and state: kind, effect, equipment bonuses, stack count and identity."""
     key: str
     name: str
     glyph: str
@@ -39,6 +40,7 @@ class Item:
 
     @property
     def identified(self) -> bool:
+        """True if the item's kind is known to the player."""
         return self.unknown_name is None
 
     @property
@@ -48,10 +50,12 @@ class Item:
 
     @property
     def is_equipment(self) -> bool:
+        """True if the item can be equipped in a slot."""
         return self.slot is not None
 
     @property
     def display_name(self) -> str:
+        """The shown name with a count prefix and plural when stacked."""
         if self.count > 1:
             return f"{self.count} {plural(self.shown_name)}"
         return self.shown_name

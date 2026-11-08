@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from . import encumbrance
 from .resources import TORCH_MAX
 from .status import STATUS_INFO
 
@@ -21,6 +22,7 @@ def bar(current: int, maximum: int, width: int, fill: str = "█", empty: str = 
 
 
 def hp_color(current: int, maximum: int) -> str:
+    """HUD colour for an HP value: green above 60%, yellow above 30%, else red."""
     ratio = current / maximum if maximum else 0
     if ratio > 0.6:
         return "bright_green"
@@ -30,6 +32,7 @@ def hp_color(current: int, maximum: int) -> str:
 
 
 def torch_color(fuel: int) -> str:
+    """HUD colour for torch fuel: bright yellow above 50%, yellow above 20%, else red."""
     ratio = fuel / TORCH_MAX
     if ratio > 0.5:
         return "bright_yellow"
@@ -38,18 +41,10 @@ def torch_color(fuel: int) -> str:
     return "bright_red"
 
 
-def pack_line(game: "Game") -> Line:
-    """``Pack 12/26``, turning yellow then red as the pack fills up."""
-    inv = game.player.inventory
-    free = inv.capacity - len(inv)
-    color = "bright_red" if free <= 2 else "yellow" if free <= 5 else "white"
-    return (f"Pack    {len(inv)}/{inv.capacity}", color)
-
-
 def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
     """Build the sidebar as a list of (text, colour) lines."""
     p = game.player
-    f = p.fighter
+    f = p.fight
     res = game.resources
     into, span = game.progression.progress
     lines: list[Line] = [
@@ -65,18 +60,21 @@ def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
         (f"Torch   {res.torch_label}", torch_color(res.torch)),
         (bar(res.torch, TORCH_MAX, width - 2, "▮", "▯"), torch_color(res.torch)),
         (f"Food    {res.hunger_label}", res.hunger_color),
+        (f"Load    {encumbrance.load_label(p)}", encumbrance.load_color(p)),
+        (f"Pack    {len(p.pack)}/{p.pack.capacity}",
+         "bright_red" if p.pack.full else
+         "bright_yellow" if p.pack.capacity - len(p.pack) <= encumbrance.SLOT_WARNING else "white"),
         (f"Turn    {game.turn}", "white"),
-        pack_line(game),
     ]
-    if game.explore_mode:
-        lines.insert(2, (f"EXPLORE MODE ({len(game.explore_deaths)} rescues)", "bright_cyan"))
+    if game.mode == "explore":
+        lines.insert(2, ("[explore mode]", "bright_magenta"))
     if game.pending_levels:
         lines.insert(7, (f"** {game.pending_levels} level-up(s)! **", "bright_green"))
     for name in p.statuses.names():
         label, color = STATUS_INFO[name][0], STATUS_INFO[name][1]
         lines.append((f"* {label} ({p.statuses.turns(name)})", color))
     lines.append(("", "white"))
-    eq = p.equipment
+    eq = p.gear
     if eq is not None:
         for slot, item in eq.slots.items():
             name = item.name if item else "-"
@@ -85,7 +83,7 @@ def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
     mons = game.visible_monsters()
     lines.append(("In view:" if mons else "Nothing in view", "bright_white"))
     for m in mons[:max_monsters]:
-        mf = m.fighter
+        mf = m.fight
         label = f"{m.glyph} {m.name}"
         tags = ("z" if m.asleep else "") + "".join(STATUS_INFO[n][0][0] for n in m.statuses.names())
         if tags:

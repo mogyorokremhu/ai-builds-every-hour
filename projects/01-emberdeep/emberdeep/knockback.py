@@ -46,9 +46,9 @@ def shove(game: "Game", attacker: "Entity", target: "Entity") -> str:
         return "blocked"
     if tile.name == "lava":
         if target.is_player:
-            dealt = target.fighter.take_damage(LAVA_EDGE_DAMAGE)
+            dealt = target.fight.take_damage(LAVA_EDGE_DAMAGE)
             game.say(f"You are hurled to the lava's edge and scorched for {dealt}!", C_BAD)
-            if not target.fighter.alive:
+            if not target.fight.alive:
                 game.death_cause = "hurled into lava"
                 game.say("You die...", C_BAD)
                 return "scorched"
@@ -60,7 +60,7 @@ def shove(game: "Game", attacker: "Entity", target: "Entity") -> str:
             return "climbed"
         if seen:
             game.say(f"The {target.name} is knocked into the lava and consumed!", C_GOOD)
-        target.fighter.hp = 0
+        target.fight.hp = 0
         game.on_kill(target)
         if target in game.entities:  # nothing is left to leave a corpse
             game.entities.remove(target)
