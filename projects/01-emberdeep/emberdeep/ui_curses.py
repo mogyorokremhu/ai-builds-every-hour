@@ -16,6 +16,7 @@ from .items import TARGET_CELL, Item
 from .look import describe_cell
 from .progression import CHOICES
 from .targeting import Cursor, blast_area, projectile_path
+from .throwing import THROW_RANGE
 
 try:
     import curses
@@ -212,6 +213,14 @@ class CursesUI:
             item = self.choose_item("Drop which item?")
             if item is not None:
                 g.drop(item)
+        elif cmd == "throw":
+            item = self.choose_item("Throw which item?", lambda it: it.kind != "artifact")
+            if item is not None:
+                target = self.target(item, max_range=THROW_RANGE, verb="Throw")
+                if target is None:
+                    g.say("Cancelled.")
+                else:
+                    g.throw(item, target)
         elif cmd == "equip":
             item = self.choose_item("Equip/remove which item?", lambda it: it.is_equipment)
             if item is not None:
@@ -236,7 +245,7 @@ class CursesUI:
         self.show_text(["EMBERDEEP — hall of fame", ""] + table + ["", "Press any key."])
 
     def use_item(self, item: Item) -> None:
-        if item.targeting == TARGET_CELL:
+        if item.targeting == TARGET_CELL and item.identified:
             target = self.target(item)
             if target is None:
                 self.game.say("Cancelled.")
@@ -268,15 +277,17 @@ class CursesUI:
                 return choice
         return None
 
-    def target(self, item: Item) -> tuple[int, int] | None:
+    def target(self, item: Item, max_range: int | None = None, verb: str = "Aim") -> tuple[int, int] | None:
         """Interactive targeting cursor. Returns the chosen cell or None if cancelled."""
         g = self.game
+        rng = item.range if max_range is None else max_range
         foes = [m.pos for m in g.visible_monsters()]
         start = foes[0] if foes else g.player.pos
-        cur = Cursor(g.player.pos, start[0], start[1], item.range, g.gmap.width, g.gmap.height)
+        cur = Cursor(g.player.pos, start[0], start[1], rng, g.gmap.width, g.gmap.height)
+        shown = item if verb == "Aim" else None  # thrown items show no blast preview
         while True:
-            self.draw(cursor=cur, item=item,
-                      footer=f"Aim the {item.name}: move, Tab=next enemy, Enter=fire, Esc=cancel")
+            self.draw(cursor=cur, item=shown,
+                      footer=f"{verb} the {item.shown_name}: move, Tab=next enemy, Enter=fire, Esc=cancel")
             key = self.screen.getch()
             if key in keys.CONFIRM_KEYS:
                 return cur.pos

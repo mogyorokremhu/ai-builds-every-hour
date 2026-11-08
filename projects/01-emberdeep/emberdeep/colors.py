@@ -23,6 +23,8 @@ TILE_COLORS: dict[str, tuple[str, str]] = {
     "lava": ("bright_red", "red"),
     "altar": ("bright_magenta", "magenta"),
     "rubble": ("yellow", "blue"),
+    "locked door": ("bright_red", "red"),
+    "brazier": ("bright_yellow", "yellow"),
 }
 
 

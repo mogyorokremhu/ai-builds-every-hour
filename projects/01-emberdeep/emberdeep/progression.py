@@ -35,8 +35,11 @@ CHOICES: dict[str, Choice] = {
 
 
 def xp_to_next(level: int) -> int:
-    """XP needed to go from ``level`` to ``level + 1`` (grows linearly)."""
-    return 40 + 35 * (level - 1)
+    """XP needed to go from ``level`` to ``level + 1`` (grows a little faster than linearly).
+
+    Tuned with the balance bot (see BALANCE.md): the old linear curve let a thorough player
+    hit the level cap well before the Ember Guardian."""
+    return 40 + 35 * (level - 1) + 4 * (level - 1) ** 2
 
 
 def xp_for_level(level: int) -> int:

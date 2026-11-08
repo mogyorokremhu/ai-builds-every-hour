@@ -12,7 +12,8 @@ falls back to the line-based text mode. Pass ``--text`` to force text mode.
 Text-mode controls (type then Enter, chainable): w/a/s/d move, q/e/z/c diagonals,
 . wait, g pick up, i inventory, u<letter> use/equip, r<letter> drop, > descend,
 x save & quit, f search for traps, p pray at an altar, k close an adjacent door,
-+v/+m/+g choose a level-up boon. Bump into a closed door (+) to open it.
++v/+m/+g choose a level-up boon, t<letter> throw at the nearest enemy.
+Bump into a closed door (+) to open it (a locked one needs an iron key, or force).
 """
 from __future__ import annotations
 
@@ -61,6 +62,15 @@ def run_text_command(game: Game, cmd: str) -> bool:
                 game.say("Use +v, +m or +g when you have a level-up.")
         elif ch == "i":
             print(render_inventory(game))
+        elif ch == "t":
+            item = game.player.inventory.get(next(chars, ""))
+            foes = game.visible_monsters()
+            if item is None:
+                game.say("No such item.")
+            elif not foes:
+                game.say("No target in view.")
+            else:
+                game.throw(item, foes[0].pos)
         elif ch in "ur":
             letter = next(chars, "")
             item = game.player.inventory.get(letter)
@@ -68,7 +78,7 @@ def run_text_command(game: Game, cmd: str) -> bool:
                 game.say("No such item.")
             elif ch == "r":
                 game.drop(item)
-            elif item.targeting == "cell":
+            elif item.targeting == "cell" and item.identified:
                 foes = game.visible_monsters()
                 if foes:
                     game.use(item, foes[0].pos)
