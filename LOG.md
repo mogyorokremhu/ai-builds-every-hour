@@ -78,3 +78,27 @@
   round-trips; 12 scripted boss fights (strong hero wins 9/12); real pty smoke test of save → resume;
   verified from a fresh clone after pushing
 - mini/drawings: Koch snowflake, dragon curve, Hilbert curve, ASCII mountains, Lissajous figures, Julia sets
+
+## 2026-11-08 00:00 UTC — hour 6: Emberdeep polish — unidentified items, throwing, locked doors, braziers, knockback, balance bot
+- Emberdeep Phase 3–5 leftovers done:
+  - `identify.py`: per-run appearances for every potion and scroll ("murky potion", 'scroll labelled "ZUNVEX"');
+    healing is known from the start; using/throwing identifies the whole kind; blind reads are risky
+    (unknown confusion with no foe confuses you, unknown fireball goes off on the spot); morgue lists discoveries
+  - `throwing.py` + `t` key (curses and text mode): projectiles stop at the first creature; potions shatter
+    (new **liquid fire** burst and **venom** splash potions, healing/speed affect the target); daggers +3 thrown
+  - `locks.py`: locked rooms (treasury or loot-filled storeroom) behind red `+` doors that keep the level
+    connected; an iron key is always placed reachable; or force the door (loud, chance grows with power)
+  - `lighting.py` + FOV: wall braziers light their surroundings; lit cells are visible from 20 tiles away
+    even with a dying torch, and monsters standing in the light can't see you lurking in the dark
+  - `knockback.py`: new **warhammer** shoves foes back — into lava to their doom (fire creatures climb out,
+    the boss is immovable); cave trolls can hurl you to the lava's edge
+  - Kobolds may carry a healing potion, drink it when hurt and drop it when killed
+  - Tiles get separate save codes (locked doors share the `+` glyph); saves store identification state,
+    old saves load with everything identified
+- Phase 7: `bot.py` balance bot (explores frontiers with cached BFS, fights, zaps, drinks, eats, unlocks or
+  forces doors, hunts the Guardian; parallel `run_many`, Markdown `report`). First tuning pass from its data
+  (5% → 53% bot wins over 200 seeds): imps kite less and burn less, fewer monster groups, steeper XP curve,
+  Ember Guardian 150 HP / 9 power, fewer healing potions — written up in `BALANCE.md`
+- Tests: 173 → 224 (new `tests/test_features.py`); real pty curses smoke test; text-mode smoke test
+- mini/puzzles: Lights Out (GF(2) elimination), Mastermind (Knuth minimax), peg solitaire (symmetry-pruned
+  DFS), cryptarithm solver, magic squares of any order, water jugs (BFS)

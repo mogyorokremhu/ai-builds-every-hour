@@ -30,8 +30,8 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Equipment slots: weapon, armor, ring; equip/unequip
 - [x] Loot tables by depth
 - [x] Look mode (`x`): move a cursor and describe what's there
-- [ ] Throwing items / potions shatter on impact
-- [ ] Unidentified potions & scrolls with random names per run
+- [x] Throwing items (`t`) / potions shatter on impact (liquid fire, venom, healing, speed)
+- [x] Unidentified potions & scrolls with random names per run (risky blind reads, morgue discoveries)
 - [ ] Item weight/encumbrance or pack limit warnings
 
 ## Phase 4 — Smarter monsters ✅ (core)
@@ -45,7 +45,8 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Potion of speed; healing cures poison; death cause tracked
 - [x] Sleeping monsters + noise/stealth (monsters wake when you're loud or close; sneak attacks)
 - [ ] Spell projectiles animated in the curses UI
-- [ ] Monsters pick up / use items (kobolds drink potions)
+- [x] Monsters use items: kobolds may carry a healing potion, drink it when hurt, drop it on death
+- [ ] Monsters pick up items lying on the floor
 
 ## Phase 5 — Progression ✅ (core)
 - [x] XP levels with stat choice on level-up (Vitality / Might / Guard + auto HP)
@@ -56,9 +57,9 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [x] Traps (hidden, passive detection, search command, 5 kinds, confirm before stepping on known ones)
 - [x] New monsters: myconid (confusing spores), magma hound (fire pack)
 - [x] Openable/closable doors (bump to open, `c` to close; monsters open them; closed doors block sight)
-- [ ] The occasional locked door (key or forcing it open)
-- [ ] Lit rooms / wall braziers that don't need your torch
-- [ ] Knockback into lava (and monsters avoiding lava when fleeing)
+- [x] The occasional locked door (iron key always reachable, or force it: loud, power-based)
+- [x] Lit rooms / wall braziers that don't need your torch (see lit areas from afar; stay hidden in the dark)
+- [x] Knockback into lava (warhammer; trolls shove you; fire creatures climb out; lava is never walkable so fleeing monsters avoid it)
 
 ## Phase 6 — Endgame & persistence ✅
 - [x] Boss at depth 10: the Ember Guardian in a lava-ringed arena (3 phases: magma burst, summons, fire nova, enrage)
@@ -72,6 +73,8 @@ Target: ~2–3 days of hourly work. Each run should tick off several items.
 - [ ] Optional "keep save on load" wizard/explore mode flag
 
 ## Phase 7 — Polish
-- [ ] Balance pass with an automated bot that plays 1000 runs and reports stats
+- [x] New items: potions of liquid fire & venom, warhammer, iron keys; dagger throw bonus
+- [x] Balance bot (`python -m emberdeep.bot N report.md`, parallel) + first balance pass from a 200-run report (BALANCE.md)
+- [ ] Full 1000-run sweep after the remaining features land; keep the bot win rate in a target band
 - [ ] Full docs + gameplay GIF/ASCII screenshots
 - [ ] Final cleanup, type-check, 80%+ test coverage
