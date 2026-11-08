@@ -1,5 +1,6 @@
-// Browser entry point: a hot-seat battle on a generated map — select, move, attack, end turn —
-// plus zoom/pan, minimap, roster, combat log, damage previews, undo and saves.
+// Browser entry point: a battle on a generated map against the AI or hot-seat — select, move,
+// attack, recruit, end turn — plus zoom/pan, minimap, roster, economy panel, day/night strip,
+// combat log, damage previews, undo and saves.
 import { Game, SIDES } from "./game.js";
 import { drawMap, drawUnits, fitLayout, hexAtPixel, hexCenter } from "./render.js";
 import { routeTo } from "./movement.js";
@@ -8,7 +9,10 @@ import { terrainCounts } from "./mapgen.js";
 import { seedFrom } from "./rng.js";
 import { key } from "./hex.js";
 import { camera, view, zoomAt, panBy, visibleRect, centerOn, clamp } from "./camera.js";
-import { describeUnit, unitType, maxHp, maxMp } from "./units.js";
+import { describeUnit, unitType, maxHp, maxMp, RECRUITABLE, UNIT_TYPES } from "./units.js";
+import { AIPlayer, DIFFICULTY } from "./ai.js";
+import { ownedVillages, income } from "./economy.js";
+import { upcoming } from "./timeofday.js";
 import { moveAnimation, lungeAnimation, animatedPosition, finished } from "./animate.js";
 import { serialize, deserialize, saveToSlot, loadFromSlot } from "./save.js";
 
@@ -25,7 +29,9 @@ const symInput = $("sym");
 const state = {
   game: null, cam: null, viewport: { width: 0, height: 0 }, miniLayout: null,
   selected: null, area: null, hover: null, anims: [], busy: false,
+  ai: { red: null, blue: null }, // AIPlayer per side, null = human
 };
+const AI_PREF = "hexfall.ai";
 const drag = { active: false, moved: false, x: 0, y: 0 };
 
 function storage() {
@@ -48,6 +54,7 @@ function newBattle(seedText) {
 
 function setGame(game) {
   state.game = game;
+  setupAi();
   state.selected = state.area = null;
   state.cam = null;
   state.anims = [];
@@ -58,6 +65,7 @@ function setGame(game) {
     .map(([id, n]) => `<span class="sw" style="background:${TERRAIN[id].color}"></span>${TERRAIN[id].name} ${n}`)
     .join(" · ");
   refresh();
+  runAi();
 }
 
 function sizeCanvas(cv, c, w, h) {
@@ -95,7 +103,10 @@ function draw(now = performance.now()) {
   const g = state.game;
   const layout = view(state.cam);
   const sel = selectedUnit();
-  const overlay = { spawns: g.turn === 1 && g.active === 0 ? g.spawns : [], hover: state.hover };
+  const overlay = {
+    spawns: g.turn === 1 && g.active === 0 ? g.spawns : [], hover: state.hover, tint: g.timeOfDay().tint,
+    recruit: state.recruitMode && !isAiTurn() ? g.recruitHexes() : [],
+  };
   if (sel && state.area && !state.busy) {
     overlay.reach = new Map([...state.area].filter(([, n]) => n.canStop));
     overlay.selected = sel;
@@ -155,10 +166,15 @@ function sideName(id) {
 function refresh() {
   const g = state.game;
   const turnEl = $("turn");
-  turnEl.textContent = g.winner ? `${sideName(g.winner)} wins!` : `Turn ${g.turn} — ${sideName(g.side)} to move`;
+  const tod = g.timeOfDay();
+  turnEl.textContent = g.winner === "draw" ? "Draw!" : g.winner ? `${sideName(g.winner)} wins!`
+    : `Turn ${g.turn}${g.rules.turnLimit ? `/${g.rules.turnLimit}` : ""} · ${tod.icon} ${tod.name} — ${sideName(g.side)}${isAiTurn() ? " (AI)" : ""} to move`;
   turnEl.className = `turn ${g.winner ?? g.side}`;
-  $("undo").disabled = !g.canUndo() || state.busy;
-  $("endturn").disabled = !!g.winner || state.busy;
+  $("undo").disabled = !g.canUndo() || state.busy || isAiTurn();
+  $("endturn").disabled = !!g.winner || state.busy || isAiTurn();
+  renderEconomy();
+  renderRecruit();
+  renderDayNight();
   renderRoster();
   renderLog();
   renderUnitInfo();
@@ -173,7 +189,8 @@ function renderRoster() {
     const head = document.createElement("li");
     head.className = `rhead ${side.id}`;
     const n = g.unitsOf(side.id).length;
-    head.textContent = `${side.name} — ${n} unit${n === 1 ? "" : "s"}`;
+    const v = ownedVillages(g, side.id).length;
+    head.textContent = `${side.name}${state.ai[side.id] ? " (AI)" : ""} — ${n} unit${n === 1 ? "" : "s"} · ⚑ ${v}`;
     ul.append(head);
     for (const u of g.unitsOf(side.id)) {
       const li = document.createElement("li");
@@ -187,6 +204,45 @@ function renderRoster() {
       ul.append(li);
     }
   }
+}
+
+function renderEconomy() {
+  const g = state.game;
+  const target = g.holdTarget();
+  $("economy").innerHTML = SIDES.map((side, i) => {
+    const v = ownedVillages(g, side.id).length;
+    const hold = target && g.hold[i] ? ` · holding ${g.hold[i]}/${g.rules.holdTurns}` : "";
+    return `<div class="eco ${side.id}${g.side === side.id ? " now" : ""}"><b>${side.name}</b>
+      <span title="gold">🪙 ${g.gold[i]}</span> <span title="income per turn">+${income(g, side.id)}</span>
+      <span title="villages">⚑ ${v}/${g.villages.length}</span>${hold}</div>`;
+  }).join("") + (target ? `<p class="goal">Win: rout the enemy, hold ${target} villages for ${g.rules.holdTurns} turns,
+    or lead on points after turn ${g.rules.turnLimit}.</p>` : "");
+}
+
+function renderRecruit() {
+  const g = state.game;
+  const el = $("recruit");
+  el.innerHTML = "";
+  const human = !isAiTurn() && !g.winner;
+  for (const type of RECRUITABLE) {
+    const t = UNIT_TYPES[type];
+    const b = document.createElement("button");
+    const problem = human ? g.recruitProblem(type) : "not your turn";
+    b.className = "rbtn";
+    b.disabled = !!problem || state.busy;
+    b.title = `${t.name} (${t.alignment}) — ${t.blurb}${problem ? ` [${problem}]` : ""}`;
+    b.innerHTML = `<b>${t.glyph}</b> ${t.name} <small>${t.cost}g</small>`;
+    b.addEventListener("click", () => doRecruit(type));
+    b.addEventListener("mouseenter", () => { state.recruitMode = true; draw(); });
+    b.addEventListener("mouseleave", () => { state.recruitMode = false; draw(); });
+    el.append(b);
+  }
+}
+
+function renderDayNight() {
+  const g = state.game;
+  $("daynight").innerHTML = upcoming(g.turn, 6).map((p, i) =>
+    `<span class="tod${i === 0 ? " now" : ""}" title="Turn ${p.turn}: ${p.name} — lawful ${p.lawful >= 0 ? "+" : ""}${p.lawful}%, chaotic ${p.lawful <= 0 ? "+" : ""}${-p.lawful}%">${p.icon}</span>`).join("");
 }
 
 function renderLog() {
@@ -218,7 +274,90 @@ function focusUnit(u) {
   refresh();
 }
 
+// ---------------------------------------------------------------- AI
+
+function readAiPref() {
+  try {
+    return JSON.parse(storage()?.getItem(AI_PREF) ?? "null") ?? { red: "human", blue: "normal" };
+  } catch {
+    return { red: "human", blue: "normal" };
+  }
+}
+
+function setupAi() {
+  const pref = { red: $("redai").value, blue: $("blueai").value };
+  for (const side of SIDES) {
+    const d = pref[side.id];
+    state.ai[side.id] = DIFFICULTY[d] ? new AIPlayer(side.id, { difficulty: d, seed: state.game.seed + (side.id === "red" ? 11 : 23) }) : null;
+  }
+  try {
+    storage()?.setItem(AI_PREF, JSON.stringify(pref));
+  } catch {
+    // preferences are optional
+  }
+}
+
+function isAiTurn() {
+  const g = state.game;
+  return !!g && !g.winner && !!state.ai[g.side];
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** Let the AI play the active side's turn with animations, then hand back control. */
+async function runAi() {
+  const g = state.game;
+  if (state.aiRunning || !isAiTurn()) return;
+  state.aiRunning = true;
+  const game = g;
+  try {
+    for (let guard = 0; guard < 300 && state.game === game && isAiTurn(); guard++) {
+      const player = state.ai[g.side];
+      const a = player.nextAction(g);
+      if (a.type === "end") {
+        g.endTurn();
+        select(null);
+        autosave();
+        refresh();
+        if (!isAiTurn()) break;
+        await sleep(250);
+        continue;
+      }
+      const u = a.unitId != null ? g.unitById(a.unitId) : null;
+      if (a.type === "move") {
+        const route = routeTo(g.area(u), a.to);
+        if (route) await animate([moveAnimation(u.id, route, performance.now())]);
+      } else if (a.type === "attack") {
+        const t = g.unitById(a.targetId);
+        if (key(a.from) !== key(u)) {
+          const route = routeTo(g.area(u), a.from);
+          if (route) await animate([moveAnimation(u.id, route, performance.now())]);
+        }
+        await animate([lungeAnimation(u.id, a.from, t, performance.now())]);
+      }
+      if (state.game !== game) break;
+      player.play(g, a);
+      refresh();
+      if (a.type !== "hold") await sleep(a.type === "recruit" ? 200 : 120);
+    }
+  } finally {
+    state.aiRunning = false;
+    autosave();
+    refresh();
+  }
+}
+
 // ---------------------------------------------------------------- actions
+
+function doRecruit(type) {
+  const g = state.game;
+  if (state.busy || isAiTurn() || g.recruitProblem(type)) return;
+  const u = g.recruit(type);
+  select(null);
+  state.selected = u.id;
+  autosave();
+  refresh();
+}
 
 function select(u) {
   state.selected = u ? u.id : null;
@@ -262,7 +401,7 @@ async function doAttack(u, target) {
 
 function onClick(h) {
   const g = state.game;
-  if (state.busy) return;
+  if (state.busy || isAiTurn()) return;
   hideTip();
   const clicked = g.unitAt(h);
   const sel = selectedUnit();
@@ -285,15 +424,16 @@ function onClick(h) {
 }
 
 function endTurn() {
-  if (state.busy || state.game.winner) return;
+  if (state.busy || state.game.winner || isAiTurn()) return;
   state.game.endTurn();
   select(null);
   autosave();
   refresh();
+  runAi();
 }
 
 function undo() {
-  if (state.busy || !state.game.undo()) return;
+  if (state.busy || isAiTurn() || !state.game.undo()) return;
   const u = selectedUnit();
   if (u) select(u);
   refresh();
@@ -473,6 +613,13 @@ $("import").addEventListener("change", async (ev) => {
   ev.target.value = "";
 });
 symInput.addEventListener("change", () => newBattle(seedInput.value));
+for (const id of ["redai", "blueai"]) {
+  $(id).addEventListener("change", () => {
+    setupAi();
+    refresh();
+    runAi();
+  });
+}
 window.addEventListener("resize", resize);
 
 function say(text) {
@@ -481,6 +628,9 @@ function say(text) {
 
 // Resume the autosave if the URL has no explicit seed, otherwise start that battle.
 (function boot() {
+  const pref = readAiPref();
+  $("redai").value = pref.red ?? "human";
+  $("blueai").value = pref.blue ?? "normal";
   const hash = decodeURIComponent(location.hash.slice(1));
   const s = storage();
   let resumed = null;
@@ -502,4 +652,4 @@ function say(text) {
 })();
 
 // Handle for debugging in the console and for the browser smoke test (tests/browser-smoke.mjs).
-window.hexfall = { state, view: () => view(state.cam), hexCenter };
+window.hexfall = { state, view: () => view(state.cam), hexCenter, runAi, setupAi };
