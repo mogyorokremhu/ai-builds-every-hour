@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>⬡ Hexfall</h1>
-    <p class="tag">hex-grid tactics · hot-seat battle (phase 3)</p>
+    <p class="tag">hex-grid tactics · villages, recruits, day &amp; night, AI opponent</p>
     <p id="turn" class="turn red" aria-live="polite"></p>
   </header>
   <section class="controls">
@@ -17,6 +17,8 @@
     <button id="newgame">New battle</button>
     <button id="random">Random map</button>
     <label><input id="sym" type="checkbox" style="width:auto"> Symmetric</label>
+    <label>Red <select id="redai"><option value="human">Human</option><option value="easy">AI easy</option><option value="normal">AI normal</option><option value="hard">AI hard</option></select></label>
+    <label>Blue <select id="blueai"><option value="human">Human</option><option value="easy">AI easy</option><option value="normal" selected>AI normal</option><option value="hard">AI hard</option></select></label>
     <span class="sep"></span>
     <button id="undo" title="Undo last move (U)">Undo</button>
     <button id="endturn" class="primary" title="End turn (E)">End turn</button>
@@ -34,6 +36,10 @@
       <div id="tip" class="tip" hidden></div>
     </main>
     <aside>
+      <div id="daynight" class="daynight" aria-label="Day/night cycle, next six turns"></div>
+      <div id="economy" class="economy"></div>
+      <h2>Recruit at your keep</h2>
+      <div id="recruit" class="recruit"></div>
       <h2>Armies</h2>
       <ul id="roster" class="roster"></ul>
       <h2>Battle log</h2>
@@ -46,7 +52,9 @@
   <footer>Click one of your units, then a yellow hex to move or a red-ringed enemy to attack (it steps
     next to melee targets by itself). Hover an enemy for the damage forecast. Keys: <kbd>E</kbd> end turn,
     <kbd>U</kbd> undo move, <kbd>N</kbd>/<kbd>Tab</kbd> next unit, <kbd>Esc</kbd> deselect. Wheel zooms, drag pans.
-    Entering a hex next to an enemy (its zone of control) ends your move.</footer>
+    Entering a hex next to an enemy (its zone of control) ends your move. Moving onto a village captures it
+    (+2 gold per turn); recruit on the green castle hexes around your keep. Lawful units fight 25% better by day,
+    chaotic ones by night.</footer>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

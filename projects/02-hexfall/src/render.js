@@ -87,6 +87,28 @@ function decorate(ctx, t, c, s) {
       ctx.lineTo(c.x, c.y - 0.42 * s);
       ctx.lineTo(c.x + 0.4 * s, c.y - 0.05 * s);
       ctx.fill();
+      if (t.owner) drawFlag(ctx, c, s, SIDE_COLORS[t.owner] ?? "#888");
+      break;
+    }
+    case "keep":
+    case "castle": {
+      // crenellated wall ring; the keep gets a tower
+      ctx.strokeStyle = "#5d564d";
+      ctx.lineWidth = Math.max(1, s / 10);
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, s * 0.55, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = "#5d564d";
+      for (let i = 0; i < 6; i++) {
+        const a = (Math.PI / 3) * i + Math.PI / 6;
+        ctx.fillRect(c.x + Math.cos(a) * s * 0.55 - s * 0.07, c.y + Math.sin(a) * s * 0.55 - s * 0.07, s * 0.14, s * 0.14);
+      }
+      if (t.terrain === "keep") {
+        ctx.fillStyle = "#4a443d";
+        ctx.fillRect(c.x - s * 0.18, c.y - s * 0.32, s * 0.36, s * 0.5);
+        ctx.fillRect(c.x - s * 0.24, c.y - s * 0.4, s * 0.12, s * 0.1);
+        ctx.fillRect(c.x + s * 0.12, c.y - s * 0.4, s * 0.12, s * 0.1);
+      }
       break;
     }
     case "swamp": {
@@ -131,12 +153,34 @@ function decorate(ctx, t, c, s) {
   ctx.restore();
 }
 
+/** A little side-coloured flag on a pole (village ownership). */
+export function drawFlag(ctx, c, s, color) {
+  const x = c.x + 0.42 * s, top = c.y - 0.62 * s;
+  ctx.strokeStyle = "#2a2118";
+  ctx.lineWidth = Math.max(1, s / 16);
+  ctx.beginPath();
+  ctx.moveTo(x, top);
+  ctx.lineTo(x, c.y + 0.1 * s);
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x, top);
+  ctx.lineTo(x + 0.34 * s, top + 0.11 * s);
+  ctx.lineTo(x, top + 0.22 * s);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,0.8)";
+  ctx.lineWidth = Math.max(0.5, s / 30);
+  ctx.stroke();
+}
+
 /**
  * Draw the whole battlefield.
  * @param {CanvasRenderingContext2D} ctx
  * @param {import("./map.js").HexMap} map
  * @param {object} layout from fitLayout
- * @param {object} [overlay] {reach: Map, path: Hex[], hover: Hex, spawns: Hex[][], selected: Hex}
+ * @param {object} [overlay] {reach: Map, path: Hex[], hover: Hex, spawns: Hex[][], selected: Hex,
+ *   tint: css colour laid over the terrain (time of day), recruit: Hex[] free recruit hexes}
  */
 export function drawMap(ctx, map, layout, overlay = {}) {
   const s = layout.size;
@@ -157,6 +201,11 @@ export function drawMap(ctx, map, layout, overlay = {}) {
     }
     decorate(ctx, t, c, s);
   }
+  if (overlay.tint) {
+    ctx.fillStyle = overlay.tint;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }
+  for (const h of overlay.recruit ?? []) outline(ctx, hexCenter(h, layout), s, "#7ddc6a", 2, [2, 3]);
   const zoneColors = [SIDE_COLORS.red, SIDE_COLORS.blue];
   (overlay.spawns ?? []).forEach((zone, i) => {
     for (const h of zone) outline(ctx, hexCenter(h, layout), s, zoneColors[i], 2, [4, 3]);
