@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from . import fx
 from .geometry import chebyshev
 from .targeting import blast_area, projectile_path
 
@@ -67,6 +68,7 @@ def throw(game: "Game", item: "Item", target: tuple[int, int]) -> bool:
     one = player.inventory.take_one(item)
     path, victim = flight(game, target)
     land = path[-1]
+    fx.emit(game, "bolt", path, one.glyph, one.color)
     game.noise = NOISE["item"]
     if one.kind == "potion":
         game.say(f"The {shown} shatters!", C_MAGIC)
@@ -95,7 +97,10 @@ def _shatter(game: "Game", potion: "Item", at: tuple[int, int], victim: "Entity 
 
     effect = potion.effect
     if effect in ("firebomb", "venom"):
-        for cell in blast_area(game.gmap, at, potion.radius):
+        area = blast_area(game.gmap, at, potion.radius)
+        fx.emit(game, "blast", [at] + [c for c in area if c != at], "*",
+                "bright_red" if effect == "firebomb" else "bright_green")
+        for cell in area:
             who = game.player if cell == game.player.pos else game.monster_at(*cell)
             if who is None:
                 continue

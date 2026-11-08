@@ -251,6 +251,10 @@ def take_turn(game: "Game", m: "Entity") -> None:
     if sees:
         m.memory = game.player.pos
     elif m.memory is None:
+        if "scavenger" in m.tags:
+            from .scavenge import scavenge
+
+            scavenge(game, m)  # nothing to hunt: go after loot instead
         return  # dormant: nothing to hunt
     BEHAVIOURS.get(m.ai or "chase", act_chase)(game, m, sees)
 
@@ -263,6 +267,12 @@ def describe_ai(m: "Entity") -> str:
         from .boss import describe
 
         return describe(m)
+    if "scavenger" in m.tags:
+        from .scavenge import describe
+
+        loot = describe(m)
+        if loot:
+            return loot
     if m.ai == "coward":
         return "It looks skittish." if not m.ai_state.get("fleeing") else "It is fleeing!"
     if m.ai == "caster":

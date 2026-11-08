@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from . import encumbrance
 from .resources import TORCH_MAX
 from .status import STATUS_INFO
 
@@ -57,8 +58,14 @@ def sidebar(game: "Game", width: int = 22, max_monsters: int = 8) -> list[Line]:
         (f"Torch   {res.torch_label}", torch_color(res.torch)),
         (bar(res.torch, TORCH_MAX, width - 2, "▮", "▯"), torch_color(res.torch)),
         (f"Food    {res.hunger_label}", res.hunger_color),
+        (f"Load    {encumbrance.load_label(p)}", encumbrance.load_color(p)),
+        (f"Pack    {len(p.inventory)}/{p.inventory.capacity}",
+         "bright_red" if p.inventory.full else
+         "bright_yellow" if p.inventory.capacity - len(p.inventory) <= encumbrance.SLOT_WARNING else "white"),
         (f"Turn    {game.turn}", "white"),
     ]
+    if game.mode == "explore":
+        lines.insert(2, ("[explore mode]", "bright_magenta"))
     if game.pending_levels:
         lines.insert(7, (f"** {game.pending_levels} level-up(s)! **", "bright_green"))
     for name in p.statuses.names():

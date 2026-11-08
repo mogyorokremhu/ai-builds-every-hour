@@ -1,6 +1,7 @@
 """Plain-text renderer: turns a Game into a printable frame (used by text mode and tests)."""
 from __future__ import annotations
 
+from . import encumbrance
 from .game import Game
 from .hud import bar
 
@@ -28,7 +29,7 @@ def render(game: Game, log_lines: int = 5) -> str:
     status = (f"HP {f.hp}/{f.max_hp} [{bar(f.hp, f.max_hp, 10, '#', '-')}]  Pow {f.power} Def {f.defense}  "
               f"Depth {game.depth}  Lv {game.level} XP {game.xp}  Turn {game.turn}\n"
               f"Torch {game.resources.torch_label}  Food {game.resources.hunger_label}  "
-              f"[{game.theme.name}]")
+              f"Load {encumbrance.load_label(game.player)}  [{game.theme.name}]")
     if game.pending_levels:
         status += "  ** LEVEL UP: +v vitality, +m might, +g guard **"
     effects = game.player.statuses.labels()
@@ -45,5 +46,7 @@ def render_inventory(game: Game) -> str:
     out = ["Inventory:"]
     for letter, it in inv.listing():
         worn = " (equipped)" if eq.is_equipped(it) else ""
-        out.append(f"  {letter}) {it.display_name}{worn}  {it.describe()}")
+        out.append(f"  {letter}) {it.display_name}{worn}  {it.describe()}  [wt {encumbrance.item_weight(it)}]")
+    p = game.player
+    out.append(f"Slots {len(inv)}/{inv.capacity}  Load {encumbrance.load_label(p)}")
     return "\n".join(out)
