@@ -65,7 +65,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [ ] Fog-aware spectating: "Show all" toggle for hot-seat review (logic in `spectate.js` ✅, UI hookup queued)
 - [x] AI scouting under fog (`scouting.js`: frontier hexes become AI goals while no enemy is seen)
 - [x] Floating damage/heal numbers per victim (`effects.js`)
-- [ ] Ability animations (arrow rain, fireball burst)
+- [ ] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hookup into main.js queued
 - [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
 
 ## Phase 7 — Campaign & presentation
@@ -75,7 +75,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Animations: attack lunges, floating damage/heal numbers, death fades (`effects.js`)
 - [ ] Colour themes: default / high contrast / colour-blind safe (`palette.js` with WCAG contrast checks ✅; Theme select + making `SIDE_COLORS` mutable queued)
 - [ ] Keyboard controls (E/U/N/Tab/Esc done) + remaining accessibility: focus trap in menu dialog
-- [ ] Mobile/touch support
+- [ ] Mobile/touch support (`touch.js` gesture recogniser: tap / pan / pinch / long-press ✅ with tests; hookup into main.js queued)
 
 ## Phase 8 — Polish
 - [ ] Browser smoke test in CI-like script form (`tests/browser-smoke.mjs` exists; add screenshots to docs)
