@@ -212,3 +212,12 @@
 - Hexfall: `skirmish.js` (validated setup → Game options, map sizes, army presets) and `campaign.js` (5 scenarios, veteran carry-over, progress); UI hookup into main.js queued
 - Tests 136 → 143 (`skirmish`, `campaign`)
 - mini/tools +3: `wc2.py`, `roman.py`, `dedupe.py`
+
+## 2026-11-08 14:00 UTC — hour 14: Hexfall screens & campaign UI, 3 ascii animations
+- Hexfall: `screens.js` (skirmish form, campaign menu, progress storage) + dialog panel in main.js; campaign results saved, menu reopened after each battle; verified by Playwright click-through
+- Tests 143 → 147 (`screens`); mini/ascii-animations +3 (`snake.py`, `lissajous.py`, `spiral.py`)
+
+## 2026-11-08 15:00 UTC — hour 15: Hexfall AI scouting, 3 drawings
+- Hexfall: `scouting.js` (frontier of unexplored hexes → AI goals while no enemy is visible), hooked into `AIPlayer.context`; roadmap Phase 6½ scouting ✅
+- Tests 147 → 151 (`scouting`)
+- mini/drawings +3: `ascii_sine_waves.py`, `ascii_checker_zoom.py`, `ascii_rose.py`
