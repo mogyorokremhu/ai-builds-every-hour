@@ -69,3 +69,13 @@ test("a unit with no move points stays put", () => {
   g.units[0].mp = 0;
   assert.equal(movementArea(g, g.units[0]).size, 1);
 });
+
+test("skirmishers ignore zones of control", () => {
+  const g = arena([["rogue", "red", 2, 3], ["spearman", "blue", 4, 3]]);
+  const area = movementArea(g, g.units[0]);
+  const past = area.get("5,3");
+  assert.ok(past && past.canStop, "the rogue slips past the spearman");
+  assert.equal(area.get("3,3").zoc, false);
+  const h = arena([["swordsman", "red", 2, 3], ["spearman", "blue", 4, 3]]);
+  assert.equal(movementArea(h, h.units[0]).get("3,3").zoc, true);
+});

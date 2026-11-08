@@ -14,6 +14,8 @@ page.on("pageerror", (e) => errors.push(e.message));
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
 await page.goto(url + "#7");
 await page.waitForFunction(() => window.hexfall?.state.game);
+// hot-seat for the scripted part (blue defaults to the AI)
+await page.selectOption("#blueai", "human");
 
 async function clickHex(h) {
   const p = await page.evaluate(([q, r]) => {
@@ -74,6 +76,19 @@ for (let turn = 0; turn < 14 && !(await game()).winner; turn++) {
   }
   await page.keyboard.press("e");
 }
+// recruiting: whoever is to move recruits the cheapest affordable unit via the panel
+const before = (await game()).units.length;
+const enabled = await page.$$("#recruit button:not([disabled])");
+if (enabled.length) {
+  await enabled[0].click();
+  if ((await game()).units.length !== before + 1) throw new Error("recruit button did not add a unit");
+}
+// hand blue to the AI and let it play a turn by itself
+await page.selectOption("#blueai", "normal");
+if ((await game()).active === 0 && !(await game()).winner) await page.keyboard.press("e");
+await page.waitForFunction(() => !window.hexfall.state.aiRunning && (window.hexfall.state.game.side === "red" || window.hexfall.state.game.winner), null, { timeout: 30000 });
+const aiTurn = (await game()).log.slice(-60).some((l) => l.side === "blue");
+if (!aiTurn) throw new Error("the AI did not play blue's turn");
 g = await game();
 const attacks = g.log.filter((l) => /hits|shoots|blasts/.test(l.text)).length;
 await page.click("#save");

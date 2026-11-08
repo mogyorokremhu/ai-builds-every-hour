@@ -32,30 +32,35 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Experience and promotions (veteran: type perk; elite: +1/+1; +15% HP and full heal per level)
 - [x] Combat log panel
 
-## Phase 4 — Economy & objectives
-- [ ] Village ownership drawn on the map (side-coloured flags) and counted in the roster header
-- [ ] Capture villages (move onto them); income per village per turn
-- [ ] Recruit units at your keep with gold
+## Phase 4 — Economy & objectives ✅
+- [x] Village ownership drawn on the map (side-coloured flags) and counted in the roster header
+- [x] Capture villages (move onto them, ends the move, undoable); income 2 + 2 per village per turn
+- [x] Recruit units at your keep with gold (generated keep + castle hexes; blocked while an enemy holds the keep)
 - [x] Healing in villages (+8); healer adjacency heal (+4, medic perk +8) at the start of your turn
-- [ ] Victory conditions: rout the enemy (done), hold villages for N turns, or turn limit with score
-- [ ] Day/night cycle affecting lawful/chaotic units
+- [x] Victory conditions: rout (no units and no way to recruit), hold ⅔ of villages for 4 turns, or turn limit with score (draws possible)
+- [x] Day/night cycle affecting lawful/chaotic units (6 phases, ±25%, map tint, forecast-aware)
+- [x] New chaotic unit: Rogue (skirmisher — ignores zones of control)
+- [x] Economy panel (gold, income, villages, hold progress), recruit panel, day/night strip; save format v2 (v1 still loads)
 
-## Phase 5 — AI opponent
-- [ ] Utility AI: score every move+attack option (damage dealt, risk, terrain, village value)
-- [ ] Target focus (finish wounded units), retreat to heal when weak
-- [ ] Village grabbing and recruitment strategy
-- [ ] Difficulty levels; AI vs AI self-play harness in node for balance testing
-- [ ] Influence maps (threat/safety) shared across AI decisions
+## Phase 5 — AI opponent ✅
+- [x] Utility AI: score every move+attack option (damage dealt, risk, terrain, village value)
+- [x] Target focus (finish wounded units), retreat to heal when weak
+- [x] Village grabbing and recruitment strategy (counter-picks, time-of-day aware, saves gold)
+- [x] Difficulty levels; AI vs AI self-play harness in node for balance testing (`tools/selfplay.mjs`)
+- [x] Influence maps (threat/control) and terrain-aware distance fields shared across AI decisions
+- [x] AI plays in the browser with animations; either side can be Human or AI (spectator mode)
+- [ ] AI endgame awareness: play for score near the turn limit, contest enemy holds harder
+- [ ] AI keeps a reserve of units guarding its villages against raiders
 
 ## Phase 6 — Abilities & variety
 - [ ] Unit abilities: charge (cavalry), volley (archers), fireball (mage, area), heal, shield wall
 - [ ] Status effects: slowed, poisoned, rallied
 - [ ] Fog of war with shadowcast-style hex line of sight
 - [ ] Weather (rain lowers ranged accuracy, fog shortens sight)
-- [ ] More terrain: bridges, castles, ruins
+- [ ] More terrain: ruins, fords, burning fields (bridges ✅, castles/keeps ✅)
 
 ## Phase 7 — Campaign & presentation
-- [ ] Skirmish setup screen (map size, seed, armies, AI level)
+- [ ] Skirmish setup screen (map size, seed, armies, starting gold, turn limit; AI level selectors done)
 - [ ] Short campaign of 5 scenarios with carried-over veterans
 - [ ] WebAudio sound effects synthesised in code (no asset files)
 - [ ] Animations: attack lunges (done), damage numbers, death fades
