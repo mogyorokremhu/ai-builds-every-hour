@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import random
 
-from . import ai, boss, knockback, levelgen, lighting, locks, loot, throwing, traps, vaults
+from . import ai, boss, encumbrance, fx, knockback, levelgen, lighting, locks, loot, scavenge, throwing, traps, vaults
 from .combat import attack
 from .entities import MONSTER_TEMPLATES, Entity, make_monster, make_player
 from .fov import compute_fov
@@ -17,6 +17,7 @@ from .status import STATUS_INFO
 from .targeting import blast_area, projectile_path
 from .themes import Theme, theme_for_depth
 from .tiles import DOOR, OPEN_DOOR
+from .timeline import Timeline
 
 MAP_W, MAP_H = 70, 24
 FOV_RADIUS = 8           # radius with a bright torch (see resources.TORCH_STAGES)
@@ -64,6 +65,9 @@ class Game:
         self.generator = "rooms"
         self.noise = 0
         self._trap_confirm: tuple[int, int] | None = None
+        self.timeline = Timeline()
+        self.fx = fx.new_queue()
+        self.burden = encumbrance.UNBURDENED
         self.new_level()
         self.say("You descend into Emberdeep. Find the stairs (>).", C_MAGIC)
 
@@ -84,6 +88,7 @@ class Game:
         self.max_depth = max(self.max_depth, self.depth)
         old_theme = self.theme
         self.theme = theme_for_depth(self.depth)
+        self.timeline.add(self.turn, self.depth, "depth", f"entered depth {self.depth}, {self.theme.name}")
         final = self.depth >= boss.BOSS_DEPTH
         if final:
             layout, sanctum = boss.build_arena(MAP_W, MAP_H, self.rng)
@@ -344,6 +349,7 @@ class Game:
     def gain_xp(self, amount: int) -> None:
         gained = self.progression.gain(amount)
         if gained:
+            self.timeline.add(self.turn, self.depth, "level", f"reached experience level {self.progression.level}")
             self.say(f"Welcome to level {self.progression.level}! Choose a boon.", C_GOOD)
 
     @property
@@ -380,7 +386,15 @@ class Game:
         monster.asleep = False
         if monster.ai_state.pop("potion", False):
             self.place_item(make_item("healing potion"), monster.x, monster.y)
+        if monster.ai_state.get("weapon") or monster.ai_state.get("sack"):
+            if scavenge.drop_all(self, monster) and self.gmap.visible[monster.y][monster.x]:
+                self.say("Its hoard spills onto the floor.", C_ITEM)
         self.kills += 1
+        base_name = monster.name[: -len(" corpse")]
+        if is_boss:
+            self.timeline.add(self.turn, self.depth, "boss", f"slew the {base_name}")
+        else:
+            self.timeline.first_kill(self.turn, self.depth, base_name)
         self.gain_xp(monster.xp_value)
         if is_boss:
             monster.tags.discard("boss")
@@ -467,6 +481,9 @@ class Game:
             if not inv.can_add(ent.item):
                 self.say("Your pack is full.", C_BAD)
                 break
+            if not encumbrance.can_lift(self.player, ent.item) and ent.item.kind != "artifact":
+                self.say(f"The {ent.item.shown_name} is too heavy to carry with everything else.", C_BAD)
+                continue
             inv.add(ent.item)
             self.entities.remove(ent)
             stored = next((i for i in inv if i is ent.item), None) or next(
@@ -476,8 +493,13 @@ class Game:
             picked = True
             if ent.item.key == "ember heart":
                 self.victory = True
+                self.timeline.add(self.turn, self.depth, "victory", "took the Ember Heart")
                 self.say("The Ember Heart pulses in your hands. You have conquered Emberdeep!", C_GOOD)
         if picked:
+            warning = encumbrance.slot_warning(inv.capacity - len(inv))
+            if warning is not None:
+                self.say(*warning)
+            self.check_burden()
             self.noise = NOISE["pickup"]
             if not self.victory:  # the run ends the moment you hold the Heart
                 self.end_turn()
@@ -605,6 +627,7 @@ class Game:
             self.say("No enemy is close enough to strike.")
             return False
         m = candidates[0]
+        fx.emit(self, "beam", projectile_path(self.gmap, self.player.pos, m.pos), "~", "bright_yellow")
         self.say("A bolt of lightning leaps from the scroll!", C_MAGIC)
         self.damage_monster(m, item.magnitude, "struck by lightning")
         return True
@@ -623,8 +646,11 @@ class Game:
             return False
         path = projectile_path(self.gmap, self.player.pos, target)
         center = path[-1] if path else self.player.pos
+        area = blast_area(self.gmap, center, item.radius)
+        fx.emit(self, "bolt", path, "*", "bright_red")
+        fx.emit(self, "blast", [center] + [c for c in area if c != center], "*", "bright_red")
         self.say("The scroll erupts into a roaring fireball!", C_MAGIC)
-        for cell in blast_area(self.gmap, center, item.radius):
+        for cell in area:
             if cell == self.player.pos:
                 dealt = self.player.fighter.take_damage(item.magnitude // 2)
                 self.say(f"You are singed by your own fireball for {dealt}!", C_BAD)
@@ -669,6 +695,7 @@ class Game:
         turn, slow ones skip turns.
         """
         self.turn += 1
+        self.check_burden()
         self.tick_statuses(self.player)
         if self.game_over:
             return
@@ -678,7 +705,7 @@ class Game:
         self.update_fov()
         for t in traps.passive_detect(self):
             self.say(f"You notice a {t.name}.", C_ITEM)
-        elapsed = cost * 100 // self.player.effective_speed
+        elapsed = cost * 100 // self.player_speed
         for m in self.monsters:
             if not m.fighter.alive:
                 continue
@@ -692,6 +719,27 @@ class Game:
                 break
         self.noise = 0
         self.update_fov()
+
+    @property
+    def player_speed(self) -> int:
+        """The player's speed after statuses *and* the weight of their pack."""
+        return max(1, int(self.player.effective_speed * encumbrance.speed_multiplier(self.player)))
+
+    def check_burden(self) -> None:
+        """Announce changes in how burdened the player is."""
+        now = encumbrance.state(self.player)
+        if now == encumbrance.OVERLOADED:
+            now = encumbrance.BURDENED  # same penalty; you just can't pick up more
+        msg = encumbrance.transition_message(getattr(self, "burden", encumbrance.UNBURDENED), now)
+        self.burden = now
+        if msg is not None:
+            self.say(*msg)
+
+    def record_end(self) -> None:
+        """Add the closing event (death or victory) to the timeline, once."""
+        if not self.game_over or any(e.kind in ("death", "victory") for e in self.timeline.events):
+            return
+        self.timeline.add(self.turn, self.depth, "death", self.death_cause or "died")
 
     def tick_resources(self) -> None:
         events = self.resources.tick()
@@ -767,6 +815,7 @@ class Game:
         """A monster casts a spell at the player (line of fire already checked)."""
         spell = ai.SPELLS[spell_key]
         p = self.player
+        fx.emit(self, "bolt", projectile_path(self.gmap, m.pos, p.pos), "*", spell["color"])
         self.say(f"The {m.name} {spell['verb']} you!", spell["color"])
         if spell["damage"]:
             dmg = max(1, spell["damage"] + self.rng.randint(-1, 1) - p.fighter.defense // 2)
