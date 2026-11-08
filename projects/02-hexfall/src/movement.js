@@ -2,21 +2,28 @@
 import { key, neighbors } from "./hex.js";
 import { MinHeap } from "./pathfind.js";
 import { hasTrait, maxMp } from "./units.js";
+import { FIRE_COST } from "./terrain.js";
 
 /** Terrains that cost mounted units one extra move point. */
 export const ROUGH_FOR_MOUNTS = new Set(["forest", "swamp"]);
 
-/** Move points `unit` pays to enter a hex of terrain `t` (Infinity = cannot enter). */
-export function stepCost(unit, t) {
+/**
+ * Move points `unit` pays to enter a hex of terrain `t` (Infinity = cannot enter).
+ * Pass the map tile as well to charge the extra cost of a burning hex.
+ */
+export function stepCost(unit, t, tile = null) {
   if (!t || !Number.isFinite(t.cost)) return Infinity;
-  return t.cost + (hasTrait(unit, "mounted") && ROUGH_FOR_MOUNTS.has(t.id) ? 1 : 0);
+  return t.cost + (hasTrait(unit, "mounted") && ROUGH_FOR_MOUNTS.has(t.id) ? 1 : 0) + (tile?.fire > 0 ? FIRE_COST : 0);
 }
 
-/** Set of hex keys adjacent to living enemies of `side` (their zone of control). */
-export function enemyZoc(game, side) {
+/**
+ * Set of hex keys adjacent to living enemies of `side` (their zone of control).
+ * Units whose ids are in `ignore` (enemies hidden by fog of war) are left out.
+ */
+export function enemyZoc(game, side, ignore = null) {
   const zoc = new Set();
   for (const u of game.units) {
-    if (u.side === side || u.hp <= 0) continue;
+    if (u.side === side || u.hp <= 0 || ignore?.has(u.id)) continue;
     for (const n of neighbors(u)) zoc.add(key(n));
   }
   return zoc;
@@ -29,14 +36,16 @@ export function enemyZoc(game, side) {
  *   (skirmishers ignore zones of control);
  * - a unit that has not moved yet may always take one step onto passable ground, even if
  *   the step costs more than its move points.
+ * - units whose ids are in `opts.ignore` are treated as absent (enemies the side cannot see).
  * @param {object} game  anything with `map` and `units`
+ * @param {object} [opts] {ignore: Set<number>}
  * @returns {Map<string, {hex:{q:number,r:number}, cost:number, prev:string|null, zoc:boolean, canStop:boolean}>}
  */
-export function movementArea(game, unit) {
+export function movementArea(game, unit, { ignore = null } = {}) {
   const { map } = game;
   const budget = unit.mp;
-  const occupant = new Map(game.units.filter((u) => u.hp > 0).map((u) => [key(u), u]));
-  const zoc = hasTrait(unit, "skirmisher") ? new Set() : enemyZoc(game, unit.side);
+  const occupant = new Map(game.units.filter((u) => u.hp > 0 && !ignore?.has(u.id)).map((u) => [key(u), u]));
+  const zoc = hasTrait(unit, "skirmisher") ? new Set() : enemyZoc(game, unit.side, ignore);
   const start = { q: unit.q, r: unit.r };
   const best = new Map([[key(start), { hex: start, cost: 0, prev: null, zoc: false, canStop: true }]]);
   if (budget <= 0) return best;
@@ -52,7 +61,7 @@ export function movementArea(game, unit) {
       const nk = key(n);
       const other = occupant.get(nk);
       if (other && other.side !== unit.side) continue;
-      const step = stepCost(unit, map.terrainAt(n));
+      const step = stepCost(unit, map.terrainAt(n), map.get(n));
       if (!Number.isFinite(step)) continue;
       let total = node.cost + step;
       if (total > budget) {

@@ -26,6 +26,8 @@ export const TERRAIN = Object.freeze({
   village: { id: "village", name: "Village", cost: 1, defense: 30, blocksSight: true, height: 1, color: "#c98a4b" },
   castle: { id: "castle", name: "Castle", cost: 1, defense: 35, blocksSight: false, height: 1, color: "#9a9184" },
   keep: { id: "keep", name: "Keep", cost: 1, defense: 45, blocksSight: true, height: 2, color: "#7c7368" },
+  ruins: { id: "ruins", name: "Ruins", cost: 1, defense: 25, blocksSight: true, height: 1, color: "#8d8577" },
+  ford: { id: "ford", name: "Ford", cost: 2, defense: -5, blocksSight: false, height: 0, color: "#6c9cc0" },
   road: { id: "road", name: "Road", cost: 0.5, defense: 0, blocksSight: false, height: 1, color: "#b9a37a" },
 });
 
@@ -34,6 +36,12 @@ export function terrain(id) {
   if (!t) throw new Error(`unknown terrain ${id}`);
   return t;
 }
+
+/** Terrains that catch fire (fireballs set them burning in dry weather). */
+export const FLAMMABLE = Object.freeze(new Set(["plains", "forest"]));
+/** Extra move points to enter a burning hex, and damage to a unit that starts its turn there. */
+export const FIRE_COST = 2;
+export const FIRE_DAMAGE = 6;
 
 export function passable(id) {
   return Number.isFinite(terrain(id).cost);

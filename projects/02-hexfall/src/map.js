@@ -9,6 +9,7 @@ import { terrain, passable } from "./terrain.js";
  * @property {string} terrain   id from TERRAIN
  * @property {number} elevation 0..1 noise value used by the generator
  * @property {string|null} owner  village owner (side id) or null
+ * @property {number} [fire]    turns left burning (absent = not burning)
  */
 
 export class HexMap {
@@ -64,6 +65,11 @@ export class HexMap {
     yield* this.tiles.values();
   }
 
+  /** Tiles currently on fire. */
+  burning() {
+    return [...this].filter((t) => t.fire > 0);
+  }
+
   /** Tiles whose terrain is in `ids`. */
   ofTerrain(...ids) {
     return [...this].filter((t) => ids.includes(t.terrain));
@@ -84,9 +90,10 @@ export class HexMap {
       rows.push(line);
     }
     const owners = [...this].filter((t) => t.owner).map((t) => [t.q, t.r, t.owner]);
+    const fires = [...this].filter((t) => t.fire > 0).map((t) => [t.q, t.r, t.fire]);
     // elevation (used for shading) in tile order, as whole percent
     const elevation = [...this].map((t) => Math.round(t.elevation * 100));
-    return { cols: this.cols, rows: this.rows, terrain: rows, owners, elevation };
+    return { cols: this.cols, rows: this.rows, terrain: rows, owners, elevation, ...(fires.length ? { fires } : {}) };
   }
 
   static fromJSON(data) {
@@ -99,6 +106,7 @@ export class HexMap {
       });
     });
     for (const [q, r, owner] of data.owners ?? []) m.get({ q, r }).owner = owner;
+    for (const [q, r, n] of data.fires ?? []) m.get({ q, r }).fire = n;
     if (data.elevation) [...m].forEach((t, i) => { t.elevation = (data.elevation[i] ?? 50) / 100; });
     return m;
   }
@@ -120,6 +128,6 @@ export class HexMap {
 export const CODES = Object.freeze({
   water: "~", shallows: "-", sand: ":", plains: ".", forest: "f", swamp: "%",
   hills: "n", mountain: "^", village: "V", road: "=", river: "w", bridge: "#",
-  castle: "c", keep: "K",
+  castle: "c", keep: "K", ruins: "u", ford: "_",
 });
 const DECODE = Object.fromEntries(Object.entries(CODES).map(([k, v]) => [v, k]));

@@ -12,6 +12,8 @@ export const DEFAULT_RULES = Object.freeze({
   holdTurns: 4,         // ...for this many of its own consecutive turn starts to win
   turnLimit: 30,        // after this many turns the battle is decided on score (0 = no limit)
   villageScore: 12,     // score per owned village at the turn limit
+  weather: true,        // seeded weather fronts (rain, fog, storms) from turn 4 on
+  fog: false,           // fog of war: sides only see what their units see
 });
 
 /** Village hexes owned by `side`. */
