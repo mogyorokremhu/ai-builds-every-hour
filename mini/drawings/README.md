@@ -17,3 +17,9 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_mountains.py` | Three midpoint-displacement ridgelines, moon and stars (`python ascii_mountains.py 42`) |
 | `ascii_lissajous.py` | Four Lissajous figures side by side, denser where the curve crosses |
 | `ascii_julia.py` | Julia sets: a tour of classic constants or your own `re im` |
+| `ascii_voronoi.py` | Voronoi cells with borders and sites (`python ascii_voronoi.py 25 7 --manhattan`) |
+| `ascii_fern.py` | Barnsley fern grown by the chaos game, density-shaded (`--mutant` for a Cyclosorus fern) |
+| `ascii_truchet.py` | Random Truchet tiles whose quarter-circle arcs join into winding paths (`--diagonal`, `--seed`) |
+| `ascii_moon.py` | Today's (or any date's) Moon phase with limb shading; `--month` shows the next 30 days |
+| `ascii_spirograph.py` | Hypotrochoid/epitrochoid gallery, or your own `R r d [--epi]` |
+| `ascii_penrose.py` | Penrose P3 rhombus tiling from subdivided Robinson triangles (`python ascii_penrose.py 6`) |
