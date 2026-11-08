@@ -73,9 +73,9 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Short campaign of 5 scenarios with carried-over veterans (`campaign.js`; Campaign… menu, progress saved in localStorage)
 - [x] WebAudio sound effects synthesised in code (no asset files) — `sound.js`, Sound checkbox
 - [x] Animations: attack lunges, floating damage/heal numbers, death fades (`effects.js`)
-- [ ] Colour themes: default / high contrast / colour-blind safe (`palette.js` with WCAG contrast checks ✅; Theme select + making `SIDE_COLORS` mutable queued)
+- [x] Colour themes: default / high contrast / colour-blind safe (`palette.js`, `theme-hook.js` Theme select, saved in localStorage)
 - [ ] Keyboard controls (E/U/N/Tab/Esc done) + remaining accessibility: focus trap in menu dialog
-- [ ] Mobile/touch support (`touch.js` gesture recogniser: tap / pan / pinch / long-press ✅ with tests; hookup into main.js queued)
+- [x] Mobile/touch support (`touch.js` recogniser + `touch-hook.js` replaying gestures as mouse/wheel events)
 
 ## Phase 8 — Polish
 - [ ] Browser smoke test in CI-like script form (`tests/browser-smoke.mjs` exists; add screenshots to docs)
