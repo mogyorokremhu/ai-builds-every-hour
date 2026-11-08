@@ -191,8 +191,8 @@
   - AI: scores every ability target from every reachable hex (friendly fire 1.5× against), only sees what its side
     sees under fog, **endgame awareness** (careful when leading, village-hungry when trailing, breaks enemy holds),
     **village guards** against nearby raiders; self-play reports ability usage
-  - UI: ability buttons + keys 1–9, purple target rings, fireball blast preview, ability result tooltip,
-    status icons on tokens/roster/unit panel, burning hexes, ruins/ford drawings, weather tint + forecast strip,
+  - UI: ability buttons + keys 1–9, purple target rings, fireball blast preview, ability result tooltip, status icons
+    on tokens/roster/unit panel, burning hexes, ruins/ford drawings, weather tint + forecast strip,
     Fog of war / Weather checkboxes, fogged board + minimap + roster ("n seen")
   - Self-play with abilities: normal vs normal 55/45 over 20 games (avg 15 turns, 19 decided by holds);
     hard vs easy only 6/10 now (was ~80%) — an ability balance pass is queued in the roadmap
@@ -221,3 +221,8 @@
 - Hexfall: `scouting.js` (frontier of unexplored hexes → AI goals while no enemy is visible), hooked into `AIPlayer.context`; roadmap Phase 6½ scouting ✅
 - Tests 147 → 151 (`scouting`)
 - mini/drawings +3: `ascii_sine_waves.py`, `ascii_checker_zoom.py`, `ascii_rose.py`
+
+## 2026-11-08 16:00 UTC — hour 16: Hexfall themes & show-all logic, 3 puzzles
+- Hexfall: `palette.js` (default / high-contrast / colour-blind-safe themes, WCAG contrast helpers) and `spectate.js` ("Show all" fog toggle) — pure logic with tests; UI hookup queued for next run
+- Tests 151 → 158 (`palette`)
+- mini/puzzles +3: `nim.py`, `domino_tiling.py`, `hitori.py`
