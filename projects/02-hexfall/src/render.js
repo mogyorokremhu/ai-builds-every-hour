@@ -5,7 +5,7 @@ import { fromOffset } from "./hex.js";
 import { unitType, maxHp, maxMp } from "./units.js";
 import { activeStatuses, STATUS } from "./status.js";
 
-export const SIDE_COLORS = Object.freeze({ red: "#d0473f", blue: "#3f74d0" });
+export const SIDE_COLORS = { red: "#d0473f", blue: "#3f74d0" }; // mutable so themes can recolour (palette.js applyTheme)
 
 /** Layout: hex size and pixel origin so that the whole map fits `width`×`height`. */
 export function fitLayout(map, width, height, margin = 12) {
