@@ -7,9 +7,11 @@ from .items import Item, make_item
 
 #: (item key, min depth, max depth, weight)
 LOOT_TABLE: list[tuple[str, int, int, int]] = [
-    ("healing potion", 1, 99, 35),
+    ("healing potion", 1, 99, 28),
     ("greater healing potion", 4, 99, 12),
     ("speed potion", 2, 99, 6),
+    ("fire potion", 2, 99, 6),
+    ("venom potion", 3, 99, 4),
     ("lightning scroll", 1, 99, 12),
     ("confusion scroll", 1, 99, 10),
     ("teleport scroll", 2, 99, 6),
@@ -22,6 +24,7 @@ LOOT_TABLE: list[tuple[str, int, int, int]] = [
     ("sword", 3, 99, 5),
     ("chain mail", 3, 99, 4),
     ("war axe", 5, 99, 3),
+    ("warhammer", 4, 99, 3),
     ("ember plate", 6, 99, 2),
     ("ring of strength", 4, 99, 2),
     ("ring of protection", 4, 99, 2),

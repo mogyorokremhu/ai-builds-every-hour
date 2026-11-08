@@ -114,7 +114,7 @@ MONSTER_TEMPLATES: dict[str, dict] = {
                    ai="coward"),
     "jackal": dict(glyph="j", color="yellow", hp=5, power=2, defense=0, xp=8, min_depth=2, weight=18,
                    ai="pack", speed=150, pack=(2, 4)),
-    "ember imp": dict(glyph="i", color="red", hp=10, power=4, defense=1, xp=20, min_depth=2, weight=20,
+    "ember imp": dict(glyph="i", color="red", hp=10, power=4, defense=1, xp=20, min_depth=2, weight=14,
                       ai="caster", spell="ember bolt", immune=("burning",)),
     "cave spider": dict(glyph="s", color="bright_green", hp=9, power=3, defense=1, xp=22, min_depth=3,
                         weight=14, speed=120, on_hit=("poisoned", 5, 1, 0.5)),
@@ -128,10 +128,11 @@ MONSTER_TEMPLATES: dict[str, dict] = {
                         weight=10, ai="pack", speed=140, pack=(2, 3), on_hit=("burning", 3, 2, 0.3),
                         immune=("burning",)),
     # the final boss (never spawned randomly: see boss.py)
-    "Ember Guardian": dict(glyph="&", color="bright_red", hp=110, power=8, defense=3, xp=400, min_depth=99,
+    "Ember Guardian": dict(glyph="&", color="bright_red", hp=150, power=9, defense=3, xp=400, min_depth=99,
                            weight=0, ai="boss", spell="magma burst", immune=("burning", "confused"),
                            tags=("boss",)),
-    "cave troll": dict(glyph="T", color="magenta", hp=22, power=6, defense=2, xp=55, min_depth=4, weight=8),
+    "cave troll": dict(glyph="T", color="magenta", hp=22, power=6, defense=2, xp=55, min_depth=4, weight=8,
+                       tags=("knockback",)),
 }
 
 

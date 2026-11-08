@@ -33,6 +33,18 @@ class Item:
     hp_bonus: int = 0
     stackable: bool = False
     count: int = 1
+    thrown_damage: int = 0          # extra damage when thrown (daggers are balanced for it)
+    knockback: float = 0.0          # chance a melee hit shoves the target back a square
+    unknown_name: str | None = None  # appearance while unidentified (see identify.py)
+
+    @property
+    def identified(self) -> bool:
+        return self.unknown_name is None
+
+    @property
+    def shown_name(self) -> str:
+        """The name the player sees: the real one, or the appearance if unidentified."""
+        return self.unknown_name or self.name
 
     @property
     def is_equipment(self) -> bool:
@@ -41,12 +53,14 @@ class Item:
     @property
     def display_name(self) -> str:
         if self.count > 1:
-            return f"{self.count} {plural(self.name)}"
-        return self.name
+            return f"{self.count} {plural(self.shown_name)}"
+        return self.shown_name
 
     def describe(self) -> str:
         """One-line description used by the inventory screen."""
         bits: list[str] = []
+        if not self.identified:
+            return "unidentified"
         if self.power_bonus:
             bits.append(f"{self.power_bonus:+d} power")
         if self.defense_bonus:
@@ -63,19 +77,31 @@ class Item:
             bits.append(f"confuses for {self.magnitude} turns")
         elif self.effect == "haste":
             bits.append(f"haste for {self.magnitude} turns")
+        elif self.effect == "firebomb":
+            bits.append("liquid fire: throw it")
+        elif self.effect == "venom":
+            bits.append("poison: throw it")
+        elif self.kind == "key":
+            bits.append("opens a locked door")
         elif self.effect == "teleport":
             bits.append("random teleport")
         elif self.effect == "refuel":
             bits.append(f"+{self.magnitude} torch fuel")
         elif self.effect == "eat":
             bits.append(f"+{self.magnitude} food")
-        elif self.kind == "artifact":
+        if self.knockback:
+            bits.append("knocks foes back")
+        if self.thrown_damage:
+            bits.append(f"+{self.thrown_damage} thrown")
+        if self.kind == "artifact":
             bits.append("the burning heart of the deep")
         return ", ".join(bits)
 
 
 def plural(name: str) -> str:
-    """Pluralise 'potion of healing' -> 'potions of healing'."""
+    """Pluralise 'potion of healing' -> 'potions of healing', 'murky potion' -> 'murky potions'."""
+    if name.startswith("scroll labelled "):
+        return "scrolls" + name[len("scroll"):]
     head, sep, tail = name.partition(" of ")
     suffix = "es" if head.endswith(("ch", "sh", "s", "x")) else "s"
     return f"{head}{suffix}{sep}{tail}"
@@ -93,6 +119,10 @@ ITEM_TEMPLATES: dict[str, Item] = {
                                  "potion", effect="heal", magnitude=30, stackable=True),
     "speed potion": _c("speed potion", "potion of speed", "!", "bright_yellow", "potion",
                        effect="haste", magnitude=15, stackable=True),
+    "fire potion": _c("fire potion", "potion of liquid fire", "!", "bright_red", "potion",
+                      effect="firebomb", magnitude=7, radius=1, stackable=True),
+    "venom potion": _c("venom potion", "potion of venom", "!", "green", "potion",
+                       effect="venom", magnitude=6, radius=1, stackable=True),
     "lightning scroll": _c("lightning scroll", "scroll of lightning", "?", "bright_yellow", "scroll",
                            effect="lightning", targeting=TARGET_AUTO, magnitude=14, range=7, stackable=True),
     "fireball scroll": _c("fireball scroll", "scroll of fireball", "?", "red", "scroll",
@@ -109,10 +139,14 @@ ITEM_TEMPLATES: dict[str, Item] = {
                  stackable=True),
     "glowcap": _c("glowcap", "glowcap mushroom", "%", "bright_green", "food", effect="eat",
                   magnitude=450, stackable=True),
+    "iron key": _c("iron key", "iron key", "-", "bright_cyan", "key", stackable=True),
     # the goal of the game: dropped by the Ember Guardian
     "ember heart": _c("ember heart", "Ember Heart", "*", "bright_red", "artifact"),
     # weapons
-    "dagger": _c("dagger", "dagger", "/", "bright_white", "weapon", slot="weapon", power_bonus=1),
+    "dagger": _c("dagger", "dagger", "/", "bright_white", "weapon", slot="weapon", power_bonus=1,
+                 thrown_damage=3),
+    "warhammer": _c("warhammer", "warhammer", "/", "bright_yellow", "weapon", slot="weapon", power_bonus=3,
+                    knockback=0.35),
     "sword": _c("sword", "sword", "/", "bright_cyan", "weapon", slot="weapon", power_bonus=3),
     "war axe": _c("war axe", "war axe", "/", "bright_red", "weapon", slot="weapon", power_bonus=5,
                   defense_bonus=-1),
