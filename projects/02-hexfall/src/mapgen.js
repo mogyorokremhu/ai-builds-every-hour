@@ -15,6 +15,7 @@ export const DEFAULTS = Object.freeze({
   water: 0.3,         // elevation below this is deep water
   villages: 6,
   spawnSize: 6,       // hexes per side's deployment zone
+  castles: true,      // keep + castle hexes on each deployment zone (recruiting)
   roads: true,
   symmetric: false,   // point-mirrored map (fair for competitive play)
   rivers: 2,          // rivers flowing downhill from the high ground
@@ -206,6 +207,7 @@ function tryGenerate(opts, rng) {
     villages = placeVillages(map, region, spawns, opts.villages, rng, taken);
   }
   if (opts.roads) layRoads(map, [a, ...villages.slice().sort((x, y) => toOffset(x).col - toOffset(y).col), b]);
+  if (opts.castles) for (const zone of spawns) buildCastle(map, zone);
   if (opts.symmetric) mirrorMap(map);
   return { map, spawns, villages };
 }
@@ -225,6 +227,11 @@ function placeVillages(map, region, spawns, count, rng, taken, allowed = () => t
     out.push(h);
   }
   return out;
+}
+
+/** Turn a deployment zone into a castle: its first hex is the keep, the rest castle walls. */
+function buildCastle(map, zone) {
+  zone.forEach((h, i) => map.set(h, i === 0 ? "keep" : "castle"));
 }
 
 /** Connect consecutive waypoints with roads that prefer existing roads and easy ground. */

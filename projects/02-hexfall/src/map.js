@@ -120,5 +120,6 @@ export class HexMap {
 export const CODES = Object.freeze({
   water: "~", shallows: "-", sand: ":", plains: ".", forest: "f", swamp: "%",
   hills: "n", mountain: "^", village: "V", road: "=", river: "w", bridge: "#",
+  castle: "c", keep: "K",
 });
 const DECODE = Object.fromEntries(Object.entries(CODES).map(([k, v]) => [v, k]));
