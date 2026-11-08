@@ -30,6 +30,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `uniqwords.py` | Distinct words from files/stdin in first-seen order (`-s` sort, `-i` ignore case) |
 | `epoch.py` | Unix timestamp (s or ms) ↔ ISO date converter, `now` |
 | `histo.py` | Text histogram of numbers with adjustable bins (`-b`) |
+| `stats.py` | Count, min, quartiles, median, mean and stdev of numbers from a file or stdin |
+| `rot.py` | Reverse lines (`-r`), word order (`-w`) or characters (`-c`) of stdin |
+| `bar.py` | Bar chart from `label value` lines on stdin |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
