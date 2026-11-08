@@ -26,3 +26,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `domino_tiling.py` | Counts domino tilings of an m×n board (broken-profile DP, 8×8 = 12,988,816) and draws a random one |
 | `hitori.py` | Hitori solver: backtracking shading with no-touch, duplicate and connectivity checks |
 | `minesweeper.py` | Minesweeper + logical auto-solver (subset rule, exact frontier probabilities); `--games N` win rate |
+| `bulls_cows.py` | Bulls and Cows solver: filters the candidate pool by feedback; `--solve`, `--stats N` |
+| `rush_hour_lite.py` | Rush Hour on a 6x6 board: BFS for the fewest car moves |
+| `kenken_check.py` | 4x4 KenKen solver: row permutations checked against cage arithmetic |
