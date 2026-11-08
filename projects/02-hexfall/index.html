@@ -16,6 +16,8 @@
     <label>Seed <input id="seed" size="10" value="1"></label>
     <button id="newgame">New battle</button>
     <button id="random">Random map</button>
+    <button id="skirmish">Skirmish…</button>
+    <button id="campaign">Campaign…</button>
     <label><input id="sym" type="checkbox" style="width:auto"> Symmetric</label>
     <label title="Sides only see what their units see; hidden enemies can ambush you"><input id="fog" type="checkbox" style="width:auto"> Fog of war</label>
     <label title="Synthesised sound effects"><input id="sound" type="checkbox" style="width:auto" checked> Sound</label>
@@ -32,6 +34,7 @@
     <label class="file">Import<input id="import" type="file" accept=".json,application/json"></label>
     <button id="zoomreset" title="Show the whole map">Reset zoom</button>
   </section>
+  <div id="panel" class="panel" role="dialog" aria-label="Menu" hidden></div>
   <div class="layout">
     <main>
       <canvas id="board" aria-label="Battle map"></canvas>

@@ -18,6 +18,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [ripples.py](ripples.py) | Raindrops on a pond: the damped 2D wave equation with slope shading |
 | [bouncing.py](bouncing.py) | Balls with gravity and momentum-conserving collisions, drawn in half-block pixels |
 | [dna_helix.py](dna_helix.py) | A rotating DNA double helix with A–T / C–G base pairs scrolling past |
+| [snake.py](snake.py) | A self-playing Snake: BFS to the food, keeps its tail reachable, restarts when boxed in |
+| [lissajous.py](lissajous.py) | Lissajous curves drawn as a drifting braille-dot trail (`--a`, `--b`) |
+| [spiral.py](spiral.py) | A rotating colour spiral tunnel from angle + log-radius (`--arms`) |
 
 ```bash
 python fire.py

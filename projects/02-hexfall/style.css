@@ -71,3 +71,18 @@ select { background: #1f242a; color: var(--fg); border: 1px solid var(--line); b
 .daynight .tod small { font-size: 10px; margin-left: 1px; }
 .daynight { flex-wrap: wrap; }
 .daynight .wx { flex-basis: 100%; margin: 2px 0 0; font-size: 13px; opacity: 0.9; }
+
+/* menu panel */
+.panel { position: fixed; z-index: 20; top: 12%; left: 50%; transform: translateX(-50%); width: min(460px, 92vw); max-height: 80vh; overflow: auto;
+         background: #181c21; border: 1px solid var(--accent); border-radius: 8px; padding: 12px 18px; box-shadow: 0 10px 40px #000a; }
+.panel[hidden] { display: none; }
+.panel h2 { margin-top: 0; }
+.srow { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 6px 0; }
+.problems { color: #e8a54b; font-size: 13px; padding-left: 18px; }
+.btnrow { margin-top: 12px; }
+.scenarios { padding-left: 0; list-style: none; }
+.sc { padding: 6px 8px; border-left: 3px solid var(--line); margin: 4px 0; }
+.sc.current { border-left-color: var(--accent); background: #232a31; }
+.sc.done { border-left-color: #4caf50; }
+.sc.locked { opacity: .5; }
+.sc span { color: var(--muted); font-size: 13px; }

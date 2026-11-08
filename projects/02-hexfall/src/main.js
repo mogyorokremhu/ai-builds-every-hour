@@ -21,6 +21,9 @@ import { serialize, deserialize, saveToSlot, loadFromSlot } from "./save.js";
 import { ABILITIES, abilitiesOf, abilityPreview, abilityStatus } from "./abilities.js";
 import { weatherForecast } from "./weather.js";
 import { describeStatuses, statusLabel } from "./status.js";
+import { toGameOptions } from "./skirmish.js";
+import { SCENARIOS, scenarioOptions, restoreVeterans, advance, newProgress } from "./campaign.js";
+import { skirmishHtml, readSkirmishForm, campaignHtml, loadProgress, saveProgress } from "./screens.js";
 
 const $ = (id) => document.getElementById(id);
 const canvas = $("board");
@@ -67,6 +70,7 @@ function newBattle(seedText) {
 
 function setGame(game) {
   state.game = game;
+  if (game !== state.campaignGame) state.campaignGame = null; // any other game ends the campaign battle
   fogInput.checked = !!game.rules.fog;
   weatherInput.checked = game.rules.weather !== false;
   setupAi();
@@ -82,6 +86,74 @@ function setGame(game) {
     .join(" · ");
   refresh();
   runAi();
+}
+
+// ---- Menus: skirmish setup and campaign ----
+const panel = $("panel");
+function openPanel(html) {
+  panel.innerHTML = html;
+  panel.hidden = false;
+  panel.querySelector("select, input, button")?.focus();
+}
+function closePanel() {
+  panel.hidden = true;
+  panel.innerHTML = "";
+}
+const val = (id) => { const e = $(id); return e.type === "checkbox" ? e.checked : e.value; };
+
+function openSkirmish() {
+  openPanel(skirmishHtml({ seed: parseSeed(seedInput.value), fog: fogInput.checked, weather: weatherInput.checked, symmetric: symInput.checked },
+    { red: $("redai").value, blue: $("blueai").value }));
+  $("sk-cancel").onclick = closePanel;
+  $("sk-start").onclick = () => {
+    const f = {};
+    for (const k of ["seed", "size", "army0", "army1", "redai", "blueai", "gold", "turns", "fog", "weather", "sym"]) f[k] = val(`sk-${k}`);
+    const { setup, ai } = readSkirmishForm(f);
+    $("redai").value = ai.red;
+    $("blueai").value = ai.blue;
+    seedInput.value = String(setup.seed);
+    state.campaign = null;
+    closePanel();
+    setGame(Game.create(toGameOptions(setup)));
+    location.hash = String(setup.seed);
+  };
+}
+
+function openCampaign() {
+  const store = storage();
+  const progress = store ? loadProgress(store) : (state.progress ??= newProgress());
+  openPanel(campaignHtml(progress));
+  $("cp-close").onclick = closePanel;
+  $("cp-reset").onclick = () => { const p = newProgress(); store ? saveProgress(store, p) : (state.progress = p); openCampaign(); };
+  const start = $("cp-start");
+  if (start) start.onclick = () => startScenario(progress);
+}
+
+function startScenario(progress) {
+  const sc = SCENARIOS[progress.index];
+  const game = Game.create(scenarioOptions(progress.index));
+  restoreVeterans(game, "red", progress.roster);
+  $("redai").value = "human";
+  $("blueai").value = sc.enemyAi;
+  state.campaign = { progress, reported: false };
+  state.campaignGame = game;
+  closePanel();
+  setGame(game);
+  say(`Scenario ${sc.id}: ${sc.name} — ${sc.brief}`);
+}
+
+/** When a campaign battle ends, record the result and reopen the menu. */
+function reportCampaign() {
+  const c = state.campaign, g = state.game;
+  if (!c || c.reported || !g.winner || g !== state.campaignGame) return;
+  c.reported = true;
+  const next = advance(c.progress, g);
+  const store = storage();
+  store ? saveProgress(store, next) : (state.progress = next);
+  setTimeout(() => {
+    openCampaign();
+    say(g.winner === "red" ? "Victory! Your survivors return as veterans." : "Defeat — try the scenario again.");
+  }, 900);
 }
 
 function sizeCanvas(cv, c, w, h) {
@@ -227,6 +299,7 @@ function refresh() {
   turnEl.textContent = g.winner === "draw" ? "Draw!" : g.winner ? `${sideName(g.winner)} wins!`
     : `Turn ${g.turn}${g.rules.turnLimit ? `/${g.rules.turnLimit}` : ""} · ${tod.icon} ${tod.name} — ${sideName(g.side)}${isAiTurn() ? " (AI)" : ""} to move`;
   turnEl.className = `turn ${g.winner ?? g.side}`;
+  reportCampaign();
   $("undo").disabled = !g.canUndo() || state.busy || isAiTurn();
   $("endturn").disabled = !!g.winner || state.busy || isAiTurn();
   renderEconomy();
@@ -723,6 +796,8 @@ window.addEventListener("keydown", (ev) => {
     const u = selectedUnit();
     const id = u && abilitiesOf(u)[Number(ev.key) - 1];
     if (id) toggleAbility(id);
+  } else if (ev.key === "Escape" && !panel.hidden) {
+    closePanel();
   } else if (ev.key === "Escape") {
     if (state.ability) {
       state.ability = null;
@@ -736,7 +811,9 @@ window.addEventListener("keydown", (ev) => {
   } else return;
 });
 
-$("newgame").addEventListener("click", () => newBattle(seedInput.value));
+$("newgame").addEventListener("click", () => { state.campaign = null; newBattle(seedInput.value); });
+$("skirmish").addEventListener("click", openSkirmish);
+$("campaign").addEventListener("click", openCampaign);
 $("random").addEventListener("click", () => {
   seedInput.value = String(Math.floor(Math.random() * 1e6));
   newBattle(seedInput.value);
