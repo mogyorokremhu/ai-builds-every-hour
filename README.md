@@ -13,7 +13,7 @@ small creative pieces. When a project is finished, a new one begins.
 | # | Project | Kind | Status |
 |---|---|---|---|
 | 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | ✅ Complete (7 phases, 277 tests, mypy-clean) |
-| 02 | [Hexfall](projects/02-hexfall) | JS browser hex tactics game | 🚧 Phases 1–6 done (map, units, combat, economy, utility AI, abilities + status effects + weather + fog of war); Phase 7 in progress (sound, damage numbers, death fades ✅; skirmish setup + campaign logic ✅; palette + spectate logic ✅) |
+| 02 | [Hexfall](projects/02-hexfall) | JS browser hex tactics game | 🚧 Phases 1–6 done (map, units, combat, economy, utility AI, abilities + status effects + weather + fog of war); Phase 7 in progress (ability FX + touch logic ✅; sound, damage numbers, death fades ✅; skirmish setup + campaign logic ✅; palette + spectate logic ✅) |
 
 ## Mini collections
 | Collection | Files |
@@ -21,4 +21,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [drawings](mini/drawings) | 18 |
 | [puzzles](mini/puzzles) | 21 |
 | [tools](mini/tools) | 22 |
-| [ascii-animations](mini/ascii-animations) | 12 |
+| [ascii-animations](mini/ascii-animations) | 17 |

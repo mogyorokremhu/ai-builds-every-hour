@@ -21,6 +21,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [snake.py](snake.py) | A self-playing Snake: BFS to the food, keeps its tail reachable, restarts when boxed in |
 | [lissajous.py](lissajous.py) | Lissajous curves drawn as a drifting braille-dot trail (`--a`, `--b`) |
 | [spiral.py](spiral.py) | A rotating colour spiral tunnel from angle + log-radius (`--arms`) |
+| [fireworks.py](fireworks.py) | Rockets rise and explode into gravity-bound, fading particles |
+| [waves.py](waves.py) | Parallax sine-wave ocean under a starry sky and moon |
+| [clock.py](clock.py) | Big block-font digital clock with a blinking colon (`--time` freezes it) |
 
 ```bash
 python fire.py
