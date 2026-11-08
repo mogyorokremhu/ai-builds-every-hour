@@ -5,12 +5,15 @@ no build step, no dependencies. Two armies deploy on a procedurally generated ba
 of plains, forests, hills, rivers and villages; capture villages for income, use terrain
 for cover, and outmanoeuvre an AI opponent.
 
-**Status:** 🚧 Phases 1–5 ✅ — a complete battle against a **utility AI** (or hot-seat): seven unit
+**Status:** 🚧 Phases 1–6 ✅ — a complete battle against a **utility AI** (or hot-seat): seven unit
 types deploy from castles, move under zones of control, fight with terrain, flanking, line of sight,
-counter-attacks and a **day/night cycle**; capture villages for **gold**, **recruit** at your keep, and
+counter-attacks and a **day/night cycle**; every unit has a special **ability** (charge, volley,
+fireball, heal, shield wall, rally, envenom) and can suffer **status effects** (poisoned, slowed,
+rallied, braced); seeded **weather** fronts (rain, fog, storms) and optional **fog of war** with
+ambushes; fireballs set **fields burning**. Capture villages for **gold**, **recruit** at your keep, and
 win by routing the enemy, **holding villages** or **leading on points** at the turn limit. A node
-**self-play harness** pits AIs against each other for balance testing. Next: Phase 6 (abilities, status
-effects, fog of war, weather). Built hourly, see [ROADMAP.md](ROADMAP.md).
+**self-play harness** pits AIs against each other for balance testing. Next: Phase 7 (skirmish setup,
+campaign, sound, effects). Built hourly, see [ROADMAP.md](ROADMAP.md).
 
 ## Run
 ```bash
@@ -26,7 +29,8 @@ easy/normal/hard with the selectors; two AIs make a spectator match, two humans 
 can go, red rings mark enemies it can attack this turn. Click a yellow hex to move (you can keep
 moving while move points last), or click a ringed enemy to attack — melee units step next to the
 target by themselves, choosing the best hex. Hover an enemy to see the exact damage forecast.
-Press **E** to end the turn, **U** to undo a move, **N**/**Tab** for the next ready unit, **Esc**
+Select a unit and press **1** (or its button under the economy panel) to use its **ability**: purple
+rings mark valid targets and hovering one previews the result. Press **E** to end the turn, **U** to undo a move, **N**/**Tab** for the next ready unit, **Esc**
 to deselect. The mouse wheel zooms, dragging pans, the minimap jumps. The battle autosaves; Save/Load
 use a browser slot, Export/Import a JSON file.
 
@@ -42,18 +46,54 @@ units deal +25% damage in daylight and −25% at night; chaotic units the revers
 care. The strip above the economy panel shows the next six turns.
 
 ## Units
-| Unit | HP | Melee | Ranged (range) | Armour | MP | Cost | Alignment | Special | Veteran perk |
-|---|---|---|---|---|---|---|---|---|---|
-| Spearman | 34 | 9 | — | 2 | 5 | 14 | lawful | ×1.5 damage to mounted units | Phalanx: +2 armour |
-| Swordsman | 40 | 11 | — | 3 | 5 | 17 | lawful | | Blademaster: +3 melee |
-| Archer | 28 | 4 | 8 (3) | 1 | 5 | 15 | neutral | needs line of sight | Longshot: +1 range |
-| Cavalry | 38 | 10 | — | 2 | 8 | 20 | lawful | mounted: forest/swamp +1 MP | Outrider: +1 MP |
-| Mage | 24 | 3 | 11 (2) | 0 | 5 | 20 | chaotic | magic ignores terrain defence | Arcanist: +3 ranged |
-| Healer | 26 | 4 | — | 1 | 5 | 16 | lawful | heals adjacent allies 4/turn | Medic: heals 8 |
-| Rogue | 30 | 8 | — | 1 | 6 | 15 | chaotic | skirmisher: ignores zones of control | Backstab: +2 melee, +1 MP |
+| Unit | HP | Melee | Ranged (range) | Armour | MP | Cost | Alignment | Special | Ability | Veteran perk |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Spearman | 34 | 9 | — | 2 | 5 | 14 | lawful | ×1.5 damage to mounted units | Shield wall | Phalanx: +2 armour |
+| Swordsman | 40 | 11 | — | 3 | 5 | 17 | lawful | | Rally | Blademaster: +3 melee |
+| Archer | 28 | 4 | 8 (3) | 1 | 5 | 15 | neutral | needs line of sight; sight 5 | Volley | Longshot: +1 range |
+| Cavalry | 38 | 10 | — | 2 | 8 | 20 | lawful | mounted: forest/swamp +1 MP; sight 5 | Charge | Outrider: +1 MP |
+| Mage | 24 | 3 | 11 (2) | 0 | 5 | 20 | chaotic | magic ignores terrain defence | Fireball | Arcanist: +3 ranged |
+| Healer | 26 | 4 | — | 1 | 5 | 16 | lawful | heals adjacent allies 4/turn | Heal | Medic: heals 8 |
+| Rogue | 30 | 8 | — | 1 | 6 | 15 | chaotic | skirmisher: ignores zones of control; sight 5 | Envenom | Backstab: +2 melee, +1 MP |
+
+## Abilities
+Using an ability takes the unit's action for the turn (like attacking). Most then recharge for a few of
+its own turns.
+
+| Ability | Unit | Cooldown | Effect |
+|---|---|---|---|
+| 🐎 Charge | Cavalry | 2 | Melee attack after moving this turn; **both** sides deal ×1.5 damage |
+| 🏹 Volley | Archer | 3 | 75% shot at the target **and every enemy next to it**; slows the target; no counter |
+| 🔥 Fireball | Mage | 3 | Hex in range and sight: full damage there, 60% on the six around it — **allies too**; dry plains and forests catch fire; no counter |
+| ✚ Heal | Healer | — | +12 HP (medics more) to an adjacent ally, cures poison |
+| 🛡 Shield wall | Spearman | 3 | The spearman and adjacent allies are **braced** until its next turn |
+| ⚑ Rally | Swordsman | 3 | The swordsman and adjacent allies are **rallied** this turn and the next |
+| ☠ Envenom | Rogue | 2 | Melee strike that **poisons** a surviving target for 3 turns |
+
+**Status effects** (icons above the token, details in the unit panel):
+**poisoned** — −6 HP at the start of each own turn, never below 1; a village or healer cures it instead of
+healing. **Slowed** — half move points and −25% damage for its next turn. **Rallied** — +20% damage.
+**Braced** — 35% less damage taken.
+
+## Weather, fire and fog of war
+- **Weather** comes in seeded 3-turn fronts (the first is always clear): *rain* (ranged −20%, sight −1),
+  *fog* (ranged reach −1, sight −2) and *storms* (ranged −30%, reach −1, sight −2). It is derived from the
+  battle seed and the turn number, so replays and saves need no extra state. The strip at the top of the
+  panel shows the next six turns. Untick *Weather* for always-clear battles.
+- **Fire:** a fireball in dry weather sets plains and forests alight for 3 turns. Burning hexes cost +2 MP
+  to enter and burn units that start their turn there for 6 (never below 1 HP). Each round a fire may
+  spread to flammable neighbours (20%); a forest that burns out becomes plains; rain and storms put
+  every fire out.
+- **Fog of war** (*Fog of war* checkbox, off by default): each side sees what its units see (sight 4–5,
+  +1 on hills, minus the weather, blocked by forests/villages/mountains as for arrows) plus the hexes
+  around its own villages. Unseen ground is dimmed, never-seen ground black; hidden enemies cannot be
+  attacked and are left out of the movement preview — walking into one's zone of control is an
+  **ambush**: the move stops there and cannot be undone. The AI plays by the same rules (it only reacts
+  to enemies it can see). In hot-seat games the board shows the side to move.
 
 ## Combat rules
-- **Damage** of one strike = attack × flanking × (1 − target terrain defence) × anti-cavalry × time of day × roll − armour,
+- **Damage** of one strike = attack × flanking × (1 − target terrain defence) × anti-cavalry × time of day
+  × statuses × weather (ranged) × ability × roll − armour,
   rounded, at least 1. The roll is one of 0.8 / 0.9 / 1.0 / 1.1 / 1.2, drawn from the game's seeded RNG.
 - **Counter-attack:** if the defender survives and has the same kind of attack that reaches the
   attacker (melee next to it, or ranged within its range and line of sight), it strikes back once.
@@ -81,6 +121,13 @@ attack from each hex, then plays the single best option across the whole army, o
 - **Terrain defence**, **villages** to capture (enemy-held ones count extra), **healing** (wounded units
   value villages and healers; healers value standing next to wounded friends), **keep defence** when
   enemies approach it;
+- **Abilities**: every ability target from every reachable hex is previewed (`abilityPreview`) and
+  scored in the same gold units — friendly fire counts 1.5× against, heals by HP restored, shield walls
+  by the threat they absorb, rallies by the allies that can still strike; abilities with a cooldown
+  must beat a plain attack by a margin;
+- **Endgame**: within 3 turns of the limit a side that leads on points becomes more careful and one
+  that trails chases villages harder; while the enemy is building a village hold its villages are
+  worth extra; owned villages with raiders within 5 hexes are worth **guarding**;
 - **Progress** along terrain-aware distance fields: healthy units advance on enemies, villages and the
   enemy keep; units below 35% HP fall back towards safe villages and healers.
 
@@ -89,8 +136,10 @@ time of day is coming, avoids piling up one type, and **saves gold** for the uni
 its army is thin. Difficulty sets random noise, risk appetite and focus fire (Easy / Normal / Hard).
 
 `node tools/selfplay.mjs` runs AI-vs-AI battles headless (`src/selfplay.js`): win rates, end reasons,
-battle length, recruits and kills per unit type. 20 symmetric games, normal vs normal: **55% / 45%**,
-avg 16 turns; hard beats easy about 80% of the time.
+battle length, recruits, kills per unit type and abilities used. 20 symmetric games, normal vs normal: **55% / 45%**,
+avg 15 turns, 19 of them decided by village holds; shield walls and heals are the most used abilities.
+Hard beat easy about 80% of the time before abilities and 6 of 10 since — the ability balance pass is next on
+the roadmap.
 
 ## How the map is made
 1. **Noise:** two fractal value-noise fields (elevation and moisture) are sampled at each
@@ -107,7 +156,9 @@ avg 16 turns; hard beats easy about 80% of the time.
    existing roads (½ MP per road hex); where a road meets a river it builds a **bridge**.
 6. **Castles:** each deployment zone becomes a castle — its first hex the **keep** (45% defence,
    high ground), the others castle hexes (35%) where recruits appear.
-7. **Symmetric mode** (`symmetric: true`, the *Symmetric* checkbox) point-mirrors the map
+7. **Ruins and fords:** two ruined forts in no-man's-land (25% defence, block sight, no income) and two
+   **fords** where a river can be waded for 2 MP between dry banks (never next to a bridge).
+8. **Symmetric mode** (`symmetric: true`, the *Symmetric* checkbox) point-mirrors the map
    through its centre — terrain, deployment zones and villages — for perfectly fair battles.
 
 ## Terrain
@@ -122,8 +173,11 @@ avg 16 turns; hard beats easy about 80% of the time.
 | Bridge | 1 | 0% | where roads cross rivers |
 | Castle | 1 | 35% | recruits appear here |
 | Keep | 1 | 45% | high ground, blocks sight; hold the enemy's to stop its recruiting |
+| Ruins | 1 | 25% | blocks sight |
+| Ford | 2 | −5% | shallow river crossing |
 | Swamp / Shallows / River | 3 | −10% | fighting knee-deep is a bad idea |
 | Water / Mountain | — | — | impassable (mountains block sight) |
+| *burning* (plains/forest) | +2 | — | 6 damage at turn start, spreads, burns out (forest → plains) |
 
 A unit with its full move points can always take one step onto passable ground, even if
 the step costs more than it has.
@@ -152,9 +206,16 @@ the step costs more than it has.
 | `src/selfplay.js` | Headless AI-vs-AI matches and series reports (`tools/selfplay.mjs` CLI) |
 | `src/save.js` | Save text, storage slots (localStorage or the in-memory `MemoryStorage`) |
 | `src/animate.js` | Pure tweening: eased moves along routes, attack lunges |
+| `src/abilities.js` | Seven abilities: targets, cooldowns, exact/expected previews, seeded resolution, fire |
+| `src/status.js` | Status effects (poisoned, slowed, rallied, braced): durations, ticks, multipliers |
+| `src/weather.js` | Seeded weather fronts, their combat/sight effects and the forecast |
+| `src/fog.js` | Fog of war: sight radius, per-side visible sets, explored memory |
 | `src/main.js` | Browser UI: battle controls, roster, log, forecast tooltip, animations, keys, saves, camera, minimap |
 
-Tests (`node --test`, 89): economy (captures + undo, income, recruiting rules, keep blocking, hold
+Tests (`node --test`, 128): all seven abilities (targets, previews vs. real rolls, friendly fire, fire
+spread and burn-out, cooldowns over turns, save round trips), status ticks and multipliers, weather
+determinism/weights/effects, fog of war (sight, hidden targets, ambushes, explored memory, AI under fog),
+ruins and fords, AI ability choices and endgame/guard scoring; economy (captures + undo, income, recruiting rules, keep blocking, hold
 and turn-limit victories, draws, v1 save compatibility), day/night damage, influence maps, AI
 behaviour (focus fire, retreat to heal, village grabbing, deterministic self-play), skirmishers; hex math properties, camera maths, RNG/noise determinism, heap
 order, A* optimality, downhill rivers, point symmetry, 25 generated maps checked for
@@ -165,4 +226,5 @@ round trips where a loaded game replays identically; animation tweening.
 
 `tests/browser-smoke.mjs` drives the real page in Chromium (Playwright): it selects, moves, undoes,
 then plays a battle with mouse clicks and keys, recruits from the panel, hands Blue to the AI and
-waits for it to play its turn, saves and loads, and fails on any page error.
+waits for it to play its turn, saves and loads, then starts a fogged battle (checks enemies are
+hidden) and raises a shield wall with the **1** key — and fails on any page error.
