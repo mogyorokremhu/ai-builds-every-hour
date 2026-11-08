@@ -323,6 +323,7 @@ class LookTests(unittest.TestCase):
         self.assertIn("A fire beetle (unhurt, slow, on fire)", text)
         self.assertIn("A floor", text)
         from emberdeep.items import make_item
+        g.identify_kind("speed potion")
         g.place_item(make_item("speed potion"), x + 1, y + 1)
         self.assertIn("potion of speed (haste for 15 turns)", describe_cell(g, x + 1, y + 1))
         self.assertEqual(describe_cell(g, 0, 0)[0][:3], "You")
