@@ -9,9 +9,9 @@
 - [x] Unit tests
 
 ## Phase 2 — Language growth
-- [ ] `let*`, `letrec`, named `let`, `do` loops
-- [ ] Quasiquote / unquote
-- [ ] `map`, `filter`, `reduce`, `apply`, `for-each`
+- [x] `let*`, `letrec`, named `let`, `do` loops
+- [x] Quasiquote / unquote
+- [x] `map`, `filter`, `reduce`, `apply`, `for-each`
 - [ ] Dotted pairs and real cons cells
 - [ ] Better error messages with source positions
 

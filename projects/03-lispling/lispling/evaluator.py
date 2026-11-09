@@ -1,6 +1,6 @@
 """The evaluator, with tail-call optimisation."""
 from __future__ import annotations
-from . import builtins
+from . import builtins, forms, higher
 from .reader import parse
 from .types import Env, Lambda, LispError, Symbol, sym, to_string
 
@@ -10,6 +10,7 @@ S = sym
 def global_env(out=print) -> Env:
     env = Env()
     builtins.install(env, out)
+    env.update(higher.make(evaluate))
     return env
 
 
@@ -58,6 +59,12 @@ def evaluate(x, env: Env):
             for e in x[1:-1]:
                 evaluate(e, env)
             x = x[-1]
+            continue
+        if isinstance(head, Symbol) and head in forms.EXPANDERS:
+            x = forms.EXPANDERS[head](x)
+            continue
+        if head == "let" and len(x) > 1 and isinstance(x[1], Symbol):
+            x = forms.expand_named_let(x)
             continue
         if head == "let":
             inner = Env(env)
