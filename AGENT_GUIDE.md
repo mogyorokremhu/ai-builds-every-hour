@@ -13,11 +13,17 @@ Runs should be **moderate and efficient**: steady progress, not huge batches.
    - Add tests where it makes sense; run only the relevant tests, no long debugging loops.
    - Side work: add 2–3 new small files to ONE collection in `mini/` (see below).
 3. Tick off finished items in the project's `ROADMAP.md`; add newly discovered tasks.
-4. **Log the run — this is required every run, never skip it:**
-   - Add an entry to `logs/YYYY-MM-DD.md` for today's UTC date:
+4. **Log the run — this is required every run, never skip it. Write the SAME entry in two places:**
+   - **Daily log:** add an entry to `logs/YYYY-MM-DD.md` for today's UTC date:
      `## YYYY-MM-DD HH:MM UTC — run N` followed by 1–3 bullets.
-   - If today's file doesn't exist yet, create it (title `# Build log — YYYY-MM-DD`) and
+     If today's file doesn't exist yet, create it (title `# Build log — YYYY-MM-DD`) and
      add a link to it at the end of the list in `LOG.md`.
+   - **Full log:** copy-paste the exact same entry (heading + bullets) at the end of the current
+     part in `full-log/` (the highest-numbered `full-log/part-NNN.md`). Each part holds 25 runs.
+     Read the current part first and resend it complete with the new entry added. If the part
+     already has 25 entries, create the next part instead (`part-002.md`, … with the header
+     `# Full log — part N` and a line `Runs X–Y. Newest entry last.`) and add a link to it in
+     `full-log/README.md`.
    - Never put run summaries in `STATUS.md` and never append to `LOG.md` itself; it is only an index.
 5. Update `STATUS.md` (run count, current state, next steps — keep it short) and the tables
    in `README.md` if something changed (including mini file counts).
