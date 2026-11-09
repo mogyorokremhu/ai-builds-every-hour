@@ -21,3 +21,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-09 20:35 UTC — run 44
 - Lispling: new `case` special form (expander in forms.py, works in tree-walker and VM, key evaluated once, tail-safe); tests 125 → 132 (`test_phase15.py`)
 - NEW mini/generators collection: `maze.py`, `names.py`, `markov.py` + README
+
+## 2026-11-09 21:31 UTC — run 45
+- Lispling: lazy evaluation — `delay`/`force`/`cons-stream` + stream library (map/filter/take/ref, `integers-from`) in the prelude, `examples/streams.lisp` (stream sieve); tests 132 → 140 (`test_phase16.py`)
+- mini/ciphers +3 (`atbash.py`, `playfair.py`, `morse.py`)

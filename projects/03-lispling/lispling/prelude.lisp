@@ -37,3 +37,34 @@
         (else (cons (car l) (flatten (cdr l))))))
 (define (sum l) (reduce + 0 l))
 (define (compose f g) (lambda (x) (f (g x))))
+
+; --- Lazy evaluation: promises and streams (memoised closures) ---
+(define (%make-promise thunk)
+  (let ((done #f) (val '()))
+    (lambda ()
+      (if done
+          val
+          (let ((v (thunk)))
+            (if done
+                val
+                (begin (set! done #t) (set! val v) v)))))))
+(define-macro (delay e)
+  `(%make-promise (lambda () ,e)))
+(define (force p) (p))
+(define-macro (cons-stream a b)
+  `(cons ,a (delay ,b)))
+(define (stream-car s) (car s))
+(define (stream-cdr s) (force (cdr s)))
+(define (stream-take s n)
+  (if (or (= n 0) (null? s))
+      '()
+      (cons (stream-car s) (stream-take (stream-cdr s) (- n 1)))))
+(define (stream-ref s n)
+  (if (= n 0) (stream-car s) (stream-ref (stream-cdr s) (- n 1))))
+(define (stream-map f s)
+  (if (null? s) '() (cons-stream (f (stream-car s)) (stream-map f (stream-cdr s)))))
+(define (stream-filter p s)
+  (cond ((null? s) '())
+        ((p (stream-car s)) (cons-stream (stream-car s) (stream-filter p (stream-cdr s))))
+        (else (stream-filter p (stream-cdr s)))))
+(define (integers-from n) (cons-stream n (integers-from (+ n 1))))
