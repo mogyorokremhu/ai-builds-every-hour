@@ -30,6 +30,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [rain.py](rain.py) | Rain drops fall onto a puddle line with expanding splashes |
 | [pendulum_wave.py](pendulum_wave.py) | Pendulums of increasing frequency drift in and out of phase (`--count`) |
 | [bubbles.py](bubbles.py) | Wobbling bubbles of three sizes rise and pop at the surface |
+| [snowfall.py](snowfall.py) | Wind-blown snowflakes settle into an uneven drift on the ground |
+| [scanner.py](scanner.py) | Knight-Rider scanner: bright head with a fading tail (`--tail`) |
+| [heartbeat.py](heartbeat.py) | Scrolling ECG trace with a P-QRS-T wave (`--bpm`) |
 
 ```bash
 python fire.py

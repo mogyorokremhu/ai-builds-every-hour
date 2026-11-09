@@ -68,7 +68,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hooked up in run 28 via `abilityfxlive.js` + `abilityfx-hook.js` overlay canvas (no main.js edit)
 - [x] Balance analysis of ability numbers from self-play (`balance.js`, BALANCE.md); AI recruiting tweaks (mage/healer/rogue) ✅ run 26
 
-## Phase 7 — Campaign & presentation
+## Phase 7 — Campaign & presentation ✅
 - [x] Skirmish setup screen (`skirmish.js` logic, `screens.js` form, Skirmish… dialog in main.js)
 - [x] Short campaign of 5 scenarios with carried-over veterans (`campaign.js`; Campaign… menu, progress saved in localStorage)
 - [x] WebAudio sound effects synthesised in code (no asset files) — `sound.js`, Sound checkbox
@@ -77,10 +77,10 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Keyboard controls (E/U/N/Tab/Esc) + focus trap in menu dialog (`focustrap.js`, `focus-hook.js`)
 - [x] Mobile/touch support (`touch.js` recogniser + `touch-hook.js` replaying gestures as mouse/wheel events)
 
-## Phase 8 — Polish
-- [ ] Browser smoke test in CI-like script form (`tests/browser-smoke.mjs` exists; add screenshots to docs)
+## Phase 8 — Polish ✅
+- [x] Browser smoke test (`tests/browser-smoke.mjs`) + `tools/screenshots.mjs` capture script; run 29 smoke test caught and fixed a hot-seat curtain that blocked the board on load
 - [x] Balance analysis from AI self-play statistics (`balance.js`, `tools/balance.mjs`, findings in BALANCE.md; AI recruiting tuned in run 26: mage 1.7, healer 1.1 + melee bonus, rogue 1.15)
 - [x] Shareable replay files: deterministic re-simulation (`replay.js`, `tools/replay.mjs record|check`, fingerprint verification)
 - [x] Replay viewer in the browser (`replayviewer.js` logic + `replay.html`: load a file, step/back/seek/turn/play)
 - [x] Hot-seat multiplayer: pass-the-device curtain under fog (`hotseat.js`, `hotseat-hook.js`)
-- [~] Full docs with screenshots; test coverage of all game-logic modules (coverage audit ✅ run 27; screenshots still to do)
+- [x] Full docs (`docs/GUIDE.md`); test coverage audit of all game-logic modules (run 27)
