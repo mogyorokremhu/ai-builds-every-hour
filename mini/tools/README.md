@@ -42,6 +42,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `wrap.py` | Word-wrap stdin to `-w` columns, `-j` justifies |
 | `colsum.py` | Sum/avg/min/max of column N (`-d` separator) |
 | `hexcolor.py` | Hex ↔ RGB ↔ HSL with WCAG contrast ratios |
+| `dupes.py` | Find duplicate files by size + SHA-256 |
+| `csv2md.py` | CSV to aligned Markdown table (numbers right-aligned) |
+| `unitconv.py` | Convert length/mass/volume/temperature units |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 

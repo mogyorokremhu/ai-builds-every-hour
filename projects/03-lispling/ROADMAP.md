@@ -27,6 +27,7 @@
 - [x] Benchmarks vs the tree-walker (`benchmarks/bench.py` compares both; VM only ~1.0-1.2x faster so far)
 
 ## Phase 5 — Ideas
-- [x] VM: named let, let*, letrec, do, quasiquote (via shared expanders); macro expansion before compile still open
+- [x] VM: named let, let*, letrec, do, quasiquote (via shared expanders)
 - [ ] VM: resolve locals to slots instead of dict Envs (the real speedup)
 - [x] Constant folding of integer + - * (compile time); inline primitive ops still open
+- [x] VM: compile-time macro expansion + `define-macro` (`_CENV`, test_phase10.py)

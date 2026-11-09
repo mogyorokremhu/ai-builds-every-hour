@@ -4,13 +4,15 @@ Supported forms: constants, symbols, quote, if, define, set!, lambda, begin,
 let (incl. named let), let*, letrec, do, quasiquote, cond (with else), and, or,
 and procedure calls. Constant arithmetic on literals is folded at compile time.
 Calls in tail position reuse the current frame, so loops run in constant Python stack.
-Macros are not expanded here: use the tree-walker for macro-heavy code.
+Macros (define-macro) are expanded at compile time against the compile env.
 """
 from __future__ import annotations
-from .evaluator import global_env
+from .evaluator import global_env, _lookup_macro, expand_macro
 from .forms import EXPANDERS
 from .reader import parse
-from .types import Env, Lambda, LispError, Symbol, to_string
+from .types import Env, Lambda, LispError, Macro, Symbol, to_string
+
+_CENV: Env | None = None  # env macros are looked up in while compiling
 
 (CONST, LOAD, STORE, DEF, JUMP, JF, JF_KEEP, JT_KEEP, POP, CALL, TAILCALL,
  RET, MAKE) = range(13)
@@ -49,6 +51,10 @@ def compile_expr(x, code: Code, tail: bool):
     else:
         head = x[0]
         form = _FORMS.get(head) if isinstance(head, Symbol) else None
+        if form is None and isinstance(head, Symbol) and _CENV is not None:
+            m = _lookup_macro(head, _CENV)
+            if m is not None:
+                return compile_expr(expand_macro(m, x[1:]), code, tail)
         if form is None and isinstance(head, Symbol):
             x = [x[0]] + [_pre(a) for a in x[1:]]
             v = _fold(x)
@@ -123,6 +129,16 @@ def _define(x, code, tail):
         compile_expr(x[2], code, False)
         name = target
     code.emit(DEF, name)
+    _end(code, tail)
+
+
+def _define_macro(x, code, tail):
+    if len(x) < 3 or not isinstance(x[1], list) or not x[1]:
+        raise LispError("define-macro needs (name params...) and a body")
+    if _CENV is None:
+        raise LispError("define-macro needs a compile environment")
+    _CENV[x[1][0]] = Macro(x[1][1:], x[2:], _CENV, x[1][0])
+    code.emit(CONST, [])
     _end(code, tail)
 
 
@@ -217,16 +233,22 @@ def _logic(op, empty):
     return f
 
 
-_FORMS = {"quote": _quote, "if": _if, "define": _define, "set!": _set,
+_FORMS = {"quote": _quote, "if": _if, "define": _define, "set!": _set, "define-macro": _define_macro,
           "lambda": _lambda, "begin": _begin, "let": _let_ok, "cond": _cond,
           **{k: _expander(v) for k, v in EXPANDERS.items()},
           "and": _logic(JF_KEEP, True), "or": _logic(JT_KEEP, False)}
 
 
-def compile_toplevel(x) -> Code:
-    c = Code()
-    compile_expr(x, c, True)
-    return c
+def compile_toplevel(x, env: Env | None = None) -> Code:
+    """Compile one top-level form; env (if given) is where macros are found/defined."""
+    global _CENV
+    old, _CENV = _CENV, env
+    try:
+        c = Code()
+        compile_expr(x, c, True)
+        return c
+    finally:
+        _CENV = old
 
 
 def disassemble(code: Code, indent="") -> str:
@@ -339,5 +361,5 @@ def run_vm(src: str, env: Env | None = None):
     env = env if env is not None else global_env()
     result = []
     for e in parse(src):
-        result = execute(VMClosure(compile_toplevel(e), env), [], toplevel=True)
+        result = execute(VMClosure(compile_toplevel(e, env), env), [], toplevel=True)
     return result
