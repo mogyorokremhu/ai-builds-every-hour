@@ -44,5 +44,5 @@ To point at a different repo, set `GITHUB_REPO` / `GITHUB_BRANCH` in `wrangler.t
   that you trust — which is the case here since you own it.
 - The Python runtime is downloaded from the jsDelivr CDN on first play (a few MB, then cached).
 - Free-plan limits (100k function requests/day) are plenty for a hobby site.
-- Local testing: `npx wrangler pages dev public --d1=DB=REPLACE_WITH_YOUR_D1_DATABASE_ID` from this folder
+- Local testing: `npx wrangler pages dev public --d1=DB=<your-database-id>` from this folder
   after running `schema.sql` with `npx wrangler d1 execute ai-builds-db --local --file=schema.sql`.
