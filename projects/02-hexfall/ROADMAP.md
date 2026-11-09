@@ -82,5 +82,5 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [ ] Balance pass from AI self-play statistics (document in BALANCE.md)
 - [x] Shareable replay files: deterministic re-simulation (`replay.js`, `tools/replay.mjs record|check`, fingerprint verification)
 - [x] Replay viewer in the browser (`replayviewer.js` logic + `replay.html`: load a file, step/back/seek/turn/play)
-- [ ] Hot-seat multiplayer
+- [x] Hot-seat multiplayer: pass-the-device curtain under fog (`hotseat.js`, `hotseat-hook.js`)
 - [ ] Full docs with screenshots; test coverage of all game-logic modules

@@ -32,3 +32,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `latin_square.py` | Latin squares: random generation, completing partial squares (MRV backtracking), counting reduced squares |
 | `josephus.py` | Josephus problem: O(n) survivor recurrence plus full elimination order |
 | `collatz_search.py` | Longest Collatz chain below a limit using a memo table; `--path N` |
+| `pascal_mod.py` | Pascal's triangle mod m as ASCII (Sierpinski triangle for m=2) |
+| `gray_code.py` | Gray code conversion both ways and the Chinese-rings toggle order |
+| `monty_hall.py` | Monty Hall simulation with any number of doors: stay vs switch |
