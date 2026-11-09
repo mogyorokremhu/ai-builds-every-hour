@@ -119,18 +119,22 @@ def evaluate(x, env: Env):
                 return []
             continue
         if head == "and":
-            r = True
-            for e in x[1:]:
-                r = evaluate(e, env)
-                if not _truthy(r):
+            if len(x) == 1:
+                return True
+            for e in x[1:-1]:
+                if not _truthy(evaluate(e, env)):
                     return False
-            return r
+            x = x[-1]  # last operand is in tail position
+            continue
         if head == "or":
-            for e in x[1:]:
+            if len(x) == 1:
+                return False
+            for e in x[1:-1]:
                 r = evaluate(e, env)
                 if _truthy(r):
                     return r
-            return False
+            x = x[-1]
+            continue
         if isinstance(head, Symbol):
             m = _lookup_macro(head, env)
             if m is not None:

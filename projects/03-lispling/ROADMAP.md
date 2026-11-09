@@ -19,9 +19,9 @@
 - [x] `define-macro` (non-hygienic)
 - [x] Standard library written in Lispling (prelude.lisp)
 - [x] Strings library (chars are 1-char strings), `assoc`, hash tables
-- [ ] Tail-call-safe `cond`/`and`/`or` audit
+- [x] Tail-call-safe `cond`/`and`/`or` audit (and/or last operand now a tail call)
 
 ## Phase 4 — Tooling
-- [ ] Example programs (fib, primes, queens) — `examples/wordcount.lisp` done
+- [x] Example programs (fib, primes, queens, wordcount)
 - [ ] Bytecode compiler + VM experiment
 - [ ] Benchmarks vs the tree-walker
