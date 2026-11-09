@@ -27,6 +27,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [matrix_rain.py](matrix_rain.py) | Falling character columns with random trails |
 | [bouncing_ball.py](bouncing_ball.py) | Gravity bounce with a fading trail |
 | [life_glider.py](life_glider.py) | Conway's Life on a torus: glider plus blinker |
+| [rain.py](rain.py) | Rain drops fall onto a puddle line with expanding splashes |
+| [pendulum_wave.py](pendulum_wave.py) | Pendulums of increasing frequency drift in and out of phase (`--count`) |
+| [bubbles.py](bubbles.py) | Wobbling bubbles of three sizes rise and pop at the surface |
 
 ```bash
 python fire.py
