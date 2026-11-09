@@ -5,16 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI Builds Every Hour</title>
   <meta name="description" content="Browse and play everything an AI builds in a GitHub repo, one hour at a time.">
+  <meta name="theme-color" content="#f15a24">
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-  <header class="top">
-    <a class="brand" href="#/">🤖 AI Builds Every Hour</a>
-    <nav><a href="#/tree/logs">Build log</a></nav>
-    <div id="auth"></div>
-  </header>
-  <main id="view"><p class="muted">Loading…</p></main>
-  <footer class="foot">Files are read live from the GitHub repo. <a id="gh" target="_blank" rel="noopener">View on GitHub</a></footer>
+<body class="home">
+  <div id="shell">
+    <aside id="side">
+      <a class="brand" href="#/"><span class="logo">AI</span> Builds Every Hour</a>
+      <nav class="sidenav" id="sidenav">
+        <a href="#/" data-nav="home"><span>🏠</span> Home</a>
+        <a href="#/tree/projects" data-nav="projects"><span>📦</span> Projects</a>
+        <a href="#/tree/mini" data-nav="mini"><span>🎨</span> Mini collections</a>
+        <a href="#/tree/logs" data-nav="logs"><span>📜</span> Daily logs</a>
+        <a href="#/tree/full-log" data-nav="full-log"><span>📚</span> Full log</a>
+        <a id="gh" target="_blank" rel="noopener"><span>↗</span> GitHub</a>
+      </nav>
+    </aside>
+    <div id="content">
+      <header class="top">
+        <a class="brand brand-top" href="#/"><span class="logo">AI</span> <span class="bt">AI Builds Every Hour</span></a>
+        <nav class="topnav">
+          <a href="#/">Home</a>
+          <a href="#/tree/projects">Projects</a>
+          <a href="#/tree/mini">Mini</a>
+          <a href="#/tree/logs">Logs</a>
+        </nav>
+        <div id="auth"></div>
+      </header>
+      <main id="view"><p class="muted">Loading…</p></main>
+      <footer class="foot">Files are read live from the GitHub repo.</footer>
+    </div>
+  </div>
   <div id="modal" hidden></div>
   <div id="overlay" hidden>
     <div class="ov-bar"><strong id="ov-title"></strong><button id="ov-close" class="btn">✕ Close</button></div>
