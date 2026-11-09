@@ -44,3 +44,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `catalan.py` | Catalan numbers and balanced-parentheses enumeration |
 | `two_sum_pairs.py` | Count pairs with a given sum via hash map, verified by brute force |
 | `spiral_matrix.py` | Build an n x n spiral and read a matrix in spiral order |
+| `zebra_puzzle.py` | Einstein's zebra puzzle via permutation search with early pruning |
+| `pancake_sort.py` | Pancake sorting: greedy flips, BFS-optimal flip count, pancake numbers |
+| `kaprekar.py` | Kaprekar's routine: chains to 6174 and the 7-step worst case |

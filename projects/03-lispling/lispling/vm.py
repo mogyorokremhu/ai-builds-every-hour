@@ -15,9 +15,9 @@ from .types import Env, Lambda, LispError, Macro, Symbol, to_string
 _CENV: Env | None = None  # env macros are looked up in while compiling
 
 (CONST, LOAD, STORE, DEF, JUMP, JF, JF_KEEP, JT_KEEP, POP, CALL, TAILCALL,
- RET, MAKE, PRIM2) = range(14)
+ RET, MAKE, PRIM2, PRIM1) = range(15)
 NAMES = ["CONST", "LOAD", "STORE", "DEF", "JUMP", "JF", "JF_KEEP", "JT_KEEP",
-         "POP", "CALL", "TAILCALL", "RET", "MAKE", "PRIM2"]
+         "POP", "CALL", "TAILCALL", "RET", "MAKE", "PRIM2", "PRIM1"]
 
 
 class Code:
@@ -42,7 +42,9 @@ class VMClosure:
 
 
 _INLINE = ("+", "-", "*", "<", ">", "<=", ">=", "=")
+_INLINE1 = ("car", "cdr", "null?", "not", "zero?", "pair?")
 _PRIMS: dict | None = None
+_PRIMS1: dict | None = None
 
 
 def _prims() -> dict:
@@ -52,6 +54,15 @@ def _prims() -> dict:
         g = global_env()
         _PRIMS = {Symbol(n): g[Symbol(n)] for n in _INLINE if Symbol(n) in g}
     return _PRIMS
+
+
+def _prims1() -> dict:
+    """Builtin unary primitives eligible for inlining (looked up once)."""
+    global _PRIMS1
+    if _PRIMS1 is None:
+        g = global_env()
+        _PRIMS1 = {Symbol(n): g[Symbol(n)] for n in _INLINE1 if Symbol(n) in g}
+    return _PRIMS1
 
 
 def compile_expr(x, code: Code, tail: bool):
@@ -82,6 +93,10 @@ def compile_expr(x, code: Code, tail: bool):
             compile_expr(x[1], code, False)
             compile_expr(x[2], code, False)
             code.emit(PRIM2, (head, _prims()[head]))
+            return _end(code, tail)
+        if isinstance(head, Symbol) and len(x) == 2 and head in _prims1():
+            compile_expr(x[1], code, False)
+            code.emit(PRIM1, (head, _prims1()[head]))
             return _end(code, tail)
         compile_expr(head, code, False)
         for a in x[1:]:
@@ -277,7 +292,7 @@ def disassemble(code: Code, indent="") -> str:
             out.append(f"{indent}{i:3} {NAMES[op]} <code {arg.name or 'lambda'}>")
             out.append(disassemble(arg, indent + "      "))
         else:
-            shown = "" if arg is None else (f"<inline {arg[0]}>" if op == PRIM2 else to_string(arg))
+            shown = "" if arg is None else (f"<inline {arg[0]}>" if op in (PRIM1, PRIM2) else to_string(arg))
             out.append(f"{indent}{i:3} {NAMES[op]:<9}{shown}")
     return "\n".join(out)
 
@@ -335,6 +350,18 @@ def execute(closure: VMClosure, args: list, toplevel=False):
                 f = env.find(sym)[sym]
                 stack.append(f(a, b) if not isinstance(f, (VMClosure, Lambda)) else
                              (execute(f, [a, b]) if isinstance(f, VMClosure) else _tree(f, [a, b])))
+        elif op == PRIM1:
+            sym, fn = arg
+            a = stack.pop()
+            if env.find(sym)[sym] is fn:
+                try:
+                    stack.append(fn(a))
+                except TypeError as e:
+                    raise LispError(f"bad call: {e}") from None
+            else:
+                f = env.find(sym)[sym]
+                stack.append(f(a) if not isinstance(f, (VMClosure, Lambda)) else
+                             (execute(f, [a]) if isinstance(f, VMClosure) else _tree(f, [a])))
         elif op == MAKE:
             stack.append(VMClosure(arg, env))
         elif op == RET:

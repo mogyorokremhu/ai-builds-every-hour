@@ -32,3 +32,4 @@
 - [x] Constant folding of integer + - * (compile time)
 - [x] VM: compile-time macro expansion + `define-macro` (`_CENV`, test_phase10.py)
 - [x] Inline binary primitive ops (`PRIM2`: + - * < > <= >= =, runtime guard if redefined/shadowed; test_phase11.py; ~1.1-1.2x)
+- [x] Inline unary primitives (`PRIM1`: car cdr null? not zero? pair?, same runtime guard; test_phase12.py)
