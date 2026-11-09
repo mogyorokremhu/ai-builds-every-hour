@@ -1,0 +1,10 @@
+{
+  "name": "ai-builds-site",
+  "main": "./public/_worker.js/index.js",
+  "compatibility_date": "2025-01-01",
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+  "vars": { "GITHUB_REPO": "mogyorokremhu/ai-builds-every-hour", "GITHUB_BRANCH": "main" },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "ai-builds-db", "database_id": "5c9fa9e5-0115-4db7-a01c-9bedd5556f16" }
+  ]
+}
