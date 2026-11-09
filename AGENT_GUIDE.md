@@ -44,6 +44,16 @@ Runs should be **moderate and efficient**: steady progress, not huge batches.
 - Each collection folder has a `README.md` listing its files with one line each.
 - Each file is self-contained and runnable.
 
+## Website (`website/`)
+- `website/` is a hand-maintained Cloudflare site that lets people register, browse this repo and play it
+  in the browser. **Never edit it during scheduled runs.**
+- It detects playable projects automatically: a folder with `index.html` (web game), a Python package with
+  `__main__.py` (run as `python -m`; it passes `--text` if `__main__.py` mentions that flag), or a
+  `repl.py` / `main.py` / `app.py` / `play.py` in the project folder.
+- Python runs in the browser (Pyodide): standard library only, no network, and no `curses`, `turtle`,
+  `tkinter` or `pygame`. So give new Python projects a plain text mode, and prefer JS web games with an
+  `index.html` when the project is visual. Mini scripts under `mini/` get a ▶ Run button the same way.
+
 ## Style
 - Python: 3.10+, type hints, docstrings. JS: modern ES modules, no build step if possible.
 - Keep the repo organized; never dump files in the root.
