@@ -135,7 +135,46 @@ def expand_assert(x):
     return [S("if"), x[1], True, [S("error"), "assertion failed", [S("quote"), x[1]]]]
 
 
+def expand_define_record_type(x):
+    """(define-record-type name (ctor field...) pred (field getter [setter])...).
+
+    Records are tagged vectors: #(name v1 v2 ...). Expands to a begin of defines.
+    """
+    if len(x) < 4 or not isinstance(x[2], list) or not x[2]:
+        raise LispError("define-record-type needs a name, a constructor spec and a predicate")
+    name, (ctor, *cfields), pred = x[1], x[2], x[3]
+    specs = x[4:]
+    fields = []
+    for sp in specs:
+        if not isinstance(sp, list) or len(sp) not in (2, 3):
+            raise LispError("define-record-type field spec is (field getter [setter])")
+        fields.append(sp[0])
+    for f in cfields:
+        if f not in fields:
+            raise LispError(f"define-record-type: constructor field {f} is not a declared field")
+    tag = [S("quote"), name]
+    o, v = S("%rec"), S("%val")
+    out = [S("begin")]
+    # fields not in the constructor default to 0
+    args = [(f if f in cfields else 0) for f in fields]
+    out.append([S("define"), [ctor, *cfields], [S("vector"), tag, *args]])
+    out.append([S("define"), [pred, o],
+                [S("and"), [S("vector?"), o], [S(">"), [S("vector-length"), o], 0],
+                 [S("equal?"), [S("vector-ref"), o, 0], tag]]])
+    for i, sp in enumerate(specs, start=1):
+        getter = [S("define"), [sp[1], o],
+                  [S("if"), [pred, o], [S("vector-ref"), o, i],
+                   [S("error"), f"{sp[1]}: not a {name}", o]]]
+        out.append(getter)
+        if len(sp) == 3:
+            out.append([S("define"), [sp[2], o, v],
+                        [S("if"), [pred, o], [S("vector-set!"), o, i, v],
+                         [S("error"), f"{sp[2]}: not a {name}", o]]])
+    return out
+
+
 EXPANDERS = {
+    "define-record-type": expand_define_record_type,
     "when": expand_when,
     "unless": expand_unless,
     "assert": expand_assert,

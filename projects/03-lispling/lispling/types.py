@@ -43,6 +43,8 @@ def to_string(x: object) -> str:
         return f"#<lambda {x.name or 'anonymous'}>"
     if type(x).__name__ == "HashTable":
         return f"#<hash-table {len(x.d)}>"
+    if type(x).__name__ == "Vector":
+        return repr(x)
     if callable(x):
         return "#<builtin>"
     return str(x)
