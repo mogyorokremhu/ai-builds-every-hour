@@ -35,3 +35,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_cardioid.py` | Cardioid string art: chords from point k to 2k on a circle |
 | `ascii_diamond_square.py` | Diamond-square terrain heightmap, shaded (`python ascii_diamond_square.py 7`) |
 | `ascii_waves_interference.py` | Ripples from three point sources interfering |
+| `ascii_dragon_curve.py` | Heighway dragon on a character grid, any order (`python ascii_dragon_curve.py 10`) |
+| `ascii_burning_ship.py` | Burning Ship fractal in shaded ASCII |
+| `ascii_maze_walk.py` | Recursive-backtracker maze (`python ascii_maze_walk.py 20 8 3`) |
