@@ -23,5 +23,10 @@
 
 ## Phase 4 — Tooling
 - [x] Example programs (fib, primes, queens, wordcount)
-- [ ] Bytecode compiler + VM experiment
-- [ ] Benchmarks vs the tree-walker (baseline harness `benchmarks/bench.py` done; needs VM to compare)
+- [x] Bytecode compiler + VM experiment (`vm.py`: core forms, explicit frame stack, tail calls, disassembler)
+- [x] Benchmarks vs the tree-walker (`benchmarks/bench.py` compares both; VM only ~1.0-1.2x faster so far)
+
+## Phase 5 — Ideas
+- [ ] VM: named let, quasiquote, macro expansion before compile
+- [ ] VM: resolve locals to slots instead of dict Envs (the real speedup)
+- [ ] Constant folding / inline primitive ops

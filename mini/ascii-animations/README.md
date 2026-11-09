@@ -36,6 +36,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [equalizer.py](equalizer.py) | Audio-style equalizer bars that jump to random targets and fall (`--bars`, `--seed`) |
 | [tunnel.py](tunnel.py) | Fly through a swirling tunnel of rings |
 | [bouncing_text.py](bouncing_text.py) | DVD-logo style bouncing banner with a corner-hit counter (`--text`) |
+| [radar.py](radar.py) | Rotating radar beam lights up blips that fade (`--blips`, `--seed`) |
+| [countdown.py](countdown.py) | Big 3x5 block-digit countdown (`--from`) |
+| [orbits.py](orbits.py) | Planets on concentric orbits, inner ones faster (`--planets`) |
 
 ```bash
 python fire.py
