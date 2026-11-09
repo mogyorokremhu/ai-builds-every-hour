@@ -1,7 +1,7 @@
 """The evaluator, with tail-call optimisation."""
 from __future__ import annotations
 from pathlib import Path
-from . import builtins, forms, higher
+from . import builtins, forms, higher, stdlib
 from .reader import parse
 from .types import Env, Lambda, LispError, Macro, Symbol, sym, to_string
 
@@ -15,6 +15,7 @@ def global_env(out=print, prelude=True) -> Env:
     env = Env()
     builtins.install(env, out)
     env.update(higher.make(evaluate))
+    env.update(stdlib.make())
     if prelude:
         for e in parse(PRELUDE.read_text()):
             evaluate(e, env)

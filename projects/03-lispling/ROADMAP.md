@@ -18,10 +18,10 @@
 ## Phase 3 — Macros & library
 - [x] `define-macro` (non-hygienic)
 - [x] Standard library written in Lispling (prelude.lisp)
-- [ ] Strings and chars library, `assoc`, hash tables
+- [x] Strings library (chars are 1-char strings), `assoc`, hash tables
 - [ ] Tail-call-safe `cond`/`and`/`or` audit
 
 ## Phase 4 — Tooling
-- [ ] Example programs (fib, primes, queens)
+- [ ] Example programs (fib, primes, queens) — `examples/wordcount.lisp` done
 - [ ] Bytecode compiler + VM experiment
 - [ ] Benchmarks vs the tree-walker

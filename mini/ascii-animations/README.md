@@ -33,6 +33,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [snowfall.py](snowfall.py) | Wind-blown snowflakes settle into an uneven drift on the ground |
 | [scanner.py](scanner.py) | Knight-Rider scanner: bright head with a fading tail (`--tail`) |
 | [heartbeat.py](heartbeat.py) | Scrolling ECG trace with a P-QRS-T wave (`--bpm`) |
+| [equalizer.py](equalizer.py) | Audio-style equalizer bars that jump to random targets and fall (`--bars`, `--seed`) |
+| [tunnel.py](tunnel.py) | Fly through a swirling tunnel of rings |
+| [bouncing_text.py](bouncing_text.py) | DVD-logo style bouncing banner with a corner-hit counter (`--text`) |
 
 ```bash
 python fire.py

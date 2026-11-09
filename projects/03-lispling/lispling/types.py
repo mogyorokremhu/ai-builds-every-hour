@@ -38,6 +38,8 @@ def to_string(x: object) -> str:
         return f"#<macro {x.name}>"
     if isinstance(x, Lambda):
         return f"#<lambda {x.name or 'anonymous'}>"
+    if type(x).__name__ == "HashTable":
+        return f"#<hash-table {len(x.d)}>"
     if callable(x):
         return "#<builtin>"
     return str(x)
