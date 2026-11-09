@@ -1,4 +1,4 @@
-"""Higher-order builtins: map, filter, reduce, apply, for-each."""
+"""Higher-order builtins: map, filter, reduce, apply, for-each, plus error/try."""
 from __future__ import annotations
 from .types import Env, Lambda, LispError, to_string
 
@@ -49,5 +49,18 @@ def make(evaluate):
             raise LispError("apply: last argument must be a list")
         return call(f, list(args[:-1]) + args[-1])
 
-    return {"map": map_, "for-each": for_each, "filter": filter_,
+    def error_(msg, *irritants):
+        text = msg if isinstance(msg, str) else to_string(msg)
+        if irritants:
+            text += ": " + " ".join(to_string(i) for i in irritants)
+        raise LispError(text)
+
+    def try_(thunk, handler):
+        """(try thunk handler): call thunk; on a LispError call handler with the message."""
+        try:
+            return call(thunk, [])
+        except LispError as e:
+            return call(handler, [str(e)])
+
+    return {"error": error_, "try": try_, "map": map_, "for-each": for_each, "filter": filter_,
             "reduce": reduce_, "fold": reduce_, "apply": apply_}

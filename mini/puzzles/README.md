@@ -47,3 +47,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `zebra_puzzle.py` | Einstein's zebra puzzle via permutation search with early pruning |
 | `pancake_sort.py` | Pancake sorting: greedy flips, BFS-optimal flip count, pancake numbers |
 | `kaprekar.py` | Kaprekar's routine: chains to 6174 and the 7-step worst case |
+| `collatz_records.py` | Collatz chains with memoisation; record-holding starts below 100000 |
+| `nim_game.py` | Nim: nim-sum winning move checked against brute-force minimax |
+| `josephus_closed_form.py` | Josephus problem: simulation, recurrence and k=2 closed form agree |

@@ -114,7 +114,31 @@ def expand_case(x):
     return [S("let"), [[k, x[1]]], [S("cond"), *clauses]]
 
 
+def expand_when(x):
+    """(when test body...) -> (if test (begin body...) '())."""
+    if len(x) < 3:
+        raise LispError("when needs a test and a body")
+    return [S("if"), x[1], [S("begin"), *x[2:]], [S("quote"), []]]
+
+
+def expand_unless(x):
+    """(unless test body...) -> (if test '() (begin body...))."""
+    if len(x) < 3:
+        raise LispError("unless needs a test and a body")
+    return [S("if"), x[1], [S("quote"), []], [S("begin"), *x[2:]]]
+
+
+def expand_assert(x):
+    """(assert expr) -> error naming the failed expression."""
+    if len(x) != 2:
+        raise LispError("assert takes exactly one expression")
+    return [S("if"), x[1], True, [S("error"), "assertion failed", [S("quote"), x[1]]]]
+
+
 EXPANDERS = {
+    "when": expand_when,
+    "unless": expand_unless,
+    "assert": expand_assert,
     "case": expand_case,
     "let*": expand_let_star,
     "letrec": expand_letrec,

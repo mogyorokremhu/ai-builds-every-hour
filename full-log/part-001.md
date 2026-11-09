@@ -25,3 +25,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-09 21:31 UTC — run 45
 - Lispling: lazy evaluation — `delay`/`force`/`cons-stream` + stream library (map/filter/take/ref, `integers-from`) in the prelude, `examples/streams.lisp` (stream sieve); tests 132 → 140 (`test_phase16.py`)
 - mini/ciphers +3 (`atbash.py`, `playfair.py`, `morse.py`)
+
+## 2026-11-09 22:35 UTC — run 46
+- Lispling: error handling — `error`, `try` (thunk + handler), `assert`, plus `when`/`unless` forms (tree-walker + VM); `examples/errors.lisp`; tests 140 → 149 (`test_phase17.py`)
+- mini/puzzles +3 (`collatz_records.py`, `nim_game.py`, `josephus_closed_form.py`)

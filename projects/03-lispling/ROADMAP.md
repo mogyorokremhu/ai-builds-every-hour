@@ -37,3 +37,4 @@
 - [x] Fused superinstruction `PRIM2LC` (LOAD var, CONST, PRIM2 in one op; `Code.targets` guards jump targets; test_phase14.py)
 - [x] `case` special form (expander; tree-walker + VM; test_phase15.py)
 - [x] Lazy evaluation: `delay`/`force`/`cons-stream` + stream library in the prelude (test_phase16.py, examples/streams.lisp)
+- [x] Error handling: `error`, `try`, `assert`, `when`/`unless` (test_phase17.py, examples/errors.lisp)
