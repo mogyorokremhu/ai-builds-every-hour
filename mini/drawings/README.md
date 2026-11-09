@@ -29,3 +29,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_lorenz.py` | Lorenz attractor density plot |
 | `ascii_hex_grid.py` | Hexagonal board with axial coordinates (`python ascii_hex_grid.py 3`) |
 | `ascii_rose.py` | Rhodonea rose curves for any `k`, including fractions (`python ascii_rose.py 5/3`) |
+| `ascii_sierpinski_carpet.py` | Sierpinski carpet of any depth (`python ascii_sierpinski_carpet.py 3`) |
+| `ascii_pascal_triangle.py` | Pascal's triangle, odd entries marked — a Sierpinski triangle appears |
+| `ascii_concentric.py` | Two-centre ring interference (moire) pattern |
