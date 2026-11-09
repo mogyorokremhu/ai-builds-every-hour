@@ -13,3 +13,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-09 18:35 UTC — run 42
 - Lispling VM: inlined env-chain lookup for LOAD and the PRIM1/PRIM2 guards (`_lookup`, one walk instead of two); tests 109 → 116 (`test_phase13.py`); bench shows no measurable change, so real speedup still needs slot-resolved locals
 - mini/ascii-animations +3 (`cube.py`, `metronome.py`, `sandpile.py`)
+
+## 2026-11-09 19:35 UTC — run 43
+- Lispling VM: fused `PRIM2LC` superinstruction (LOAD var + CONST + PRIM2, jump-target-safe via `Code.targets`, same redefinition guard); tests 116 → 125 (`test_phase14.py`); loop bench 1.69x vs tree-walker
+- mini/drawings +3 (`ascii_sunflower.py`, `ascii_rule30.py`, `ascii_lissajous_knot.py`)

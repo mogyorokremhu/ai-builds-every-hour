@@ -15,15 +15,16 @@ from .types import Env, Lambda, LispError, Macro, Symbol, to_string
 _CENV: Env | None = None  # env macros are looked up in while compiling
 
 (CONST, LOAD, STORE, DEF, JUMP, JF, JF_KEEP, JT_KEEP, POP, CALL, TAILCALL,
- RET, MAKE, PRIM2, PRIM1) = range(15)
+ RET, MAKE, PRIM2, PRIM1, PRIM2LC) = range(16)
 NAMES = ["CONST", "LOAD", "STORE", "DEF", "JUMP", "JF", "JF_KEEP", "JT_KEEP",
-         "POP", "CALL", "TAILCALL", "RET", "MAKE", "PRIM2", "PRIM1"]
+         "POP", "CALL", "TAILCALL", "RET", "MAKE", "PRIM2", "PRIM1", "PRIM2LC"]
 
 
 class Code:
     def __init__(self, params=(), name=""):
         self.ops: list[tuple[int, object]] = []
         self.params, self.name = list(params), name
+        self.targets: set[int] = set()  # jump targets (fusion must not swallow them)
 
     def emit(self, op, arg=None):
         self.ops.append((op, arg))
@@ -31,6 +32,17 @@ class Code:
 
     def patch(self, at):
         self.ops[at] = (self.ops[at][0], len(self.ops))
+        self.targets.add(len(self.ops))
+
+    def emit_prim2(self, sym, fn):
+        """Emit PRIM2, fusing a preceding LOAD var / CONST k pair into PRIM2LC."""
+        n = len(self.ops)
+        if (n >= 2 and self.ops[-2][0] == LOAD and self.ops[-1][0] == CONST
+                and n - 1 not in self.targets and n not in self.targets):
+            _, k = self.ops.pop()
+            _, var = self.ops.pop()
+            return self.emit(PRIM2LC, (sym, fn, var, k))
+        return self.emit(PRIM2, (sym, fn))
 
 
 class VMClosure:
@@ -92,7 +104,7 @@ def compile_expr(x, code: Code, tail: bool):
             # inline binary primitive; guarded at runtime in case it was redefined
             compile_expr(x[1], code, False)
             compile_expr(x[2], code, False)
-            code.emit(PRIM2, (head, _prims()[head]))
+            code.emit_prim2(head, _prims()[head])
             return _end(code, tail)
         if isinstance(head, Symbol) and len(x) == 2 and head in _prims1():
             compile_expr(x[1], code, False)
@@ -292,7 +304,8 @@ def disassemble(code: Code, indent="") -> str:
             out.append(f"{indent}{i:3} {NAMES[op]} <code {arg.name or 'lambda'}>")
             out.append(disassemble(arg, indent + "      "))
         else:
-            shown = "" if arg is None else (f"<inline {arg[0]}>" if op in (PRIM1, PRIM2) else to_string(arg))
+            shown = ("" if arg is None else f"<inline {arg[0]}>" if op in (PRIM1, PRIM2)
+                     else f"<inline {arg[0]} {arg[2]} {to_string(arg[3])}>" if op == PRIM2LC else to_string(arg))
             out.append(f"{indent}{i:3} {NAMES[op]:<9}{shown}")
     return "\n".join(out)
 
@@ -369,6 +382,19 @@ def execute(closure: VMClosure, args: list, toplevel=False):
                 f = cur
                 stack.append(f(a) if not isinstance(f, (VMClosure, Lambda)) else
                              (execute(f, [a]) if isinstance(f, VMClosure) else _tree(f, [a])))
+        elif op == PRIM2LC:
+            sym, fn, var, k = arg
+            a = _lookup(env, var)
+            cur = _lookup(env, sym)
+            if cur is fn:
+                try:
+                    stack.append(fn(a, k))
+                except TypeError as e:
+                    raise LispError(f"bad call: {e}") from None
+            else:
+                f = cur
+                stack.append(f(a, k) if not isinstance(f, (VMClosure, Lambda)) else
+                             (execute(f, [a, k]) if isinstance(f, VMClosure) else _tree(f, [a, k])))
         elif op == MAKE:
             stack.append(VMClosure(arg, env))
         elif op == RET:

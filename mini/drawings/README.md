@@ -41,3 +41,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_newton_fractal.py` | Newton fractal for z^3 - 1, one glyph per root basin |
 | `ascii_clifford_attractor.py` | Clifford strange attractor density plot |
 | `ascii_moire_grid.py` | Moire pattern from two rotated gratings (`python ascii_moire_grid.py 4`) |
+| `ascii_sunflower.py` | Vogel sunflower seed spiral at the golden angle |
+| `ascii_rule30.py` | Elementary cellular automaton triangle (any rule number) |
+| `ascii_lissajous_knot.py` | Trefoil-style knot with depth shading |
