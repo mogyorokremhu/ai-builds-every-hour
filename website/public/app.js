@@ -148,26 +148,31 @@ function renderAuth() {
     $('#b-reg').onclick = () => showAuth('register');
   }
 }
+// Shared by the login card on the home page and the login/register dialog.
+function bindAuthForm(form, mode, errEl, done) {
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const r = await api(mode, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username: form.u.value.trim(), password: form.p.value }) });
+    if (r.ok) { user = r.data.user; if (done) done(); renderAuth(); route(); }
+    else { errEl.hidden = false; errEl.textContent = (r.data && r.data.error) || 'Something went wrong.'; }
+  };
+}
 function showAuth(mode, note = '') {
   const m = $('#modal');
   const isLogin = mode === 'login';
   m.hidden = false;
   m.innerHTML = `<div class="dlg"><button class="btn x" type="button" id="a-x">✕</button>
-    <h2>${isLogin ? 'Log in' : 'Create your account'}</h2>${note ? `<p class="note">${esc(note)}</p>` : ''}
-    <form id="a-form"><label>Username<input name="u" autocomplete="username" required minlength="3" maxlength="20" autocapitalize="off"></label>
-    <label>Password<input name="p" type="password" autocomplete="${isLogin ? 'current-password' : 'new-password'}" required minlength="${isLogin ? 1 : 8}"></label>
-    <p class="err" id="a-err" hidden></p><button class="btn primary">${isLogin ? 'Log in' : 'Register'}</button></form>
-    <p class="sw">${isLogin ? 'No account yet? <a href="#" id="a-sw">Register</a>' : 'Already registered? <a href="#" id="a-sw">Log in</a>'}</p></div>`;
+    <div class="auth-top"><h2>${isLogin ? 'Welcome back' : 'Join the<br>build'}</h2>
+      <p>${note ? `<span class="note">${esc(note)}</span>` : isLogin ? 'Log in to read the source code and play everything in your browser.' : 'A free account lets you read the code and play every project right here.'}</p>
+      <a href="#" id="a-sw">${isLogin ? 'CREATE ACCOUNT' : 'BACK TO LOGIN'}</a></div>
+    <form id="a-form" class="auth-bot"><h3>${isLogin ? 'USER LOGIN' : 'NEW ACCOUNT'}</h3>
+      <label class="pill"><span class="ic">👤</span><input name="u" placeholder="Username" autocomplete="username" required minlength="3" maxlength="20" autocapitalize="off"></label>
+      <label class="pill"><span class="ic">🔒</span><input name="p" type="password" placeholder="Password" autocomplete="${isLogin ? 'current-password' : 'new-password'}" required minlength="${isLogin ? 1 : 8}"></label>
+      <p class="err" id="a-err" hidden></p><button class="login-btn">${isLogin ? 'LOGIN' : 'REGISTER'}</button></form></div>`;
   $('#a-x').onclick = () => (m.hidden = true);
   $('#a-sw').onclick = (e) => { e.preventDefault(); showAuth(isLogin ? 'register' : 'login', note); };
   $('input', m).focus();
-  $('#a-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const f = e.target;
-    const r = await api(mode, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username: f.u.value.trim(), password: f.p.value }) });
-    if (r.ok) { user = r.data.user; m.hidden = true; renderAuth(); route(); }
-    else { const er = $('#a-err'); er.hidden = false; er.textContent = (r.data && r.data.error) || 'Something went wrong.'; }
-  };
+  bindAuthForm($('#a-form'), mode, $('#a-err'), () => (m.hidden = true));
 }
 
 // ---------- Play overlay ----------
@@ -210,15 +215,28 @@ async function fillDescriptions() {
     } catch {}
   }
 }
+function memberCard() {
+  if (user) {
+    return `<div class="member"><h3>WELCOME BACK</h3><p class="welcome">Signed in as <strong>${esc(user.username)}</strong>.<br>Everything is unlocked.</p>
+      <div class="stack"><a class="go full" href="#/tree/projects">BROWSE PROJECTS</a><a class="go full" href="#/tree/mini">MINI COLLECTIONS</a></div></div>`;
+  }
+  return `<div class="member"><h3>MEMBER LOGIN</h3>
+    <form id="h-form" class="stack"><label class="field"><input name="u" placeholder="USERNAME" autocomplete="username" required minlength="3" maxlength="20" autocapitalize="off"></label>
+      <label class="field"><input name="p" type="password" placeholder="PASSWORD" autocomplete="current-password" required></label>
+      <p class="err" id="h-err" hidden></p><button class="go">LOGIN</button></form>
+    <p class="small">No account yet? <a href="#" id="h-reg">Create one — it’s free</a></p></div>`;
+}
 function viewHome() {
   const projects = [...(index.get('projects')?.dirs || [])].sort().map((d) => 'projects/' + d);
   const minis = [...(index.get('mini')?.dirs || [])].sort().map((d) => 'mini/' + d);
-  view.innerHTML = `<section class="hero"><h1>An AI builds something new every hour</h1>
-    <p>Big multi-day projects and tiny creative experiments, written by Claude on a schedule. Browse everything below — register for free to read the code and play the games right here in your browser.</p>
-    ${user ? '' : '<button class="btn primary big" id="h-reg">Register to play</button>'}</section>
+  view.innerHTML = `<section class="hero-panel"><div class="hero-left"><h1>Built by AI.<br>Every hour.</h1>
+      <p class="sub">Browse it. Play it.</p>
+      <p>Big multi-day projects and tiny creative experiments, written by Claude on a schedule. Browse everything — register for free to read the code and play the games right here in your browser.</p>
+      <a class="pill-outline" href="#/tree/projects">Explore projects</a></div>${memberCard()}</section>
     <h2 class="sec">Projects</h2><div class="grid">${projects.map(card).join('') || '<p class="muted">No projects yet.</p>'}</div>
     <h2 class="sec">Mini collections</h2><div class="grid">${minis.map(card).join('') || '<p class="muted">None yet.</p>'}</div>`;
-  const b = $('#h-reg'); if (b) b.onclick = () => showAuth('register');
+  const f = $('#h-form');
+  if (f) { bindAuthForm(f, 'login', $('#h-err')); $('#h-reg').onclick = (e) => { e.preventDefault(); showAuth('register'); }; }
   fillDescriptions();
 }
 
@@ -278,6 +296,9 @@ async function route() {
   const kind = parts.shift();
   const path = parts.map(decodeURIComponent).join('/');
   window.scrollTo(0, 0);
+  document.body.classList.toggle('home', !kind);
+  const section = !kind ? 'home' : path.split('/')[0] || 'home';
+  for (const a of document.querySelectorAll('#sidenav a[data-nav]')) a.classList.toggle('on', a.dataset.nav === section);
   try {
     if (!kind) viewHome();
     else if (kind === 'tree') await viewDir(path);
