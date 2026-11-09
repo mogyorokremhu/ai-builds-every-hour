@@ -39,6 +39,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [radar.py](radar.py) | Rotating radar beam lights up blips that fade (`--blips`, `--seed`) |
 | [countdown.py](countdown.py) | Big 3x5 block-digit countdown (`--from`) |
 | [orbits.py](orbits.py) | Planets on concentric orbits, inner ones faster (`--planets`) |
+| [cube.py](cube.py) | Rotating wireframe cube with perspective (`--size`) |
+| [metronome.py](metronome.py) | Swinging metronome arm that ticks at the extremes (`--bpm`) |
+| [sandpile.py](sandpile.py) | Abelian sandpile toppling pattern (`--grains`, `--size`) |
 
 ```bash
 python fire.py

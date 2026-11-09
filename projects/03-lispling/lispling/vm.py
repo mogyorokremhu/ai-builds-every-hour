@@ -310,7 +310,12 @@ def execute(closure: VMClosure, args: list, toplevel=False):
         if op == CONST:
             stack.append(arg)
         elif op == LOAD:
-            stack.append(env.find(arg)[arg])
+            e = env
+            while arg not in e:  # inlined Env.find: avoids a method call per lookup
+                e = e.parent
+                if e is None:
+                    raise LispError(f"unbound symbol: {arg}")
+            stack.append(e[arg])
         elif op == STORE:
             env.find(arg)[arg] = stack.pop()
             stack.append([])
@@ -341,25 +346,27 @@ def execute(closure: VMClosure, args: list, toplevel=False):
             sym, fn = arg
             b = stack.pop()
             a = stack.pop()
-            if env.find(sym)[sym] is fn:
+            cur = _lookup(env, sym)
+            if cur is fn:
                 try:
                     stack.append(fn(a, b))
                 except TypeError as e:
                     raise LispError(f"bad call: {e}") from None
             else:  # user shadowed/redefined the operator: do a normal call
-                f = env.find(sym)[sym]
+                f = cur
                 stack.append(f(a, b) if not isinstance(f, (VMClosure, Lambda)) else
                              (execute(f, [a, b]) if isinstance(f, VMClosure) else _tree(f, [a, b])))
         elif op == PRIM1:
             sym, fn = arg
             a = stack.pop()
-            if env.find(sym)[sym] is fn:
+            cur = _lookup(env, sym)
+            if cur is fn:
                 try:
                     stack.append(fn(a))
                 except TypeError as e:
                     raise LispError(f"bad call: {e}") from None
             else:
-                f = env.find(sym)[sym]
+                f = cur
                 stack.append(f(a) if not isinstance(f, (VMClosure, Lambda)) else
                              (execute(f, [a]) if isinstance(f, VMClosure) else _tree(f, [a])))
         elif op == MAKE:
@@ -398,6 +405,15 @@ def execute(closure: VMClosure, args: list, toplevel=False):
                     stack.append(v)
             else:
                 raise LispError(f"not a procedure: {to_string(f)}")
+
+
+def _lookup(env, name):
+    """Value of name, walking the env chain (single pass, no method calls)."""
+    while name not in env:
+        env = env.parent
+        if env is None:
+            raise LispError(f"unbound symbol: {name}")
+    return env[name]
 
 
 def _bind(f, env, args):
