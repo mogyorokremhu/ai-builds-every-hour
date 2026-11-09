@@ -38,3 +38,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `fibonacci_word.py` | Fibonacci word substitution and Zeckendorf representations |
 | `permutation_rank.py` | Lexicographic rank/unrank of permutations (factorial number system) |
 | `sum_of_squares.py` | Sums of two (Fermat) and four (Lagrange) squares |
+| `look_and_say.py` | Look-and-say sequence with Conway's constant estimate |
+| `happy_numbers.py` | Happy numbers and their digit-square chains |
+| `bridge_torch.py` | Bridge-and-torch puzzle: optimal crossing time for any group |

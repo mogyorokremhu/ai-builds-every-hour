@@ -16,8 +16,8 @@
 - [ ] Better error messages with source positions
 
 ## Phase 3 — Macros & library
-- [ ] `define-macro` (non-hygienic)
-- [ ] Standard library written in Lispling (prelude.lisp)
+- [x] `define-macro` (non-hygienic)
+- [x] Standard library written in Lispling (prelude.lisp)
 - [ ] Strings and chars library, `assoc`, hash tables
 - [ ] Tail-call-safe `cond`/`and`/`or` audit
 

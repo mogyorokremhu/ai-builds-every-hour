@@ -1,21 +1,49 @@
 """The evaluator, with tail-call optimisation."""
 from __future__ import annotations
+from pathlib import Path
 from . import builtins, forms, higher
 from .reader import parse
-from .types import Env, Lambda, LispError, Symbol, sym, to_string
+from .types import Env, Lambda, LispError, Macro, Symbol, sym, to_string
 
 S = sym
 
 
-def global_env(out=print) -> Env:
+PRELUDE = Path(__file__).with_name("prelude.lisp")
+
+
+def global_env(out=print, prelude=True) -> Env:
     env = Env()
     builtins.install(env, out)
     env.update(higher.make(evaluate))
+    if prelude:
+        for e in parse(PRELUDE.read_text()):
+            evaluate(e, env)
     return env
 
 
 def _truthy(x) -> bool:
     return x is not False
+
+
+def _lookup_macro(name, env):
+    e = env
+    while e is not None:
+        if name in e:
+            return e[name] if isinstance(e[name], Macro) else None
+        e = e.parent
+    return None
+
+
+def expand_macro(m: Macro, args):
+    """Run the macro body on the unevaluated args and return the new form."""
+    if len(args) != len(m.params):
+        raise LispError(f"macro {m.name} expects {len(m.params)} args, got {len(args)}")
+    menv = Env(m.env)
+    menv.update(zip(m.params, args))
+    r = []
+    for e in m.body:
+        r = evaluate(e, menv)
+    return r
 
 
 def evaluate(x, env: Env):
@@ -49,6 +77,11 @@ def evaluate(x, env: Env):
                 if isinstance(val, Lambda) and not val.name:
                     val.name = target
                 env[target] = val
+            return []
+        if head == "define-macro":
+            if len(x) < 3 or not isinstance(x[1], list) or not x[1]:
+                raise LispError("define-macro needs (name params...) and a body")
+            env[x[1][0]] = Macro(x[1][1:], x[2:], env, x[1][0])
             return []
         if head == "set!":
             env.find(x[1])[x[1]] = evaluate(x[2], env)
@@ -97,6 +130,11 @@ def evaluate(x, env: Env):
                 if _truthy(r):
                     return r
             return False
+        if isinstance(head, Symbol):
+            m = _lookup_macro(head, env)
+            if m is not None:
+                x = expand_macro(m, x[1:])
+                continue
         # procedure call
         f = evaluate(head, env)
         args = [evaluate(a, env) for a in x[1:]]

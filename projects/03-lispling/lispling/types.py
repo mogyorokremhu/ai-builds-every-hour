@@ -34,6 +34,8 @@ def to_string(x: object) -> str:
         return '"' + x.replace("\\", "\\\\").replace('"', '\\"') + '"'
     if isinstance(x, float) and x.is_integer():
         return str(int(x))
+    if isinstance(x, Macro):
+        return f"#<macro {x.name}>"
     if isinstance(x, Lambda):
         return f"#<lambda {x.name or 'anonymous'}>"
     if callable(x):
@@ -46,6 +48,10 @@ class Lambda:
 
     def __init__(self, params, body, env, name=""):
         self.params, self.body, self.env, self.name = params, body, env, name
+
+
+class Macro(Lambda):
+    """A non-hygienic macro: receives unevaluated forms, returns a form."""
 
 
 class Env(dict):
