@@ -90,7 +90,32 @@ def _qq(t):
     return [_append, *parts]
 
 
+_case_n = 0
+
+
+def expand_case(x):
+    """(case key ((d ...) body...) ... (else body...)) -> let + cond with equal?."""
+    global _case_n
+    if len(x) < 2:
+        raise LispError("case needs a key expression")
+    _case_n += 1
+    k = S(f"%case-key{_case_n}")
+    clauses = []
+    for c in x[2:]:
+        if not isinstance(c, list) or len(c) < 2:
+            raise LispError("case clause needs data and a body")
+        if c[0] == S("else"):
+            clauses.append([S("else"), *c[1:]])
+        elif isinstance(c[0], list):
+            test = [S("or"), *[[S("equal?"), k, [S("quote"), d]] for d in c[0]]]
+            clauses.append([test, *c[1:]])
+        else:
+            raise LispError("case clause data must be a list")
+    return [S("let"), [[k, x[1]]], [S("cond"), *clauses]]
+
+
 EXPANDERS = {
+    "case": expand_case,
     "let*": expand_let_star,
     "letrec": expand_letrec,
     "do": expand_do,
