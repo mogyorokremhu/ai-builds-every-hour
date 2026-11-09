@@ -66,7 +66,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] AI scouting under fog (`scouting.js`: frontier hexes become AI goals while no enemy is seen)
 - [x] Floating damage/heal numbers per victim (`effects.js`)
 - [ ] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hookup needs `layout` exposed from main.js (small main.js edit)
-- [ ] Balance pass of ability numbers from self-play (document in BALANCE.md) — hard vs easy fell from ~80% to ~60%; holds decide 19 of 20 battles
+- [x] Balance analysis of ability numbers from self-play (`balance.js`, BALANCE.md); AI recruiting tweaks (mage/healer/rogue) still open
 
 ## Phase 7 — Campaign & presentation
 - [x] Skirmish setup screen (`skirmish.js` logic, `screens.js` form, Skirmish… dialog in main.js)
@@ -79,7 +79,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 
 ## Phase 8 — Polish
 - [ ] Browser smoke test in CI-like script form (`tests/browser-smoke.mjs` exists; add screenshots to docs)
-- [ ] Balance pass from AI self-play statistics (document in BALANCE.md)
+- [x] Balance analysis from AI self-play statistics (`balance.js`, `tools/balance.mjs`, findings in BALANCE.md; tuning of AI recruiting/rogue still open)
 - [x] Shareable replay files: deterministic re-simulation (`replay.js`, `tools/replay.mjs record|check`, fingerprint verification)
 - [x] Replay viewer in the browser (`replayviewer.js` logic + `replay.html`: load a file, step/back/seek/turn/play)
 - [x] Hot-seat multiplayer: pass-the-device curtain under fog (`hotseat.js`, `hotseat-hook.js`)
