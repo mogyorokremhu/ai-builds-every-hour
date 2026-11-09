@@ -28,7 +28,7 @@ export const DIFFICULTY = Object.freeze({
 
 /** Preferred army mix (relative weights) before counter-picking adjustments. */
 export const RECRUIT_MIX = Object.freeze({
-  swordsman: 3, spearman: 2.2, archer: 2.2, cavalry: 2, mage: 1.4, healer: 1, rogue: 1.4,
+  swordsman: 3, spearman: 2.2, archer: 2.2, cavalry: 2, mage: 1.7, healer: 1.1, rogue: 1.15,
 });
 
 const valueRate = (u) => unitType(u).cost / maxHp(u);
@@ -151,7 +151,11 @@ export class AIPlayer {
       w /= 1 + count(mine, (u) => u.type === type) * 0.6;
       if (type === "spearman") w *= 1 + mounted * 0.2;
       if (type === "cavalry") w *= 1 + ranged * 0.25;
-      if (type === "healer" && (healers >= 1 || mine.length < 4)) w *= 0.2;
+      if (type === "healer") {
+        const melee = count(mine, (u) => unitType(u).ranged === 0 && !hasTrait(u, "healer"));
+        if (healers >= 1 || mine.length < 4) w *= 0.2;
+        else if (melee >= 4) w *= 2.5; // a big melee line wants a medic behind it
+      }
       w *= 1 + alignmentBonus(t.alignment, soon) / 100;
       options.push([type, w * (0.85 + this.rng.next() * 0.3)]);
     }

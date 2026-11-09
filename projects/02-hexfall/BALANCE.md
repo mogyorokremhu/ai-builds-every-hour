@@ -19,7 +19,15 @@ credited per 100 gold of recruit cost; the Healer's kills are mostly incidental.
 - Spearman, Swordsman and Archer sit within ±15% of each other: healthy.
 - Games are decided by village holds (17–19 of 20), not by routs.
 
-## Raw reports
+## Run 26 — AI recruiting tweak
+
+`RECRUIT_MIX` changed: mage 1.4 → 1.7, healer 1 → 1.1 (plus x2.5 when the army has 4+ melee units
+and no healer), rogue 1.4 → 1.15. First attempt (mage 2.4, rogue 0.9) overshot: mages 56–73 recruits,
+rogues ~1, red share 75% in one series. Final numbers over 20 games per series: healers recruited
+18–23 (was 0–1), mages 11–16 (was 9), rogues 22–27 (was ~49). Mage stays efficient (10–11 kills/100g),
+healers still score few kills by design. No side bias (z 0.45–0.89).
+
+## Raw reports (run 25, before the tweak)
 
 ### normal (red) vs normal (blue)
 

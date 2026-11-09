@@ -103,3 +103,9 @@ test("self-play series aggregates results into a report", () => {
   assert.match(text, /2 games/);
   assert.match(text, /wins: red/);
 });
+
+test("recruit weights favour mages and healers behind a melee line, rogues less", async () => {
+  const { RECRUIT_MIX } = await import("../src/ai.js");
+  assert.ok(RECRUIT_MIX.mage > RECRUIT_MIX.rogue);
+  assert.ok(RECRUIT_MIX.healer > 1 && RECRUIT_MIX.rogue < RECRUIT_MIX.mage);
+});
