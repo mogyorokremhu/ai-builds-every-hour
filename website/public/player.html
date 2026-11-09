@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Player</title>
+  <style>
+    html,body{height:100%;margin:0;background:#000;color:#d7dde4;font-family:ui-monospace,Menlo,Consolas,monospace}
+    body{display:flex;flex-direction:column}
+    #bar{display:flex;gap:8px;align-items:center;padding:6px 10px;background:#161b22;border-bottom:1px solid #2a313c;font:13px system-ui,sans-serif}
+    #bar button{font:inherit;border:1px solid #2a313c;background:#21262d;color:#e6edf3;border-radius:6px;padding:4px 12px}
+    #status{flex:1;color:#8b949e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #screen{flex:1;margin:0;padding:10px;overflow:auto;white-space:pre;font-size:13px;line-height:1.25}
+    #inp{display:flex;gap:6px;padding:8px;background:#161b22;border-top:1px solid #2a313c}
+    #line{flex:1;min-width:0;font:16px ui-monospace,Menlo,Consolas,monospace;background:#0d1117;color:#e6edf3;border:1px solid #2a313c;border-radius:6px;padding:8px}
+    #inp button{font:inherit;border:1px solid #3fb950;background:#3fb950;color:#04130a;border-radius:6px;padding:0 16px}
+    #inp.off{opacity:.45}
+    .c0{color:#6e7681}.c1{color:#ff7b72}.c2{color:#3fb950}.c3{color:#d29922}.c4{color:#58a6ff}.c5{color:#d2a8ff}.c6{color:#39c5cf}.c7{color:#e6edf3}
+    .g0{color:#8b949e}.g1{color:#ffa198}.g2{color:#56d364}.g3{color:#e3b341}.g4{color:#79c0ff}.g5{color:#e2c5ff}.g6{color:#56d4dd}.g7{color:#fff}
+    .b0{background:#484f58}.b1{background:#8e1519}.b2{background:#196c2e}.b3{background:#7d4e00}.b4{background:#0c2d6b}.b5{background:#5a32a3}.b6{background:#0b5560}.b7{background:#b1bac4;color:#000}
+    .bold{font-weight:700}.err{color:#ff7b72}
+  </style>
+</head>
+<body>
+  <div id="bar"><button id="restart">↻ Restart</button><button id="stop">■ Stop</button><span id="status">Starting…</span></div>
+  <pre id="screen" tabindex="0"></pre>
+  <form id="inp" class="off"><input id="line" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Waiting…" disabled><button>Send</button></form>
+  <script src="/player.js"></script>
+</body>
+</html>

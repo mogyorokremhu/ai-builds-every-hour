@@ -1,0 +1,12 @@
+name = "ai-builds-site"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "public"
+
+[vars]
+GITHUB_REPO = "mogyorokremhu/ai-builds-every-hour"
+GITHUB_BRANCH = "main"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-builds-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

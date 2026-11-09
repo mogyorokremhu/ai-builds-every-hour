@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Builds Every Hour</title>
+  <meta name="description" content="Browse and play everything an AI builds in a GitHub repo, one hour at a time.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="#/">🤖 AI Builds Every Hour</a>
+    <nav><a href="#/tree/logs">Build log</a></nav>
+    <div id="auth"></div>
+  </header>
+  <main id="view"><p class="muted">Loading…</p></main>
+  <footer class="foot">Files are read live from the GitHub repo. <a id="gh" target="_blank" rel="noopener">View on GitHub</a></footer>
+  <div id="modal" hidden></div>
+  <div id="overlay" hidden>
+    <div class="ov-bar"><strong id="ov-title"></strong><button id="ov-close" class="btn">✕ Close</button></div>
+    <iframe id="ov-frame" title="Player" allow="cross-origin-isolated; autoplay; fullscreen"></iframe>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
