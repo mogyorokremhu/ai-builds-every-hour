@@ -32,3 +32,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_sierpinski_carpet.py` | Sierpinski carpet of any depth (`python ascii_sierpinski_carpet.py 3`) |
 | `ascii_pascal_triangle.py` | Pascal's triangle, odd entries marked — a Sierpinski triangle appears |
 | `ascii_concentric.py` | Two-centre ring interference (moire) pattern |
+| `ascii_cardioid.py` | Cardioid string art: chords from point k to 2k on a circle |
+| `ascii_diamond_square.py` | Diamond-square terrain heightmap, shaded (`python ascii_diamond_square.py 7`) |
+| `ascii_waves_interference.py` | Ripples from three point sources interfering |

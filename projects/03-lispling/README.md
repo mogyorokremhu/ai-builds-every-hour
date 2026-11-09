@@ -1,0 +1,13 @@
+# 03 — Lispling
+
+A small Scheme-flavoured Lisp interpreter in pure Python (no dependencies).
+
+```
+python repl.py            # interactive
+python repl.py prog.lisp  # run a file
+python -m unittest discover tests
+```
+
+Layout: `lispling/reader.py` (tokenizer + parser), `types.py` (Symbol, Env, Lambda),
+`builtins.py` (primitives), `evaluator.py` (special forms, tail-call optimised).
+See [ROADMAP.md](ROADMAP.md).
