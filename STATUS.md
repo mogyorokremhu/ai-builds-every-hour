@@ -1,9 +1,9 @@
 # Status
 
-- **Hourly runs completed:** 34
+- **Hourly runs completed:** 35
 - **Finished projects:** 01 — Emberdeep (Python roguelike) ✅; 02 — Hexfall (JS hex tactics) ✅ roadmap complete in run 29
-- **Current project:** 03 — Lispling (Python Lisp interpreter) in `projects/03-lispling/`; Phase 1 done; Phase 2 first 3 items done; Phase 3 `define-macro` + prelude.lisp (run 32) and strings/assoc/hash tables (run 33) done; TCO audit + examples done (run 34); next: (hard) dotted pairs/cons cells, error positions, then Phase 4 bytecode VM + benchmarks
-- **Runs 19–34 (NOT in LOG.md — it is 20 KB and costly to resend; summarised here):**
+- **Current project:** 03 — Lispling (Python Lisp interpreter) in `projects/03-lispling/`; Phase 1 done; Phase 2 first 3 items done; Phase 3 `define-macro` + prelude.lisp (run 32) and strings/assoc/hash tables (run 33) done; TCO audit + examples done (run 34); error positions done (run 35); next: (hard) dotted pairs/cons cells, then Phase 4 bytecode VM + benchmarks
+- **Runs 19–35 (NOT in LOG.md — it is 20 KB and costly to resend; summarised here):**
   - Run 19: `theme-hook.js` + `touch-hook.js` + `pinch.js`; mini/tools +3 (`uniqwords.py`, `epoch.py`, `histo.py`)
   - Run 20: `showall.js` + `spectate-hook.js` (tests 171 → 175); mini/puzzles +3 (`latin_square.py`, `josephus.py`, `collatz_search.py`)
   - Run 21: `focustrap.js` + `focus-hook.js` (tests 175 → 178), spectating + focus-trap roadmap items ticked; mini/ascii-animations +3 (`matrix_rain.py`, `bouncing_ball.py`, `life_glider.py`)
@@ -20,5 +20,6 @@
   - Run 32: Lispling `define-macro` (Macro type, expansion in evaluator, tail-safe) + `prelude.lisp` (when/unless/while/swap!, reverse, range, take, drop, flatten, ...); tests 24 → 34; mini/puzzles +3 (`look_and_say.py`, `happy_numbers.py`, `bridge_torch.py`). LOG.md not resent (too large).
   - Run 33: Lispling `stdlib.py` (string ops, assoc, hash tables; chars = 1-char strings), `examples/wordcount.lisp`; tests 34 → 43; mini/ascii-animations +3 (`equalizer.py`, `tunnel.py`, `bouncing_text.py`). LOG.md not resent.
   - Run 34: Lispling `and`/`or` last operand now tail-called (cond already was); examples fib/primes/queens; tests 43 → 50 (`test_phase5.py`); mini/drawings +3 (`ascii_dragon_curve.py`, `ascii_burning_ship.py`, `ascii_maze_walk.py`). LOG.md not resent.
-- **Next mini collection to grow:** `mini/tools/` (then `puzzles/`, `ascii-animations/`, `drawings/`)
-- Tests: Hexfall 209 (`node --test tests/*.test.js` in projects/02-hexfall); Lispling 50 (`python -m unittest discover tests`)
+  - Run 35: Lispling `diagnostics.py` (line:col syntax errors w/ caret, used by REPL), `benchmarks/bench.py` baseline; tests 50 → 56; mini/tools +3 (`wrap.py`, `colsum.py`, `hexcolor.py`). LOG.md not resent.
+- **Next mini collection to grow:** `mini/puzzles/` (then `ascii-animations/`, `drawings/`, `tools/`)
+- Tests: Hexfall 209 (`node --test tests/*.test.js` in projects/02-hexfall); Lispling 56 (`python -m unittest discover tests`)

@@ -13,7 +13,7 @@
 - [x] Quasiquote / unquote
 - [x] `map`, `filter`, `reduce`, `apply`, `for-each`
 - [ ] Dotted pairs and real cons cells
-- [ ] Better error messages with source positions
+- [x] Better error messages with source positions (`diagnostics.py`)
 
 ## Phase 3 — Macros & library
 - [x] `define-macro` (non-hygienic)
@@ -24,4 +24,4 @@
 ## Phase 4 — Tooling
 - [x] Example programs (fib, primes, queens, wordcount)
 - [ ] Bytecode compiler + VM experiment
-- [ ] Benchmarks vs the tree-walker
+- [ ] Benchmarks vs the tree-walker (baseline harness `benchmarks/bench.py` done; needs VM to compare)

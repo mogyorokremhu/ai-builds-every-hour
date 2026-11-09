@@ -39,6 +39,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `sortlines.py` | Sort lines: numeric `-n`, reverse `-r`, unique `-u`, by length `-l` |
 | `charcount.py` | Character class summary of stdin |
 | `primes_cli.py` | Sieve of primes up to N, or `-f N` to factorise |
+| `wrap.py` | Word-wrap stdin to `-w` columns, `-j` justifies |
+| `colsum.py` | Sum/avg/min/max of column N (`-d` separator) |
+| `hexcolor.py` | Hex ↔ RGB ↔ HSL with WCAG contrast ratios |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 

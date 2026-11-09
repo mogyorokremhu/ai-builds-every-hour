@@ -1,6 +1,7 @@
 """Interactive REPL: `python repl.py` or `python repl.py file.lisp`."""
 import sys
 from lispling import global_env, run
+from lispling.diagnostics import parse_checked
 from lispling.types import LispError, to_string
 
 
@@ -19,6 +20,7 @@ def main() -> None:
         if buf.count("(") > buf.count(")"):
             continue
         try:
+            parse_checked(buf)  # precise line:col syntax errors
             r = run(buf, env)
             if r != []:
                 print(to_string(r))
