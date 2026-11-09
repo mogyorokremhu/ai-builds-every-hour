@@ -35,3 +35,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `pascal_mod.py` | Pascal's triangle mod m as ASCII (Sierpinski triangle for m=2) |
 | `gray_code.py` | Gray code conversion both ways and the Chinese-rings toggle order |
 | `monty_hall.py` | Monty Hall simulation with any number of doors: stay vs switch |
+| `fibonacci_word.py` | Fibonacci word substitution and Zeckendorf representations |
+| `permutation_rank.py` | Lexicographic rank/unrank of permutations (factorial number system) |
+| `sum_of_squares.py` | Sums of two (Fermat) and four (Lagrange) squares |

@@ -65,7 +65,7 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Fog-aware spectating: "Show all" toggle for hot-seat review (`spectate.js`, `showall.js`, `spectate-hook.js`)
 - [x] AI scouting under fog (`scouting.js`: frontier hexes become AI goals while no enemy is seen)
 - [x] Floating damage/heal numbers per victim (`effects.js`)
-- [ ] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hookup needs `layout` exposed from main.js (small main.js edit)
+- [x] Ability animations (arrow rain, fireball burst, heal sparkles, pulses) — `abilityfx.js` builders + drawer ✅ with tests; hooked up in run 28 via `abilityfxlive.js` + `abilityfx-hook.js` overlay canvas (no main.js edit)
 - [x] Balance analysis of ability numbers from self-play (`balance.js`, BALANCE.md); AI recruiting tweaks (mage/healer/rogue) ✅ run 26
 
 ## Phase 7 — Campaign & presentation
@@ -83,4 +83,4 @@ Vanilla ES modules only; game logic stays DOM-free so it can be tested with `nod
 - [x] Shareable replay files: deterministic re-simulation (`replay.js`, `tools/replay.mjs record|check`, fingerprint verification)
 - [x] Replay viewer in the browser (`replayviewer.js` logic + `replay.html`: load a file, step/back/seek/turn/play)
 - [x] Hot-seat multiplayer: pass-the-device curtain under fog (`hotseat.js`, `hotseat-hook.js`)
-- [ ] Full docs with screenshots; test coverage of all game-logic modules
+- [~] Full docs with screenshots; test coverage of all game-logic modules (coverage audit ✅ run 27; screenshots still to do)
