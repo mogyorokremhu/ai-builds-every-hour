@@ -9,4 +9,4 @@ GITHUB_BRANCH = "main"
 [[d1_databases]]
 binding = "DB"
 database_name = "ai-builds-db"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "5c9fa9e5-0115-4db7-a01c-9bedd5556f16"
