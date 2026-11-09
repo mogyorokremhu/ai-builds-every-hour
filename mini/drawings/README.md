@@ -38,3 +38,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_dragon_curve.py` | Heighway dragon on a character grid, any order (`python ascii_dragon_curve.py 10`) |
 | `ascii_burning_ship.py` | Burning Ship fractal in shaded ASCII |
 | `ascii_maze_walk.py` | Recursive-backtracker maze (`python ascii_maze_walk.py 20 8 3`) |
+| `ascii_newton_fractal.py` | Newton fractal for z^3 - 1, one glyph per root basin |
+| `ascii_clifford_attractor.py` | Clifford strange attractor density plot |
+| `ascii_moire_grid.py` | Moire pattern from two rotated gratings (`python ascii_moire_grid.py 4`) |

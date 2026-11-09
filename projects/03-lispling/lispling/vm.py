@@ -1,12 +1,14 @@
 """Bytecode compiler + stack VM for a core subset of Lispling.
 
 Supported forms: constants, symbols, quote, if, define, set!, lambda, begin,
-let, cond (with else), and, or, and procedure calls. Calls in tail position
-reuse the current frame, so loops run in constant Python stack.
+let (incl. named let), let*, letrec, do, quasiquote, cond (with else), and, or,
+and procedure calls. Constant arithmetic on literals is folded at compile time.
+Calls in tail position reuse the current frame, so loops run in constant Python stack.
 Macros are not expanded here: use the tree-walker for macro-heavy code.
 """
 from __future__ import annotations
 from .evaluator import global_env
+from .forms import EXPANDERS
 from .reader import parse
 from .types import Env, Lambda, LispError, Symbol, to_string
 
@@ -47,6 +49,12 @@ def compile_expr(x, code: Code, tail: bool):
     else:
         head = x[0]
         form = _FORMS.get(head) if isinstance(head, Symbol) else None
+        if form is None and isinstance(head, Symbol):
+            x = [x[0]] + [_pre(a) for a in x[1:]]
+            v = _fold(x)
+            if v is not None:
+                code.emit(CONST, v)
+                return _end(code, tail)
         if form:
             form(x, code, tail)
             return
@@ -57,6 +65,15 @@ def compile_expr(x, code: Code, tail: bool):
         return
     if tail:
         code.emit(RET)
+
+
+def _pre(a):
+    """Fold nested constant arithmetic inside an operand."""
+    if isinstance(a, list) and a and isinstance(a[0], Symbol) and a[0] in _FOLD:
+        a = [a[0]] + [_pre(b) for b in a[1:]]
+        v = _fold(a)
+        return a if v is None else v
+    return a
 
 
 def _end(code, tail):
@@ -132,12 +149,35 @@ def _begin(x, code, tail):
 
 def _let_ok(x, code, tail):
     if not isinstance(x[1], list):
-        raise LispError("vm: named let is not supported")
+        # (let loop ((v init)...) body) => ((lambda () (define loop (lambda (v...) body)) (loop init...)))
+        loop, binds = x[1], x[2]
+        lam = [Symbol("lambda"), [b[0] for b in binds], *x[3:]]
+        call = [Symbol("define"), loop, lam]
+        return compile_expr([[Symbol("lambda"), [], call, [loop, *[b[1] for b in binds]]]], code, tail)
     names = [b[0] for b in x[1]]
     code.emit(MAKE, _lambda_code(names, x[2:]))
     for b in x[1]:
         compile_expr(b[1], code, False)
     code.emit(TAILCALL if tail else CALL, len(names))
+
+
+def _expander(fn):
+    def f(x, code, tail):
+        compile_expr(fn(x), code, tail)
+    return f
+
+
+_FOLD = {"+": lambda *a: sum(a), "-": lambda a, *r: -a if not r else a - sum(r),
+         "*": lambda *a: __import__("math").prod(a)}
+
+
+def _fold(x):
+    """Fold (+ 1 2) style calls whose operands are all int literals; else None."""
+    h = x[0]
+    if isinstance(h, Symbol) and h in _FOLD and len(x) > 1 and all(
+            type(a) is int for a in x[1:]):
+        return _FOLD[h](*x[1:])
+    return None
 
 
 def _cond(x, code, tail):
@@ -179,6 +219,7 @@ def _logic(op, empty):
 
 _FORMS = {"quote": _quote, "if": _if, "define": _define, "set!": _set,
           "lambda": _lambda, "begin": _begin, "let": _let_ok, "cond": _cond,
+          **{k: _expander(v) for k, v in EXPANDERS.items()},
           "and": _logic(JF_KEEP, True), "or": _logic(JT_KEEP, False)}
 
 
