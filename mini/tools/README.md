@@ -45,6 +45,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `dupes.py` | Find duplicate files by size + SHA-256 |
 | `csv2md.py` | CSV to aligned Markdown table (numbers right-aligned) |
 | `unitconv.py` | Convert length/mass/volume/temperature units |
+| `humansize.py` | Bytes <-> human sizes (KiB/kB) |
+| `jsonfmt.py` | Pretty-print / minify / sort JSON |
+| `lineno.py` | Number lines, optionally skipping blanks |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 

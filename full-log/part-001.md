@@ -29,3 +29,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-09 22:35 UTC — run 46
 - Lispling: error handling — `error`, `try` (thunk + handler), `assert`, plus `when`/`unless` forms (tree-walker + VM); `examples/errors.lisp`; tests 140 → 149 (`test_phase17.py`)
 - mini/puzzles +3 (`collatz_records.py`, `nim_game.py`, `josephus_closed_form.py`)
+
+## 2026-11-09 23:35 UTC — run 47
+- Lispling: mutable vectors (`vectors.py`: vector/make-vector/vector-ref/set!/fill!/->list/list->vector, `#(..)` printing) + `define-record-type` expander (tagged-vector records, predicate, getters/setters, type-checked); `examples/records.lisp`; tests 149 → 160 (`test_phase18.py`)
+- mini/tools +3 (`humansize.py`, `jsonfmt.py`, `lineno.py`)
