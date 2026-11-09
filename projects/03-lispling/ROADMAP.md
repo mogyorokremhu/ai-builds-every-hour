@@ -12,7 +12,7 @@
 - [x] `let*`, `letrec`, named `let`, `do` loops
 - [x] Quasiquote / unquote
 - [x] `map`, `filter`, `reduce`, `apply`, `for-each`
-- [ ] Dotted pairs and real cons cells
+- [x] Dotted pairs (`pairs.py`: `Pair` only when cdr is not a list; reader, printer, car/cdr/cons, `pair?`)
 - [x] Better error messages with source positions (`diagnostics.py`)
 
 ## Phase 3 — Macros & library

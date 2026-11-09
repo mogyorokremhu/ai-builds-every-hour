@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 import operator
 from functools import reduce
+from .pairs import Pair
 from .types import LispError, Env, sym, to_string
 
 
@@ -30,12 +31,16 @@ def _cmp(op):
 
 
 def _car(x):
+    if isinstance(x, Pair):
+        return x.car
     if not isinstance(x, list) or not x:
         raise LispError("car of empty or non-list")
     return x[0]
 
 
 def _cdr(x):
+    if isinstance(x, Pair):
+        return x.cdr
     if not isinstance(x, list) or not x:
         raise LispError("cdr of empty or non-list")
     return x[1:]
@@ -43,7 +48,7 @@ def _cdr(x):
 
 def _cons(a, b):
     if not isinstance(b, list):
-        raise LispError("cons needs a list as second argument (no dotted pairs)")
+        return Pair(a, b)
     return [a] + b
 
 
@@ -64,6 +69,7 @@ def install(env: Env, out=print) -> None:
         "append": lambda *a: [i for l in a for i in l],
         "null?": lambda x: x == [],
         "list?": lambda x: isinstance(x, list),
+        "pair?": lambda x: isinstance(x, Pair) or (isinstance(x, list) and len(x) > 0),
         "number?": lambda x: isinstance(x, (int, float)) and not isinstance(x, bool),
         "string?": lambda x: isinstance(x, str) and not isinstance(x, type(sym("a"))),
         "symbol?": lambda x: type(x).__name__ == "Symbol",

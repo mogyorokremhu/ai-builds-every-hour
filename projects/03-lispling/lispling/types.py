@@ -28,6 +28,9 @@ def to_string(x: object) -> str:
         return "#f"
     if isinstance(x, list):
         return "(" + " ".join(to_string(i) for i in x) + ")"
+    if type(x).__name__ == "Pair":
+        from .pairs import pair_to_string
+        return pair_to_string(x, to_string)
     if isinstance(x, Symbol):
         return str(x)
     if isinstance(x, str):

@@ -2,6 +2,7 @@
 from __future__ import annotations
 import re
 from .types import LispError, sym
+from .pairs import make_dotted
 
 TOKEN = re.compile(r"""\s*(,@|[('`,)]|"(?:\\.|[^\\"])*"|;.*|[^\s('"`,;)]+)""")
 
@@ -50,6 +51,11 @@ def read_from(toks: list[str], i: int = 0):
                 raise LispError("missing )")
             if toks[i] == ")":
                 return out, i + 1
+            if toks[i] == "." and out:
+                tail, i = read_from(toks, i + 1)
+                if i >= len(toks) or toks[i] != ")":
+                    raise LispError("expected ) after dotted tail")
+                return make_dotted(out, tail), i + 1
             e, i = read_from(toks, i)
             out.append(e)
     if t == ")":

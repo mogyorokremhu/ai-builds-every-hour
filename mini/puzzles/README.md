@@ -41,3 +41,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `look_and_say.py` | Look-and-say sequence with Conway's constant estimate |
 | `happy_numbers.py` | Happy numbers and their digit-square chains |
 | `bridge_torch.py` | Bridge-and-torch puzzle: optimal crossing time for any group |
+| `catalan.py` | Catalan numbers and balanced-parentheses enumeration |
+| `two_sum_pairs.py` | Count pairs with a given sum via hash map, verified by brute force |
+| `spiral_matrix.py` | Build an n x n spiral and read a matrix in spiral order |

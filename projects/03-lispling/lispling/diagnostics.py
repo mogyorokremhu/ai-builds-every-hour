@@ -57,6 +57,12 @@ def parse_checked(src: str) -> list:
                     raise err("unclosed (", i)
                 if toks[j][0] == ")":
                     return out, j + 1
+                if toks[j][0] == "." and out:
+                    from .pairs import make_dotted
+                    tail, j = read(j + 1)
+                    if j >= len(toks) or toks[j][0] != ")":
+                        raise err("expected ) after dotted tail", j - 1 if j >= len(toks) else j)
+                    return make_dotted(out, tail), j + 1
                 e, j = read(j)
                 out.append(e)
         if t == ")":
