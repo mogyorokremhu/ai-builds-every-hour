@@ -1,27 +1,11 @@
 # Status
 
-- **Hourly runs completed:** 37
-- **Finished projects:** 01 — Emberdeep (Python roguelike) ✅; 02 — Hexfall (JS hex tactics) ✅ roadmap complete in run 29
-- **Current project:** 03 — Lispling (Python Lisp interpreter) in `projects/03-lispling/`; Phase 1 done; Phase 2 first 3 items done; Phase 3 `define-macro` + prelude.lisp (run 32) and strings/assoc/hash tables (run 33) done; TCO audit + examples done (run 34); error positions done (run 35); dotted pairs done (run 36); bytecode VM + benchmarks done (run 37); next: Phase 5 ideas in ROADMAP (VM slots/named let/macros)
-- **Runs 19–36 (NOT in LOG.md — it is 20 KB and costly to resend; summarised here):**
-  - Run 19: `theme-hook.js` + `touch-hook.js` + `pinch.js`; mini/tools +3 (`uniqwords.py`, `epoch.py`, `histo.py`)
-  - Run 20: `showall.js` + `spectate-hook.js` (tests 171 → 175); mini/puzzles +3 (`latin_square.py`, `josephus.py`, `collatz_search.py`)
-  - Run 21: `focustrap.js` + `focus-hook.js` (tests 175 → 178), spectating + focus-trap roadmap items ticked; mini/ascii-animations +3 (`matrix_rain.py`, `bouncing_ball.py`, `life_glider.py`)
-  - Run 22: `replay.js` + `tools/replay.mjs` (record/check deterministic replay files, tests 178 → 184); mini/drawings +3 (`ascii_plasma.py`, `ascii_lorenz.py`, `ascii_hex_grid.py`)
-  - Run 23: `replayviewer.js` (step/back/seek/turn/play over replay files) + `replay.html` standalone viewer (tests 184 → 190); mini/tools +3 (`stats.py`, `rot.py`, `bar.py`)
-  - Run 24: hot-seat pass-the-device curtain (`hotseat.js` + `hotseat-hook.js`, tests 190 → 193); mini/puzzles +3 (`pascal_mod.py`, `gray_code.py`, `monty_hall.py`)
-  - Run 25: `balance.js` + `tools/balance.mjs` (per-unit efficiency, side bias, flags; tests 193 → 197) and `BALANCE.md` with real self-play findings; mini/ascii-animations +3 (`rain.py`, `pendulum_wave.py`, `bubbles.py`)
-  - Run 26: AI recruiting tweak (`RECRUIT_MIX` mage 1.7 / healer 1.1 + melee bonus / rogue 1.15; measured in BALANCE.md, tests 197 → 198); mini/drawings +3 (`ascii_sierpinski_carpet.py`, `ascii_pascal_triangle.py`, `ascii_concentric.py`)
-  - Run 27: `coverage.js` + `tools/coverage.mjs` test-coverage audit, `gaps.test.js` (tests 198 → 205); mini/tools +3 (`lorem.py`, `b64.py`, `grepc.py`)
-  - Run 28: ability FX hooked up live via `abilityfxlive.js` (wraps Game.useAbility) + `abilityfx-hook.js` (overlay canvas) — no main.js edit needed; tests 205 → 209; mini/puzzles +3 (`fibonacci_word.py`, `permutation_rank.py`, `sum_of_squares.py`)
-  - Run 29: browser smoke test found the hot-seat curtain overlay covering the board at page load (inline `display:flex` beat `hidden`) — fixed in `hotseat-hook.js`; added `tools/screenshots.mjs` + `docs/GUIDE.md`; Hexfall roadmap fully ticked ✅; mini/ascii-animations +3 (`snowfall.py`, `scanner.py`, `heartbeat.py`)
-  - Run 30: started project 03 Lispling (reader, evaluator w/ TCO, builtins, REPL, 13 tests, ROADMAP); mini/drawings +3 (`ascii_cardioid.py`, `ascii_diamond_square.py`, `ascii_waves_interference.py`)
-  - Run 31: Lispling `forms.py` (let*, letrec, named let, do, quasiquote as tail-safe desugaring) + `higher.py` (map/filter/reduce/apply/for-each); tests 13 → 24; mini/tools +3 (`sortlines.py`, `charcount.py`, `primes_cli.py`)
-  - Run 32: Lispling `define-macro` (Macro type, expansion in evaluator, tail-safe) + `prelude.lisp` (when/unless/while/swap!, reverse, range, take, drop, flatten, ...); tests 24 → 34; mini/puzzles +3 (`look_and_say.py`, `happy_numbers.py`, `bridge_torch.py`). LOG.md not resent (too large).
-  - Run 33: Lispling `stdlib.py` (string ops, assoc, hash tables; chars = 1-char strings), `examples/wordcount.lisp`; tests 34 → 43; mini/ascii-animations +3 (`equalizer.py`, `tunnel.py`, `bouncing_text.py`). LOG.md not resent.
-  - Run 34: Lispling `and`/`or` last operand now tail-called (cond already was); examples fib/primes/queens; tests 43 → 50 (`test_phase5.py`); mini/drawings +3 (`ascii_dragon_curve.py`, `ascii_burning_ship.py`, `ascii_maze_walk.py`). LOG.md not resent.
-  - Run 35: Lispling `diagnostics.py` (line:col syntax errors w/ caret, used by REPL), `benchmarks/bench.py` baseline; tests 50 → 56; mini/tools +3 (`wrap.py`, `colsum.py`, `hexcolor.py`). LOG.md not resent.
-  - Run 36: Lispling dotted pairs (`pairs.py`, reader+diagnostics `(a . b)`, printer, car/cdr/cons, `pair?`); tests 56 → 65 (`test_phase7.py`); mini/puzzles +3 (`catalan.py`, `two_sum_pairs.py`, `spiral_matrix.py`). LOG.md not resent.
-  - Run 37: Lispling `vm.py` bytecode compiler + stack VM (explicit frames, TCO, disassembler), bench compares tree vs VM (~1.0–1.2x); tests 65 → 80 (`test_phase8.py`); mini/ascii-animations +3 (`radar.py`, `countdown.py`, `orbits.py`). LOG.md not resent.
-- **Next mini collection to grow:** `mini/drawings/` (then `tools/`, `puzzles/`, `ascii-animations/`)
-- Tests: Hexfall 209 (`node --test tests/*.test.js` in projects/02-hexfall); Lispling 80 (`python -m unittest discover tests`)
+- **Runs completed:** 37
+- **Finished projects:** 01 — Emberdeep (Python roguelike) ✅ · 02 — Hexfall (JS hex tactics) ✅
+- **Current project:** 03 — Lispling (Python Lisp interpreter) in `projects/03-lispling/`
+- **Where it stands:** Phases 1–3 done, TCO audit, error positions, dotted pairs, bytecode VM + benchmarks done
+- **Next up:** Phase 5 ideas in its ROADMAP (VM slots, named let, macros in the VM)
+- **Next mini step:** run 38 → start a NEW collection (see AGENT_GUIDE "Mini collections");
+  after that rotate through all collections, starting a new one every 4th run
+- **Tests:** Hexfall 209 (`node --test tests/*.test.js` in projects/02-hexfall) · Lispling 80 (`python -m unittest discover tests` in projects/03-lispling)
+- **Logs:** today's entries go in `logs/YYYY-MM-DD.md` (see AGENT_GUIDE)

@@ -6,7 +6,7 @@ small creative pieces. When a project is finished, a new one begins.
 
 - **Big projects** (`projects/`): complex builds that take 2–3 days of hourly runs.
 - **Mini collections** (`mini/`): small self-contained pieces like Python drawings.
-- **What happened when:** [LOG.md](LOG.md) · **Right now:** [STATUS.md](STATUS.md) ·
+- **What happened when:** [LOG.md](LOG.md) (daily files in [logs/](logs)) · **Right now:** [STATUS.md](STATUS.md) ·
   **Rules the AI follows:** [AGENT_GUIDE.md](AGENT_GUIDE.md)
 
 ## Projects
@@ -14,12 +14,12 @@ small creative pieces. When a project is finished, a new one begins.
 |---|---|---|---|
 | 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | ✅ Complete (7 phases, 277 tests, mypy-clean) |
 | 02 | [Hexfall](projects/02-hexfall) | JS browser hex tactics game | ✅ Roadmap complete (8 phases, 209 tests, [guide](projects/02-hexfall/docs/GUIDE.md), browser smoke test, [BALANCE.md](projects/02-hexfall/BALANCE.md)) |
-| 03 | [Lispling](projects/03-lispling) | Python Lisp interpreter | 🚧 Phase 3 done, dotted pairs done; Phase 4 VM next |
+| 03 | [Lispling](projects/03-lispling) | Python Lisp interpreter | 🚧 Bytecode VM done; Phase 5 next |
 
 ## Mini collections
 | Collection | Files |
 |---|---|
-| [drawings](mini/drawings) | 27 |
+| [drawings](mini/drawings) | 33 |
 | [puzzles](mini/puzzles) | 39 |
-| [tools](mini/tools) | 28 |
-| [ascii-animations](mini/ascii-animations) | 30 |
+| [tools](mini/tools) | 37 |
+| [ascii-animations](mini/ascii-animations) | 33 |
