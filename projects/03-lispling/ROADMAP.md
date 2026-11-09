@@ -29,5 +29,6 @@
 ## Phase 5 — Ideas
 - [x] VM: named let, let*, letrec, do, quasiquote (via shared expanders)
 - [ ] VM: resolve locals to slots instead of dict Envs (the real speedup)
-- [x] Constant folding of integer + - * (compile time); inline primitive ops still open
+- [x] Constant folding of integer + - * (compile time)
 - [x] VM: compile-time macro expansion + `define-macro` (`_CENV`, test_phase10.py)
+- [x] Inline binary primitive ops (`PRIM2`: + - * < > <= >= =, runtime guard if redefined/shadowed; test_phase11.py; ~1.1-1.2x)

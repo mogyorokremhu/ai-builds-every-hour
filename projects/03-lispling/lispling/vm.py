@@ -15,9 +15,9 @@ from .types import Env, Lambda, LispError, Macro, Symbol, to_string
 _CENV: Env | None = None  # env macros are looked up in while compiling
 
 (CONST, LOAD, STORE, DEF, JUMP, JF, JF_KEEP, JT_KEEP, POP, CALL, TAILCALL,
- RET, MAKE) = range(13)
+ RET, MAKE, PRIM2) = range(14)
 NAMES = ["CONST", "LOAD", "STORE", "DEF", "JUMP", "JF", "JF_KEEP", "JT_KEEP",
-         "POP", "CALL", "TAILCALL", "RET", "MAKE"]
+         "POP", "CALL", "TAILCALL", "RET", "MAKE", "PRIM2"]
 
 
 class Code:
@@ -39,6 +39,19 @@ class VMClosure:
 
     def __call__(self, *args):
         return execute(self, list(args))
+
+
+_INLINE = ("+", "-", "*", "<", ">", "<=", ">=", "=")
+_PRIMS: dict | None = None
+
+
+def _prims() -> dict:
+    """Builtin binary primitives eligible for inlining (looked up once)."""
+    global _PRIMS
+    if _PRIMS is None:
+        g = global_env()
+        _PRIMS = {Symbol(n): g[Symbol(n)] for n in _INLINE if Symbol(n) in g}
+    return _PRIMS
 
 
 def compile_expr(x, code: Code, tail: bool):
@@ -64,6 +77,12 @@ def compile_expr(x, code: Code, tail: bool):
         if form:
             form(x, code, tail)
             return
+        if isinstance(head, Symbol) and len(x) == 3 and head in _prims():
+            # inline binary primitive; guarded at runtime in case it was redefined
+            compile_expr(x[1], code, False)
+            compile_expr(x[2], code, False)
+            code.emit(PRIM2, (head, _prims()[head]))
+            return _end(code, tail)
         compile_expr(head, code, False)
         for a in x[1:]:
             compile_expr(a, code, False)
@@ -258,7 +277,8 @@ def disassemble(code: Code, indent="") -> str:
             out.append(f"{indent}{i:3} {NAMES[op]} <code {arg.name or 'lambda'}>")
             out.append(disassemble(arg, indent + "      "))
         else:
-            out.append(f"{indent}{i:3} {NAMES[op]:<9}{'' if arg is None else to_string(arg)}")
+            shown = "" if arg is None else (f"<inline {arg[0]}>" if op == PRIM2 else to_string(arg))
+            out.append(f"{indent}{i:3} {NAMES[op]:<9}{shown}")
     return "\n".join(out)
 
 
@@ -302,6 +322,19 @@ def execute(closure: VMClosure, args: list, toplevel=False):
                 stack.pop()
         elif op == POP:
             stack.pop()
+        elif op == PRIM2:
+            sym, fn = arg
+            b = stack.pop()
+            a = stack.pop()
+            if env.find(sym)[sym] is fn:
+                try:
+                    stack.append(fn(a, b))
+                except TypeError as e:
+                    raise LispError(f"bad call: {e}") from None
+            else:  # user shadowed/redefined the operator: do a normal call
+                f = env.find(sym)[sym]
+                stack.append(f(a, b) if not isinstance(f, (VMClosure, Lambda)) else
+                             (execute(f, [a, b]) if isinstance(f, VMClosure) else _tree(f, [a, b])))
         elif op == MAKE:
             stack.append(VMClosure(arg, env))
         elif op == RET:

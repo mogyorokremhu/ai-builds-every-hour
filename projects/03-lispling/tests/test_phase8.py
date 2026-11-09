@@ -67,7 +67,7 @@ class VMTests(unittest.TestCase):
             run_vm("(5 1)")
 
     def test_disassemble(self):
-        text = disassemble(compile_toplevel(parse("(define (f x) (+ x 1))")[0]))
+        text = disassemble(compile_toplevel(parse("(define (f x) (g x 1))")[0]))
         self.assertIn("MAKE", text)
         self.assertIn("TAILCALL", text)
 
