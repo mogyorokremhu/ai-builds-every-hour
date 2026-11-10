@@ -5,6 +5,7 @@ char type). Hash tables wrap a dict keyed by a frozen form of the Lispling
 value, so lists and strings both work as keys.
 """
 from __future__ import annotations
+import math
 from .types import LispError, Symbol, sym, to_string
 
 
@@ -98,8 +99,66 @@ def _hash_remove(h, k):
     return []
 
 
+def _radix(n, r):
+    n, r = int(n), int(r)
+    if not 2 <= r <= 36:
+        raise ValueError("number->string-radix: radix must be 2..36")
+    digits = "0123456789abcdefghijklmnopqrstuvwxyz"
+    sign, n = ("-" if n < 0 else ""), abs(n)
+    out = ""
+    while True:
+        n, d = divmod(n, r)
+        out = digits[d] + out
+        if n == 0:
+            return sign + out
+
+
+def _n(name, x):
+    if isinstance(x, bool) or not isinstance(x, (int, float)):
+        raise TypeError(f"{name}: expected a number, got {x!r}")
+    return x
+
+
+def _int_fn(name, f):
+    def g(*args):
+        for a in args:
+            if isinstance(_n(name, a), float) and a != int(a):
+                raise TypeError(f"{name}: expected an integer, got {a!r}")
+        return f(*[int(a) for a in args])
+    return g
+
+
+def _tdiv(a, b):
+    if b == 0:
+        raise LispError("division by zero")
+    q = abs(a) // abs(b)
+    return q if (a < 0) == (b < 0) else -q
+
+
+def _expt(a, b):
+    return _n("expt", a) ** _n("expt", b)
+
+
+def _round_half_even(x):
+    return int(round(_n("round", x)))
+
+
 def make() -> dict:
     return {
+        # numbers
+        "gcd": lambda *a: math.gcd(*[int(_n("gcd", x)) for x in a]),
+        "lcm": lambda *a: math.lcm(*[int(_n("lcm", x)) for x in a]),
+        "quotient": _int_fn("quotient", lambda a, b: _tdiv(a, b)),
+        "remainder": _int_fn("remainder", lambda a, b: a - b * _tdiv(a, b)),
+        "modulo": _int_fn("modulo", lambda a, b: a % b),
+        "expt": _expt,
+        "floor": lambda x: math.floor(_n("floor", x)),
+        "ceiling": lambda x: math.ceil(_n("ceiling", x)),
+        "truncate": lambda x: math.trunc(_n("truncate", x)),
+        "round": _round_half_even,
+        "exact->inexact": lambda x: float(_n("exact->inexact", x)),
+        "inexact->exact": lambda x: int(_n("inexact->exact", x)),
+        "number->string-radix": lambda n, r: _radix(_n("number->string-radix", n), r),
         # strings
         "string-length": lambda s: len(_s("string-length", s)),
         "substring": _substring,

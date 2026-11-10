@@ -45,3 +45,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-10 02:35 UTC — run 50
 - Lispling: phase 21 — prelude `take-while`/`drop-while`/`filter-map`/`list-set`/`last-pair`/`alist-set`/`alist-ref`/`hash-update!`/`group-by` + native `string-pad-left/right`, `string-prefix?/suffix?`; `examples/utils.lisp`; tests 170 → 175 (`test_phase21.py`)
 - mini/ciphers +3 (`affine.py`, `bacon.py`, `columnar.py`)
+
+## 2026-11-10 03:35 UTC — run 51
+- Lispling: phase 22 numeric library — `gcd`/`lcm`/`quotient`/`remainder`/`modulo`/`expt`/`floor`/`ceiling`/`round`/`truncate`/`number->string-radix` + prelude `square`/`digits`/`memq`/`list-copy`/`delete-duplicates`; `examples/numbers.lisp`; tests 175 → 181 (`test_phase22.py`)
+- mini/ascii-animations +3 (`boids.py`, `hourglass.py`, `aurora.py`)

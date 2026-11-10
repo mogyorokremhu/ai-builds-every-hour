@@ -1,0 +1,6 @@
+; Numeric library (phase 22)
+(display (gcd 48 18) (lcm 4 6))
+(display (quotient -7 2) (remainder -7 2) (modulo -7 2))
+(display (expt 2 100))
+(display (number->string-radix 255 2))
+(display (digits 2026) (square 12))

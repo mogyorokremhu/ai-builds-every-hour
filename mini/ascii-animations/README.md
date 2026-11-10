@@ -42,6 +42,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [cube.py](cube.py) | Rotating wireframe cube with perspective (`--size`) |
 | [metronome.py](metronome.py) | Swinging metronome arm that ticks at the extremes (`--bpm`) |
 | [sandpile.py](sandpile.py) | Abelian sandpile toppling pattern (`--grains`, `--size`) |
+| [boids.py](boids.py) | Boids flocking: separation, alignment, cohesion on a wrapping field (`--boids`, `--seed`) |
+| [hourglass.py](hourglass.py) | Sand grains falling through an hourglass neck (`--grains`) |
+| [aurora.py](aurora.py) | Drifting sine-wave curtains of light |
 
 ```bash
 python fire.py

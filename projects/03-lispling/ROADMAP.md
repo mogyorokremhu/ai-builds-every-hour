@@ -42,3 +42,4 @@
 - [x] Sorting + list utilities in the prelude (`sort`, `list-ref`, `partition`, ... ; test_phase19.py, examples/sorting.lisp)
 - [x] Folds + list utilities (`fold-left/right`, `append-map`, `iota`, `any`, `every`, `count`, `zip`, `remove-duplicates`; test_phase20.py, examples/folds.lisp)
 - [x] take-while/drop-while, filter-map, alist-set/ref, hash-update!, group-by, string-pad-left/right, string-prefix?/suffix? (test_phase21.py, examples/utils.lisp)
+- [x] Numeric library: gcd/lcm/quotient/remainder/modulo/expt/floor/ceiling/round/truncate/number->string-radix + square/digits/memq/list-copy (test_phase22.py, examples/numbers.lisp)
