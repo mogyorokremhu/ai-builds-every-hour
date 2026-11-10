@@ -1,0 +1,7 @@
+; List helpers (prelude, phase 35)
+(display (adjacent-pairs '(1 2 3 4)))
+(display (last-n '(1 2 3 4 5) 2))
+(display (drop-last '(1 2 3 4 5) 2))
+(display (argmax '(3 9 2 9)))
+(display (running-max '(1 3 2 5 4)))
+(display (interpose 0 '(1 2 3)))
