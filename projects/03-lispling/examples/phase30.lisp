@@ -1,0 +1,8 @@
+; Number theory and matrices (prelude, phase 30)
+(display (prime? 97))
+(display (primes-up-to 30))
+(display (prime-factors 360))
+(display (fib-list 10))
+(display (dot-product '(1 2 3) '(4 5 6)))
+(display (mat-mul '((1 2) (3 4)) '((5 6) (7 8))))
+(display (mat-pow '((1 1) (1 0)) 10))

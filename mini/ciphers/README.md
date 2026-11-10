@@ -11,3 +11,6 @@ Classic ciphers, each a runnable stdlib-only script.
 - `affine.py` — affine cipher (a·x+b mod 26), validates a is coprime with 26 (`-d` decrypts).
 - `bacon.py` — Bacon's A/B five-bit letter encoding and decoding.
 - `columnar.py` — columnar transposition with keyword column ordering (`-d` decrypts).
+- `scytale.py` — scytale rod transposition with padding (`-d` decrypts).
+- `polybius.py` — Polybius square digit-pair encoding, I/J merged (`-d` decodes).
+- `xor_cipher.py` — repeating-key XOR with hex output (`-d` decrypts).
