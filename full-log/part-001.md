@@ -61,3 +61,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-10 06:35 UTC — run 54
 - Lispling: phase 25 combinators — variadic `curry`/`partial` (any number of pre-supplied args), `constantly`, `complement`, `juxt`, `compose*`; `examples/combinators.lisp`; tests 194 → 201 (`test_phase25.py`)
 - mini/puzzles +3 (`subset_sum.py`, `coin_change.py`, `lis.py`)
+
+## 2026-11-10 07:35 UTC — run 55
+- Lispling: phase 26 strings & chars — char predicates/conversion, `string>?`/`<=?`/`>=?`/`-ci=?`, trim-left/right, titlecase, `string-count`, prelude `string-map`/`for-each`/`filter`/`take`/`drop`/`capitalize`, `palindrome?`, `caesar-shift`, `word-count`; `examples/strings2.lisp`; tests 201 → 211 (`test_phase26.py`)
+- mini/tools +3 (`rle.py`, `sumlines.py`, `fizzlist.py`)

@@ -46,3 +46,4 @@
 - [x] Functional helpers: butlast/curry/flip/max-by/min-by/interleave/transpose/chunk/frequencies (test_phase23.py, examples/functional.lisp)
 - [x] Variadic parameters (`(define (f . rest))`, `(lambda args ...)`) in evaluator + VM (test_phase24.py, examples/variadic.lisp)
 - [x] Variadic `curry`/`partial`, `constantly`, `complement`, `juxt`, `compose*` (test_phase25.py, examples/combinators.lisp)
+- [x] Strings & chars: char predicates, string comparisons/trim/titlecase/count, string-map/filter/take/drop, palindrome?, caesar-shift (test_phase26.py, examples/strings2.lisp)

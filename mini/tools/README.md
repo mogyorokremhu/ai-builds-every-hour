@@ -48,6 +48,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `humansize.py` | Bytes <-> human sizes (KiB/kB) |
 | `jsonfmt.py` | Pretty-print / minify / sort JSON |
 | `lineno.py` | Number lines, optionally skipping blanks |
+| `rle.py` | Run-length encode/decode lines of text (`-d` decodes) |
+| `sumlines.py` | Count/sum/avg/min/max of the first number on each line (handles `1,000`) |
+| `fizzlist.py` | Generalized FizzBuzz with custom `divisor=Word` rules |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
