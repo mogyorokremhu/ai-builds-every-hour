@@ -44,6 +44,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [sandpile.py](sandpile.py) | Abelian sandpile toppling pattern (`--grains`, `--size`) |
 | [boids.py](boids.py) | Boids flocking: separation, alignment, cohesion on a wrapping field (`--boids`, `--seed`) |
 | [hourglass.py](hourglass.py) | Sand grains falling through an hourglass neck (`--grains`) |
+| [campfire.py](campfire.py) | Flickering flames and rising sparks (`--seed`) |
+| [lava_lamp.py](lava_lamp.py) | Metaball blobs drifting in a glass tube (`--blobs`) |
+| [pulse_rings.py](pulse_rings.py) | Expanding concentric rings (`--period`) |
 | [aurora.py](aurora.py) | Drifting sine-wave curtains of light |
 
 ```bash

@@ -56,3 +56,4 @@
 - [x] Phase 33: sliding-window/take-every/rle/rle-decode/dedupe-adjacent/scan-left/prefix-sums/unfold (test_phase33.py, examples/phase33.lisp)
 - [x] Phase 34: rotate-left/right, index-of, last-index-of, zip-with, range-step, flatten-depth (test_phase34.py, examples/phase34.lisp)
 - [x] Phase 35: adjacent-pairs/last-n/drop-last/argmax/running-max/interpose (test_phase35.py, examples/phase35.lisp)
+- [x] Phase 36: map-indexed/replicate/remove-nth/all-equal?/chunk-by/cumulative-sum (test_phase36.py, examples/phase36.lisp)
