@@ -52,3 +52,4 @@
 - [x] Phase 29: find/find-tail, list-max/min, average/median/mode, flatmap, vector-swap!/reverse! (test_phase29.py, examples/phase29.lisp)
 - [x] Phase 30: prime?/primes-up-to/prime-factors/fib-list, dot-product/identity-matrix/mat-mul/mat-pow (test_phase30.py, examples/phase30.lisp)
 - [x] Phase 31: factorial/binomial/divisors/perfect?/totient/mod-expt/digits->number/collatz-length (test_phase31.py, examples/phase31.lisp)
+- [x] Phase 32: gcd-list/lcm-list/digit-sum/reverse-number/palindrome-number?/triangular/isqrt/perfect-square?/pascal-row/happy? (test_phase32.py, examples/phase32.lisp)
