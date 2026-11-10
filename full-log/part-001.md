@@ -37,3 +37,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-10 00:30 UTC — run 48
 - Lispling: phase 19 prelude library — `sort` (stable merge sort), `list-ref`, `list-tail`, `remove`, `delete`, `partition`, `list-index`, `vector-map`/`vector-for-each`/`vector-sort`; `examples/sorting.lisp`; tests 160 → 166 (`test_phase19.py`)
 - NEW mini/cellular-automata (`life.py`, `elementary.py`, `langton.py` + README)
+
+## 2026-11-10 01:35 UTC — run 49
+- Lispling: phase 20 prelude — `fold-left`/`fold-right`, `append-map`, `iota`/`iota-from`, `any`/`every`/`count`, `zip`, `remove-duplicates`; `examples/folds.lisp`; tests 166 → 170 (`test_phase20.py`)
+- mini/generators +3 (`password.py`, `dungeon.py`, `haiku.py`)
