@@ -51,3 +51,4 @@
 - [x] Phase 28 (`prelude28.lisp`): make-list/list-tabulate/product/split-at/span/break/insert-at/delete-at, tree-map/leaves/depth, alist helpers (test_phase28.py, examples/phase28.lisp)
 - [x] Phase 29: find/find-tail, list-max/min, average/median/mode, flatmap, vector-swap!/reverse! (test_phase29.py, examples/phase29.lisp)
 - [x] Phase 30: prime?/primes-up-to/prime-factors/fib-list, dot-product/identity-matrix/mat-mul/mat-pow (test_phase30.py, examples/phase30.lisp)
+- [x] Phase 31: factorial/binomial/divisors/perfect?/totient/mod-expt/digits->number/collatz-length (test_phase31.py, examples/phase31.lisp)

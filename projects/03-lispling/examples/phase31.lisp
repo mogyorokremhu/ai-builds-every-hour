@@ -1,0 +1,8 @@
+; Combinatorics and number theory (prelude, phase 31)
+(display (factorial 10))
+(display (binomial 10 3))
+(display (divisors 28))
+(display (filter perfect? (range 1 500)))
+(display (totient 36))
+(display (mod-expt 4 13 497))
+(display (collatz-length 27))
