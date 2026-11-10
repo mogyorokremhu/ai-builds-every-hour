@@ -1,0 +1,6 @@
+; List helpers (prelude, phase 36)
+(display (map-indexed (lambda (i x) (* i x)) '(5 6 7)))
+(display (replicate 3 'a))
+(display (remove-nth '(a b c d) 2))
+(display (all-equal? '(1 1 1)))
+(display (chunk-by even? '(2 4 1 3 6)))
