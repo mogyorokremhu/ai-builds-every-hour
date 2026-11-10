@@ -33,3 +33,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-09 23:35 UTC — run 47
 - Lispling: mutable vectors (`vectors.py`: vector/make-vector/vector-ref/set!/fill!/->list/list->vector, `#(..)` printing) + `define-record-type` expander (tagged-vector records, predicate, getters/setters, type-checked); `examples/records.lisp`; tests 149 → 160 (`test_phase18.py`)
 - mini/tools +3 (`humansize.py`, `jsonfmt.py`, `lineno.py`)
+
+## 2026-11-10 00:30 UTC — run 48
+- Lispling: phase 19 prelude library — `sort` (stable merge sort), `list-ref`, `list-tail`, `remove`, `delete`, `partition`, `list-index`, `vector-map`/`vector-for-each`/`vector-sort`; `examples/sorting.lisp`; tests 160 → 166 (`test_phase19.py`)
+- NEW mini/cellular-automata (`life.py`, `elementary.py`, `langton.py` + README)

@@ -39,3 +39,4 @@
 - [x] Lazy evaluation: `delay`/`force`/`cons-stream` + stream library in the prelude (test_phase16.py, examples/streams.lisp)
 - [x] Error handling: `error`, `try`, `assert`, `when`/`unless` (test_phase17.py, examples/errors.lisp)
 - [x] Vectors + `define-record-type` (test_phase18.py, examples/records.lisp)
+- [x] Sorting + list utilities in the prelude (`sort`, `list-ref`, `partition`, ... ; test_phase19.py, examples/sorting.lisp)

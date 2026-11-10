@@ -1,0 +1,7 @@
+; Sorting and list utilities (prelude, phase 19)
+(display (sort '(5 2 9 1 5 6) <))
+(display (sort '("pear" "apple" "fig") string<?))
+(display (partition even? (range 1 11)))
+(display (list-ref '(a b c d) 2) (list-index even? '(1 3 4)))
+(display (vector-sort (vector 3 1 2) >))
+(display (sort (map (lambda (n) (* n n)) '(-3 2 -1)) <))
