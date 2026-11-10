@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><title>Typing speed</title>
+<style>body{font-family:monospace;max-width:620px;margin:2em auto;font-size:1.2em}
+#t span.ok{color:#2a2}#t span.bad{background:#fbb}#t span.cur{background:#ddd}
+input{width:100%;font:inherit;padding:.4em;margin-top:1em}</style>
+<h2>Typing speed</h2><div id="t"></div><input id="i" autofocus placeholder="start typing…"><p id="s"></p>
+<script>
+const texts = ["the quick brown fox jumps over the lazy dog",
+ "a small step each hour adds up to a big project",
+ "simple code that works beats clever code that breaks"];
+let text, start = null;
+const $ = id => document.getElementById(id);
+function reset(){
+  text = texts[Math.floor(Math.random()*texts.length)]; start = null;
+  $('i').value = ''; $('s').textContent = ''; render('');
+}
+function render(v){
+  $('t').innerHTML = [...text].map((ch,k) =>
+    `<span class="${k>=v.length ? (k===v.length?'cur':'') : v[k]===ch?'ok':'bad'}">${ch}</span>`).join('');
+}
+$('i').addEventListener('input', e => {
+  const v = e.target.value; if (start === null) start = Date.now();
+  render(v);
+  if (v.length >= text.length){
+    const mins = (Date.now()-start)/60000;
+    const errs = [...text].filter((ch,k) => v[k] !== ch).length;
+    $('s').textContent = `${Math.round(text.split(' ').length/mins)} WPM, ${errs} errors. Type again to restart.`;
+    setTimeout(reset, 100);
+  }
+});
+reset();
+</script>

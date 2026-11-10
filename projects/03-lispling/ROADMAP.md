@@ -47,3 +47,4 @@
 - [x] Variadic parameters (`(define (f . rest))`, `(lambda args ...)`) in evaluator + VM (test_phase24.py, examples/variadic.lisp)
 - [x] Variadic `curry`/`partial`, `constantly`, `complement`, `juxt`, `compose*` (test_phase25.py, examples/combinators.lisp)
 - [x] Strings & chars: char predicates, string comparisons/trim/titlecase/count, string-map/filter/take/drop, palindrome?, caesar-shift (test_phase26.py, examples/strings2.lisp)
+- [x] Set ops, combinatorics (`combinations`/`permutations`/`power-set`), vector utilities incl. binary search (test_phase27.py, examples/sets_combinatorics.lisp)

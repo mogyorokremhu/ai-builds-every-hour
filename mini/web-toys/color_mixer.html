@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><title>Color mixer</title>
+<style>body{font-family:sans-serif;max-width:420px;margin:2em auto;text-align:center}
+#sw{height:160px;border-radius:12px;border:1px solid #888;margin-bottom:1em}
+label{display:block;margin:.6em 0}input{width:70%}code{font-size:1.2em}</style>
+<h2>Color mixer</h2><div id="sw"></div>
+<label>R <input type="range" id="r" min="0" max="255" value="200"> <span id="rv"></span></label>
+<label>G <input type="range" id="g" min="0" max="255" value="100"> <span id="gv"></span></label>
+<label>B <input type="range" id="b" min="0" max="255" value="50"> <span id="bv"></span></label>
+<p><code id="hex"></code> · <code id="hsl"></code></p>
+<script>
+const $ = id => document.getElementById(id);
+function hsl(r,g,b){
+  r/=255; g/=255; b/=255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), l = (mx+mn)/2, d = mx-mn;
+  let h = 0, s = 0;
+  if (d){
+    s = d/(1-Math.abs(2*l-1));
+    h = mx===r ? ((g-b)/d)%6 : mx===g ? (b-r)/d+2 : (r-g)/d+4;
+    h = (h*60+360)%360;
+  }
+  return `hsl(${Math.round(h)}, ${Math.round(s*100)}%, ${Math.round(l*100)}%)`;
+}
+function update(){
+  const [r,g,b] = ['r','g','b'].map(k => +$(k).value);
+  ['r','g','b'].forEach((k,i) => $(k+'v').textContent = [r,g,b][i]);
+  const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+  $('sw').style.background = hex; $('hex').textContent = hex; $('hsl').textContent = hsl(r,g,b);
+}
+document.querySelectorAll('input').forEach(i => i.oninput = update); update();
+</script>

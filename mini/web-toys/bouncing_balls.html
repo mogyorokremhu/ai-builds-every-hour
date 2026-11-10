@@ -1,0 +1,29 @@
+<!doctype html><meta charset="utf-8"><title>Bouncing balls</title>
+<style>html,body{margin:0;background:#111;overflow:hidden}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>
+// Click to spawn balls; they bounce off walls and fall under gravity.
+const c = document.getElementById('c'), g = c.getContext('2d');
+function resize(){ c.width = innerWidth; c.height = innerHeight; }
+addEventListener('resize', resize); resize();
+const balls = [];
+function spawn(x, y){
+  balls.push({x, y, vx:(Math.random()-.5)*8, vy:(Math.random()-.5)*8,
+    r:8+Math.random()*18, h:Math.random()*360});
+}
+c.addEventListener('pointerdown', e => spawn(e.clientX, e.clientY));
+for (let i = 0; i < 12; i++) spawn(Math.random()*innerWidth, Math.random()*innerHeight/2);
+function frame(){
+  g.fillStyle = 'rgba(17,17,17,.25)'; g.fillRect(0,0,c.width,c.height);
+  for (const b of balls){
+    b.vy += .25; b.x += b.vx; b.y += b.vy;
+    if (b.x < b.r){ b.x = b.r; b.vx *= -.95; }
+    if (b.x > c.width-b.r){ b.x = c.width-b.r; b.vx *= -.95; }
+    if (b.y > c.height-b.r){ b.y = c.height-b.r; b.vy *= -.9; if (Math.abs(b.vy)<1) b.vy = -12; }
+    g.fillStyle = `hsl(${b.h},80%,60%)`;
+    g.beginPath(); g.arc(b.x,b.y,b.r,0,7); g.fill();
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
