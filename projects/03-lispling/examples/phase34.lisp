@@ -1,0 +1,8 @@
+; List helpers (prelude, phase 34)
+(display (rotate-left '(1 2 3 4 5) 2))
+(display (rotate-right '(1 2 3 4 5) 1))
+(display (index-of '(a b c b) 'b))
+(display (last-index-of '(a b c b) 'b))
+(display (zip-with + '(1 2 3) '(10 20 30)))
+(display (range-step 10 0 -3))
+(display (flatten-depth '(1 (2 (3 (4)))) 1))

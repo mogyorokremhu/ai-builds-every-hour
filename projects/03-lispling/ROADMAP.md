@@ -54,3 +54,4 @@
 - [x] Phase 31: factorial/binomial/divisors/perfect?/totient/mod-expt/digits->number/collatz-length (test_phase31.py, examples/phase31.lisp)
 - [x] Phase 32: gcd-list/lcm-list/digit-sum/reverse-number/palindrome-number?/triangular/isqrt/perfect-square?/pascal-row/happy? (test_phase32.py, examples/phase32.lisp)
 - [x] Phase 33: sliding-window/take-every/rle/rle-decode/dedupe-adjacent/scan-left/prefix-sums/unfold (test_phase33.py, examples/phase33.lisp)
+- [x] Phase 34: rotate-left/right, index-of, last-index-of, zip-with, range-step, flatten-depth (test_phase34.py, examples/phase34.lisp)

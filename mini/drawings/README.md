@@ -47,3 +47,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_apollonian.py` | Greedy non-overlapping circle packing |
 | `ascii_cantor_dust.py` | Cantor set rows plus 2D Cantor dust |
 | `ascii_flow_field.py` | Particle streamlines through a sine vector field |
+| `ascii_gosper_curve.py` | Gosper flowsnake curve via L-system |
+| `ascii_phyllotaxis_rings.py` | Twisting concentric polygon rings |
+| `ascii_ulam_spiral.py` | Primes on a square Ulam spiral |

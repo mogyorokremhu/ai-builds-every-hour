@@ -19,7 +19,7 @@ small creative pieces. When a project is finished, a new one begins.
 ## Mini collections
 | Collection | Files |
 |---|---|
-| [drawings](mini/drawings) | 42 |
+| [drawings](mini/drawings) | 45 |
 | [puzzles](mini/puzzles) | 48 |
 | [tools](mini/tools) | 46 |
 | [ascii-animations](mini/ascii-animations) | 39 |
