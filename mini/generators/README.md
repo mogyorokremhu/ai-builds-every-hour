@@ -8,3 +8,6 @@ Small random generators. Each file is self-contained and runnable.
 - `password.py` — memorable word-word-number passphrases (`python password.py 5 3 42`)
 - `dungeon.py` — random rooms + corridors dungeon map in ASCII (`python dungeon.py 60 20 7`)
 - `haiku.py` — template-based 5-7-5 haiku (`python haiku.py 3 1`)
+- `lorem.py` — lorem-ipsum filler paragraphs (`python lorem.py 2 5`)
+- `palette.py` — harmonious colour palettes with ANSI swatches (`python palette.py triad 3`)
+- `bingo.py` — printable 5x5 bingo cards (`python bingo.py 2 9`)
