@@ -1,15 +1,13 @@
 """Higher-order builtins: map, filter, reduce, apply, for-each, plus error/try."""
 from __future__ import annotations
-from .types import Env, Lambda, LispError, to_string
+from .types import Env, Lambda, LispError, bind_params, to_string
 
 
 def make(evaluate):
     def call(f, args):
         if isinstance(f, Lambda):
-            if len(args) != len(f.params):
-                raise LispError(f"{f.name or 'lambda'} expects {len(f.params)} args, got {len(args)}")
             env = Env(f.env)
-            env.update(zip(f.params, args))
+            bind_params(env, f.params, f.rest, args, f.name)
             r = []
             for e in f.body:
                 r = evaluate(e, env)

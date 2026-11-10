@@ -50,11 +50,42 @@ def to_string(x: object) -> str:
     return str(x)
 
 
+def split_params(p):
+    """Split a parameter spec into (fixed names, rest name or None).
+
+    Accepts a list ``(a b)``, a dotted pair ``(a b . r)`` or a bare symbol ``args``.
+    """
+    from .pairs import Pair
+    if isinstance(p, str):
+        return [], p
+    if isinstance(p, Pair):
+        fixed = []
+        while isinstance(p, Pair):
+            fixed.append(p.car)
+            p = p.cdr
+        return fixed, p
+    return list(p), None
+
+
+def bind_params(env, params, rest, args, name=""):
+    """Bind args to params (and the rest list) in env, checking arity."""
+    n = len(params)
+    if rest is None:
+        if len(args) != n:
+            raise LispError(f"{name or 'lambda'} expects {n} args, got {len(args)}")
+    elif len(args) < n:
+        raise LispError(f"{name or 'lambda'} expects at least {n} args, got {len(args)}")
+    env.update(zip(params, args))
+    if rest is not None:
+        env[rest] = list(args[n:])
+
+
 class Lambda:
     """A user-defined procedure (closure)."""
 
     def __init__(self, params, body, env, name=""):
-        self.params, self.body, self.env, self.name = params, body, env, name
+        self.params, self.rest = split_params(params)
+        self.body, self.env, self.name = body, env, name
 
 
 class Macro(Lambda):

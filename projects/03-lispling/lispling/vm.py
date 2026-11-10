@@ -10,7 +10,8 @@ from __future__ import annotations
 from .evaluator import global_env, _lookup_macro, expand_macro
 from .forms import EXPANDERS
 from .reader import parse
-from .types import Env, Lambda, LispError, Macro, Symbol, to_string
+from .pairs import Pair
+from .types import Env, Lambda, LispError, Macro, Symbol, bind_params, split_params, to_string
 
 _CENV: Env | None = None  # env macros are looked up in while compiling
 
@@ -23,7 +24,8 @@ NAMES = ["CONST", "LOAD", "STORE", "DEF", "JUMP", "JF", "JF_KEEP", "JT_KEEP",
 class Code:
     def __init__(self, params=(), name=""):
         self.ops: list[tuple[int, object]] = []
-        self.params, self.name = list(params), name
+        self.params, self.rest = split_params(params)
+        self.name = name
         self.targets: set[int] = set()  # jump targets (fusion must not swallow them)
 
     def emit(self, op, arg=None):
@@ -168,7 +170,10 @@ def _if(x, code, tail):
 
 def _define(x, code, tail):
     target = x[1]
-    if isinstance(target, list):
+    if isinstance(target, Pair):
+        code.emit(MAKE, _lambda_code(target.cdr, x[2:], target.car))
+        name = target.car
+    elif isinstance(target, list):
         code.emit(MAKE, _lambda_code(target[1:], x[2:], target[0]))
         name = target[0]
     else:
@@ -443,15 +448,13 @@ def _lookup(env, name):
 
 
 def _bind(f, env, args):
-    if len(args) != len(f.code.params):
-        raise LispError(f"{f.name or 'lambda'} expects {len(f.code.params)} args, got {len(args)}")
-    env.update(zip(f.code.params, args))
+    bind_params(env, f.code.params, f.code.rest, args, f.name)
 
 
 def _tree(f: Lambda, args):
     from .evaluator import evaluate
     env = Env(f.env)
-    env.update(zip(f.params, args))
+    bind_params(env, f.params, f.rest, args, f.name)
     r = []
     for e in f.body:
         r = evaluate(e, env)

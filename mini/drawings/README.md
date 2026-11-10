@@ -44,3 +44,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_sunflower.py` | Vogel sunflower seed spiral at the golden angle |
 | `ascii_rule30.py` | Elementary cellular automaton triangle (any rule number) |
 | `ascii_lissajous_knot.py` | Trefoil-style knot with depth shading |
+| `ascii_apollonian.py` | Greedy non-overlapping circle packing |
+| `ascii_cantor_dust.py` | Cantor set rows plus 2D Cantor dust |
+| `ascii_flow_field.py` | Particle streamlines through a sine vector field |

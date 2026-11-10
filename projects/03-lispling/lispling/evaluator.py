@@ -3,7 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from . import builtins, forms, higher, stdlib, vectors
 from .reader import parse
-from .types import Env, Lambda, LispError, Macro, Symbol, sym, to_string
+from .pairs import Pair
+from .types import Env, Lambda, LispError, Macro, Symbol, bind_params, sym, to_string
 
 S = sym
 
@@ -71,7 +72,10 @@ def evaluate(x, env: Env):
             continue
         if head == "define":
             target = x[1]
-            if isinstance(target, list):  # (define (f a b) body...)
+            if isinstance(target, Pair):  # (define (f a . rest) body...)
+                name = target.car
+                env[name] = Lambda(target.cdr, x[2:], env, name)
+            elif isinstance(target, list):  # (define (f a b) body...)
                 name = target[0]
                 env[name] = Lambda(target[1:], x[2:], env, name)
             else:
@@ -145,10 +149,8 @@ def evaluate(x, env: Env):
         f = evaluate(head, env)
         args = [evaluate(a, env) for a in x[1:]]
         if isinstance(f, Lambda):
-            if len(args) != len(f.params):
-                raise LispError(f"{f.name or 'lambda'} expects {len(f.params)} args, got {len(args)}")
             env = Env(f.env)
-            env.update(zip(f.params, args))
+            bind_params(env, f.params, f.rest, args, f.name)
             for e in f.body[:-1]:
                 evaluate(e, env)
             x = f.body[-1]
