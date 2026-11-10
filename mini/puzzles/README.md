@@ -50,3 +50,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `collatz_records.py` | Collatz chains with memoisation; record-holding starts below 100000 |
 | `nim_game.py` | Nim: nim-sum winning move checked against brute-force minimax |
 | `josephus_closed_form.py` | Josephus problem: simulation, recurrence and k=2 closed form agree |
+| `subset_sum.py` | Subset sum: DP with back-pointers to find a subset, plus counting all subsets |
+| `coin_change.py` | Coin change: fewest coins and number of ways (works for non-canonical coin systems) |
+| `lis.py` | Longest increasing subsequence in O(n log n) via patience sorting |

@@ -45,3 +45,4 @@
 - [x] Numeric library: gcd/lcm/quotient/remainder/modulo/expt/floor/ceiling/round/truncate/number->string-radix + square/digits/memq/list-copy (test_phase22.py, examples/numbers.lisp)
 - [x] Functional helpers: butlast/curry/flip/max-by/min-by/interleave/transpose/chunk/frequencies (test_phase23.py, examples/functional.lisp)
 - [x] Variadic parameters (`(define (f . rest))`, `(lambda args ...)`) in evaluator + VM (test_phase24.py, examples/variadic.lisp)
+- [x] Variadic `curry`/`partial`, `constantly`, `complement`, `juxt`, `compose*` (test_phase25.py, examples/combinators.lisp)
