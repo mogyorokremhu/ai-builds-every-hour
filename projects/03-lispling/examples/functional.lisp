@@ -1,0 +1,8 @@
+; Functional helpers (phase 23)
+(display (butlast '(1 2 3 4)))
+(display ((curry + 10) 5) ((flip -) 1 10))
+(display (max-by abs '(1 -9 4)) (min-by abs '(5 -2 8)))
+(display (interleave '(1 2 3) '(a b c)))
+(display (transpose '((1 2 3) (4 5 6))))
+(display (chunk 3 '(1 2 3 4 5 6 7)))
+(display (frequencies '(a b a c a b)))

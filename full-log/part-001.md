@@ -49,3 +49,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-10 03:35 UTC — run 51
 - Lispling: phase 22 numeric library — `gcd`/`lcm`/`quotient`/`remainder`/`modulo`/`expt`/`floor`/`ceiling`/`round`/`truncate`/`number->string-radix` + prelude `square`/`digits`/`memq`/`list-copy`/`delete-duplicates`; `examples/numbers.lisp`; tests 175 → 181 (`test_phase22.py`)
 - mini/ascii-animations +3 (`boids.py`, `hourglass.py`, `aurora.py`)
+
+## 2026-11-10 04:30 UTC — run 52
+- Lispling: phase 23 functional helpers — prelude `butlast`/`curry`/`flip`/`max-by`/`min-by`/`interleave`/`transpose`/`chunk`/`frequencies`; `examples/functional.lisp`; tests 181 → 187 (`test_phase23.py`; variadic params not yet supported by the interpreter, so `curry` is 2-arg)
+- NEW mini/sound (`tones.py`, `melody.py`, `chord.py` + README) — stdlib WAV generators
