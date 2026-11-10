@@ -10,6 +10,7 @@ S = sym
 
 
 PRELUDE = Path(__file__).with_name("prelude.lisp")
+PRELUDE28 = Path(__file__).with_name("prelude28.lisp")  # phase 28 additions
 
 
 def global_env(out=print, prelude=True) -> Env:
@@ -19,8 +20,9 @@ def global_env(out=print, prelude=True) -> Env:
     env.update(stdlib.make())
     env.update(vectors.make())
     if prelude:
-        for e in parse(PRELUDE.read_text()):
-            evaluate(e, env)
+        for path in (PRELUDE, PRELUDE28):
+            for e in parse(path.read_text()):
+                evaluate(e, env)
     return env
 
 

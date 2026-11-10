@@ -48,3 +48,4 @@
 - [x] Variadic `curry`/`partial`, `constantly`, `complement`, `juxt`, `compose*` (test_phase25.py, examples/combinators.lisp)
 - [x] Strings & chars: char predicates, string comparisons/trim/titlecase/count, string-map/filter/take/drop, palindrome?, caesar-shift (test_phase26.py, examples/strings2.lisp)
 - [x] Set ops, combinatorics (`combinations`/`permutations`/`power-set`), vector utilities incl. binary search (test_phase27.py, examples/sets_combinatorics.lisp)
+- [x] Phase 28 (`prelude28.lisp`): make-list/list-tabulate/product/split-at/span/break/insert-at/delete-at, tree-map/leaves/depth, alist helpers (test_phase28.py, examples/phase28.lisp)
