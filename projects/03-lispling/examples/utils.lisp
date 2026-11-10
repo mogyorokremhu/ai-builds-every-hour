@@ -1,0 +1,8 @@
+; List/alist/string utilities (prelude, phase 21)
+(display (take-while even? '(2 4 5 6)))
+(display (drop-while even? '(2 4 5 6)))
+(display (filter-map (lambda (x) (and (> x 1) (* x x))) '(1 2 3)))
+(display (list-set '(a b c) 1 'z))
+(display (alist-set '((a 1)) 'b 2) (alist-ref '((a 1)) 'q 0))
+(display (group-by odd? (iota 6)))
+(display (string-pad-left "7" 3 "0") (string-pad-right "ab" 4 ".") "|")

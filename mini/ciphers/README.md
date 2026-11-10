@@ -8,3 +8,6 @@ Classic ciphers, each a runnable stdlib-only script.
 - `atbash.py` — Atbash mirror-alphabet cipher (self-inverse).
 - `playfair.py` — Playfair digraph cipher with 5x5 key square (`-d` decrypts).
 - `morse.py` — Morse code encoder/decoder (`-d` decodes).
+- `affine.py` — affine cipher (a·x+b mod 26), validates a is coprime with 26 (`-d` decrypts).
+- `bacon.py` — Bacon's A/B five-bit letter encoding and decoding.
+- `columnar.py` — columnar transposition with keyword column ordering (`-d` decrypts).

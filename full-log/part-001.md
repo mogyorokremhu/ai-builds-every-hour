@@ -41,3 +41,7 @@ Runs 40–64. Newest entry last.
 ## 2026-11-10 01:35 UTC — run 49
 - Lispling: phase 20 prelude — `fold-left`/`fold-right`, `append-map`, `iota`/`iota-from`, `any`/`every`/`count`, `zip`, `remove-duplicates`; `examples/folds.lisp`; tests 166 → 170 (`test_phase20.py`)
 - mini/generators +3 (`password.py`, `dungeon.py`, `haiku.py`)
+
+## 2026-11-10 02:35 UTC — run 50
+- Lispling: phase 21 — prelude `take-while`/`drop-while`/`filter-map`/`list-set`/`last-pair`/`alist-set`/`alist-ref`/`hash-update!`/`group-by` + native `string-pad-left/right`, `string-prefix?/suffix?`; `examples/utils.lisp`; tests 170 → 175 (`test_phase21.py`)
+- mini/ciphers +3 (`affine.py`, `bacon.py`, `columnar.py`)
