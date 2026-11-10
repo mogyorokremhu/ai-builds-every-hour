@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>Reaction time</title>
+<body style="margin:0;font:24px sans-serif;color:#fff">
+<div id="b" style="height:100vh;display:flex;align-items:center;justify-content:center;background:#345;cursor:pointer;text-align:center">Click to start</div>
+<script>
+let state='idle',t0,timer,best=null;
+b.onclick=()=>{
+  if(state=='idle'){state='wait';b.style.background='#a33';b.textContent='Wait for green...';
+    timer=setTimeout(()=>{state='go';b.style.background='#3a3';b.textContent='CLICK!';t0=performance.now()},1000+Math.random()*3000)}
+  else if(state=='wait'){clearTimeout(timer);state='idle';b.style.background='#345';b.textContent='Too soon! Click to retry'}
+  else{const t=Math.round(performance.now()-t0);best=best===null?t:Math.min(best,t);
+    state='idle';b.style.background='#345';b.innerHTML=t+' ms<br><small>best: '+best+' ms — click to retry</small>'}
+};
+</script>

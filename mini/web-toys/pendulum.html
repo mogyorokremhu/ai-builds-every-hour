@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8"><title>Double pendulum</title>
+<body style="margin:0;background:#111"><canvas id="c" width="500" height="500" style="display:block;margin:auto;background:#111"></canvas>
+<script>
+const c=document.getElementById('c'),g=c.getContext('2d');
+let a1=Math.PI/2,a2=Math.PI/2+0.01,v1=0,v2=0,m1=10,m2=10,l1=120,l2=120,G=1,trail=[];
+function step(){
+  const n1=-G*(2*m1+m2)*Math.sin(a1)-m2*G*Math.sin(a1-2*a2)-2*Math.sin(a1-a2)*m2*(v2*v2*l2+v1*v1*l1*Math.cos(a1-a2));
+  const d1=l1*(2*m1+m2-m2*Math.cos(2*a1-2*a2));
+  const n2=2*Math.sin(a1-a2)*(v1*v1*l1*(m1+m2)+G*(m1+m2)*Math.cos(a1)+v2*v2*l2*m2*Math.cos(a1-a2));
+  const d2=l2*(2*m1+m2-m2*Math.cos(2*a1-2*a2));
+  v1+=n1/d1;v2+=n2/d2;a1+=v1;a2+=v2;
+}
+function draw(){
+  step();
+  const x1=250+l1*Math.sin(a1),y1=150+l1*Math.cos(a1),x2=x1+l2*Math.sin(a2),y2=y1+l2*Math.cos(a2);
+  trail.push([x2,y2]);if(trail.length>300)trail.shift();
+  g.fillStyle='#111';g.fillRect(0,0,500,500);
+  g.strokeStyle='#4af';g.beginPath();trail.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke();
+  g.strokeStyle='#fff';g.beginPath();g.moveTo(250,150);g.lineTo(x1,y1);g.lineTo(x2,y2);g.stroke();
+  g.fillStyle='#fc4';[[x1,y1],[x2,y2]].forEach(p=>{g.beginPath();g.arc(p[0],p[1],8,0,7);g.fill()});
+  requestAnimationFrame(draw);
+}
+c.onclick=()=>{a1=Math.random()*6;a2=Math.random()*6;v1=v2=0;trail=[]};
+draw();
+</script>

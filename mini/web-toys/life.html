@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>Life toy</title>
+<body style="background:#111;color:#ccc;font:14px sans-serif;text-align:center">
+<p>Click/drag to draw cells. <button id="p">Pause</button> <button id="r">Random</button> <button id="x">Clear</button></p>
+<canvas id="c" width="480" height="480" style="background:#000"></canvas>
+<script>
+const N=60,S=8,c=document.getElementById('c'),g=c.getContext('2d');
+let grid=Array.from({length:N},()=>Array(N).fill(0)),run=true,down=false;
+function rnd(){grid=grid.map(r=>r.map(()=>Math.random()<.25?1:0))}
+function step(){
+  grid=grid.map((r,y)=>r.map((v,x)=>{let n=0;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(dx||dy)n+=grid[(y+dy+N)%N][(x+dx+N)%N];
+    return n==3||(v&&n==2)?1:0}));
+}
+function draw(){g.fillStyle='#000';g.fillRect(0,0,480,480);g.fillStyle='#6f6';
+  grid.forEach((r,y)=>r.forEach((v,x)=>{if(v)g.fillRect(x*S,y*S,S-1,S-1)}))}
+function paint(e){const b=c.getBoundingClientRect(),x=Math.floor((e.clientX-b.left)/S),y=Math.floor((e.clientY-b.top)/S);
+  if(grid[y]&&x>=0&&x<N)grid[y][x]=1;draw()}
+c.onmousedown=e=>{down=true;paint(e)};c.onmousemove=e=>down&&paint(e);onmouseup=()=>down=false;
+p.onclick=()=>{run=!run;p.textContent=run?'Pause':'Play'};r.onclick=rnd;x.onclick=()=>grid=grid.map(r=>r.map(()=>0));
+rnd();setInterval(()=>{if(run)step();draw()},100);
+</script>
