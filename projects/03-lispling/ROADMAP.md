@@ -58,3 +58,4 @@
 - [x] Phase 35: adjacent-pairs/last-n/drop-last/argmax/running-max/interpose (test_phase35.py, examples/phase35.lisp)
 - [x] Phase 36: map-indexed/replicate/remove-nth/all-equal?/chunk-by/cumulative-sum (test_phase36.py, examples/phase36.lisp)
 - [x] Phase 37: differences/take-last/split-on/min-max-list/flatten-once/zip3 (test_phase37.py, examples/phase37.lisp)
+- [x] Phase 38: count-if/list-index-if/remove-if/sum-list/cartesian/map-pairs (test_phase38.py, examples/phase38.lisp)
