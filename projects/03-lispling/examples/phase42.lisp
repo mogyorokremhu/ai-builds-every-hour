@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 42)
+(display (last-element '(1 2 3)))
+(display (init '(1 2 3)))
+(display (take-until even? '(1 3 4 5)))
+(display (count-while odd? '(1 3 4 5)))
+(display (sum-by square '(1 2 3)))
+(display (clamp 15 0 10))
+(display (lerp 0 10 1/2))
