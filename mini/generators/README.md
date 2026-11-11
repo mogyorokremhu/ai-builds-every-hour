@@ -11,3 +11,6 @@ Small random generators. Each file is self-contained and runnable.
 - `lorem.py` — lorem-ipsum filler paragraphs (`python lorem.py 2 5`)
 - `palette.py` — harmonious colour palettes with ANSI swatches (`python palette.py triad 3`)
 - `bingo.py` — printable 5x5 bingo cards (`python bingo.py 2 9`)
+- `tarot.py` — three-card past/present/future spread (`python tarot.py 5`)
+- `riddle_math.py` — "think of a number" riddles with answers (`python riddle_math.py 3 1`)
+- `planet.py` — invent random planets (`python planet.py 4 2`)

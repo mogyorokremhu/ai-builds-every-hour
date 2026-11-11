@@ -297,3 +297,11 @@
 (define (swap-pairs xs)
   (cond ((or (null? xs) (null? (cdr xs))) xs)
         (else (cons (car (cdr xs)) (cons (car xs) (swap-pairs (cdr (cdr xs))))))))
+; phase 42
+(define (last-element xs) (if (null? (cdr xs)) (car xs) (last-element (cdr xs))))
+(define (init xs) (if (null? (cdr xs)) '() (cons (car xs) (init (cdr xs)))))
+(define (take-until p xs) (cond ((null? xs) '()) ((p (car xs)) '()) (else (cons (car xs) (take-until p (cdr xs))))))
+(define (count-while p xs) (if (or (null? xs) (not (p (car xs)))) 0 (+ 1 (count-while p (cdr xs)))))
+(define (sum-by f xs) (if (null? xs) 0 (+ (f (car xs)) (sum-by f (cdr xs)))))
+(define (clamp x lo hi) (cond ((< x lo) lo) ((> x hi) hi) (else x)))
+(define (lerp a b t) (+ a (* t (- b a))))
