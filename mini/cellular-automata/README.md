@@ -11,3 +11,6 @@ Tiny text-mode automata, each self-contained.
 - `day_and_night.py` — Day & Night B3678/S34678 on a random torus.
 - `cyclic.py` — cyclic CA: 5 states chasing each other into spirals.
 - `sandpile.py` — abelian sandpile toppling from a single pile (`python sandpile.py 200`).
+- `seeds.py` — Seeds B2/S: explosive pattern from two adjacent cells.
+- `rule110_triangle.py` — Rule 110 grown from a single cell.
+- `forest_fire.py` — forest-fire model with growth, lightning and spreading fire.

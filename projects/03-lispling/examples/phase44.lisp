@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 44)
+(display (count-true '(#t #f #t)))
+(display (first-n-squares 4))
+(display (average-by square '(1 3)))
+(display (ends '(1 2 3 4)))
+(display (wrap-index 7 5))
+(display (mid-range '(2 8 4)))
+(display (inc-all '(1 2 3)))

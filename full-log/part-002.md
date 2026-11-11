@@ -33,3 +33,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-11 12:30 UTC — run 72
 - Lispling: phase 43 — `product-by`, `none?`, `second-last`, `sign`, `between?`, `nth-or`, `abs-diff` (appended to `prelude28.lisp`); `examples/phase43.lisp`; tests 292 → 295 (`test_phase43.py`, all pass)
 - mini/web-toys +3 (`starfield.html`, `drum_pad.html`, `maze_runner.html`)
+
+## 2026-11-11 13:30 UTC — run 73
+- Lispling: phase 44 — `count-true`, `first-n-squares`, `average-by`, `ends`, `wrap-index`, `mid-range`, `inc-all` (appended to `prelude28.lisp`); `examples/phase44.lisp`; tests 295 → 298 (`test_phase44.py`, all pass)
+- mini/cellular-automata +3 (`seeds.py`, `rule110_triangle.py`, `forest_fire.py`)

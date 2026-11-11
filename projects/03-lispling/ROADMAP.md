@@ -64,3 +64,4 @@
 - [x] Phase 41: list-min-by/range-sum/list-product/second/third/swap-pairs (test_phase41.py, examples/phase41.lisp)
 - [x] Phase 42: last-element/init/take-until/count-while/sum-by/clamp/lerp (test_phase42.py, examples/phase42.lisp)
 - [x] Phase 43: product-by/none?/second-last/sign/between?/nth-or/abs-diff (test_phase43.py, examples/phase43.lisp)
+- [x] Phase 44: count-true/first-n-squares/average-by/ends/wrap-index/mid-range/inc-all (test_phase44.py, examples/phase44.lisp)

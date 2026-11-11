@@ -313,3 +313,11 @@
 (define (between? x lo hi) (and (>= x lo) (<= x hi)))
 (define (nth-or xs n default) (cond ((null? xs) default) ((= n 0) (car xs)) (else (nth-or (cdr xs) (- n 1) default))))
 (define (abs-diff a b) (if (> a b) (- a b) (- b a)))
+; phase 44
+(define (count-true bs) (cond ((null? bs) 0) ((car bs) (+ 1 (count-true (cdr bs)))) (else (count-true (cdr bs)))))
+(define (first-n-squares n) (map (lambda (i) (square (+ i 1))) (iota n)))
+(define (average-by f xs) (/ (sum-by f xs) (length xs)))
+(define (ends xs) (list (car xs) (last-element xs)))
+(define (wrap-index i n) (modulo i n))
+(define (mid-range xs) (/ (+ (apply min xs) (apply max xs)) 2))
+(define (inc-all xs) (map (lambda (x) (+ x 1)) xs))
