@@ -1,0 +1,7 @@
+; List helpers (prelude, phase 38)
+(display (count-if even? '(1 2 3 4 6)))
+(display (list-index-if (lambda (x) (> x 2)) '(1 2 3 4)))
+(display (remove-if even? '(1 2 3 4 5)))
+(display (sum-list '(1 2 3 4)))
+(display (cartesian '(1 2) '(a b)))
+(display (map-pairs + '(1 2 3 4)))
