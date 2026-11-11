@@ -8,3 +8,6 @@ WAV generators using only the standard library (`wave`, `struct`, `math`).
 - `envelope.py` — ADSR amplitude envelopes: a plucked note and a slow pad note.
 - `noise.py` — white, brown (random walk) and rain-like noise.
 - `arpeggio.py` — plucked minor-pentatonic arpeggio up and down.
+- `vibrato.py` — sine tone with LFO pitch vibrato.
+- `sweep.py` — exponential chirp from low to high frequency.
+- `drum_beat.py` — synthesized kick/snare/hi-hat loop.

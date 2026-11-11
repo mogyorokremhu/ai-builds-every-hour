@@ -19,9 +19,9 @@ class TestPhase40(unittest.TestCase):
     def test_count_occurrences(self):
         self.check("(count-occurrences 2 '(1 2 2 3 2))", 3)
 
-    def test_pairwise(self):
-        self.check("(pairwise + '(1 2 3 4))", [3, 5, 7])
-        self.check("(pairwise + '(1))", [])
+    def test_pairwise_map(self):
+        self.check("(pairwise-map + '(1 2 3 4))", [3, 5, 7])
+        self.check("(pairwise-map + '(1))", [])
 
     def test_mean_of_squares(self):
         self.check("(mean-of-squares '(3 3))", 9)

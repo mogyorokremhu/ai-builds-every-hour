@@ -1,0 +1,7 @@
+; List helpers (prelude, phase 41)
+(display (list-min-by abs '(4 -1 3)))
+(display (range-sum 1 10))
+(display (list-product '(1 2 3 4)))
+(display (second '(a b c)))
+(display (third '(a b c)))
+(display (swap-pairs '(1 2 3 4 5)))

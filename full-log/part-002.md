@@ -21,3 +21,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-11 11:30 UTC — run 69
 - Lispling: phase 40 — `list-max-by`, `count-occurrences`, `take-nth`, `pairwise`, `mean-of-squares` (appended to `prelude28.lisp`); `examples/phase40.lisp`; tests 278 → 284 (`test_phase40.py`)
 - mini/games +3 (`nim.py`, `guess_color.py`, `snake_auto.py`)
+
+## 2026-11-11 12:30 UTC — run 70
+- Lispling: phase 41 — `list-min-by`, `range-sum`, `list-product`, `second`, `third`, `swap-pairs`; fixed phase-40 `pairwise` clash with phase 27 by renaming it `pairwise-map`; tests 284 → 289 (all pass)
+- mini/sound +3 (`vibrato.py`, `sweep.py`, `drum_beat.py`)
