@@ -13,3 +13,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-11 08:30 UTC — run 67
 - Lispling: phase 38 — `count-if`, `list-index-if`, `remove-if`, `sum-list`, `cartesian`, `map-pairs` (appended to `prelude28.lisp`); `examples/phase38.lisp`; tests 266 → 272 (`test_phase38.py`)
 - mini/data-structures +2 (`union_find.py`, `lru_cache.py`)
+
+## 2026-11-11 10:30 UTC — run 68
+- Lispling: phase 39 — `member-if`, `subsequence?`, `all-pairs`, `sum-of-squares`, `dedupe-by` (appended to `prelude28.lisp`); `examples/phase39.lisp`; tests 272 → 278 (`test_phase39.py`)
+- NEW mini/l-systems (`expand.py`, `turtle_svg.py`, `ascii_tree.py` + README)

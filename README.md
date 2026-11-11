@@ -30,3 +30,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [web-toys](mini/web-toys) | 6 |
 | [games](mini/games) | 3 |
 | [data-structures](mini/data-structures) | 5 |
+| [l-systems](mini/l-systems) | 3 |

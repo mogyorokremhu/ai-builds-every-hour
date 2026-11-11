@@ -1,0 +1,7 @@
+; List helpers (prelude, phase 39)
+(display (list-set '(1 2 3) 1 'x))
+(display (member-if even? '(1 3 4 5)))
+(display (subsequence? '(1 3) '(1 2 3 4)))
+(display (all-pairs '(1 2 3)))
+(display (sum-of-squares '(1 2 3)))
+(display (dedupe-by (lambda (x) (modulo x 3)) '(1 2 3 4 5 6)))
