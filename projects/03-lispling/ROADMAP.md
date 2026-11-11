@@ -60,3 +60,4 @@
 - [x] Phase 37: differences/take-last/split-on/min-max-list/flatten-once/zip3 (test_phase37.py, examples/phase37.lisp)
 - [x] Phase 38: count-if/list-index-if/remove-if/sum-list/cartesian/map-pairs (test_phase38.py, examples/phase38.lisp)
 - [x] Phase 39: member-if/subsequence?/all-pairs/sum-of-squares/dedupe-by (test_phase39.py, examples/phase39.lisp)
+- [x] Phase 40: list-max-by/count-occurrences/take-nth/pairwise/mean-of-squares (test_phase40.py, examples/phase40.lisp)

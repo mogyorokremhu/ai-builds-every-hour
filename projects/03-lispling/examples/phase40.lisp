@@ -1,0 +1,5 @@
+; List helpers (prelude, phase 40)
+(display (list-max-by abs '(1 -5 3)))
+(display (count-occurrences 2 '(1 2 2 3 2)))
+(display (pairwise + '(1 2 3 4)))
+(display (mean-of-squares '(1 2 3)))

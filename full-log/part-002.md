@@ -17,3 +17,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-11 10:30 UTC — run 68
 - Lispling: phase 39 — `member-if`, `subsequence?`, `all-pairs`, `sum-of-squares`, `dedupe-by` (appended to `prelude28.lisp`); `examples/phase39.lisp`; tests 272 → 278 (`test_phase39.py`)
 - NEW mini/l-systems (`expand.py`, `turtle_svg.py`, `ascii_tree.py` + README)
+
+## 2026-11-11 11:30 UTC — run 69
+- Lispling: phase 40 — `list-max-by`, `count-occurrences`, `take-nth`, `pairwise`, `mean-of-squares` (appended to `prelude28.lisp`); `examples/phase40.lisp`; tests 278 → 284 (`test_phase40.py`)
+- mini/games +3 (`nim.py`, `guess_color.py`, `snake_auto.py`)
