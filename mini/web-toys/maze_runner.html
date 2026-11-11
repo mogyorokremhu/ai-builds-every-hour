@@ -1,0 +1,41 @@
+<!doctype html><meta charset="utf-8"><title>Maze runner</title>
+<style>body{background:#14161c;color:#eee;font:16px sans-serif;text-align:center}canvas{background:#000;margin-top:10px}</style>
+<h2>Maze runner</h2><div id="msg">Arrow keys / WASD to reach the red square. Space = new maze.</div><canvas id="c" width="561" height="561"></canvas>
+<script>
+// Perfect maze via recursive backtracker; walk from top-left to bottom-right.
+const W = 20, S = 28, c = document.getElementById('c'), g = c.getContext('2d');
+let cells, px, py, moves;
+function gen(){
+  cells = Array.from({length:W*W}, () => ({n:1,e:1,s:1,w:1,v:0}));
+  const at = (x,y) => cells[y*W+x], st = [[0,0]]; at(0,0).v = 1;
+  const D = {n:[0,-1,'s'], e:[1,0,'w'], s:[0,1,'n'], w:[-1,0,'e']};
+  while (st.length){
+    const [x,y] = st[st.length-1];
+    const opts = Object.keys(D).filter(k => { const nx=x+D[k][0], ny=y+D[k][1]; return nx>=0&&ny>=0&&nx<W&&ny<W&&!at(nx,ny).v; });
+    if (!opts.length){ st.pop(); continue; }
+    const k = opts[Math.floor(Math.random()*opts.length)], nx = x+D[k][0], ny = y+D[k][1];
+    at(x,y)[k] = 0; at(nx,ny)[D[k][2]] = 0; at(nx,ny).v = 1; st.push([nx,ny]);
+  }
+  px = py = 0; moves = 0; draw();
+}
+function draw(){
+  g.clearRect(0,0,c.width,c.height); g.strokeStyle = '#6cf'; g.lineWidth = 2; g.beginPath();
+  for (let y=0;y<W;y++) for (let x=0;x<W;x++){
+    const k = cells[y*W+x], X = x*S+10, Y = y*S+10;
+    if (k.n){g.moveTo(X,Y);g.lineTo(X+S,Y);} if (k.w){g.moveTo(X,Y);g.lineTo(X,Y+S);}
+    if (k.s){g.moveTo(X,Y+S);g.lineTo(X+S,Y+S);} if (k.e){g.moveTo(X+S,Y);g.lineTo(X+S,Y+S);}
+  }
+  g.stroke(); g.fillStyle = '#e44'; g.fillRect((W-1)*S+16,(W-1)*S+16,S-12,S-12);
+  g.fillStyle = '#fd3'; g.beginPath(); g.arc(px*S+10+S/2, py*S+10+S/2, S/3, 0, 7); g.fill();
+}
+addEventListener('keydown', e => {
+  const m = {ArrowUp:'n',w:'n',ArrowDown:'s',s:'s',ArrowLeft:'w',a:'w',ArrowRight:'e',d:'e'}[e.key];
+  if (e.key === ' '){ e.preventDefault(); return gen(); }
+  if (!m) return; e.preventDefault();
+  const k = cells[py*W+px]; if (k[m]) return;
+  px += m==='e'?1:m==='w'?-1:0; py += m==='s'?1:m==='n'?-1:0; moves++;
+  draw();
+  if (px===W-1 && py===W-1) document.getElementById('msg').textContent = 'Solved in '+moves+' moves! Space = new maze.';
+});
+gen();
+</script>

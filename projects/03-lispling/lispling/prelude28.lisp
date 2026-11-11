@@ -305,3 +305,11 @@
 (define (sum-by f xs) (if (null? xs) 0 (+ (f (car xs)) (sum-by f (cdr xs)))))
 (define (clamp x lo hi) (cond ((< x lo) lo) ((> x hi) hi) (else x)))
 (define (lerp a b t) (+ a (* t (- b a))))
+; phase 43
+(define (product-by f xs) (if (null? xs) 1 (* (f (car xs)) (product-by f (cdr xs)))))
+(define (none? p xs) (cond ((null? xs) #t) ((p (car xs)) #f) (else (none? p (cdr xs)))))
+(define (second-last xs) (if (null? (cdr (cdr xs))) (car xs) (second-last (cdr xs))))
+(define (sign x) (cond ((< x 0) -1) ((> x 0) 1) (else 0)))
+(define (between? x lo hi) (and (>= x lo) (<= x hi)))
+(define (nth-or xs n default) (cond ((null? xs) default) ((= n 0) (car xs)) (else (nth-or (cdr xs) (- n 1) default))))
+(define (abs-diff a b) (if (> a b) (- a b) (- b a)))

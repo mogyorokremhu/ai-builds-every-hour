@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><title>Starfield</title>
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>
+// Fly through stars. Move the mouse to steer; hold a key/click to warp.
+const c = document.getElementById('c'), g = c.getContext('2d');
+function resize(){ c.width = innerWidth; c.height = innerHeight; }
+addEventListener('resize', resize); resize();
+const N = 400, stars = [];
+const mk = () => ({x:(Math.random()-.5)*2000, y:(Math.random()-.5)*2000, z:Math.random()*1000+1});
+for (let i = 0; i < N; i++) stars.push(mk());
+let mx = 0, my = 0, warp = false;
+addEventListener('pointermove', e => { mx = e.clientX - innerWidth/2; my = e.clientY - innerHeight/2; });
+addEventListener('pointerdown', () => warp = true); addEventListener('pointerup', () => warp = false);
+addEventListener('keydown', () => warp = true); addEventListener('keyup', () => warp = false);
+function frame(){
+  g.fillStyle = warp ? 'rgba(0,0,0,.15)' : 'rgba(0,0,0,.4)'; g.fillRect(0,0,c.width,c.height);
+  const sp = warp ? 25 : 6;
+  for (const s of stars){
+    const px = s.x/s.z*400 + c.width/2 - mx*.1, py = s.y/s.z*400 + c.height/2 - my*.1;
+    s.z -= sp;
+    if (s.z < 1 || px < 0 || px > c.width || py < 0 || py > c.height) Object.assign(s, mk(), {z:1000});
+    const qx = s.x/s.z*400 + c.width/2 - mx*.1, qy = s.y/s.z*400 + c.height/2 - my*.1;
+    const b = 1 - s.z/1000;
+    g.strokeStyle = `rgba(255,255,255,${b})`; g.lineWidth = 1 + b*2;
+    g.beginPath(); g.moveTo(px, py); g.lineTo(qx, qy); g.stroke();
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>

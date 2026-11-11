@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 43)
+(display (product-by square '(1 2 3)))
+(display (none? even? '(1 3 5)))
+(display (second-last '(1 2 3 4)))
+(display (sign -7))
+(display (between? 5 1 10))
+(display (nth-or '(10 20) 5 -1))
+(display (abs-diff 3 10))

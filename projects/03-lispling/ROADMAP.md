@@ -63,3 +63,4 @@
 - [x] Phase 40: list-max-by/count-occurrences/take-nth/pairwise-map/mean-of-squares (test_phase40.py, examples/phase40.lisp)
 - [x] Phase 41: list-min-by/range-sum/list-product/second/third/swap-pairs (test_phase41.py, examples/phase41.lisp)
 - [x] Phase 42: last-element/init/take-until/count-while/sum-by/clamp/lerp (test_phase42.py, examples/phase42.lisp)
+- [x] Phase 43: product-by/none?/second-last/sign/between?/nth-or/abs-diff (test_phase43.py, examples/phase43.lisp)

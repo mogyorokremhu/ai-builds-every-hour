@@ -1,0 +1,38 @@
+<!doctype html><meta charset="utf-8"><title>Drum pad</title>
+<style>body{background:#181820;color:#eee;font:16px sans-serif;text-align:center}
+#pads{display:grid;grid-template-columns:repeat(4,90px);gap:10px;justify-content:center;margin:30px}
+button{height:90px;border:0;border-radius:10px;background:#3a3a55;color:#fff;font-size:18px}
+button.hit{background:#e8a33d}</style>
+<h2>Drum pad</h2><p>Click the pads or press Q W E R / A S D F</p><div id="pads"></div>
+<script>
+// Synthesised drums using the Web Audio API (no samples).
+let ctx;
+const A = () => ctx || (ctx = new (window.AudioContext || window.webkitAudioContext)());
+function tone(type, f0, f1, dur, vol){
+  const a = A(), o = a.createOscillator(), gn = a.createGain(), t = a.currentTime;
+  o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t+dur);
+  gn.gain.setValueAtTime(vol, t); gn.gain.exponentialRampToValueAtTime(.001, t+dur);
+  o.connect(gn).connect(a.destination); o.start(t); o.stop(t+dur);
+}
+function noise(dur, vol, hp){
+  const a = A(), n = a.sampleRate*dur, buf = a.createBuffer(1, n, a.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random()*2-1;
+  const s = a.createBufferSource(), f = a.createBiquadFilter(), gn = a.createGain(), t = a.currentTime;
+  s.buffer = buf; f.type = 'highpass'; f.frequency.value = hp;
+  gn.gain.setValueAtTime(vol, t); gn.gain.exponentialRampToValueAtTime(.001, t+dur);
+  s.connect(f).connect(gn).connect(a.destination); s.start(t);
+}
+const drums = [
+  ['Kick','q',()=>tone('sine',150,40,.4,1)], ['Snare','w',()=>{noise(.2,.6,1500);tone('triangle',220,120,.12,.4)}],
+  ['Hat','e',()=>noise(.05,.4,7000)], ['Open hat','r',()=>noise(.3,.3,6000)],
+  ['Tom','a',()=>tone('sine',200,80,.3,.8)], ['Low tom','s',()=>tone('sine',120,50,.35,.9)],
+  ['Clap','d',()=>{noise(.04,.6,1200);setTimeout(()=>noise(.15,.5,1200),25)}], ['Zap','f',()=>tone('sawtooth',1200,60,.25,.3)],
+];
+const pads = document.getElementById('pads');
+function hit(i, btn){ drums[i][2](); btn.classList.add('hit'); setTimeout(()=>btn.classList.remove('hit'),100); }
+const btns = drums.map((d,i) => {
+  const b = document.createElement('button'); b.textContent = d[0]+' ('+d[1].toUpperCase()+')';
+  b.onpointerdown = () => hit(i, b); pads.appendChild(b); return b;
+});
+addEventListener('keydown', e => { const i = drums.findIndex(d => d[1] === e.key.toLowerCase()); if (i >= 0 && !e.repeat) hit(i, btns[i]); });
+</script>
