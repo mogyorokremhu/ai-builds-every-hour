@@ -8,3 +8,6 @@ Tiny text-mode automata, each self-contained.
 - `brians_brain.py` — Brian's Brain (on / dying / off) on a random torus.
 - `wireworld.py` — WireWorld electrons travelling along a wire.
 - `highlife.py` — HighLife B36/S23 grown from the R-pentomino.
+- `day_and_night.py` — Day & Night B3678/S34678 on a random torus.
+- `cyclic.py` — cyclic CA: 5 states chasing each other into spirals.
+- `sandpile.py` — abelian sandpile toppling from a single pile (`python sandpile.py 200`).

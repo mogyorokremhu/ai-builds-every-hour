@@ -1,0 +1,7 @@
+; List helpers (prelude, phase 37)
+(display (differences '(1 4 9 16)))
+(display (take-last '(1 2 3 4) 2))
+(display (split-on 0 '(1 2 0 3 0 4)))
+(display (min-max-list '(3 9 -2 5)))
+(display (flatten-once '((1 2) (3))))
+(display (zip3 '(1 2) '(a b) '(x y)))
