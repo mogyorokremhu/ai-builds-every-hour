@@ -74,3 +74,4 @@
 - [x] Phase 51: sum-even-squares/evens-squared/septuple-all/product-odds/take-while-even/count-between/drop-while-nonzero (test_phase51.py, examples/phase51.lisp)
 - [x] Phase 52: sum-multiples-of/octuple-all/count-less-than/count-greater-than/take-while-odd/drop-while-odd/odds-squared (test_phase52.py, examples/phase52.lisp)
 - [x] Phase 53: nonuple-all/sum-between/evens-cubed/odds-cubed/product-multiples-of/drop-while-even/take-while-multiple-of (test_phase53.py, examples/phase53.lisp)
+- [x] Phase 54: decuple-all/sum-less-than/sum-greater-than/count-multiples-between/evens-doubled/odds-doubled/take-while-less-than (test_phase54.py, examples/phase54.lisp)

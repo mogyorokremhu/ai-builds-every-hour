@@ -392,3 +392,11 @@
 (define (product-multiples-of n xs) (apply * (filter (lambda (x) (zero? (modulo x n))) xs)))
 (define (drop-while-even xs) (drop-while even? xs))
 (define (take-while-multiple-of n xs) (take-while (lambda (x) (zero? (modulo x n))) xs))
+; phase 54
+(define (decuple-all xs) (map (lambda (x) (* 10 x)) xs))
+(define (sum-less-than n xs) (apply + (filter (lambda (x) (< x n)) xs)))
+(define (sum-greater-than n xs) (apply + (filter (lambda (x) (> x n)) xs)))
+(define (count-multiples-between n lo hi xs) (count (lambda (x) (and (zero? (modulo x n)) (>= x lo) (<= x hi))) xs))
+(define (evens-doubled xs) (map (lambda (x) (* 2 x)) (filter even? xs)))
+(define (odds-doubled xs) (map (lambda (x) (* 2 x)) (filter odd? xs)))
+(define (take-while-less-than n xs) (take-while (lambda (x) (< x n)) xs))

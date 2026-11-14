@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 54)
+(display (sum-less-than 3 '(1 2 3 4)))
+(display (sum-greater-than 2 '(1 2 3 4)))
+(display (count-multiples-between 2 3 9 '(2 4 6 8 10)))
+(display (decuple-all '(1 2)))
+(display (evens-doubled '(1 2 3 4)))
+(display (odds-doubled '(1 2 3)))
+(display (take-while-less-than 3 '(1 2 3 1)))

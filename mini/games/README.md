@@ -11,3 +11,6 @@ Tiny terminal games, standard library only. Each supports `--auto` so it can run
 - `lights_out.py` — 5x5 Lights Out; `--auto` solves it with GF(2) elimination.
 - `twenty_forty_eight.py` — 2048; `--auto` plays greedily by empty cells.
 - `minesweeper_auto.py` — 9x9 Minesweeper; `--auto` deduces safe cells and guesses when stuck.
+- `connect_four.py` — Connect Four vs a minimax AI; `--auto` is AI vs random.
+- `bulls_and_cows.py` — 4-digit code breaker; `--auto` solves by elimination.
+- `game_of_life_duel.py` — two-colour Life; prints which colour wins.
