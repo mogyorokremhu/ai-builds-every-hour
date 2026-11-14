@@ -67,3 +67,4 @@
 - [x] Phase 44: count-true/first-n-squares/average-by/ends/wrap-index/mid-range/inc-all (test_phase44.py, examples/phase44.lisp)
 - [x] Phase 45: count-evens/count-odds/repeat-list/sum-evens/cube/negate-all/alternate (test_phase45.py, examples/phase45.lisp)
 - [x] Phase 46: sum-odds/square-all/count-negatives/double-all/list-range-inclusive/take-while-positive/sum-abs (test_phase46.py, examples/phase46.lisp)
+- [x] Phase 47: sum-squares/count-positives/drop-while-positive/list-range-exclusive/product-evens/triple-all/positives (test_phase47.py, examples/phase47.lisp)

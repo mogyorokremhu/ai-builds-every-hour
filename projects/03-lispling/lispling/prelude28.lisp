@@ -336,3 +336,11 @@
 (define (list-range-inclusive a b) (if (> a b) '() (cons a (list-range-inclusive (+ a 1) b))))
 (define (take-while-positive xs) (take-while (lambda (x) (> x 0)) xs))
 (define (sum-abs xs) (apply + (map abs xs)))
+; phase 47
+(define (sum-squares xs) (apply + (map (lambda (x) (* x x)) xs)))
+(define (count-positives xs) (count (lambda (x) (> x 0)) xs))
+(define (drop-while-positive xs) (drop-while (lambda (x) (> x 0)) xs))
+(define (list-range-exclusive a b) (if (>= a b) '() (cons a (list-range-exclusive (+ a 1) b))))
+(define (product-evens xs) (apply * (filter even? xs)))
+(define (triple-all xs) (map (lambda (x) (* 3 x)) xs))
+(define (positives xs) (filter (lambda (x) (> x 0)) xs))
