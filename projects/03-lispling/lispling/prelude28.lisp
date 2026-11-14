@@ -376,3 +376,11 @@
 (define (take-while-even xs) (take-while even? xs))
 (define (count-between lo hi xs) (count (lambda (x) (and (>= x lo) (<= x hi))) xs))
 (define (drop-while-nonzero xs) (drop-while (lambda (x) (not (zero? x))) xs))
+; phase 52
+(define (sum-multiples-of n xs) (apply + (filter (lambda (x) (zero? (modulo x n))) xs)))
+(define (octuple-all xs) (map (lambda (x) (* 8 x)) xs))
+(define (count-less-than n xs) (count (lambda (x) (< x n)) xs))
+(define (count-greater-than n xs) (count (lambda (x) (> x n)) xs))
+(define (take-while-odd xs) (take-while odd? xs))
+(define (drop-while-odd xs) (drop-while odd? xs))
+(define (odds-squared xs) (map (lambda (x) (* x x)) (filter odd? xs)))
