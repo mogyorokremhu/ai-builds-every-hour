@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 49)
+(display (sum-negatives '(-1 2 -3)))
+(display (product-positives '(-1 2 3)))
+(display (drop-while-negative '(-1 -2 3 -4)))
+(display (count-nonzero '(0 1 0 2)))
+(display (quintuple-all '(1 2 3)))
+(display (nonzeros '(0 1 0 2)))
+(display (list-range-step-up 2 5))

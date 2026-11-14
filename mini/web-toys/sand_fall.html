@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8"><title>Falling sand</title>
+<style>html,body{margin:0;background:#000;overflow:hidden;color:#fff;font-family:sans-serif}canvas{display:block;image-rendering:pixelated}
+#h{position:fixed;top:6px;left:8px;font-size:13px;opacity:.7}</style>
+<canvas id="c"></canvas><div id="h">drag to pour sand · 1-3 change colour · C clears</div>
+<script>
+// Falling-sand cellular automaton on a 2x pixel-scaled grid.
+const S=3, cv=document.getElementById('c'), g=cv.getContext('2d');
+const W=Math.floor(innerWidth/S), H=Math.floor(innerHeight/S);
+cv.width=W; cv.height=H; cv.style.width=W*S+'px'; cv.style.height=H*S+'px';
+let grid=new Uint8Array(W*H), hue=1, down=false, mx=0, my=0;
+const cols=[[0,0,0],[230,190,90],[220,110,60],[90,170,230]];
+cv.onpointerdown=e=>{down=true;mv(e)}; onpointerup=()=>down=false; cv.onpointermove=mv;
+function mv(e){mx=Math.floor(e.clientX/S); my=Math.floor(e.clientY/S);}
+onkeydown=e=>{if('123'.includes(e.key)) hue=+e.key; if(e.key==='c'||e.key==='C') grid.fill(0);};
+const img=g.createImageData(W,H);
+function step(){
+  if(down) for(let i=0;i<12;i++){const x=mx+Math.floor(Math.random()*7-3), y=my+Math.floor(Math.random()*7-3);
+    if(x>=0&&x<W&&y>=0&&y<H&&!grid[y*W+x]) grid[y*W+x]=hue;}
+  for(let y=H-2;y>=0;y--){const dir=Math.random()<.5?-1:1;
+    for(let x=0;x<W;x++){const i=y*W+x,v=grid[i]; if(!v) continue;
+      const b=i+W; if(!grid[b]){grid[b]=v;grid[i]=0;continue;}
+      const nx=x+dir; if(nx>=0&&nx<W&&!grid[b+dir]){grid[b+dir]=v;grid[i]=0;}}}
+  for(let i=0;i<W*H;i++){const c=cols[grid[i]]; img.data[i*4]=c[0];img.data[i*4+1]=c[1];img.data[i*4+2]=c[2];img.data[i*4+3]=255;}
+  g.putImageData(img,0,0); requestAnimationFrame(step);
+}
+step();
+</script>

@@ -11,3 +11,6 @@ Single-file HTML toys: open in a browser, no build step.
 - `starfield.html` — fly through a 3D starfield; mouse steers, click/key warps.
 - `drum_pad.html` — synthesised drum pad (Web Audio), click or use Q W E R / A S D F.
 - `maze_runner.html` — walk a freshly generated perfect maze to the red square.
+- `tic_tac_toe.html` — play X against an unbeatable minimax AI.
+- `sand_fall.html` — falling-sand automaton; drag to pour three colours of sand.
+- `snake.html` — classic wrapping snake that speeds up with every apple.

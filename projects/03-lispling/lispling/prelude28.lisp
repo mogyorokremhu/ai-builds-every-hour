@@ -352,3 +352,11 @@
 (define (quadruple-all xs) (map (lambda (x) (* 4 x)) xs))
 (define (sum-positives xs) (apply + (filter (lambda (x) (> x 0)) xs)))
 (define (list-range-step-down a b) (if (< a b) '() (cons a (list-range-step-down (- a 1) b))))
+; phase 49
+(define (sum-negatives xs) (apply + (filter (lambda (x) (< x 0)) xs)))
+(define (product-positives xs) (apply * (filter (lambda (x) (> x 0)) xs)))
+(define (drop-while-negative xs) (drop-while (lambda (x) (< x 0)) xs))
+(define (count-nonzero xs) (count (lambda (x) (not (zero? x))) xs))
+(define (quintuple-all xs) (map (lambda (x) (* 5 x)) xs))
+(define (nonzeros xs) (filter (lambda (x) (not (zero? x))) xs))
+(define (list-range-step-up a b) (if (> a b) '() (cons a (list-range-step-up (+ a 1) b))))

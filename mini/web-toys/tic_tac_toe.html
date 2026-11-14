@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><title>Tic-tac-toe</title>
+<style>body{background:#111;color:#eee;font-family:sans-serif;text-align:center}
+#b{display:grid;grid-template-columns:repeat(3,100px);gap:6px;justify-content:center;margin:20px}
+button.cell{width:100px;height:100px;font-size:56px;background:#222;color:#fc6;border:0;cursor:pointer}
+button.r{padding:8px 16px}</style>
+<h2>Tic-tac-toe vs unbeatable AI</h2><div id="b"></div><p id="s">Your move (X)</p><button class="r" id="r">Restart</button>
+<script>
+// You are X; the AI (O) plays perfect minimax, so the best you can do is draw.
+const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+let B, over; const bd=document.getElementById('b'), st=document.getElementById('s');
+const win=b=>{for(const [a,c,d] of L) if(b[a]&&b[a]===b[c]&&b[a]===b[d]) return b[a]; return b.includes('')?null:'D';};
+function mm(b,p){const w=win(b); if(w) return w==='O'?1:w==='X'?-1:0;
+  let best=p==='O'?-2:2;
+  for(let i=0;i<9;i++) if(!b[i]){b[i]=p; const v=mm(b,p==='O'?'X':'O'); b[i]='';
+    best=p==='O'?Math.max(best,v):Math.min(best,v);} return best;}
+function ai(){let bi=-1,bv=-2; for(let i=0;i<9;i++) if(!B[i]){B[i]='O'; const v=mm(B,'X'); B[i]=''; if(v>bv){bv=v;bi=i;}} B[bi]='O';}
+function draw(){bd.innerHTML=''; B.forEach((v,i)=>{const e=document.createElement('button'); e.className='cell'; e.textContent=v;
+  e.onclick=()=>{if(over||B[i]) return; B[i]='X'; if(!check()) {ai(); check();} draw();}; bd.appendChild(e);});}
+function check(){const w=win(B); if(!w) return false; over=true; st.textContent=w==='D'?'Draw!':w+' wins!'; return true;}
+function reset(){B=Array(9).fill(''); over=false; st.textContent='Your move (X)'; draw();}
+document.getElementById('r').onclick=reset; reset();
+</script>
