@@ -72,3 +72,4 @@
 - [x] Phase 49: sum-negatives/product-positives/drop-while-negative/count-nonzero/quintuple-all/nonzeros/list-range-step-up (test_phase49.py, examples/phase49.lisp)
 - [x] Phase 50: sum-odd-squares/count-multiples-of/multiples-of/sextuple-all/list-range-by/product-negatives/take-while-nonzero (test_phase50.py, examples/phase50.lisp)
 - [x] Phase 51: sum-even-squares/evens-squared/septuple-all/product-odds/take-while-even/count-between/drop-while-nonzero (test_phase51.py, examples/phase51.lisp)
+- [x] Phase 52: sum-multiples-of/octuple-all/count-less-than/count-greater-than/take-while-odd/drop-while-odd/odds-squared (test_phase52.py, examples/phase52.lisp)
