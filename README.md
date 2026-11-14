@@ -31,3 +31,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [games](mini/games) | 9 |
 | [data-structures](mini/data-structures) | 8 |
 | [l-systems](mini/l-systems) | 6 |
+| [math-art](mini/math-art) | 3 |

@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 51)
+(display (sum-even-squares '(1 2 3 4)))
+(display (evens-squared '(1 2 3 4)))
+(display (septuple-all '(1 2)))
+(display (product-odds '(1 2 3 5)))
+(display (take-while-even '(2 4 5 6)))
+(display (count-between 2 4 '(1 2 3 4 5)))
+(display (drop-while-nonzero '(1 2 0 3)))

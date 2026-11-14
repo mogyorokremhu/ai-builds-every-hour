@@ -368,3 +368,11 @@
 (define (list-range-by a b step) (if (> a b) '() (cons a (list-range-by (+ a step) b step))))
 (define (product-negatives xs) (apply * (filter (lambda (x) (< x 0)) xs)))
 (define (take-while-nonzero xs) (take-while (lambda (x) (not (zero? x))) xs))
+; phase 51
+(define (sum-even-squares xs) (apply + (map (lambda (x) (* x x)) (filter even? xs))))
+(define (evens-squared xs) (map (lambda (x) (* x x)) (filter even? xs)))
+(define (septuple-all xs) (map (lambda (x) (* 7 x)) xs))
+(define (product-odds xs) (apply * (filter odd? xs)))
+(define (take-while-even xs) (take-while even? xs))
+(define (count-between lo hi xs) (count (lambda (x) (and (>= x lo) (<= x hi))) xs))
+(define (drop-while-nonzero xs) (drop-while (lambda (x) (not (zero? x))) xs))
