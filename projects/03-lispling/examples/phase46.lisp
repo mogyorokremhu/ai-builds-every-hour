@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 46)
+(display (sum-odds '(1 2 3 4 5)))
+(display (square-all '(1 2 3)))
+(display (count-negatives '(-1 2 -3)))
+(display (double-all '(1 2 3)))
+(display (list-range-inclusive 2 5))
+(display (take-while-positive '(1 2 -1 3)))
+(display (sum-abs '(-1 2 -3)))
