@@ -65,3 +65,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-14 20:35 UTC — run 80
 - Lispling: phase 51 — `sum-even-squares`, `evens-squared`, `septuple-all`, `product-odds`, `take-while-even`, `count-between`, `drop-while-nonzero` (appended to `prelude28.lisp`); `examples/phase51.lisp`; tests 311 → 313 (`test_phase51.py`, all pass)
 - NEW collection mini/math-art (3 files + README): `spirograph_svg.py`, `mandelbrot_ascii.py`, `lissajous_ascii.py`
+
+## 2026-11-14 21:35 UTC — run 81
+- Lispling: phase 52 — `sum-multiples-of`, `octuple-all`, `count-less-than`, `count-greater-than`, `take-while-odd`, `drop-while-odd`, `odds-squared` (appended to `prelude28.lisp`); `examples/phase52.lisp`; tests 313 → 315 (`test_phase52.py`, all pass)
+- mini/l-systems +3 (`koch_snowflake_svg.py`, `hilbert_ascii.py`, `dragon_unfold.py`)
