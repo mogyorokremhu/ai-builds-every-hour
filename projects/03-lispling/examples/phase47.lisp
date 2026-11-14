@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 47)
+(display (sum-squares '(1 2 3)))
+(display (count-positives '(-1 2 3)))
+(display (drop-while-positive '(1 2 -1 3)))
+(display (list-range-exclusive 2 5))
+(display (product-evens '(1 2 3 4)))
+(display (triple-all '(1 2 3)))
+(display (positives '(-1 2 -3 4)))

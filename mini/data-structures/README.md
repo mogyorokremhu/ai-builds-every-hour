@@ -7,3 +7,6 @@ Classic data structures from scratch, standard library only. Each file runs a sm
 - `bloom_filter.py` — Bloom filter sized from n and target false-positive rate.
 - `union_find.py` — disjoint-set with path compression and union by rank.
 - `lru_cache.py` — LRU cache via hash map + doubly linked list.
+- `skip_list.py` — probabilistic sorted set with O(log n) add/remove/lookup.
+- `ring_buffer.py` — fixed-capacity circular buffer that overwrites the oldest item.
+- `segment_tree.py` — iterative segment tree for range sums with point updates.
