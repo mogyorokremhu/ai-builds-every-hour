@@ -8,3 +8,6 @@ Lindenmayer systems: string rewriting plus a turtle interpreter. Pure standard l
 - `lsystem_stats.py` — growth statistics (length, ratio, symbol counts) per generation.
 - `sierpinski_ascii.py` — Sierpinski triangle from an L-system, drawn in ASCII.
 - `lsystem_random.py` — stochastic L-system with weighted rules and seeded variants.
+- `koch_snowflake_svg.py` — Koch snowflake written as an SVG.
+- `hilbert_ascii.py` — Hilbert curve from an L-system, drawn in ASCII.
+- `dragon_unfold.py` — dragon curve turns by paper folding, verified against the L-system.

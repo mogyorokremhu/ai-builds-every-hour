@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 52)
+(display (sum-multiples-of 3 '(1 3 6 7 9)))
+(display (octuple-all '(1 2)))
+(display (count-less-than 3 '(1 2 3 4)))
+(display (count-greater-than 3 '(1 2 3 4 5)))
+(display (take-while-odd '(1 3 4 5)))
+(display (drop-while-odd '(1 3 4 5)))
+(display (odds-squared '(1 2 3)))
