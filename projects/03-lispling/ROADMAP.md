@@ -68,3 +68,4 @@
 - [x] Phase 45: count-evens/count-odds/repeat-list/sum-evens/cube/negate-all/alternate (test_phase45.py, examples/phase45.lisp)
 - [x] Phase 46: sum-odds/square-all/count-negatives/double-all/list-range-inclusive/take-while-positive/sum-abs (test_phase46.py, examples/phase46.lisp)
 - [x] Phase 47: sum-squares/count-positives/drop-while-positive/list-range-exclusive/product-evens/triple-all/positives (test_phase47.py, examples/phase47.lisp)
+- [x] Phase 48: sum-of-cubes/count-zeros/negatives/take-while-negative/quadruple-all/sum-positives/list-range-step-down (test_phase48.py, examples/phase48.lisp)

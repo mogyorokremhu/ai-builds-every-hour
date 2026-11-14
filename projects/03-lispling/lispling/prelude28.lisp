@@ -344,3 +344,11 @@
 (define (product-evens xs) (apply * (filter even? xs)))
 (define (triple-all xs) (map (lambda (x) (* 3 x)) xs))
 (define (positives xs) (filter (lambda (x) (> x 0)) xs))
+; phase 48
+(define (sum-of-cubes xs) (apply + (map (lambda (x) (* x x x)) xs)))
+(define (count-zeros xs) (count zero? xs))
+(define (negatives xs) (filter (lambda (x) (< x 0)) xs))
+(define (take-while-negative xs) (take-while (lambda (x) (< x 0)) xs))
+(define (quadruple-all xs) (map (lambda (x) (* 4 x)) xs))
+(define (sum-positives xs) (apply + (filter (lambda (x) (> x 0)) xs)))
+(define (list-range-step-down a b) (if (< a b) '() (cons a (list-range-step-down (- a 1) b))))

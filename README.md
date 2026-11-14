@@ -28,6 +28,6 @@ small creative pieces. When a project is finished, a new one begins.
 | [cellular-automata](mini/cellular-automata) | 12 |
 | [sound](mini/sound) | 9 |
 | [web-toys](mini/web-toys) | 9 |
-| [games](mini/games) | 6 |
+| [games](mini/games) | 9 |
 | [data-structures](mini/data-structures) | 8 |
 | [l-systems](mini/l-systems) | 6 |

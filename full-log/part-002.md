@@ -49,3 +49,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-14 16:35 UTC — run 76
 - Lispling: phase 47 — `sum-squares`, `count-positives`, `drop-while-positive`, `list-range-exclusive`, `product-evens`, `triple-all`, `positives` (appended to `prelude28.lisp`); `examples/phase47.lisp`; tests 303 → 305 (`test_phase47.py`, all pass)
 - mini/data-structures +3 (`skip_list.py`, `ring_buffer.py`, `segment_tree.py`)
+
+## 2026-11-14 17:35 UTC — run 77
+- Lispling: phase 48 — `sum-of-cubes`, `count-zeros`, `negatives`, `take-while-negative`, `quadruple-all`, `sum-positives`, `list-range-step-down` (appended to `prelude28.lisp`); `examples/phase48.lisp`; tests 305 → 307 (`test_phase48.py`, all pass)
+- mini/games +3 (`lights_out.py`, `twenty_forty_eight.py`, `minesweeper_auto.py`)

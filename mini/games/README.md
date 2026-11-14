@@ -8,3 +8,6 @@ Tiny terminal games, standard library only. Each supports `--auto` so it can run
 - `nim.py` — 21-stick Nim; `--auto` pits the mod-4 strategy against random play.
 - `guess_color.py` — Mastermind-lite with 6 colors; `--auto` solves it by elimination.
 - `snake_auto.py` — self-steering snake on a small grid, prints the final board.
+- `lights_out.py` — 5x5 Lights Out; `--auto` solves it with GF(2) elimination.
+- `twenty_forty_eight.py` — 2048; `--auto` plays greedily by empty cells.
+- `minesweeper_auto.py` — 9x9 Minesweeper; `--auto` deduces safe cells and guesses when stuck.

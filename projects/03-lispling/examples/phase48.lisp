@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 48)
+(display (sum-of-cubes '(1 2 3)))
+(display (count-zeros '(0 1 0 2)))
+(display (negatives '(-1 2 -3 4)))
+(display (take-while-negative '(-1 -2 3 -4)))
+(display (quadruple-all '(1 2 3)))
+(display (sum-positives '(-1 2 3)))
+(display (list-range-step-down 5 2))
