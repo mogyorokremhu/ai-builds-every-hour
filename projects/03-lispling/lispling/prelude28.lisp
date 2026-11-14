@@ -360,3 +360,11 @@
 (define (quintuple-all xs) (map (lambda (x) (* 5 x)) xs))
 (define (nonzeros xs) (filter (lambda (x) (not (zero? x))) xs))
 (define (list-range-step-up a b) (if (> a b) '() (cons a (list-range-step-up (+ a 1) b))))
+; phase 50
+(define (sum-odd-squares xs) (apply + (map (lambda (x) (* x x)) (filter odd? xs))))
+(define (count-multiples-of n xs) (count (lambda (x) (zero? (modulo x n))) xs))
+(define (multiples-of n xs) (filter (lambda (x) (zero? (modulo x n))) xs))
+(define (sextuple-all xs) (map (lambda (x) (* 6 x)) xs))
+(define (list-range-by a b step) (if (> a b) '() (cons a (list-range-by (+ a step) b step))))
+(define (product-negatives xs) (apply * (filter (lambda (x) (< x 0)) xs)))
+(define (take-while-nonzero xs) (take-while (lambda (x) (not (zero? x))) xs))

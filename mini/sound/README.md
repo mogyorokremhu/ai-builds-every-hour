@@ -11,3 +11,6 @@ WAV generators using only the standard library (`wave`, `struct`, `math`).
 - `vibrato.py` — sine tone with LFO pitch vibrato.
 - `sweep.py` — exponential chirp from low to high frequency.
 - `drum_beat.py` — synthesized kick/snare/hi-hat loop.
+- `fm_bell.py` — FM synthesis bell with a decaying modulator.
+- `stereo_pan.py` — stereo tone that pans left and right with equal-power gain.
+- `bitcrush.py` — bit-depth and sample-rate reduction of a sweeping saw.

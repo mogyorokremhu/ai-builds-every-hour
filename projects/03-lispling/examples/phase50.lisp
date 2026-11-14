@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 50)
+(display (sum-odd-squares '(1 2 3)))
+(display (count-multiples-of 3 '(3 4 6 9)))
+(display (multiples-of 2 '(1 2 3 4)))
+(display (sextuple-all '(1 2)))
+(display (list-range-by 0 10 5))
+(display (product-negatives '(-2 3 -4)))
+(display (take-while-nonzero '(1 2 0 3)))
