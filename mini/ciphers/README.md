@@ -14,3 +14,6 @@ Classic ciphers, each a runnable stdlib-only script.
 - `scytale.py` — scytale rod transposition with padding (`-d` decrypts).
 - `polybius.py` — Polybius square digit-pair encoding, I/J merged (`-d` decodes).
 - `xor_cipher.py` — repeating-key XOR with hex output (`-d` decrypts).
+- `rot47.py` — ROT47 over printable ASCII (self-inverse).
+- `beaufort.py` — Beaufort cipher (K−P mod 26), self-reciprocal.
+- `autokey.py` — Autokey cipher, plaintext extends the key (`-d` decrypts).

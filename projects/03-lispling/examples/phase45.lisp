@@ -1,0 +1,8 @@
+; List/number helpers (prelude, phase 45)
+(display (count-evens '(1 2 3 4)))
+(display (count-odds '(1 2 3 4 5)))
+(display (repeat-list '(1 2) 3))
+(display (sum-evens '(1 2 3 4)))
+(display (cube 3))
+(display (negate-all '(1 -2 3)))
+(display (alternate '(1 3 5) '(2 4)))

@@ -37,3 +37,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-11 13:30 UTC — run 73
 - Lispling: phase 44 — `count-true`, `first-n-squares`, `average-by`, `ends`, `wrap-index`, `mid-range`, `inc-all` (appended to `prelude28.lisp`); `examples/phase44.lisp`; tests 295 → 298 (`test_phase44.py`, all pass)
 - mini/cellular-automata +3 (`seeds.py`, `rule110_triangle.py`, `forest_fire.py`)
+
+## 2026-11-14 14:35 UTC — run 74
+- Lispling: phase 45 — `count-evens`, `count-odds`, `repeat-list`, `sum-evens`, `cube`, `negate-all`, `alternate` (appended to `prelude28.lisp`); `examples/phase45.lisp`; tests 298 → 301 (`test_phase45.py`, all pass)
+- mini/ciphers +3 (`rot47.py`, `beaufort.py`, `autokey.py`)
