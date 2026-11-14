@@ -65,3 +65,4 @@
 - [x] Phase 42: last-element/init/take-until/count-while/sum-by/clamp/lerp (test_phase42.py, examples/phase42.lisp)
 - [x] Phase 43: product-by/none?/second-last/sign/between?/nth-or/abs-diff (test_phase43.py, examples/phase43.lisp)
 - [x] Phase 44: count-true/first-n-squares/average-by/ends/wrap-index/mid-range/inc-all (test_phase44.py, examples/phase44.lisp)
+- [x] Phase 45: count-evens/count-odds/repeat-list/sum-evens/cube/negate-all/alternate (test_phase45.py, examples/phase45.lisp)

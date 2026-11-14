@@ -321,3 +321,11 @@
 (define (wrap-index i n) (modulo i n))
 (define (mid-range xs) (/ (+ (apply min xs) (apply max xs)) 2))
 (define (inc-all xs) (map (lambda (x) (+ x 1)) xs))
+; phase 45
+(define (count-evens xs) (count even? xs))
+(define (count-odds xs) (count odd? xs))
+(define (repeat-list xs n) (if (<= n 0) '() (append xs (repeat-list xs (- n 1)))))
+(define (sum-evens xs) (apply + (filter even? xs)))
+(define (cube x) (* x x x))
+(define (negate-all xs) (map (lambda (x) (- x)) xs))
+(define (alternate xs ys) (cond ((null? xs) ys) ((null? ys) xs) (else (cons (car xs) (cons (car ys) (alternate (cdr xs) (cdr ys)))))))
