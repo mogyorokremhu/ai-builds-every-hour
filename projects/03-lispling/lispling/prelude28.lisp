@@ -384,3 +384,11 @@
 (define (take-while-odd xs) (take-while odd? xs))
 (define (drop-while-odd xs) (drop-while odd? xs))
 (define (odds-squared xs) (map (lambda (x) (* x x)) (filter odd? xs)))
+; phase 53
+(define (nonuple-all xs) (map (lambda (x) (* 9 x)) xs))
+(define (sum-between lo hi xs) (apply + (filter (lambda (x) (and (>= x lo) (<= x hi))) xs)))
+(define (evens-cubed xs) (map (lambda (x) (* x x x)) (filter even? xs)))
+(define (odds-cubed xs) (map (lambda (x) (* x x x)) (filter odd? xs)))
+(define (product-multiples-of n xs) (apply * (filter (lambda (x) (zero? (modulo x n))) xs)))
+(define (drop-while-even xs) (drop-while even? xs))
+(define (take-while-multiple-of n xs) (take-while (lambda (x) (zero? (modulo x n))) xs))

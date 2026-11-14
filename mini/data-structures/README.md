@@ -10,3 +10,6 @@ Classic data structures from scratch, standard library only. Each file runs a sm
 - `skip_list.py` — probabilistic sorted set with O(log n) add/remove/lookup.
 - `ring_buffer.py` — fixed-capacity circular buffer that overwrites the oldest item.
 - `segment_tree.py` — iterative segment tree for range sums with point updates.
+- `fenwick_tree.py` — binary indexed tree for prefix/range sums with point updates.
+- `linked_deque.py` — doubly linked deque with O(1) operations at both ends.
+- `avl_tree.py` — self-balancing AVL BST (rotations), stays O(log n) on sorted input.
