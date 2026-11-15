@@ -1,0 +1,5 @@
+; Higher moments and running means (prelude55, phase 62)
+(display (skewness '(2 4 4 4 5 5 7 9)))
+(display (excess-kurtosis '(2 4 4 4 5 5 7 9)))
+(display (kurtosis '(2 4 4 4 5 5 7 9)))
+(display (cumulative-mean '(2 4 6 8)))

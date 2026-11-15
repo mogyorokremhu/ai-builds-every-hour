@@ -35,3 +35,8 @@
 (define (pearson-skewness xs) (/ (* 3 (- (/ (apply + xs) (length xs)) (median xs))) (std-dev xs)))
 (define (median-absolute-deviation xs) (let ((m (median xs))) (median (map (lambda (x) (abs (- x m))) xs))))
 (define (weighted-variance xs ws) (let ((m (weighted-average xs ws))) (/ (apply + (map (lambda (x w) (* w (* (- x m) (- x m)))) xs ws)) (apply + ws))))
+; Phase 62: higher moments and running means
+(define (skewness xs) (let ((m (/ (apply + xs) (length xs))) (s (std-dev xs))) (/ (/ (apply + (map (lambda (x) (expt (- x m) 3)) xs)) (length xs)) (* s s s))))
+(define (excess-kurtosis xs) (let ((m (/ (apply + xs) (length xs))) (v (variance xs))) (- (/ (/ (apply + (map (lambda (x) (expt (- x m) 4)) xs)) (length xs)) (* v v)) 3)))
+(define (kurtosis xs) (+ 3 (excess-kurtosis xs)))
+(define (cumulative-mean xs) (map (lambda (s i) (/ s i)) (cumulative-sum xs) (list-range-inclusive 1 (length xs))))
