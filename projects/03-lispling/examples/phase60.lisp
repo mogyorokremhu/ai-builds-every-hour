@@ -1,0 +1,5 @@
+; Dispersion helpers (prelude55, phase 60)
+(display (sum-squared-deviations '(1 2 3 4 5)))
+(display (coefficient-of-variation '(2 4 4 4 5 5 7 9)))
+(display (standard-error '(2 4 4 4 5 5 7 9)))
+(display (midrange-of '(1 9 4)))

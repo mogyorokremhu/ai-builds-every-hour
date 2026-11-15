@@ -50,3 +50,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_gosper_curve.py` | Gosper flowsnake curve via L-system |
 | `ascii_phyllotaxis_rings.py` | Twisting concentric polygon rings |
 | `ascii_ulam_spiral.py` | Primes on a square Ulam spiral |
+| `ascii_lissajous_curve.py` | Single phase-shifted Lissajous curve on a grid |
+| `ascii_checker_circle.py` | Checkerboard-filled ASCII circle |
+| `ascii_wave_interference.py` | Two-source wave interference shading |

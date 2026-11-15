@@ -25,3 +25,8 @@
 (define (harmonic-mean xs) (/ (length xs) (apply + (map (lambda (x) (/ 1 x)) xs))))
 (define (geometric-mean xs) (expt (apply * xs) (/ 1 (length xs))))
 (define (trimmed-mean xs k) (let* ((s (sort xs <)) (m (take-last (drop-last s k) (- (length s) (* 2 k))))) (/ (apply + m) (length m))))
+; Phase 60: dispersion helpers
+(define (sum-squared-deviations xs) (* (variance xs) (length xs)))
+(define (coefficient-of-variation xs) (/ (std-dev xs) (/ (apply + xs) (length xs))))
+(define (standard-error xs) (/ (std-dev xs) (sqrt (length xs))))
+(define (midrange-of xs) (/ (+ (apply min xs) (apply max xs)) 2))
