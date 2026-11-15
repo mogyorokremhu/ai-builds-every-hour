@@ -1,0 +1,5 @@
+; Weighted means, exponential smoothing, relative and median errors (prelude55, phase 67)
+(display (weighted-mean '(1 2 3) '(3 2 1)))
+(display (exponential-moving-average '(10 20 30) 0.5))
+(display (relative-error 10 12))
+(display (median-absolute-error '(1 2 3) '(2 4 3)))

@@ -86,3 +86,4 @@
 - [x] Phase 64: linear-slope/linear-intercept/r-squared/running-max-min-range (test_phase64.py, examples/phase64.lisp)
 - [x] Phase 65: predict-linear/residuals/max-error/mean-absolute-percentage-error (test_phase65.py, examples/phase65.lisp)
 - [x] Phase 66: mean-bias/smape/normalized-rmse/cumulative-error (test_phase66.py, examples/phase66.lisp)
+- [x] Phase 67: weighted-mean/exponential-moving-average/relative-error/median-absolute-error (test_phase67.py, examples/phase67.lisp)

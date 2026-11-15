@@ -35,3 +35,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [quizzes](mini/quizzes) | 6 |
 | [simulations](mini/simulations) | 3 |
 | [number-theory](mini/number-theory) | 3 |
+| [interpreters](mini/interpreters) | 3 |

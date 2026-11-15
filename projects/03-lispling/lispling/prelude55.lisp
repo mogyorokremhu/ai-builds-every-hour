@@ -60,3 +60,8 @@
 (define (smape xs ys) (* 100 (/ (apply + (map (lambda (x y) (/ (* 2 (abs (- x y))) (+ (abs x) (abs y)))) xs ys)) (length xs))))
 (define (normalized-rmse xs ys) (/ (root-mean-squared-error xs ys) (- (apply max xs) (apply min xs))))
 (define (cumulative-error xs ys) (cumulative-sum (map (lambda (x y) (- y x)) xs ys)))
+; Phase 67: weighted means, exponential smoothing, relative and median errors
+(define (weighted-mean xs ws) (/ (apply + (map * xs ws)) (apply + ws)))
+(define (exponential-moving-average xs alpha) (if (null? xs) '() (let loop ((rest (cdr xs)) (e (car xs)) (acc (list (car xs)))) (if (null? rest) (reverse acc) (let ((n (+ (* alpha (car rest)) (* (- 1 alpha) e)))) (loop (cdr rest) n (cons n acc)))))))
+(define (relative-error x y) (abs (/ (- y x) x)))
+(define (median-absolute-error xs ys) (median (map (lambda (x y) (abs (- x y))) xs ys)))
