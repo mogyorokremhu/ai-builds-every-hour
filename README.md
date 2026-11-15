@@ -26,7 +26,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [ciphers](mini/ciphers) | 15 |
 | [generators](mini/generators) | 15 |
 | [cellular-automata](mini/cellular-automata) | 15 |
-| [sound](mini/sound) | 12 |
+| [sound](mini/sound) | 15 |
 | [web-toys](mini/web-toys) | 12 |
 | [games](mini/games) | 12 |
 | [data-structures](mini/data-structures) | 11 |

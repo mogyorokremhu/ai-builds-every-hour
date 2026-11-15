@@ -14,3 +14,6 @@ WAV generators using only the standard library (`wave`, `struct`, `math`).
 - `fm_bell.py` — FM synthesis bell with a decaying modulator.
 - `stereo_pan.py` — stereo tone that pans left and right with equal-power gain.
 - `bitcrush.py` — bit-depth and sample-rate reduction of a sweeping saw.
+- `square_pwm.py` — square wave with a sweeping pulse-width (duty cycle).
+- `karplus_strong.py` — plucked-string synthesis with a delay-line average.
+- `tremolo.py` — LFO amplitude modulation of a C major chord.

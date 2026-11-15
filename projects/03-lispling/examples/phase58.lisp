@@ -1,0 +1,5 @@
+; Percentiles & ranks (prelude55, phase 58)
+(display (percentile '(5 1 4 2 3) 0.5))
+(display (interquartile-range '(1 2 3 4 5 6 7 8 9)))
+(display (ranks '(30 10 20)))
+(display (normalize-sum '(1 1 2)))

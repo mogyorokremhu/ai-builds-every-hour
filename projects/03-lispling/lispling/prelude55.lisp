@@ -14,3 +14,9 @@
 (define (z-scores xs) (let ((m (/ (apply + xs) (length xs))) (s (std-dev xs))) (map (lambda (x) (/ (- x m) s)) xs)))
 (define (min-max-normalize xs) (let ((lo (apply min xs)) (hi (apply max xs))) (map (lambda (x) (/ (- x lo) (- hi lo))) xs)))
 (define (moving-average xs n) (map (lambda (w) (/ (apply + w) n)) (sliding-window xs n)))
+; Phase 58: percentiles, ranges, ranks
+(define (quantile-sorted s p) (list-ref s (min (- (length s) 1) (inexact->exact (floor (* p (- (length s) 1)))))))
+(define (percentile xs p) (quantile-sorted (sort xs <) p))
+(define (interquartile-range xs) (let ((s (sort xs <))) (- (quantile-sorted s 0.75) (quantile-sorted s 0.25))))
+(define (ranks xs) (let ((s (sort xs <))) (map (lambda (x) (+ 1 (index-of s x))) xs)))
+(define (normalize-sum xs) (let ((t (apply + xs))) (map (lambda (x) (/ x t)) xs)))
