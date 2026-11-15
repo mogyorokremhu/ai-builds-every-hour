@@ -49,3 +49,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-15 17:35 UTC — run 101
 - Lispling: phase 72 — `rolling-percent-change`, `rolling-mad`, `rolling-zscore-last`, `rolling-distinct` (appended to `prelude55.lisp`); `examples/phase72.lisp`; tests 391 → 396 (`test_phase72.py`, all pass)
 - mini/ciphers +3 (`rot_n.py`, `keyword_cipher.py`, `frequency_attack.py`)
+
+## 2026-11-15 18:35 UTC — run 102
+- Lispling: phase 73 — `rolling-first`, `rolling-last`, `rolling-sum-abs`, `rolling-mean-abs` (appended to `prelude55.lisp`); `examples/phase73.lisp`; tests 396 → 400 (`test_phase73.py`, all pass)
+- mini/games +3 (`dice_poker.py`, `word_ladder.py`, `battleship_auto.py`)

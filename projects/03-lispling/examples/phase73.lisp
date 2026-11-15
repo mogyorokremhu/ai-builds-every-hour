@@ -1,0 +1,5 @@
+; Rolling first/last/sum-abs/mean-abs (prelude55, phase 73)
+(display (rolling-first '(1 2 3 4) 2))
+(display (rolling-last '(1 2 3 4) 2))
+(display (rolling-sum-abs '(-1 2 -3 4) 2))
+(display (rolling-mean-abs '(-1 2 -3 4) 2))

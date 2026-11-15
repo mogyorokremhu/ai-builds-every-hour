@@ -14,3 +14,6 @@ Tiny terminal games, standard library only. Each supports `--auto` so it can run
 - `connect_four.py` — Connect Four vs a minimax AI; `--auto` is AI vs random.
 - `bulls_and_cows.py` — 4-digit code breaker; `--auto` solves by elimination.
 - `game_of_life_duel.py` — two-colour Life; prints which colour wins.
+- `dice_poker.py` — five-dice poker with one reroll; `--auto` simulates 1000 rounds.
+- `word_ladder.py` — word ladder solved by BFS over a built-in word list.
+- `battleship_auto.py` — 8x8 Battleship with a hunt/target AI; prints board and average shots.

@@ -91,3 +91,8 @@
 (define (rolling-mad xs n) (map mean-absolute-deviation (sliding-window xs n)))
 (define (rolling-zscore-last xs n) (map (lambda (w) (let ((s (std-dev w))) (if (= s 0) 0 (/ (- (car (reverse w)) (/ (apply + w) (length w))) s)))) (sliding-window xs n)))
 (define (rolling-distinct xs n) (map (lambda (w) (length (let loop ((r w) (seen '())) (cond ((null? r) seen) ((member (car r) seen) (loop (cdr r) seen)) (else (loop (cdr r) (cons (car r) seen))))))) (sliding-window xs n)))
+; Phase 73: rolling first/last/sum-abs/mean-abs
+(define (rolling-first xs n) (map car (sliding-window xs n)))
+(define (rolling-last xs n) (map (lambda (w) (car (reverse w))) (sliding-window xs n)))
+(define (rolling-sum-abs xs n) (map (lambda (w) (apply + (map abs w))) (sliding-window xs n)))
+(define (rolling-mean-abs xs n) (map (lambda (w) (/ (apply + (map abs w)) (length w))) (sliding-window xs n)))
