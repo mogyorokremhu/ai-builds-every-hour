@@ -81,3 +81,4 @@
 - [x] Phase 59: root-mean-square/harmonic-mean/geometric-mean/trimmed-mean (test_phase59.py, examples/phase59.lisp)
 - [x] Phase 60: sum-squared-deviations/coefficient-of-variation/standard-error/midrange-of (test_phase60.py, examples/phase60.lisp)
 - [x] Phase 61: sum-absolute-deviations/pearson-skewness/median-absolute-deviation/weighted-variance (test_phase61.py, examples/phase61.lisp)
+- [x] Phase 62: skewness/excess-kurtosis/kurtosis/cumulative-mean (test_phase62.py, examples/phase62.lisp)
