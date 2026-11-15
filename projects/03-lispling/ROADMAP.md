@@ -91,3 +91,4 @@
 - [x] Phase 69: rolling-mean/rolling-median/rolling-variance/rolling-product (test_phase69.py, examples/phase69.lisp)
 - [x] Phase 70: rolling-std-dev/rolling-sum-squares/rolling-geometric-mean/rolling-midrange (test_phase70.py, examples/phase70.lisp)
 - [x] Phase 71: rolling-argmax/rolling-argmin/rolling-count-if/rolling-change (test_phase71.py, examples/phase71.lisp)
+- [x] Phase 72: rolling-percent-change/rolling-mad/rolling-zscore-last/rolling-distinct (test_phase72.py, examples/phase72.lisp)
