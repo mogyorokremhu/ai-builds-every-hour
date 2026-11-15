@@ -77,3 +77,4 @@
 - [x] Phase 54: decuple-all/sum-less-than/sum-greater-than/count-multiples-between/evens-doubled/odds-doubled/take-while-less-than (test_phase54.py, examples/phase54.lisp)
 - [x] Phases 55-56: stats helpers in `prelude55.lisp` (test_phase55.py, test_phase56.py)
 - [x] Phase 57: correlation/z-scores/min-max-normalize/moving-average (test_phase57.py, examples/phase57.lisp)
+- [x] Phase 58: percentile/interquartile-range/ranks/normalize-sum (test_phase58.py, examples/phase58.lisp)
