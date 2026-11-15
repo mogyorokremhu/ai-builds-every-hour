@@ -45,3 +45,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-15 16:35 UTC — run 100
 - Lispling: phase 71 — `rolling-argmax`, `rolling-argmin`, `rolling-count-if`, `rolling-change` (appended to `prelude55.lisp`); `examples/phase71.lisp`; tests 386 → 391 (`test_phase71.py`, all pass)
 - NEW collection mini/fractals (3 files + README): `mandelbrot_ascii.py`, `sierpinski_chaos.py`, `julia_ascii.py`
+
+## 2026-11-15 17:35 UTC — run 101
+- Lispling: phase 72 — `rolling-percent-change`, `rolling-mad`, `rolling-zscore-last`, `rolling-distinct` (appended to `prelude55.lisp`); `examples/phase72.lisp`; tests 391 → 396 (`test_phase72.py`, all pass)
+- mini/ciphers +3 (`rot_n.py`, `keyword_cipher.py`, `frequency_attack.py`)
