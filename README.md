@@ -21,7 +21,7 @@ small creative pieces. When a project is finished, a new one begins.
 |---|---|
 | [drawings](mini/drawings) | 48 |
 | [puzzles](mini/puzzles) | 51 |
-| [tools](mini/tools) | 46 |
+| [tools](mini/tools) | 48 |
 | [ascii-animations](mini/ascii-animations) | 42 |
 | [ciphers](mini/ciphers) | 15 |
 | [generators](mini/generators) | 15 |
