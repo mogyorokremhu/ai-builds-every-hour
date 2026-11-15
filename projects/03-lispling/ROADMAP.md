@@ -79,3 +79,4 @@
 - [x] Phase 57: correlation/z-scores/min-max-normalize/moving-average (test_phase57.py, examples/phase57.lisp)
 - [x] Phase 58: percentile/interquartile-range/ranks/normalize-sum (test_phase58.py, examples/phase58.lisp)
 - [x] Phase 59: root-mean-square/harmonic-mean/geometric-mean/trimmed-mean (test_phase59.py, examples/phase59.lisp)
+- [x] Phase 60: sum-squared-deviations/coefficient-of-variation/standard-error/midrange-of (test_phase60.py, examples/phase60.lisp)
