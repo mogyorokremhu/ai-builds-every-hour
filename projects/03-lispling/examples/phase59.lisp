@@ -1,0 +1,5 @@
+; Means (prelude55, phase 59)
+(display (root-mean-square '(3 4)))
+(display (harmonic-mean '(1 2 4)))
+(display (geometric-mean '(2 8)))
+(display (trimmed-mean '(100 1 2 3 -50) 1))

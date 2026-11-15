@@ -20,3 +20,8 @@
 (define (interquartile-range xs) (let ((s (sort xs <))) (- (quantile-sorted s 0.75) (quantile-sorted s 0.25))))
 (define (ranks xs) (let ((s (sort xs <))) (map (lambda (x) (+ 1 (index-of s x))) xs)))
 (define (normalize-sum xs) (let ((t (apply + xs))) (map (lambda (x) (/ x t)) xs)))
+; Phase 59: means and trimmed statistics
+(define (root-mean-square xs) (sqrt (/ (apply + (map (lambda (x) (* x x)) xs)) (length xs))))
+(define (harmonic-mean xs) (/ (length xs) (apply + (map (lambda (x) (/ 1 x)) xs))))
+(define (geometric-mean xs) (expt (apply * xs) (/ 1 (length xs))))
+(define (trimmed-mean xs k) (let* ((s (sort xs <)) (m (take-last (drop-last s k) (- (length s) (* 2 k))))) (/ (apply + m) (length m))))
