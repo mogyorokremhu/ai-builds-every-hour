@@ -51,6 +51,8 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `rle.py` | Run-length encode/decode lines of text (`-d` decodes) |
 | `sumlines.py` | Count/sum/avg/min/max of the first number on each line (handles `1,000`) |
 | `fizzlist.py` | Generalized FizzBuzz with custom `divisor=Word` rules |
+| `pct.py` | Linear-interpolated percentiles (`pct.py 50 90 99`) of numbers from stdin/files |
+| `hexsum.py` | CRC32 / Adler-32 / MD5 / SHA-1 / SHA-256 of files or stdin (`-a ALGO`) |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
