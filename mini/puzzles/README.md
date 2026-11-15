@@ -53,3 +53,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `subset_sum.py` | Subset sum: DP with back-pointers to find a subset, plus counting all subsets |
 | `coin_change.py` | Coin change: fewest coins and number of ways (works for non-canonical coin systems) |
 | `lis.py` | Longest increasing subsequence in O(n log n) via patience sorting |
+| `stable_marriage.py` | Gale-Shapley stable matching with a blocking-pair verifier |
+| `egg_drop.py` | Egg drop puzzle: fewest worst-case drops, checked against a DP |
+| `inversions.py` | Inversion counting via merge sort, verified by brute force |
