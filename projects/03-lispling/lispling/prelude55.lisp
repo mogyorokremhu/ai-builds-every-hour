@@ -9,3 +9,8 @@
 (define (weighted-average xs ws) (/ (apply + (map * xs ws)) (apply + ws)))
 (define (cumulative-max xs) (if (null? xs) '() (cdr (scan-left max (car xs) xs))))
 (define (cumulative-min xs) (if (null? xs) '() (cdr (scan-left min (car xs) xs))))
+; Phase 57: correlation, normalization, moving averages
+(define (correlation xs ys) (/ (covariance xs ys) (* (std-dev xs) (std-dev ys))))
+(define (z-scores xs) (let ((m (/ (apply + xs) (length xs))) (s (std-dev xs))) (map (lambda (x) (/ (- x m) s)) xs)))
+(define (min-max-normalize xs) (let ((lo (apply min xs)) (hi (apply max xs))) (map (lambda (x) (/ (- x lo) (- hi lo))) xs)))
+(define (moving-average xs n) (map (lambda (w) (/ (apply + w) n)) (sliding-window xs n)))
