@@ -50,3 +50,8 @@
 (define (linear-intercept xs ys) (- (/ (apply + ys) (length ys)) (* (linear-slope xs ys) (/ (apply + xs) (length xs)))))
 (define (r-squared xs ys) (let ((r (correlation xs ys))) (* r r)))
 (define (running-max-min-range xs) (map - (running-max xs) (running-min xs)))
+; Phase 65: regression prediction, residuals and error extremes
+(define (predict-linear xs ys x) (+ (linear-intercept xs ys) (* (linear-slope xs ys) x)))
+(define (residuals xs ys) (let ((a (linear-intercept xs ys)) (b (linear-slope xs ys))) (map (lambda (x y) (- y (+ a (* b x)))) xs ys)))
+(define (max-error xs ys) (apply max (map (lambda (x y) (abs (- x y))) xs ys)))
+(define (mean-absolute-percentage-error xs ys) (* 100 (/ (apply + (map (lambda (x y) (abs (/ (- x y) x))) xs ys)) (length xs))))

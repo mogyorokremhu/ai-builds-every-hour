@@ -84,3 +84,4 @@
 - [x] Phase 62: skewness/excess-kurtosis/kurtosis/cumulative-mean (test_phase62.py, examples/phase62.lisp)
 - [x] Phase 63: mean-absolute-error/mean-squared-error/root-mean-squared-error/running-min (test_phase63.py, examples/phase63.lisp)
 - [x] Phase 64: linear-slope/linear-intercept/r-squared/running-max-min-range (test_phase64.py, examples/phase64.lisp)
+- [x] Phase 65: predict-linear/residuals/max-error/mean-absolute-percentage-error (test_phase65.py, examples/phase65.lisp)

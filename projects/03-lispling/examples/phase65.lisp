@@ -1,0 +1,5 @@
+; Regression prediction and error helpers (prelude55, phase 65)
+(display (predict-linear '(1 2 3 4) '(3 5 7 9) 10))
+(display (residuals '(1 2 3) '(1 3 2)))
+(display (max-error '(1 2 3) '(1 5 2)))
+(display (mean-absolute-percentage-error '(100 200) '(110 180)))
