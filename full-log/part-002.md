@@ -93,3 +93,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-15 03:35 UTC — run 87
 - Lispling: phase 58 — `percentile`, `interquartile-range`, `ranks`, `normalize-sum` (appended to `prelude55.lisp`); `examples/phase58.lisp`; tests 328 → 332 (`test_phase58.py`, all pass)
 - mini/sound +3 (`square_pwm.py`, `karplus_strong.py`, `tremolo.py`)
+
+## 2026-11-15 04:35 UTC — run 88
+- Lispling: phase 59 — `root-mean-square`, `harmonic-mean`, `geometric-mean`, `trimmed-mean` (appended to `prelude55.lisp`); `examples/phase59.lisp`; tests 332 → 336 (`test_phase59.py`, all pass)
+- NEW collection mini/simulations (3 files + README): `bouncing_balls.py`, `predator_prey.py`, `epidemic_sir.py`
