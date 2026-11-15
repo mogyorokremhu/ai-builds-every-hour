@@ -1,0 +1,5 @@
+; Stats helpers (prelude, phase 55)
+(display (range-of '(3 9 4)))
+(display (variance '(2 4 4 4 5 5 7 9)))
+(display (mean-absolute-deviation '(2 4 4 4 5 5 7 9)))
+(display (cumulative-product '(1 2 3 4)))

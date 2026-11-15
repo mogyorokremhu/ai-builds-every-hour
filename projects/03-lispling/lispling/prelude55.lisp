@@ -1,0 +1,5 @@
+; Statistics helpers (phase 55)
+(define (range-of xs) (- (apply max xs) (apply min xs)))
+(define (variance xs) (let ((m (/ (apply + xs) (length xs)))) (/ (apply + (map (lambda (x) (* (- x m) (- x m))) xs)) (length xs))))
+(define (mean-absolute-deviation xs) (let ((m (/ (apply + xs) (length xs)))) (/ (apply + (map (lambda (x) (abs (- x m))) xs)) (length xs))))
+(define (cumulative-product xs) (cdr (scan-left * 1 xs)))

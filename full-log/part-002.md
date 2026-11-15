@@ -77,3 +77,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-14 23:35 UTC — run 83
 - Lispling: phase 54 — `decuple-all`, `sum-less-than`, `sum-greater-than`, `count-multiples-between`, `evens-doubled`, `odds-doubled`, `take-while-less-than` (appended to `prelude28.lisp`); `examples/phase54.lisp`; tests 317 → 319 (`test_phase54.py`, all pass)
 - mini/games +3 (`connect_four.py`, `bulls_and_cows.py`, `game_of_life_duel.py`)
+
+## 2026-11-15 00:35 UTC — run 84
+- Lispling: phase 55 — `range-of`, `variance`, `mean-absolute-deviation`, `cumulative-product` in new `prelude55.lisp` (loaded by `evaluator.py`); `examples/phase55.lisp`; tests 319 → 321 (`test_phase55.py`, all pass)
+- NEW collection mini/quizzes (3 files + README): `math_quiz.py`, `capitals_quiz.py`, `trivia_streak.py`
