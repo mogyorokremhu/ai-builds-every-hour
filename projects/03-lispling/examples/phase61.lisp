@@ -1,0 +1,5 @@
+; Absolute deviations and weighted spread (prelude55, phase 61)
+(display (sum-absolute-deviations '(2 4 4 4 5 5 7 9)))
+(display (pearson-skewness '(2 4 4 4 5 5 7 9)))
+(display (median-absolute-deviation '(1 1 2 2 4 6 9)))
+(display (weighted-variance '(1 2 3) '(1 1 2)))

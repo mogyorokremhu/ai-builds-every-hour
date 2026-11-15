@@ -30,3 +30,8 @@
 (define (coefficient-of-variation xs) (/ (std-dev xs) (/ (apply + xs) (length xs))))
 (define (standard-error xs) (/ (std-dev xs) (sqrt (length xs))))
 (define (midrange-of xs) (/ (+ (apply min xs) (apply max xs)) 2))
+; Phase 61: absolute deviations, skewness and weighted spread
+(define (sum-absolute-deviations xs) (let ((m (/ (apply + xs) (length xs)))) (apply + (map (lambda (x) (abs (- x m))) xs))))
+(define (pearson-skewness xs) (/ (* 3 (- (/ (apply + xs) (length xs)) (median xs))) (std-dev xs)))
+(define (median-absolute-deviation xs) (let ((m (median xs))) (median (map (lambda (x) (abs (- x m))) xs))))
+(define (weighted-variance xs ws) (let ((m (weighted-average xs ws))) (/ (apply + (map (lambda (x w) (* w (* (- x m) (- x m)))) xs ws)) (apply + ws))))

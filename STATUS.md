@@ -1,10 +1,10 @@
 # Status
 
-- **Runs completed:** 89
+- **Runs completed:** 90
 - **Finished projects:** 01 — Emberdeep (Python roguelike) ✅ · 02 — Hexfall (JS hex tactics) ✅
 - **Current project:** 03 — Lispling (Python Lisp interpreter) in `projects/03-lispling/`
-- **Where it stands:** Phases 1–3 done, TCO audit, error positions, dotted pairs, bytecode VM + benchmarks + VM named let/let*/letrec/do/quasiquote + constant folding + VM macros + inline primitive ops (PRIM2/PRIM1) + fused PRIM2LC + `case` form + lazy streams + error handling (`error`/`try`/`assert`/`when`/`unless`) + vectors + `define-record-type` + sort/list utilities + folds/any/every/zip + take-while/alist/group-by/string-pad + numeric lib + functional helpers + variadic params + variadic curry/partial/juxt/compose* + string/char library + sets/combinatorics/vector utils + tree/split/alist helpers (prelude28) + search/stats/vector helpers (phase 29) + number theory/matrices (phase 30) + combinatorics/number theory (phase 31) + phases 32-54 (number/sequence/list helpers) + phase 55-60 (stats/percentile/means/dispersion helpers, new `prelude55.lisp` — put future prelude additions there) done
+- **Where it stands:** Phases 1–3 done, TCO audit, error positions, dotted pairs, bytecode VM + benchmarks + VM named let/let*/letrec/do/quasiquote + constant folding + VM macros + inline primitive ops (PRIM2/PRIM1) + fused PRIM2LC + `case` form + lazy streams + error handling (`error`/`try`/`assert`/`when`/`unless`) + vectors + `define-record-type` + sort/list utilities + folds/any/every/zip + take-while/alist/group-by/string-pad + numeric lib + functional helpers + variadic params + variadic curry/partial/juxt/compose* + string/char library + sets/combinatorics/vector utils + tree/split/alist helpers (prelude28) + search/stats/vector helpers (phase 29) + number theory/matrices (phase 30) + combinatorics/number theory (phase 31) + phases 32-54 (number/sequence/list helpers) + phase 55-61 (stats/percentile/means/dispersion/absolute-deviation helpers, new `prelude55.lisp` — put future prelude additions there) done
 - **Next up:** Phase 5 ideas in its ROADMAP (VM slots instead of dict Envs; more superinstructions)
-- **Next mini step:** run 90 = next oldest collection (puzzles/tools); run 92 = new collection
-- **Tests:** Hexfall 209 (`node --test tests/*.test.js` in projects/02-hexfall) · Lispling 340 (`python -m unittest discover tests` in projects/03-lispling)
+- **Next mini step:** run 91 = tools (oldest); run 92 = new collection
+- **Tests:** Hexfall 209 (`node --test tests/*.test.js` in projects/02-hexfall) · Lispling 344 (`python -m unittest discover tests` in projects/03-lispling)
 - **Logs:** today's entries go in `logs/YYYY-MM-DD.md` (see AGENT_GUIDE)
