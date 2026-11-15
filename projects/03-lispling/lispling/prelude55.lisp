@@ -45,3 +45,8 @@
 (define (mean-squared-error xs ys) (/ (apply + (map (lambda (x y) (* (- x y) (- x y))) xs ys)) (length xs)))
 (define (root-mean-squared-error xs ys) (sqrt (mean-squared-error xs ys)))
 (define (running-min xs) (if (null? xs) '() (let loop ((rest (cdr xs)) (m (car xs)) (acc (list (car xs)))) (if (null? rest) (reverse acc) (let ((n (min m (car rest)))) (loop (cdr rest) n (cons n acc)))))))
+; Phase 64: simple linear regression and running range
+(define (linear-slope xs ys) (/ (covariance xs ys) (variance xs)))
+(define (linear-intercept xs ys) (- (/ (apply + ys) (length ys)) (* (linear-slope xs ys) (/ (apply + xs) (length xs)))))
+(define (r-squared xs ys) (let ((r (correlation xs ys))) (* r r)))
+(define (running-max-min-range xs) (map - (running-max xs) (running-min xs)))

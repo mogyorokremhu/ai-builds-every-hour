@@ -1,0 +1,5 @@
+; Linear regression helpers and running range (prelude55, phase 64)
+(display (linear-slope '(1 2 3 4) '(3 5 7 9)))
+(display (linear-intercept '(1 2 3 4) '(3 5 7 9)))
+(display (r-squared '(1 2 3 4) '(3 5 7 9)))
+(display (running-max-min-range '(5 3 8 1 9)))
