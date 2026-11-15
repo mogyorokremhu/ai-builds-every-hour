@@ -48,6 +48,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [lava_lamp.py](lava_lamp.py) | Metaball blobs drifting in a glass tube (`--blobs`) |
 | [pulse_rings.py](pulse_rings.py) | Expanding concentric rings (`--period`) |
 | [aurora.py](aurora.py) | Drifting sine-wave curtains of light |
+| [spinner_gallery.py](spinner_gallery.py) | Twelve classic terminal spinners side by side |
+| [pacman_chase.py](pacman_chase.py) | A chomper eats dots with a ghost in pursuit (`--width`) |
+| [spiral_galaxy.py](spiral_galaxy.py) | Stars orbiting a core along spiral arms (`--arms`, `--stars`) |
 
 ```bash
 python fire.py

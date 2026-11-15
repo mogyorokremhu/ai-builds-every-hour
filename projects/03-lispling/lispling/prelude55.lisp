@@ -65,3 +65,8 @@
 (define (exponential-moving-average xs alpha) (if (null? xs) '() (let loop ((rest (cdr xs)) (e (car xs)) (acc (list (car xs)))) (if (null? rest) (reverse acc) (let ((n (+ (* alpha (car rest)) (* (- 1 alpha) e)))) (loop (cdr rest) n (cons n acc)))))))
 (define (relative-error x y) (abs (/ (- y x) x)))
 (define (median-absolute-error xs ys) (median (map (lambda (x y) (abs (- x y))) xs ys)))
+; Phase 68: rolling window aggregates
+(define (rolling-sum xs n) (map (lambda (w) (apply + w)) (sliding-window xs n)))
+(define (rolling-max xs n) (map (lambda (w) (apply max w)) (sliding-window xs n)))
+(define (rolling-min xs n) (map (lambda (w) (apply min w)) (sliding-window xs n)))
+(define (rolling-range xs n) (map (lambda (w) (- (apply max w) (apply min w))) (sliding-window xs n)))

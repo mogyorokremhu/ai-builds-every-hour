@@ -29,3 +29,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-15 12:35 UTC — run 96
 - Lispling: phase 67 — `weighted-mean`, `exponential-moving-average`, `relative-error`, `median-absolute-error` (appended to `prelude55.lisp`); `examples/phase67.lisp`; tests 368 → 373 (`test_phase67.py`, all pass)
 - NEW collection mini/interpreters (3 files + README): `brainfuck.py`, `rpn_calc.py`, `mini_forth.py`
+
+## 2026-11-15 13:35 UTC — run 97
+- Lispling: phase 68 — `rolling-sum`, `rolling-max`, `rolling-min`, `rolling-range` (appended to `prelude55.lisp`); `examples/phase68.lisp`; tests 373 → 376 (`test_phase68.py`, all pass)
+- mini/ascii-animations +3 (`spinner_gallery.py`, `pacman_chase.py`, `spiral_galaxy.py`)

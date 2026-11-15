@@ -1,0 +1,5 @@
+; Rolling window aggregates (prelude55, phase 68)
+(display (rolling-sum '(1 2 3 4 5) 3))
+(display (rolling-max '(1 5 2 4 3) 2))
+(display (rolling-min '(4 2 6 1 5) 3))
+(display (rolling-range '(1 5 2 8 3) 2))
