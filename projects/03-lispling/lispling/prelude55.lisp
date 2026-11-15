@@ -55,3 +55,8 @@
 (define (residuals xs ys) (let ((a (linear-intercept xs ys)) (b (linear-slope xs ys))) (map (lambda (x y) (- y (+ a (* b x)))) xs ys)))
 (define (max-error xs ys) (apply max (map (lambda (x y) (abs (- x y))) xs ys)))
 (define (mean-absolute-percentage-error xs ys) (* 100 (/ (apply + (map (lambda (x y) (abs (/ (- x y) x))) xs ys)) (length xs))))
+; Phase 66: forecast bias and scale-free error metrics
+(define (mean-bias xs ys) (/ (apply + (map (lambda (x y) (- y x)) xs ys)) (length xs)))
+(define (smape xs ys) (* 100 (/ (apply + (map (lambda (x y) (/ (* 2 (abs (- x y))) (+ (abs x) (abs y)))) xs ys)) (length xs))))
+(define (normalized-rmse xs ys) (/ (root-mean-squared-error xs ys) (- (apply max xs) (apply min xs))))
+(define (cumulative-error xs ys) (cumulative-sum (map (lambda (x y) (- y x)) xs ys)))

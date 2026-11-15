@@ -14,3 +14,6 @@ Single-file HTML toys: open in a browser, no build step.
 - `tic_tac_toe.html` — play X against an unbeatable minimax AI.
 - `sand_fall.html` — falling-sand automaton; drag to pour three colours of sand.
 - `snake.html` — classic wrapping snake that speeds up with every apple.
+- `lissajous.html` — Lissajous curve with sliders for the two frequencies and phase; colour drifts.
+- `gravity_wells.html` — 400 particles orbit gravity wells you click to add (shift+click removes).
+- `whack_a_mole.html` — 30-second whack-a-mole that speeds up as your score climbs.

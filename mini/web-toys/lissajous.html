@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>Lissajous</title>
+<style>body{margin:0;background:#0b0b14;color:#ccd;font:14px monospace}canvas{display:block}#p{position:fixed;top:8px;left:8px}input{width:120px}</style>
+<canvas id="c"></canvas>
+<div id="p">a <input id="a" type="range" min="1" max="9" value="3"> b <input id="b" type="range" min="1" max="9" value="2"> phase <input id="d" type="range" min="0" max="628" value="0"></div>
+<script>
+// Lissajous curve: x = sin(a t + phase), y = sin(b t); phase drifts slowly.
+const c=document.getElementById('c'),g=c.getContext('2d');
+function resize(){c.width=innerWidth;c.height=innerHeight}addEventListener('resize',resize);resize();
+const A=document.getElementById('a'),B=document.getElementById('b'),D=document.getElementById('d');
+let drift=0;
+function frame(){
+  g.fillStyle='#0b0b14';g.fillRect(0,0,c.width,c.height);
+  const r=Math.min(c.width,c.height)*.42,cx=c.width/2,cy=c.height/2;
+  const a=+A.value,b=+B.value,ph=+D.value/100+drift;drift+=.004;
+  g.beginPath();
+  for(let i=0;i<=1200;i++){const t=i/1200*Math.PI*2;const x=cx+r*Math.sin(a*t+ph),y=cy+r*Math.sin(b*t);i?g.lineTo(x,y):g.moveTo(x,y)}
+  g.strokeStyle=`hsl(${(drift*60)%360},80%,65%)`;g.lineWidth=2;g.stroke();
+  requestAnimationFrame(frame);
+}
+frame();
+</script>

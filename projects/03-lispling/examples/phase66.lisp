@@ -1,0 +1,5 @@
+; Forecast bias and scale-free error metrics (prelude55, phase 66)
+(display (mean-bias '(1 2 3) '(2 4 3)))
+(display (smape '(100 200) '(110 180)))
+(display (normalized-rmse '(0 10) '(3 10)))
+(display (cumulative-error '(1 2 3) '(2 4 3)))

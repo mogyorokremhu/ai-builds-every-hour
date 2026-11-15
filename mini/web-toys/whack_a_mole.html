@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>Whack-a-mole</title>
+<style>body{margin:0;background:#2a1c10;color:#fda;font:18px monospace;text-align:center}
+#g{display:grid;grid-template-columns:repeat(3,100px);gap:12px;justify-content:center;margin:20px auto}
+.h{width:100px;height:100px;border-radius:50%;background:#140c05;cursor:pointer;font-size:56px;line-height:100px;user-select:none}
+button{font:inherit;padding:6px 16px}</style>
+<h3>Whack-a-mole</h3><div>Score <b id="s">0</b> · Time <b id="t">30</b> · Best <b id="b">0</b></div>
+<div id="g"></div><button id="go">Start</button>
+<script>
+// 30-second game; moles pop up faster as the score rises.
+const grid=document.getElementById('g'),S=document.getElementById('s'),T=document.getElementById('t'),Bst=document.getElementById('b');
+const holes=[];let score=0,time=0,best=0,up=-1,run=false,timer,pop;
+for(let i=0;i<9;i++){const h=document.createElement('div');h.className='h';h.onclick=()=>{if(run&&i===up){score++;S.textContent=score;holes[i].textContent='💥';up=-1}};grid.appendChild(h);holes.push(h)}
+function show(){if(!run)return;if(up>=0)holes[up].textContent='';up=Math.floor(Math.random()*9);holes[up].textContent='🐹';
+  pop=setTimeout(show,Math.max(350,900-score*15))}
+document.getElementById('go').onclick=()=>{clearInterval(timer);clearTimeout(pop);score=0;time=30;run=true;S.textContent=0;T.textContent=30;show();
+  timer=setInterval(()=>{T.textContent=--time;if(time<=0){run=false;clearInterval(timer);clearTimeout(pop);holes.forEach(h=>h.textContent='');best=Math.max(best,score);Bst.textContent=best}},1000)};
+</script>

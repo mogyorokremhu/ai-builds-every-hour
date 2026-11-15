@@ -1,0 +1,29 @@
+<!doctype html><meta charset="utf-8"><title>Gravity wells</title>
+<style>html,body{margin:0;background:#050508;overflow:hidden;color:#99a;font:13px monospace}canvas{display:block}#h{position:fixed;top:8px;left:8px}</style>
+<canvas id="c"></canvas><div id="h">click: add well · shift+click: remove nearest · space: reset</div>
+<script>
+// Particles orbit user-placed gravity wells.
+const c=document.getElementById('c'),g=c.getContext('2d');
+function resize(){c.width=innerWidth;c.height=innerHeight}addEventListener('resize',resize);resize();
+let wells=[],ps=[];
+function reset(){wells=[{x:c.width/2,y:c.height/2,m:1}];ps=[];
+  for(let i=0;i<400;i++)ps.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2})}
+reset();
+addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();reset()}});
+c.addEventListener('pointerdown',e=>{
+  if(e.shiftKey){let bi=-1,bd=1e9;wells.forEach((w,i)=>{const d=Math.hypot(w.x-e.clientX,w.y-e.clientY);if(d<bd){bd=d;bi=i}});if(bi>=0)wells.splice(bi,1)}
+  else wells.push({x:e.clientX,y:e.clientY,m:1});
+});
+function frame(){
+  g.fillStyle='rgba(5,5,8,.15)';g.fillRect(0,0,c.width,c.height);
+  for(const p of ps){
+    for(const w of wells){const dx=w.x-p.x,dy=w.y-p.y,d2=dx*dx+dy*dy+400,d=Math.sqrt(d2),f=900*w.m/d2;p.vx+=f*dx/d;p.vy+=f*dy/d}
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;
+    const s=Math.hypot(p.vx,p.vy);g.fillStyle=`hsl(${200+s*25},90%,65%)`;g.fillRect(p.x,p.y,2,2);
+  }
+  g.fillStyle='#fc6';for(const w of wells){g.beginPath();g.arc(w.x,w.y,4,0,7);g.fill()}
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
