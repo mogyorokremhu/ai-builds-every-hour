@@ -83,3 +83,4 @@
 - [x] Phase 61: sum-absolute-deviations/pearson-skewness/median-absolute-deviation/weighted-variance (test_phase61.py, examples/phase61.lisp)
 - [x] Phase 62: skewness/excess-kurtosis/kurtosis/cumulative-mean (test_phase62.py, examples/phase62.lisp)
 - [x] Phase 63: mean-absolute-error/mean-squared-error/root-mean-squared-error/running-min (test_phase63.py, examples/phase63.lisp)
+- [x] Phase 64: linear-slope/linear-intercept/r-squared/running-max-min-range (test_phase64.py, examples/phase64.lisp)
