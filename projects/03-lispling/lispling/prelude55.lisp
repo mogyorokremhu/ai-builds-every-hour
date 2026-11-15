@@ -75,3 +75,8 @@
 (define (rolling-median xs n) (map median (sliding-window xs n)))
 (define (rolling-variance xs n) (map variance (sliding-window xs n)))
 (define (rolling-product xs n) (map (lambda (w) (apply * w)) (sliding-window xs n)))
+; Phase 70: more rolling-window aggregates
+(define (rolling-std-dev xs n) (map std-dev (sliding-window xs n)))
+(define (rolling-sum-squares xs n) (map (lambda (w) (apply + (map (lambda (x) (* x x)) w))) (sliding-window xs n)))
+(define (rolling-geometric-mean xs n) (map geometric-mean (sliding-window xs n)))
+(define (rolling-midrange xs n) (map midrange-of (sliding-window xs n)))

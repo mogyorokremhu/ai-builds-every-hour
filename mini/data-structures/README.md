@@ -13,3 +13,6 @@ Classic data structures from scratch, standard library only. Each file runs a sm
 - `fenwick_tree.py` — binary indexed tree for prefix/range sums with point updates.
 - `linked_deque.py` — doubly linked deque with O(1) operations at both ends.
 - `avl_tree.py` — self-balancing AVL BST (rotations), stays O(log n) on sorted input.
+- `min_stack.py` — stack that reports its minimum in O(1).
+- `monotonic_queue.py` — sliding-window maximum via a monotonic deque.
+- `sparse_table.py` — O(1) range-minimum queries after an O(n log n) build.

@@ -1,0 +1,5 @@
+; Rolling std-dev/sum-squares/geometric-mean/midrange (prelude55, phase 70)
+(display (rolling-std-dev '(1 2 3 4 5) 3))
+(display (rolling-sum-squares '(1 2 3 4) 2))
+(display (rolling-geometric-mean '(1 4 16 64) 2))
+(display (rolling-midrange '(1 9 3 7) 2))
