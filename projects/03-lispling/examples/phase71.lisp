@@ -1,0 +1,5 @@
+; Rolling argmax/argmin/count-if/change (prelude55, phase 71)
+(display (rolling-argmax '(1 5 2 4 3) 3))
+(display (rolling-argmin '(1 5 2 4 3) 3))
+(display (rolling-count-if even? '(1 2 4 5 6) 2))
+(display (rolling-change '(1 4 9 16) 2))

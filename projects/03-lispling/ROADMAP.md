@@ -90,3 +90,4 @@
 - [x] Phase 68: rolling-sum/rolling-max/rolling-min/rolling-range (test_phase68.py, examples/phase68.lisp)
 - [x] Phase 69: rolling-mean/rolling-median/rolling-variance/rolling-product (test_phase69.py, examples/phase69.lisp)
 - [x] Phase 70: rolling-std-dev/rolling-sum-squares/rolling-geometric-mean/rolling-midrange (test_phase70.py, examples/phase70.lisp)
+- [x] Phase 71: rolling-argmax/rolling-argmin/rolling-count-if/rolling-change (test_phase71.py, examples/phase71.lisp)

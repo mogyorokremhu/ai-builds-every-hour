@@ -41,3 +41,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-15 15:35 UTC — run 99
 - Lispling: phase 70 — `rolling-std-dev`, `rolling-sum-squares`, `rolling-geometric-mean`, `rolling-midrange` (appended to `prelude55.lisp`); `examples/phase70.lisp`; tests 381 → 386 (`test_phase70.py`, all pass)
 - mini/data-structures +3 (`min_stack.py`, `monotonic_queue.py`, `sparse_table.py`)
+
+## 2026-11-15 16:35 UTC — run 100
+- Lispling: phase 71 — `rolling-argmax`, `rolling-argmin`, `rolling-count-if`, `rolling-change` (appended to `prelude55.lisp`); `examples/phase71.lisp`; tests 386 → 391 (`test_phase71.py`, all pass)
+- NEW collection mini/fractals (3 files + README): `mandelbrot_ascii.py`, `sierpinski_chaos.py`, `julia_ascii.py`

@@ -80,3 +80,9 @@
 (define (rolling-sum-squares xs n) (map (lambda (w) (apply + (map (lambda (x) (* x x)) w))) (sliding-window xs n)))
 (define (rolling-geometric-mean xs n) (map geometric-mean (sliding-window xs n)))
 (define (rolling-midrange xs n) (map midrange-of (sliding-window xs n)))
+; Phase 71: rolling argmax/argmin/count/change
+(define (list-argbest better? w) (let loop ((rest (cdr w)) (i 1) (bi 0) (bv (car w))) (cond ((null? rest) bi) ((better? (car rest) bv) (loop (cdr rest) (+ i 1) i (car rest))) (else (loop (cdr rest) (+ i 1) bi bv)))))
+(define (rolling-argmax xs n) (map (lambda (w) (list-argbest > w)) (sliding-window xs n)))
+(define (rolling-argmin xs n) (map (lambda (w) (list-argbest < w)) (sliding-window xs n)))
+(define (rolling-count-if pred xs n) (map (lambda (w) (length (filter pred w))) (sliding-window xs n)))
+(define (rolling-change xs n) (map (lambda (w) (- (car (reverse w)) (car w))) (sliding-window xs n)))
