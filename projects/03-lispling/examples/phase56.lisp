@@ -1,0 +1,6 @@
+; Stats helpers (prelude55, phase 56)
+(display (std-dev '(2 4 4 4 5 5 7 9)))
+(display (covariance '(1 2 3) '(2 4 6)))
+(display (weighted-average '(1 2 3) '(1 1 2)))
+(display (cumulative-max '(3 1 4 1 5)))
+(display (cumulative-min '(3 1 4 1 5)))

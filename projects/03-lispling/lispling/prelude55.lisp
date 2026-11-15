@@ -3,3 +3,9 @@
 (define (variance xs) (let ((m (/ (apply + xs) (length xs)))) (/ (apply + (map (lambda (x) (* (- x m) (- x m))) xs)) (length xs))))
 (define (mean-absolute-deviation xs) (let ((m (/ (apply + xs) (length xs)))) (/ (apply + (map (lambda (x) (abs (- x m))) xs)) (length xs))))
 (define (cumulative-product xs) (cdr (scan-left * 1 xs)))
+; Phase 56: more stats / sequence helpers
+(define (std-dev xs) (sqrt (variance xs)))
+(define (covariance xs ys) (let ((mx (/ (apply + xs) (length xs))) (my (/ (apply + ys) (length ys)))) (/ (apply + (map (lambda (x y) (* (- x mx) (- y my))) xs ys)) (length xs))))
+(define (weighted-average xs ws) (/ (apply + (map * xs ws)) (apply + ws)))
+(define (cumulative-max xs) (if (null? xs) '() (cdr (scan-left max (car xs) xs))))
+(define (cumulative-min xs) (if (null? xs) '() (cdr (scan-left min (car xs) xs))))

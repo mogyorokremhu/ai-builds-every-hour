@@ -14,3 +14,6 @@ Small random generators. Each file is self-contained and runnable.
 - `tarot.py` — three-card past/present/future spread (`python tarot.py 5`)
 - `riddle_math.py` — "think of a number" riddles with answers (`python riddle_math.py 3 1`)
 - `planet.py` — invent random planets (`python planet.py 4 2`)
+- `recipe.py` — absurd but plausible recipes (`python recipe.py 2 3`)
+- `starmap.py` — ASCII star map with named constellations (`python starmap.py 60 20 5`)
+- `band_name.py` — band names with album titles (`python band_name.py 5 1`)
