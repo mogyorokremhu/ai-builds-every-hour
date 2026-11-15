@@ -85,3 +85,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-15 01:35 UTC — run 85
 - Lispling: phase 56 — `std-dev`, `covariance`, `weighted-average`, `cumulative-max`, `cumulative-min` (appended to `prelude55.lisp`); `examples/phase56.lisp`; tests 321 → 324 (`test_phase56.py`, all pass)
 - mini/generators +3 (`recipe.py`, `starmap.py`, `band_name.py`)
+
+## 2026-11-15 02:35 UTC — run 86
+- Lispling: phase 57 — `correlation`, `z-scores`, `min-max-normalize`, `moving-average` (appended to `prelude55.lisp`); `examples/phase57.lisp`; tests 324 → 328 (`test_phase57.py`, all pass)
+- mini/cellular-automata +3 (`anneal.py`, `rule_table.py`, `ulam_turmite.py`)
