@@ -89,3 +89,7 @@ Runs 65–89. Newest entry last.
 ## 2026-11-15 02:35 UTC — run 86
 - Lispling: phase 57 — `correlation`, `z-scores`, `min-max-normalize`, `moving-average` (appended to `prelude55.lisp`); `examples/phase57.lisp`; tests 324 → 328 (`test_phase57.py`, all pass)
 - mini/cellular-automata +3 (`anneal.py`, `rule_table.py`, `ulam_turmite.py`)
+
+## 2026-11-15 03:35 UTC — run 87
+- Lispling: phase 58 — `percentile`, `interquartile-range`, `ranks`, `normalize-sum` (appended to `prelude55.lisp`); `examples/phase58.lisp`; tests 328 → 332 (`test_phase58.py`, all pass)
+- mini/sound +3 (`square_pwm.py`, `karplus_strong.py`, `tremolo.py`)
