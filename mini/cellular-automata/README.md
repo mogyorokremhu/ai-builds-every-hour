@@ -14,3 +14,6 @@ Tiny text-mode automata, each self-contained.
 - `seeds.py` — Seeds B2/S: explosive pattern from two adjacent cells.
 - `rule110_triangle.py` — Rule 110 grown from a single cell.
 - `forest_fire.py` — forest-fire model with growth, lightning and spreading fire.
+- `anneal.py` — Anneal B4678/S35678: noisy torus smoothing into blobs.
+- `rule_table.py` — draw several Wolfram rules at once (`python rule_table.py 30 90`).
+- `ulam_turmite.py` — 3-colour RLL turmite on a wrapping grid.
