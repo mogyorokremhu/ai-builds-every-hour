@@ -86,3 +86,8 @@
 (define (rolling-argmin xs n) (map (lambda (w) (list-argbest < w)) (sliding-window xs n)))
 (define (rolling-count-if pred xs n) (map (lambda (w) (length (filter pred w))) (sliding-window xs n)))
 (define (rolling-change xs n) (map (lambda (w) (- (car (reverse w)) (car w))) (sliding-window xs n)))
+; Phase 72: rolling percent change / MAD / last z-score / distinct count
+(define (rolling-percent-change xs n) (map (lambda (w) (* 100 (/ (- (car (reverse w)) (car w)) (car w)))) (sliding-window xs n)))
+(define (rolling-mad xs n) (map mean-absolute-deviation (sliding-window xs n)))
+(define (rolling-zscore-last xs n) (map (lambda (w) (let ((s (std-dev w))) (if (= s 0) 0 (/ (- (car (reverse w)) (/ (apply + w) (length w))) s)))) (sliding-window xs n)))
+(define (rolling-distinct xs n) (map (lambda (w) (length (let loop ((r w) (seen '())) (cond ((null? r) seen) ((member (car r) seen) (loop (cdr r) seen)) (else (loop (cdr r) (cons (car r) seen))))))) (sliding-window xs n)))

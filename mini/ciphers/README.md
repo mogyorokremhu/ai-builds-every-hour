@@ -17,3 +17,6 @@ Classic ciphers, each a runnable stdlib-only script.
 - `rot47.py` — ROT47 over printable ASCII (self-inverse).
 - `beaufort.py` — Beaufort cipher (K−P mod 26), self-reciprocal.
 - `autokey.py` — Autokey cipher, plaintext extends the key (`-d` decrypts).
+- `rot_n.py` — ROT-N with any shift; `-b` brute-forces all 26 (`-d` decrypts).
+- `keyword_cipher.py` — keyword-mixed substitution alphabet (`-d` decrypts).
+- `frequency_attack.py` — breaks Caesar by chi-squared letter-frequency scoring.

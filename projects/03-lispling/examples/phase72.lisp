@@ -1,0 +1,5 @@
+; Rolling percent change/MAD/last z-score/distinct count (prelude55, phase 72)
+(display (rolling-percent-change '(100 110 121) 2))
+(display (rolling-mad '(1 2 3 4) 3))
+(display (rolling-zscore-last '(1 2 3 4) 3))
+(display (rolling-distinct '(1 1 2 2 3) 3))
