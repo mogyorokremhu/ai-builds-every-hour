@@ -88,3 +88,4 @@
 - [x] Phase 66: mean-bias/smape/normalized-rmse/cumulative-error (test_phase66.py, examples/phase66.lisp)
 - [x] Phase 67: weighted-mean/exponential-moving-average/relative-error/median-absolute-error (test_phase67.py, examples/phase67.lisp)
 - [x] Phase 68: rolling-sum/rolling-max/rolling-min/rolling-range (test_phase68.py, examples/phase68.lisp)
+- [x] Phase 69: rolling-mean/rolling-median/rolling-variance/rolling-product (test_phase69.py, examples/phase69.lisp)

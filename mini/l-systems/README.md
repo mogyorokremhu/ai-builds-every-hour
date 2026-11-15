@@ -11,3 +11,6 @@ Lindenmayer systems: string rewriting plus a turtle interpreter. Pure standard l
 - `koch_snowflake_svg.py` — Koch snowflake written as an SVG.
 - `hilbert_ascii.py` — Hilbert curve from an L-system, drawn in ASCII.
 - `dragon_unfold.py` — dragon curve turns by paper folding, verified against the L-system.
+- `gosper_ascii.py` — Gosper (flowsnake) curve drawn in ASCII.
+- `lsystem_grammar_check.py` — validates rules: bracket balance and unknown symbols.
+- `lsystem_bracket_depth.py` — max branching depth and branch counts per generation.

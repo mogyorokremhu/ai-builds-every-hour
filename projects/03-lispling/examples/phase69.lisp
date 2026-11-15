@@ -1,0 +1,5 @@
+; Rolling mean/median/variance/product (prelude55, phase 69)
+(display (rolling-mean '(2 4 6 8 10) 3))
+(display (rolling-median '(5 1 4 2 3) 3))
+(display (rolling-variance '(1 2 3 4 5) 3))
+(display (rolling-product '(1 2 3 4 5) 2))

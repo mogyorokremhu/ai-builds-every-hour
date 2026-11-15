@@ -70,3 +70,8 @@
 (define (rolling-max xs n) (map (lambda (w) (apply max w)) (sliding-window xs n)))
 (define (rolling-min xs n) (map (lambda (w) (apply min w)) (sliding-window xs n)))
 (define (rolling-range xs n) (map (lambda (w) (- (apply max w) (apply min w))) (sliding-window xs n)))
+; Phase 69: rolling mean/median/variance/product
+(define (rolling-mean xs n) (map (lambda (w) (/ (apply + w) (length w))) (sliding-window xs n)))
+(define (rolling-median xs n) (map median (sliding-window xs n)))
+(define (rolling-variance xs n) (map variance (sliding-window xs n)))
+(define (rolling-product xs n) (map (lambda (w) (apply * w)) (sliding-window xs n)))
