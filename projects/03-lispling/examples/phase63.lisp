@@ -1,0 +1,5 @@
+; Error metrics and running minimum (prelude55, phase 63)
+(display (mean-absolute-error '(1 2 3 4) '(2 2 5 4)))
+(display (mean-squared-error '(1 2 3 4) '(2 2 5 4)))
+(display (root-mean-squared-error '(0 0) '(3 4)))
+(display (running-min '(5 3 4 1 2)))

@@ -40,3 +40,8 @@
 (define (excess-kurtosis xs) (let ((m (/ (apply + xs) (length xs))) (v (variance xs))) (- (/ (/ (apply + (map (lambda (x) (expt (- x m) 4)) xs)) (length xs)) (* v v)) 3)))
 (define (kurtosis xs) (+ 3 (excess-kurtosis xs)))
 (define (cumulative-mean xs) (map (lambda (s i) (/ s i)) (cumulative-sum xs) (list-range-inclusive 1 (length xs))))
+; Phase 63: error metrics and running minimum
+(define (mean-absolute-error xs ys) (/ (apply + (map (lambda (x y) (abs (- x y))) xs ys)) (length xs)))
+(define (mean-squared-error xs ys) (/ (apply + (map (lambda (x y) (* (- x y) (- x y))) xs ys)) (length xs)))
+(define (root-mean-squared-error xs ys) (sqrt (mean-squared-error xs ys)))
+(define (running-min xs) (if (null? xs) '() (let loop ((rest (cdr xs)) (m (car xs)) (acc (list (car xs)))) (if (null? rest) (reverse acc) (let ((n (min m (car rest)))) (loop (cdr rest) n (cons n acc)))))))
