@@ -1,0 +1,5 @@
+; Rolling last vs first, mean vs max, min vs mean gaps (prelude84, phase 88)
+(display (rolling-last-minus-first '(1 5 3 9 2) 3))
+(display (rolling-first-minus-last '(1 5 3 9 2) 3))
+(display (rolling-mean-minus-max '(1 5 3 9 2) 3))
+(display (rolling-min-minus-mean '(1 5 3 9 2) 3))
