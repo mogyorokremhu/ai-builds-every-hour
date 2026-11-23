@@ -93,3 +93,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-23 15:30 UTC — run 112
 - Lispling: phase 83 — `rolling-count-below-mean`, `rolling-sum-below-mean`, `rolling-count-at-least-mean`, `rolling-sum-at-least-mean` (appended to `prelude55.lisp`); `examples/phase83.lisp`; tests 436 → 440 (`test_phase83.py`, all pass)
 - NEW mini/compression (`rle.py`, `huffman.py`, `lzw.py` + README)
+
+## 2026-11-23 16:30 UTC — run 113
+- Lispling: phase 84 — `rolling-count-at-most-mean`, `rolling-sum-at-most-mean`, `rolling-count-equal-mean`, `rolling-sum-equal-mean` (new `prelude84.lisp`, loaded by evaluator — put future additions there); `examples/phase84.lisp`; tests 440 → 444 (`test_phase84.py`, all pass)
+- mini/math-art +3 (`dragon_curve_ascii.py`, `barnsley_fern_ascii.py`, `hilbert_curve_ascii.py`)
