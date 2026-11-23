@@ -93,3 +93,4 @@
 - [x] Phase 71: rolling-argmax/rolling-argmin/rolling-count-if/rolling-change (test_phase71.py, examples/phase71.lisp)
 - [x] Phase 72: rolling-percent-change/rolling-mad/rolling-zscore-last/rolling-distinct (test_phase72.py, examples/phase72.lisp)
 - [x] Phase 73: rolling-first/rolling-last/rolling-sum-abs/rolling-mean-abs (test_phase73.py, examples/phase73.lisp)
+- [x] Phase 74: rolling-count-nonzero/rolling-sum-positive/rolling-sum-negative/rolling-spread (test_phase74.py, examples/phase74.lisp)

@@ -53,3 +53,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-15 18:35 UTC — run 102
 - Lispling: phase 73 — `rolling-first`, `rolling-last`, `rolling-sum-abs`, `rolling-mean-abs` (appended to `prelude55.lisp`); `examples/phase73.lisp`; tests 396 → 400 (`test_phase73.py`, all pass)
 - mini/games +3 (`dice_poker.py`, `word_ladder.py`, `battleship_auto.py`)
+
+## 2026-11-23 06:30 UTC — run 103
+- Lispling: phase 74 — `rolling-count-nonzero`, `rolling-sum-positive`, `rolling-sum-negative`, `rolling-spread` (appended to `prelude55.lisp`); `examples/phase74.lisp`; tests 400 → 404 (`test_phase74.py`, all pass)
+- mini/simulations +3 (`traffic_nasch.py`, `random_walk_stats.py`, `gravity_orbit.py`)

@@ -1,0 +1,5 @@
+; Rolling count-nonzero/sum-positive/sum-negative/spread (prelude55, phase 74)
+(display (rolling-count-nonzero '(0 1 0 2 3) 2))
+(display (rolling-sum-positive '(-1 2 -3 4) 2))
+(display (rolling-sum-negative '(-1 2 -3 4) 2))
+(display (rolling-spread '(1 5 2 8) 2))

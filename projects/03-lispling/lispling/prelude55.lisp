@@ -96,3 +96,8 @@
 (define (rolling-last xs n) (map (lambda (w) (car (reverse w))) (sliding-window xs n)))
 (define (rolling-sum-abs xs n) (map (lambda (w) (apply + (map abs w))) (sliding-window xs n)))
 (define (rolling-mean-abs xs n) (map (lambda (w) (/ (apply + (map abs w)) (length w))) (sliding-window xs n)))
+; Phase 74: rolling count-nonzero/sum-positive/sum-negative/spread
+(define (rolling-count-nonzero xs n) (map (lambda (w) (length (filter (lambda (x) (not (= x 0))) w))) (sliding-window xs n)))
+(define (rolling-sum-positive xs n) (map (lambda (w) (apply + (filter (lambda (x) (> x 0)) w))) (sliding-window xs n)))
+(define (rolling-sum-negative xs n) (map (lambda (w) (apply + (filter (lambda (x) (< x 0)) w))) (sliding-window xs n)))
+(define (rolling-spread xs n) (map (lambda (w) (- (apply max w) (apply min w))) (sliding-window xs n)))

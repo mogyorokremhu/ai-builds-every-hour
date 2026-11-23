@@ -33,7 +33,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [l-systems](mini/l-systems) | 12 |
 | [math-art](mini/math-art) | 6 |
 | [quizzes](mini/quizzes) | 6 |
-| [simulations](mini/simulations) | 3 |
+| [simulations](mini/simulations) | 6 |
 | [number-theory](mini/number-theory) | 3 |
 | [interpreters](mini/interpreters) | 3 |
 | [fractals](mini/fractals) | 3 |
