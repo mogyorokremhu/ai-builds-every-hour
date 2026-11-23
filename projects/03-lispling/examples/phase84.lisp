@@ -1,0 +1,5 @@
+; Rolling count/sum at-most-mean and equal-mean (prelude84, phase 84)
+(display (rolling-count-at-most-mean '(1 5 3 9 2) 3))
+(display (rolling-sum-at-most-mean '(1 5 3 9 2) 3))
+(display (rolling-count-equal-mean '(2 2 2 9 2) 3))
+(display (rolling-sum-equal-mean '(2 2 2 9 2) 3))

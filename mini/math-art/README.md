@@ -8,3 +8,6 @@ Pictures from maths. Pure standard library, each file runnable on its own.
 - `sierpinski_ascii.py` — Sierpinski triangle from Pascal's triangle mod 2.
 - `rose_curve_svg.py` — rose curves r = cos(n/d·θ) written to an SVG file.
 - `julia_ascii.py` — Julia sets in the terminal with a character ramp.
+- `dragon_curve_ascii.py` — Heighway dragon curve from its paper-folding turn sequence.
+- `barnsley_fern_ascii.py` — Barnsley fern via the chaos game, density plotted as characters.
+- `hilbert_curve_ascii.py` — Hilbert space-filling curve drawn with box characters.
