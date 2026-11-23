@@ -138,3 +138,9 @@
 (define (rolling-count-at-most t xs n) (map (lambda (w) (length (filter (lambda (x) (<= x t)) w))) (sliding-window xs n)))
 (define (rolling-sum-at-most t xs n) (map (lambda (w) (apply + (filter (lambda (x) (<= x t)) w))) (sliding-window xs n)))
 (define (rolling-sum-equal t xs n) (map (lambda (w) (apply + (filter (lambda (x) (= x t)) w))) (sliding-window xs n)))
+
+; Phase 82: rolling sum-not-equal/sum-nonmultiples/count-above-mean/sum-above-mean
+(define (rolling-sum-not-equal t xs n) (map (lambda (w) (apply + (filter (lambda (x) (not (= x t))) w))) (sliding-window xs n)))
+(define (rolling-sum-nonmultiples k xs n) (map (lambda (w) (apply + (filter (lambda (x) (not (= (remainder x k) 0))) w))) (sliding-window xs n)))
+(define (rolling-count-above-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (length (filter (lambda (x) (> (* x c) s)) w)))) (sliding-window xs n)))
+(define (rolling-sum-above-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (apply + (filter (lambda (x) (> (* x c) s)) w)))) (sliding-window xs n)))

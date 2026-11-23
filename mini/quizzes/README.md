@@ -8,3 +8,6 @@ Tiny terminal quizzes, standard library only. Each supports `--auto` (and `--see
 - `binary_quiz.py` — convert binary and hex numbers to decimal.
 - `roman_quiz.py` — write numbers as Roman numerals.
 - `unit_quiz.py` — metric/imperial unit conversions, 1% tolerance.
+- `ascii_quiz.py` — character ↔ ASCII code questions.
+- `prime_quiz.py` — is this number prime? (y/n)
+- `color_quiz.py` — read RGB channels out of hex colors.

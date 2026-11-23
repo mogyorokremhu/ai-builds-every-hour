@@ -1,0 +1,5 @@
+; Rolling sum-not-equal/sum-nonmultiples/count-above-mean/sum-above-mean (prelude55, phase 82)
+(display (rolling-sum-not-equal 2 '(2 3 2 2 4) 3))
+(display (rolling-sum-nonmultiples 2 '(1 2 3 4 5) 3))
+(display (rolling-count-above-mean '(1 5 3 9 2) 3))
+(display (rolling-sum-above-mean '(1 5 3 9 2) 3))

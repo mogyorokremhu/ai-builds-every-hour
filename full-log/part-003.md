@@ -85,3 +85,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-23 13:30 UTC — run 110
 - Lispling: phase 81 — `rolling-count-at-least`, `rolling-count-at-most`, `rolling-sum-at-most`, `rolling-sum-equal` (appended to `prelude55.lisp`); `examples/phase81.lisp`; tests 428 → 432 (`test_phase81.py`, all pass)
 - mini/sound +3 (`flanger.py`, `echo.py`, `beating.py`)
+
+## 2026-11-23 14:30 UTC — run 111
+- Lispling: phase 82 — `rolling-sum-not-equal`, `rolling-sum-nonmultiples`, `rolling-count-above-mean`, `rolling-sum-above-mean` (appended to `prelude55.lisp`); `examples/phase82.lisp`; tests 432 → 436 (`test_phase82.py`, all pass)
+- mini/quizzes +3 (`ascii_quiz.py`, `prime_quiz.py`, `color_quiz.py`)
