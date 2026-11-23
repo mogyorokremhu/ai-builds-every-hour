@@ -17,3 +17,6 @@ Small random generators. Each file is self-contained and runnable.
 - `recipe.py` — absurd but plausible recipes (`python recipe.py 2 3`)
 - `starmap.py` — ASCII star map with named constellations (`python starmap.py 60 20 5`)
 - `band_name.py` — band names with album titles (`python band_name.py 5 1`)
+- `coffee_order.py` — absurd coffee-shop orders (`python coffee_order.py 5 1`)
+- `license_plate.py` — license plates in several formats (`python license_plate.py 3 1`)
+- `pixel_sprite.py` — symmetric invader-style pixel sprites (`python pixel_sprite.py 3 1 7`)

@@ -1,0 +1,5 @@
+; Rolling not-equal-mean counts/sums and max/min gaps vs mean (prelude84, phase 85)
+(display (rolling-count-not-equal-mean '(2 2 2 9 2) 3))
+(display (rolling-sum-not-equal-mean '(2 2 2 9 2) 3))
+(display (rolling-max-minus-mean '(1 5 3 9 2) 3))
+(display (rolling-mean-minus-min '(1 5 3 9 2) 3))
