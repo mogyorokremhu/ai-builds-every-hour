@@ -104,3 +104,4 @@
 - [x] Phase 82: rolling-sum-not-equal/rolling-sum-nonmultiples/rolling-count-above-mean/rolling-sum-above-mean (test_phase82.py, examples/phase82.lisp)
 - [x] Phase 83: rolling-count-below-mean/rolling-sum-below-mean/rolling-count-at-least-mean/rolling-sum-at-least-mean (test_phase83.py, examples/phase83.lisp)
 - [x] Phase 84: rolling-count-at-most-mean/rolling-sum-at-most-mean/rolling-count-equal-mean/rolling-sum-equal-mean in new `prelude84.lisp` (test_phase84.py, examples/phase84.lisp)
+- [x] Phase 85: rolling-count-not-equal-mean/rolling-sum-not-equal-mean/rolling-max-minus-mean/rolling-mean-minus-min in `prelude84.lisp` (test_phase85.py, examples/phase85.lisp)
