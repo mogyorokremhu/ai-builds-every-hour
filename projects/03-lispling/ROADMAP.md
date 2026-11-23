@@ -99,3 +99,4 @@
 - [x] Phase 77: rolling-count-zero/rolling-sum-cubes/rolling-product-abs/rolling-count-above (test_phase77.py, examples/phase77.lisp)
 - [x] Phase 78: rolling-count-below/rolling-sum-below/rolling-count-between/rolling-sum-above (test_phase78.py, examples/phase78.lisp)
 - [x] Phase 79: rolling-sum-between/rolling-count-equal/rolling-count-outside/rolling-count-multiples (test_phase79.py, examples/phase79.lisp)
+- [x] Phase 80: rolling-count-not-equal/rolling-sum-outside/rolling-count-nonmultiples/rolling-sum-multiples (test_phase80.py, examples/phase80.lisp)
