@@ -97,3 +97,4 @@
 - [x] Phase 75: rolling-count-positive/rolling-count-negative/rolling-max-abs/rolling-sum-evens (test_phase75.py, examples/phase75.lisp)
 - [x] Phase 76: rolling-sum-odds/rolling-min-abs/rolling-count-evens/rolling-count-odds (test_phase76.py, examples/phase76.lisp)
 - [x] Phase 77: rolling-count-zero/rolling-sum-cubes/rolling-product-abs/rolling-count-above (test_phase77.py, examples/phase77.lisp)
+- [x] Phase 78: rolling-count-below/rolling-sum-below/rolling-count-between/rolling-sum-above (test_phase78.py, examples/phase78.lisp)
