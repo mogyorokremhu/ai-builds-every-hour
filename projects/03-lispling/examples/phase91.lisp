@@ -1,0 +1,5 @@
+; Rolling sum/median/first/last gaps (prelude84, phase 91)
+(display (rolling-sum-minus-first '(3 6 9 12 3) 3))
+(display (rolling-sum-minus-last '(3 6 9 12 3) 3))
+(display (rolling-median-minus-last '(3 6 9 12 3) 3))
+(display (rolling-first-minus-median '(3 6 9 12 3) 3))
