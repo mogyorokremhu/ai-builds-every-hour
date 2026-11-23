@@ -51,6 +51,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [spinner_gallery.py](spinner_gallery.py) | Twelve classic terminal spinners side by side |
 | [pacman_chase.py](pacman_chase.py) | A chomper eats dots with a ghost in pursuit (`--width`) |
 | [spiral_galaxy.py](spiral_galaxy.py) | Stars orbiting a core along spiral arms (`--arms`, `--stars`) |
+| [fireflies.py](fireflies.py) | Blinking fireflies drifting over a meadow (`--count`) |
+| [conveyor.py](conveyor.py) | Boxes on a belt, big ones hop a sorting gate |
+| [elevator.py](elevator.py) | Elevator car serving random floor calls with SCAN direction (`--floors`) |
 
 ```bash
 python fire.py
