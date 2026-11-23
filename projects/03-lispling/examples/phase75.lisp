@@ -1,0 +1,5 @@
+; Rolling count-positive/count-negative/max-abs/sum-evens (prelude55, phase 75)
+(display (rolling-count-positive '(-1 2 -3 4) 2))
+(display (rolling-count-negative '(-1 2 -3 4) 2))
+(display (rolling-max-abs '(-5 2 -3 4) 2))
+(display (rolling-sum-evens '(1 2 4 5 6) 2))

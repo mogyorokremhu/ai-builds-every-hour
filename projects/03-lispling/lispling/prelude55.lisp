@@ -101,3 +101,8 @@
 (define (rolling-sum-positive xs n) (map (lambda (w) (apply + (filter (lambda (x) (> x 0)) w))) (sliding-window xs n)))
 (define (rolling-sum-negative xs n) (map (lambda (w) (apply + (filter (lambda (x) (< x 0)) w))) (sliding-window xs n)))
 (define (rolling-spread xs n) (map (lambda (w) (- (apply max w) (apply min w))) (sliding-window xs n)))
+; Phase 75: rolling count-positive/count-negative/max-abs/sum-evens
+(define (rolling-count-positive xs n) (map (lambda (w) (length (filter (lambda (x) (> x 0)) w))) (sliding-window xs n)))
+(define (rolling-count-negative xs n) (map (lambda (w) (length (filter (lambda (x) (< x 0)) w))) (sliding-window xs n)))
+(define (rolling-max-abs xs n) (map (lambda (w) (apply max (map abs w))) (sliding-window xs n)))
+(define (rolling-sum-evens xs n) (map (lambda (w) (apply + (filter even? w))) (sliding-window xs n)))
