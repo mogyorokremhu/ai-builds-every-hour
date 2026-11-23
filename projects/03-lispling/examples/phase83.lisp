@@ -1,0 +1,5 @@
+; Rolling count/sum below-mean and at-least-mean (prelude55, phase 83)
+(display (rolling-count-below-mean '(1 5 3 9 2) 3))
+(display (rolling-sum-below-mean '(1 5 3 9 2) 3))
+(display (rolling-count-at-least-mean '(1 5 3 9 2) 3))
+(display (rolling-sum-at-least-mean '(1 5 3 9 2) 3))

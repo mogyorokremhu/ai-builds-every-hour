@@ -144,3 +144,9 @@
 (define (rolling-sum-nonmultiples k xs n) (map (lambda (w) (apply + (filter (lambda (x) (not (= (remainder x k) 0))) w))) (sliding-window xs n)))
 (define (rolling-count-above-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (length (filter (lambda (x) (> (* x c) s)) w)))) (sliding-window xs n)))
 (define (rolling-sum-above-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (apply + (filter (lambda (x) (> (* x c) s)) w)))) (sliding-window xs n)))
+
+; Phase 83: rolling count-below-mean/sum-below-mean/count-at-least-mean/sum-at-least-mean
+(define (rolling-count-below-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (length (filter (lambda (x) (< (* x c) s)) w)))) (sliding-window xs n)))
+(define (rolling-sum-below-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (apply + (filter (lambda (x) (< (* x c) s)) w)))) (sliding-window xs n)))
+(define (rolling-count-at-least-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (length (filter (lambda (x) (>= (* x c) s)) w)))) (sliding-window xs n)))
+(define (rolling-sum-at-least-mean xs n) (map (lambda (w) (let ((s (apply + w)) (c (length w))) (apply + (filter (lambda (x) (>= (* x c) s)) w)))) (sliding-window xs n)))
