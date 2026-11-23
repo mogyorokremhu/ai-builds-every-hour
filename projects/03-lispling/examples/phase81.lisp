@@ -1,0 +1,5 @@
+; Rolling count-at-least/count-at-most/sum-at-most/sum-equal (prelude55, phase 81)
+(display (rolling-count-at-least 3 '(1 3 5 2 4) 3))
+(display (rolling-count-at-most 3 '(1 3 5 2 4) 3))
+(display (rolling-sum-at-most 3 '(1 3 5 2 4) 3))
+(display (rolling-sum-equal 2 '(2 3 2 2 4) 3))

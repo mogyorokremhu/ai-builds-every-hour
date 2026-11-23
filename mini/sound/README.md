@@ -17,3 +17,6 @@ WAV generators using only the standard library (`wave`, `struct`, `math`).
 - `square_pwm.py` — square wave with a sweeping pulse-width (duty cycle).
 - `karplus_strong.py` — plucked-string synthesis with a delay-line average.
 - `tremolo.py` — LFO amplitude modulation of a C major chord.
+- `flanger.py` — LFO-swept short delay mixed with a saw wave, with interpolated delay reads.
+- `echo.py` — feedback echo with decaying repeats on a plucked note.
+- `beating.py` — two close frequencies make audible amplitude beats.
