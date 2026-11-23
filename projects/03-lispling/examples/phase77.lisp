@@ -1,0 +1,5 @@
+; Rolling count-zero/sum-cubes/product-abs/count-above (prelude55, phase 77)
+(display (rolling-count-zero '(0 1 0 0 2) 2))
+(display (rolling-sum-cubes '(1 2 3 4) 2))
+(display (rolling-product-abs '(-2 3 -4 5) 2))
+(display (rolling-count-above 2 '(1 3 5 2 4) 3))

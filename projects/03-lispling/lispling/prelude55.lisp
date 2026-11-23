@@ -111,3 +111,8 @@
 (define (rolling-min-abs xs n) (map (lambda (w) (apply min (map abs w))) (sliding-window xs n)))
 (define (rolling-count-evens xs n) (map (lambda (w) (length (filter even? w))) (sliding-window xs n)))
 (define (rolling-count-odds xs n) (map (lambda (w) (length (filter odd? w))) (sliding-window xs n)))
+; Phase 77: rolling count-zero/sum-cubes/product-abs/count-above
+(define (rolling-count-zero xs n) (map (lambda (w) (length (filter (lambda (x) (= x 0)) w))) (sliding-window xs n)))
+(define (rolling-sum-cubes xs n) (map (lambda (w) (apply + (map (lambda (x) (* x x x)) w))) (sliding-window xs n)))
+(define (rolling-product-abs xs n) (map (lambda (w) (apply * (map abs w))) (sliding-window xs n)))
+(define (rolling-count-above t xs n) (map (lambda (w) (length (filter (lambda (x) (> x t)) w))) (sliding-window xs n)))
