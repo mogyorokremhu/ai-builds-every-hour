@@ -1,0 +1,5 @@
+; Rolling count-below/sum-below/count-between/sum-above (prelude55, phase 78)
+(display (rolling-count-below 3 '(1 3 5 2 4) 3))
+(display (rolling-sum-below 4 '(1 3 5 2 4) 2))
+(display (rolling-count-between 2 4 '(1 3 5 2 4) 3))
+(display (rolling-sum-above 2 '(1 3 5 2 4) 3))

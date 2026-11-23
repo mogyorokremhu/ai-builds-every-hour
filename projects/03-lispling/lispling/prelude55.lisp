@@ -116,3 +116,8 @@
 (define (rolling-sum-cubes xs n) (map (lambda (w) (apply + (map (lambda (x) (* x x x)) w))) (sliding-window xs n)))
 (define (rolling-product-abs xs n) (map (lambda (w) (apply * (map abs w))) (sliding-window xs n)))
 (define (rolling-count-above t xs n) (map (lambda (w) (length (filter (lambda (x) (> x t)) w))) (sliding-window xs n)))
+; Phase 78: rolling count-below/sum-below/count-between/sum-above
+(define (rolling-count-below t xs n) (map (lambda (w) (length (filter (lambda (x) (< x t)) w))) (sliding-window xs n)))
+(define (rolling-sum-below t xs n) (map (lambda (w) (apply + (filter (lambda (x) (< x t)) w))) (sliding-window xs n)))
+(define (rolling-count-between lo hi xs n) (map (lambda (w) (length (filter (lambda (x) (and (>= x lo) (<= x hi))) w))) (sliding-window xs n)))
+(define (rolling-sum-above t xs n) (map (lambda (w) (apply + (filter (lambda (x) (> x t)) w))) (sliding-window xs n)))
