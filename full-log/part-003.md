@@ -61,3 +61,7 @@ Runs 90–114. Newest entry last.
 ## 2026-11-23 07:30 UTC — run 104
 - Lispling: phase 75 — `rolling-count-positive`, `rolling-count-negative`, `rolling-max-abs`, `rolling-sum-evens` (appended to `prelude55.lisp`); `examples/phase75.lisp`; tests 404 → 408 (`test_phase75.py`, all pass)
 - NEW mini/bit-tricks (`popcount_tricks.py`, `gray_code.py`, `bitset_sieve.py`)
+
+## 2026-11-23 08:30 UTC — run 105
+- Lispling: phase 76 — `rolling-sum-odds`, `rolling-min-abs`, `rolling-count-evens`, `rolling-count-odds` (appended to `prelude55.lisp`); `examples/phase76.lisp`; tests 408 → 412 (`test_phase76.py`, all pass)
+- mini/interpreters +2 (`turing_machine.py`, `stack_vm.py`)

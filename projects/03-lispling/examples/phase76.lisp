@@ -1,0 +1,5 @@
+; Rolling sum-odds/min-abs/count-evens/count-odds (prelude55, phase 76)
+(display (rolling-sum-odds '(1 2 3 5 6) 2))
+(display (rolling-min-abs '(-5 2 -3 4) 2))
+(display (rolling-count-evens '(1 2 4 5 6) 2))
+(display (rolling-count-odds '(1 2 4 5 6) 2))

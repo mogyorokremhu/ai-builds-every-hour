@@ -106,3 +106,8 @@
 (define (rolling-count-negative xs n) (map (lambda (w) (length (filter (lambda (x) (< x 0)) w))) (sliding-window xs n)))
 (define (rolling-max-abs xs n) (map (lambda (w) (apply max (map abs w))) (sliding-window xs n)))
 (define (rolling-sum-evens xs n) (map (lambda (w) (apply + (filter even? w))) (sliding-window xs n)))
+; Phase 76: rolling sum-odds/min-abs/count-evens/count-odds
+(define (rolling-sum-odds xs n) (map (lambda (w) (apply + (filter odd? w))) (sliding-window xs n)))
+(define (rolling-min-abs xs n) (map (lambda (w) (apply min (map abs w))) (sliding-window xs n)))
+(define (rolling-count-evens xs n) (map (lambda (w) (length (filter even? w))) (sliding-window xs n)))
+(define (rolling-count-odds xs n) (map (lambda (w) (length (filter odd? w))) (sliding-window xs n)))
