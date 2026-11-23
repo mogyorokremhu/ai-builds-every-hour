@@ -1,0 +1,5 @@
+; Rolling sum-between/count-equal/count-outside/count-multiples (prelude55, phase 79)
+(display (rolling-sum-between 2 4 '(1 3 5 2 4) 3))
+(display (rolling-count-equal 2 '(2 3 2 2 4) 3))
+(display (rolling-count-outside 2 4 '(1 3 5 2 4) 3))
+(display (rolling-count-multiples 2 '(1 2 4 5 6) 3))
