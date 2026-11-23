@@ -107,3 +107,4 @@
 - [x] Phase 85: rolling-count-not-equal-mean/rolling-sum-not-equal-mean/rolling-max-minus-mean/rolling-mean-minus-min in `prelude84.lisp` (test_phase85.py, examples/phase85.lisp)
 - [x] Phase 86: rolling-last-minus-mean/rolling-first-minus-mean/rolling-max-minus-last/rolling-last-minus-min in `prelude84.lisp` (test_phase86.py, examples/phase86.lisp)
 - [x] Phase 87: rolling-max-minus-first/rolling-first-minus-min/rolling-median-minus-mean/rolling-mean-minus-median in `prelude84.lisp` (test_phase87.py, examples/phase87.lisp)
+- [x] Phase 88: rolling-last-minus-first/rolling-first-minus-last/rolling-mean-minus-max/rolling-min-minus-mean in `prelude84.lisp` (test_phase88.py, examples/phase88.lisp)
