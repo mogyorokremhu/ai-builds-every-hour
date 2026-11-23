@@ -1,0 +1,5 @@
+; Rolling count-not-equal/sum-outside/count-nonmultiples/sum-multiples (prelude55, phase 80)
+(display (rolling-count-not-equal 2 '(2 3 2 2 4) 3))
+(display (rolling-sum-outside 2 4 '(1 3 5 2 4) 3))
+(display (rolling-count-nonmultiples 2 '(1 2 4 5 6) 3))
+(display (rolling-sum-multiples 2 '(1 2 4 5 6) 3))

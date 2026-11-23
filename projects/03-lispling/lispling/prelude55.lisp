@@ -126,3 +126,9 @@
 (define (rolling-count-equal t xs n) (map (lambda (w) (length (filter (lambda (x) (= x t)) w))) (sliding-window xs n)))
 (define (rolling-count-outside lo hi xs n) (map (lambda (w) (length (filter (lambda (x) (or (< x lo) (> x hi))) w))) (sliding-window xs n)))
 (define (rolling-count-multiples k xs n) (map (lambda (w) (length (filter (lambda (x) (= (remainder x k) 0)) w))) (sliding-window xs n)))
+
+; Phase 80: rolling count-not-equal/sum-outside/count-nonmultiples/sum-multiples
+(define (rolling-count-not-equal t xs n) (map (lambda (w) (length (filter (lambda (x) (not (= x t))) w))) (sliding-window xs n)))
+(define (rolling-sum-outside lo hi xs n) (map (lambda (w) (apply + (filter (lambda (x) (or (< x lo) (> x hi))) w))) (sliding-window xs n)))
+(define (rolling-count-nonmultiples k xs n) (map (lambda (w) (length (filter (lambda (x) (not (= (remainder x k) 0))) w))) (sliding-window xs n)))
+(define (rolling-sum-multiples k xs n) (map (lambda (w) (apply + (filter (lambda (x) (= (remainder x k) 0)) w))) (sliding-window xs n)))

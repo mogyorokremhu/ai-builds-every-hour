@@ -17,3 +17,6 @@ Tiny text-mode automata, each self-contained.
 - `anneal.py` — Anneal B4678/S35678: noisy torus smoothing into blobs.
 - `rule_table.py` — draw several Wolfram rules at once (`python rule_table.py 30 90`).
 - `ulam_turmite.py` — 3-colour RLL turmite on a wrapping grid.
+- `fredkin.py` — Fredkin replicator (B1357/S02468): odd-neighbour rule that copies patterns.
+- `rule30_random.py` — Rule 30 centre column as a random bit/byte stream with run statistics.
+- `totalistic.py` — 3-colour 1D totalistic automaton (`python totalistic.py 777`).
