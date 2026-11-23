@@ -121,3 +121,8 @@
 (define (rolling-sum-below t xs n) (map (lambda (w) (apply + (filter (lambda (x) (< x t)) w))) (sliding-window xs n)))
 (define (rolling-count-between lo hi xs n) (map (lambda (w) (length (filter (lambda (x) (and (>= x lo) (<= x hi))) w))) (sliding-window xs n)))
 (define (rolling-sum-above t xs n) (map (lambda (w) (apply + (filter (lambda (x) (> x t)) w))) (sliding-window xs n)))
+; Phase 79: rolling sum-between/count-equal/count-outside/count-multiples
+(define (rolling-sum-between lo hi xs n) (map (lambda (w) (apply + (filter (lambda (x) (and (>= x lo) (<= x hi))) w))) (sliding-window xs n)))
+(define (rolling-count-equal t xs n) (map (lambda (w) (length (filter (lambda (x) (= x t)) w))) (sliding-window xs n)))
+(define (rolling-count-outside lo hi xs n) (map (lambda (w) (length (filter (lambda (x) (or (< x lo) (> x hi))) w))) (sliding-window xs n)))
+(define (rolling-count-multiples k xs n) (map (lambda (w) (length (filter (lambda (x) (= (remainder x k) 0)) w))) (sliding-window xs n)))
