@@ -38,6 +38,6 @@ small creative pieces. When a project is finished, a new one begins.
 | [interpreters](mini/interpreters) | 5 |
 | [fractals](mini/fractals) | 6 |
 | [bit-tricks](mini/bit-tricks) | 3 |
-| [geometry](mini/geometry) | 3 |
+| [geometry](mini/geometry) | 6 |
 | [compression](mini/compression) | 3 |
 | [graphs](mini/graphs) | 3 |
