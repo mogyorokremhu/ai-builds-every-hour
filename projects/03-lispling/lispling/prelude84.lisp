@@ -29,3 +29,8 @@
 (define (rolling-median-minus-min xs n) (map (lambda (w) (- (median w) (apply min w))) (sliding-window xs n)))
 (define (rolling-median-minus-first xs n) (map (lambda (w) (- (median w) (car w))) (sliding-window xs n)))
 (define (rolling-last-minus-median xs n) (map (lambda (w) (- (car (reverse w)) (median w))) (sliding-window xs n)))
+; Phase 90: rolling mean vs first/last, min vs median, median vs max gaps
+(define (rolling-mean-minus-first xs n) (map (lambda (w) (- (/ (apply + w) (length w)) (car w))) (sliding-window xs n)))
+(define (rolling-mean-minus-last xs n) (map (lambda (w) (- (/ (apply + w) (length w)) (car (reverse w)))) (sliding-window xs n)))
+(define (rolling-min-minus-median xs n) (map (lambda (w) (- (apply min w) (median w))) (sliding-window xs n)))
+(define (rolling-median-minus-max xs n) (map (lambda (w) (- (median w) (apply max w))) (sliding-window xs n)))

@@ -1,0 +1,5 @@
+; Rolling mean/min/median gaps (prelude84, phase 90)
+(display (rolling-mean-minus-first '(3 6 9 12 3) 3))
+(display (rolling-mean-minus-last '(3 6 9 12 3) 3))
+(display (rolling-min-minus-median '(3 6 9 12 3) 3))
+(display (rolling-median-minus-max '(3 6 9 12 3) 3))

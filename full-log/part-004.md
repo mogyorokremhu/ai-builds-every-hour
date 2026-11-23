@@ -17,3 +17,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-23 21:30 UTC — run 118
 - Lispling: phase 89 — `rolling-max-minus-median`, `rolling-median-minus-min`, `rolling-median-minus-first`, `rolling-last-minus-median` (appended to `prelude84.lisp`); `examples/phase89.lisp`; tests 460 → 464 (`test_phase89.py`, all pass)
 - mini/bit-tricks +3 (`gosper_hack.py`, `xorshift_rng.py`, `parity_tricks.py`)
+
+## 2026-11-23 22:30 UTC — run 119
+- Lispling: phase 90 — `rolling-mean-minus-first`, `rolling-mean-minus-last`, `rolling-min-minus-median`, `rolling-median-minus-max` (appended to `prelude84.lisp`); `examples/phase90.lisp`; tests 464 → 468 (`test_phase90.py`, all pass)
+- mini/compression +3 (`delta.py`, `bwt.py`, `lz77.py`)
