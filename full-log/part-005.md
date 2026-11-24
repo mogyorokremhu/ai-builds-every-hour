@@ -13,3 +13,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-24 21:30 UTC — run 142
 - Lispling: phase 113 — `rolling-first-squared`, `rolling-last-squared`, `rolling-max-squared`, `rolling-min-squared` (appended to `prelude84.lisp`); `examples/phase113.lisp`; tests 556 → 560 (`test_phase113.py`, all pass)
 - mini/encoding +3 (`rot_and_atbash.py`, `base32_codec.py`, `morse_code.py`)
+
+## 2026-11-24 22:30 UTC — run 143
+- Lispling: phase 114 — `rolling-sum-squared`, `rolling-median-squared`, `rolling-range-squared`, `rolling-first-cubed` (appended to `prelude84.lisp`); `examples/phase114.lisp`; tests 560 → 564 (`test_phase114.py`, all pass)
+- mini/sorting +3 (`insertion_sort.py`, `cocktail_sort.py`, `bucket_sort.py`)

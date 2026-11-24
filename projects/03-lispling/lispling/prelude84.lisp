@@ -170,3 +170,9 @@
 (define (rolling-last-squared xs n) (map (lambda (w) (* (car (reverse w)) (car (reverse w)))) (sliding-window xs n)))
 (define (rolling-max-squared xs n) (map (lambda (w) (* (apply max w) (apply max w))) (sliding-window xs n)))
 (define (rolling-min-squared xs n) (map (lambda (w) (* (apply min w) (apply min w))) (sliding-window xs n)))
+
+; Phase 114: sum^2, median^2, range^2, first^3
+(define (rolling-sum-squared xs n) (map (lambda (w) (* (apply + w) (apply + w))) (sliding-window xs n)))
+(define (rolling-median-squared xs n) (map (lambda (w) (* (median w) (median w))) (sliding-window xs n)))
+(define (rolling-range-squared xs n) (map (lambda (w) (* (- (apply max w) (apply min w)) (- (apply max w) (apply min w)))) (sliding-window xs n)))
+(define (rolling-first-cubed xs n) (map (lambda (w) (* (car w) (car w) (car w))) (sliding-window xs n)))

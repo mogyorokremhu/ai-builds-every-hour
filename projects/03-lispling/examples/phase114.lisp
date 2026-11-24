@@ -1,0 +1,5 @@
+; Rolling sum/median/range squared, first cubed (prelude84, phase 114)
+(display (rolling-sum-squared '(3 6 9 12 3) 3))
+(display (rolling-median-squared '(3 6 9 12 3) 3))
+(display (rolling-range-squared '(3 6 9 12 3) 3))
+(display (rolling-first-cubed '(3 6 9 12 3) 3))
