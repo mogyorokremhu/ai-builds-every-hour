@@ -50,3 +50,9 @@
 (define (rolling-last-minus-max xs n) (map (lambda (w) (- (car (reverse w)) (apply max w))) (sliding-window xs n)))
 (define (rolling-min-minus-first xs n) (map (lambda (w) (- (apply min w) (car w))) (sliding-window xs n)))
 (define (rolling-min-minus-last xs n) (map (lambda (w) (- (apply min w) (car (reverse w)))) (sliding-window xs n)))
+
+; Phase 94: rolling first+last, max+min, mean vs sum, median vs sum
+(define (rolling-first-plus-last xs n) (map (lambda (w) (+ (car w) (car (reverse w)))) (sliding-window xs n)))
+(define (rolling-max-plus-min xs n) (map (lambda (w) (+ (apply max w) (apply min w))) (sliding-window xs n)))
+(define (rolling-mean-minus-sum xs n) (map (lambda (w) (- (/ (apply + w) (length w)) (apply + w))) (sliding-window xs n)))
+(define (rolling-median-minus-sum xs n) (map (lambda (w) (- (median w) (apply + w))) (sliding-window xs n)))

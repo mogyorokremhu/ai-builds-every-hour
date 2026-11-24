@@ -1,0 +1,5 @@
+; Rolling first+last, max+min, mean/median vs sum (prelude84, phase 94)
+(display (rolling-first-plus-last '(3 6 9 12 3) 3))
+(display (rolling-max-plus-min '(3 6 9 12 3) 3))
+(display (rolling-mean-minus-sum '(3 6 9 12 3) 3))
+(display (rolling-median-minus-sum '(3 6 9 12 3) 3))

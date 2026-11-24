@@ -8,3 +8,6 @@ Bit manipulation toys, standard library only.
 - `gosper_hack.py` — Gosper's hack: enumerate all n-bit values with exactly k set bits.
 - `xorshift_rng.py` — xorshift32/64 generators with a bit-balance check.
 - `parity_tricks.py` — parity via loop/fold plus Hamming(7,4) syndrome decoding.
+- `bit_permutations.py` — next same-popcount permutation and submask enumeration.
+- `bit_matrix.py` — 8x8 bit matrix in one 64-bit int: transpose and rotate.
+- `bit_run_lengths.py` — longest run of ones, run count, leading/trailing zeros.
