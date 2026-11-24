@@ -35,7 +35,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [quizzes](mini/quizzes) | 9 |
 | [simulations](mini/simulations) | 9 |
 | [number-theory](mini/number-theory) | 6 |
-| [interpreters](mini/interpreters) | 5 |
+| [interpreters](mini/interpreters) | 8 |
 | [fractals](mini/fractals) | 6 |
 | [bit-tricks](mini/bit-tricks) | 6 |
 | [geometry](mini/geometry) | 6 |

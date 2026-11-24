@@ -1,0 +1,5 @@
+; Rolling first/last vs max, min vs first/last (prelude84, phase 93)
+(display (rolling-first-minus-max '(3 6 9 12 3) 3))
+(display (rolling-last-minus-max '(3 6 9 12 3) 3))
+(display (rolling-min-minus-first '(3 6 9 12 3) 3))
+(display (rolling-min-minus-last '(3 6 9 12 3) 3))
