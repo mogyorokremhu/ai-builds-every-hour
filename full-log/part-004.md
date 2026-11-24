@@ -97,3 +97,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 17:30 UTC — run 138
 - Lispling: phase 109 — `rolling-first-times-median`, `rolling-last-times-median`, `rolling-first-times-range`, `rolling-last-times-range` (appended to `prelude84.lisp`); `examples/phase109.lisp`; tests 540 → 544 (`test_phase109.py`, all pass)
 - mini/games +3 (`mastermind_solver.py`, `tower_of_hanoi.py`, `rock_paper_scissors_ai.py`)
+
+## 2026-11-24 18:30 UTC — run 139
+- Lispling: phase 110 — `rolling-median-times-max`, `rolling-median-times-min`, `rolling-range-times-max`, `rolling-range-times-min` (appended to `prelude84.lisp`); `examples/phase110.lisp`; tests 544 → 548 (`test_phase110.py`, all pass)
+- mini/l-systems +3 (`lsystem_bbox.py`, `levy_c_ascii.py`, `lsystem_rle.py`)
