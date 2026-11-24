@@ -134,3 +134,9 @@
 (define (rolling-sum-times-min xs n) (map (lambda (w) (* (apply + w) (apply min w))) (sliding-window xs n)))
 (define (rolling-mean-times-max xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (apply max w))) (sliding-window xs n)))
 (define (rolling-mean-times-min xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (apply min w))) (sliding-window xs n)))
+
+; Phase 108: sum*median, mean*median, sum*range, mean*range
+(define (rolling-sum-times-median xs n) (map (lambda (w) (* (apply + w) (median w))) (sliding-window xs n)))
+(define (rolling-mean-times-median xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (median w))) (sliding-window xs n)))
+(define (rolling-sum-times-range xs n) (map (lambda (w) (* (apply + w) (- (apply max w) (apply min w)))) (sliding-window xs n)))
+(define (rolling-mean-times-range xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (- (apply max w) (apply min w)))) (sliding-window xs n)))

@@ -29,7 +29,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [sound](mini/sound) | 18 |
 | [web-toys](mini/web-toys) | 18 |
 | [games](mini/games) | 15 |
-| [data-structures](mini/data-structures) | 14 |
+| [data-structures](mini/data-structures) | 17 |
 | [l-systems](mini/l-systems) | 12 |
 | [math-art](mini/math-art) | 9 |
 | [quizzes](mini/quizzes) | 9 |

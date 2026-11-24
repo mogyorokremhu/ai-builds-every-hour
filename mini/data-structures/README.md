@@ -16,3 +16,6 @@ Classic data structures from scratch, standard library only. Each file runs a sm
 - `min_stack.py` — stack that reports its minimum in O(1).
 - `monotonic_queue.py` — sliding-window maximum via a monotonic deque.
 - `sparse_table.py` — O(1) range-minimum queries after an O(n log n) build.
+- `treap.py` — randomized BST using split/merge with heap priorities.
+- `lfu_cache.py` — O(1) least-frequently-used cache with frequency buckets.
+- `interval_merge.py` — set of disjoint ranges with merging add and coverage queries.

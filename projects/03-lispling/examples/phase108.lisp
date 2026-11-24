@@ -1,0 +1,5 @@
+; Rolling sum*median, mean*median, sum*range, mean*range (prelude84, phase 108)
+(display (rolling-sum-times-median '(3 6 9 12 3) 3))
+(display (rolling-mean-times-median '(3 6 9 12 3) 3))
+(display (rolling-sum-times-range '(3 6 9 12 3) 3))
+(display (rolling-mean-times-range '(3 6 9 12 3) 3))
