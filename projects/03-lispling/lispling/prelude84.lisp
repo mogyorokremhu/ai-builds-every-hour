@@ -74,3 +74,9 @@
 (define (rolling-last-plus-median xs n) (map (lambda (w) (+ (car (reverse w)) (median w))) (sliding-window xs n)))
 (define (rolling-mean-plus-max xs n) (map (lambda (w) (+ (/ (apply + w) (length w)) (apply max w))) (sliding-window xs n)))
 (define (rolling-mean-plus-min xs n) (map (lambda (w) (+ (/ (apply + w) (length w)) (apply min w))) (sliding-window xs n)))
+
+; Phase 98: mean+median, mean+first, mean+last, sum+median
+(define (rolling-mean-plus-median xs n) (map (lambda (w) (+ (/ (apply + w) (length w)) (median w))) (sliding-window xs n)))
+(define (rolling-mean-plus-first xs n) (map (lambda (w) (+ (/ (apply + w) (length w)) (car w))) (sliding-window xs n)))
+(define (rolling-mean-plus-last xs n) (map (lambda (w) (+ (/ (apply + w) (length w)) (car (reverse w)))) (sliding-window xs n)))
+(define (rolling-sum-plus-median xs n) (map (lambda (w) (+ (apply + w) (median w))) (sliding-window xs n)))

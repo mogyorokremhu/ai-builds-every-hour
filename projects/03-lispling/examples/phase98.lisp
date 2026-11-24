@@ -1,0 +1,5 @@
+; Rolling mean+median, mean+first, mean+last, sum+median (prelude84, phase 98)
+(display (rolling-mean-plus-median '(3 6 9 12 3) 3))
+(display (rolling-mean-plus-first '(3 6 9 12 3) 3))
+(display (rolling-mean-plus-last '(3 6 9 12 3) 3))
+(display (rolling-sum-plus-median '(3 6 9 12 3) 3))
