@@ -123,3 +123,4 @@
 - [x] Phase 101: rolling-median-plus-first/rolling-median-plus-last/rolling-range-plus-first/rolling-range-plus-last in `prelude84.lisp` (test_phase101.py, examples/phase101.lisp)
 - [x] Phase 102: rolling-first-times-last/rolling-max-times-min/rolling-range-minus-mean/rolling-range-minus-median in `prelude84.lisp` (test_phase102.py, examples/phase102.lisp)
 - [x] Phase 103: rolling-sum-times-first/rolling-sum-times-last/rolling-mean-times-first/rolling-mean-times-last in `prelude84.lisp` (test_phase103.py, examples/phase103.lisp)
+- [x] Phase 104: rolling-median-times-first/rolling-median-times-last/rolling-max-times-first/rolling-max-times-last in `prelude84.lisp` (test_phase104.py, examples/phase104.lisp)
