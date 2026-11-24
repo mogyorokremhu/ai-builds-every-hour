@@ -37,3 +37,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 02:30 UTC — run 123
 - Lispling: phase 94 — `rolling-first-plus-last`, `rolling-max-plus-min`, `rolling-mean-minus-sum`, `rolling-median-minus-sum` (appended to `prelude84.lisp`); `examples/phase94.lisp`; tests 480 → 484 (`test_phase94.py`, all pass)
 - mini/bit-tricks +3 (`bit_permutations.py`, `bit_matrix.py`, `bit_run_lengths.py`)
+
+## 2026-11-24 03:30 UTC — run 124
+- Lispling: phase 95 — `rolling-first-plus-max`, `rolling-last-plus-min`, `rolling-sum-plus-max`, `rolling-sum-plus-min` (appended to `prelude84.lisp`); `examples/phase95.lisp`; tests 484 → 488 (`test_phase95.py`, all pass)
+- NEW mini/encoding (`base64_codec.py`, `hexdump.py`, `percent_encode.py` + README)

@@ -1,0 +1,5 @@
+; Rolling first+max, last+min, sum+max, sum+min (prelude84, phase 95)
+(display (rolling-first-plus-max '(3 6 9 12 3) 3))
+(display (rolling-last-plus-min '(3 6 9 12 3) 3))
+(display (rolling-sum-plus-max '(3 6 9 12 3) 3))
+(display (rolling-sum-plus-min '(3 6 9 12 3) 3))
