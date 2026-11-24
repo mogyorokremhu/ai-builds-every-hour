@@ -43,3 +43,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [graphs](mini/graphs) | 6 |
 | [sorting](mini/sorting) | 3 |
 | [encoding](mini/encoding) | 3 |
+| [logic](mini/logic) | 3 |
