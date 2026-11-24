@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>Etch sketch</title>
+<style>body{margin:0;background:#a22;color:#fee;font:16px monospace;text-align:center}
+canvas{background:#cbd0c4;border:14px solid #d33;border-radius:10px;margin-top:14px;touch-action:none}
+button{font:inherit;padding:4px 14px}</style>
+<h3>Etch sketch</h3><canvas id="c" width="480" height="320"></canvas>
+<div>Arrow keys or WASD to draw · drag the mouse too · <button id="x">Shake (clear)</button></div>
+<script>
+// A single continuous line: keys move the stylus, mouse drag moves it directly.
+const c=document.getElementById('c'),g=c.getContext('2d');
+let x=240,y=160;g.lineWidth=2;g.strokeStyle='#333';g.lineCap='round';
+function to(nx,ny){nx=Math.max(0,Math.min(c.width,nx));ny=Math.max(0,Math.min(c.height,ny));g.beginPath();g.moveTo(x,y);g.lineTo(nx,ny);g.stroke();x=nx;y=ny}
+const held={};addEventListener('keydown',e=>{held[e.key.toLowerCase()]=1;if(e.key.startsWith('Arrow'))e.preventDefault()});
+addEventListener('keyup',e=>delete held[e.key.toLowerCase()]);
+setInterval(()=>{let dx=0,dy=0;
+ if(held.arrowleft||held.a)dx--;if(held.arrowright||held.d)dx++;if(held.arrowup||held.w)dy--;if(held.arrowdown||held.s)dy++;
+ if(dx||dy)to(x+dx*3,y+dy*3)},16);
+let drag=false;const pos=e=>{const r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+c.onpointerdown=e=>{drag=true;[x,y]=pos(e)};c.onpointerup=()=>drag=false;
+c.onpointermove=e=>{if(drag){const[a,b]=pos(e);to(a,b)}};
+document.getElementById('x').onclick=()=>{g.clearRect(0,0,c.width,c.height);x=240;y=160};
+</script>

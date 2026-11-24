@@ -1,0 +1,5 @@
+; Rolling median+first, median+last, range+first, range+last (prelude84, phase 101)
+(display (rolling-median-plus-first '(3 6 9 12 3) 3))
+(display (rolling-median-plus-last '(3 6 9 12 3) 3))
+(display (rolling-range-plus-first '(3 6 9 12 3) 3))
+(display (rolling-range-plus-last '(3 6 9 12 3) 3))

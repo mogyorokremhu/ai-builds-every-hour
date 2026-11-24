@@ -1,0 +1,22 @@
+<!doctype html><meta charset="utf-8"><title>Metronome</title>
+<style>body{margin:0;background:#112;color:#cde;font:18px monospace;text-align:center}
+#p{width:12px;height:200px;background:#fc3;margin:30px auto 0;transform-origin:50% 100%;border-radius:6px}
+input{width:260px}button{font:inherit;padding:6px 18px;margin:6px}</style>
+<h3>Metronome</h3><div><b id="b">100</b> BPM · beat <b id="n">-</b></div>
+<div id="p"></div><div><input id="r" type="range" min="40" max="220" value="100"></div>
+<div>Beats per bar <select id="m"><option>2<option>3<option selected>4<option>6</select> <button id="go">Start</button></div>
+<script>
+// Web Audio clicks scheduled slightly ahead; the arm swings once per beat.
+const r=document.getElementById('r'),B=document.getElementById('b'),N=document.getElementById('n'),P=document.getElementById('p'),M=document.getElementById('m'),go=document.getElementById('go');
+let ac,on=false,next=0,beat=0,dir=1;
+r.oninput=()=>B.textContent=r.value;
+function click(t,accent){const o=ac.createOscillator(),v=ac.createGain();o.frequency.value=accent?1400:900;
+ v.gain.setValueAtTime(.5,t);v.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(v).connect(ac.destination);o.start(t);o.stop(t+.06)}
+function tick(){if(!on)return;
+ while(next<ac.currentTime+.15){const bar=+M.value,i=beat%bar;click(next,i===0);
+  const at=next,idx=i+1;setTimeout(()=>{N.textContent=idx;dir=-dir;P.style.transition='transform '+(60/r.value)+'s ease-in-out';P.style.transform='rotate('+dir*30+'deg)'},Math.max(0,(at-ac.currentTime)*1000));
+  next+=60/r.value;beat++}
+ setTimeout(tick,25)}
+go.onclick=()=>{if(on){on=false;go.textContent='Start';return}
+ ac=ac||new AudioContext();on=true;beat=0;next=ac.currentTime+.05;go.textContent='Stop';tick()};
+</script>

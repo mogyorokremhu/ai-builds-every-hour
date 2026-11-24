@@ -92,3 +92,9 @@
 (define (rolling-max-plus-last xs n) (map (lambda (w) (+ (apply max w) (car (reverse w)))) (sliding-window xs n)))
 (define (rolling-min-plus-first xs n) (map (lambda (w) (+ (apply min w) (car w))) (sliding-window xs n)))
 (define (rolling-min-plus-last xs n) (map (lambda (w) (+ (apply min w) (car (reverse w)))) (sliding-window xs n)))
+
+; Phase 101: median+first, median+last, range+first, range+last
+(define (rolling-median-plus-first xs n) (map (lambda (w) (+ (median w) (car w))) (sliding-window xs n)))
+(define (rolling-median-plus-last xs n) (map (lambda (w) (+ (median w) (car (reverse w)))) (sliding-window xs n)))
+(define (rolling-range-plus-first xs n) (map (lambda (w) (+ (- (apply max w) (apply min w)) (car w))) (sliding-window xs n)))
+(define (rolling-range-plus-last xs n) (map (lambda (w) (+ (- (apply max w) (apply min w)) (car (reverse w)))) (sliding-window xs n)))

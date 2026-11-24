@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><title>Simon</title>
+<style>body{margin:0;background:#101018;color:#ddf;font:18px monospace;text-align:center}
+#g{display:grid;grid-template-columns:repeat(2,130px);gap:10px;justify-content:center;margin:20px auto}
+.q{height:130px;border-radius:14px;opacity:.45;cursor:pointer}.q.on{opacity:1;filter:brightness(1.4)}
+button{font:inherit;padding:6px 16px}</style>
+<h3>Simon</h3><div id="m">Press Start</div><div>Round <b id="r">0</b> · Best <b id="b">0</b></div>
+<div id="g"></div><button id="go">Start</button>
+<script>
+// Watch the sequence, repeat it; it grows by one each round.
+const cols=['#e33','#3b3','#36f','#fc2'],freq=[262,330,392,523],g=document.getElementById('g'),msg=document.getElementById('m'),R=document.getElementById('r'),Bb=document.getElementById('b');
+let seq=[],step=0,busy=true,best=0,ac;const q=[];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function beep(i){ac=ac||new AudioContext();const o=ac.createOscillator(),v=ac.createGain();o.frequency.value=freq[i];v.gain.value=.2;o.connect(v).connect(ac.destination);o.start();o.stop(ac.currentTime+.25)}
+async function flash(i){q[i].classList.add('on');beep(i);await sleep(300);q[i].classList.remove('on');await sleep(120)}
+cols.forEach((c,i)=>{const d=document.createElement('div');d.className='q';d.style.background=c;
+ d.onclick=async()=>{if(busy)return;flash(i);
+  if(i!==seq[step]){msg.textContent='Wrong! Game over';busy=true;return}
+  if(++step===seq.length){busy=true;best=Math.max(best,seq.length);Bb.textContent=best;msg.textContent='Nice!';await sleep(700);round()}};
+ g.appendChild(d);q.push(d)});
+async function round(){seq.push(Math.floor(Math.random()*4));R.textContent=seq.length;step=0;busy=true;msg.textContent='Watch...';
+ for(const i of seq)await flash(i);msg.textContent='Your turn';busy=false}
+document.getElementById('go').onclick=()=>{seq=[];round()};
+</script>

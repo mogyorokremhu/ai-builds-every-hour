@@ -17,3 +17,6 @@ Single-file HTML toys: open in a browser, no build step.
 - `lissajous.html` — Lissajous curve with sliders for the two frequencies and phase; colour drifts.
 - `gravity_wells.html` — 400 particles orbit gravity wells you click to add (shift+click removes).
 - `whack_a_mole.html` — 30-second whack-a-mole that speeds up as your score climbs.
+- `etch_sketch.html` — Etch A Sketch: draw one continuous line with arrow keys/WASD or the mouse.
+- `metronome.html` — Web Audio metronome with BPM slider, accented downbeat and a swinging arm.
+- `simon_says.html` — Simon memory game with four coloured pads and tones; sequence grows each round.
