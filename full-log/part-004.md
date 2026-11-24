@@ -57,3 +57,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 07:30 UTC — run 128
 - Lispling: phase 99 — `rolling-sum-plus-first`, `rolling-sum-plus-last`, `rolling-sum-plus-mean`, `rolling-range-plus-mean` (appended to `prelude84.lisp`); `examples/phase99.lisp`; tests 500 → 504 (`test_phase99.py`, all pass)
 - NEW mini/logic +3 (`truth_table.py`, `dpll_sat.py`, `quine_mccluskey.py`) + README
+
+## 2026-11-24 08:30 UTC — run 129
+- Lispling: phase 100 — `rolling-max-plus-first`, `rolling-max-plus-last`, `rolling-min-plus-first`, `rolling-min-plus-last` (appended to `prelude84.lisp`); `examples/phase100.lisp`; tests 504 → 508 (`test_phase100.py`, all pass)
+- mini/sorting +3 (`counting_sort.py`, `radix_sort.py`, `shell_sort.py`)
