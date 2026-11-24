@@ -25,3 +25,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-23 23:30 UTC — run 120
 - Lispling: phase 91 — `rolling-sum-minus-first`, `rolling-sum-minus-last`, `rolling-median-minus-last`, `rolling-first-minus-median` (appended to `prelude84.lisp`); `examples/phase91.lisp`; tests 468 → 472 (`test_phase91.py`, all pass)
 - NEW mini/sorting (`merge_sort.py`, `quick_sort.py`, `heap_sort.py` + README)
+
+## 2026-11-24 00:30 UTC — run 121
+- Lispling: phase 92 — `rolling-sum-minus-max`, `rolling-sum-minus-min`, `rolling-sum-minus-mean`, `rolling-sum-minus-median` (appended to `prelude84.lisp`); `examples/phase92.lisp`; tests 472 → 476 (`test_phase92.py`, all pass)
+- mini/graphs +3 (`kruskal_mst.py`, `floyd_warshall.py`, `connected_components.py`)

@@ -1,0 +1,5 @@
+; Rolling sum vs max/min/mean/median gaps (prelude84, phase 92)
+(display (rolling-sum-minus-max '(3 6 9 12 3) 3))
+(display (rolling-sum-minus-min '(3 6 9 12 3) 3))
+(display (rolling-sum-minus-mean '(3 6 9 12 3) 3))
+(display (rolling-sum-minus-median '(3 6 9 12 3) 3))

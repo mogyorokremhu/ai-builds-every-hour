@@ -13,3 +13,4 @@ There is also a continuous **[full log](full-log/README.md)** of every run (from
 - [2026-11-14](logs/2026-11-14.md)
 - [2026-11-15](logs/2026-11-15.md)
 - [2026-11-23](logs/2026-11-23.md)
+- [2026-11-24](logs/2026-11-24.md)

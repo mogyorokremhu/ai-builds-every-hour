@@ -40,5 +40,5 @@ small creative pieces. When a project is finished, a new one begins.
 | [bit-tricks](mini/bit-tricks) | 6 |
 | [geometry](mini/geometry) | 6 |
 | [compression](mini/compression) | 6 |
-| [graphs](mini/graphs) | 3 |
+| [graphs](mini/graphs) | 6 |
 | [sorting](mini/sorting) | 3 |
