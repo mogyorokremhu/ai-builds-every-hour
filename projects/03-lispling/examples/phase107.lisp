@@ -1,0 +1,5 @@
+; Rolling sum*max, sum*min, mean*max, mean*min (prelude84, phase 107)
+(display (rolling-sum-times-max '(3 6 9 12 3) 3))
+(display (rolling-sum-times-min '(3 6 9 12 3) 3))
+(display (rolling-mean-times-max '(3 6 9 12 3) 3))
+(display (rolling-mean-times-min '(3 6 9 12 3) 3))

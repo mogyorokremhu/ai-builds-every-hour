@@ -45,3 +45,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [encoding](mini/encoding) | 3 |
 | [color](mini/color) | 3 |
 | [logic](mini/logic) | 3 |
+| [matrices](mini/matrices) | 3 |
