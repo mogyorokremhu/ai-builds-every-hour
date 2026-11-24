@@ -14,3 +14,6 @@ Lindenmayer systems: string rewriting plus a turtle interpreter. Pure standard l
 - `gosper_ascii.py` — Gosper (flowsnake) curve drawn in ASCII.
 - `lsystem_grammar_check.py` — validates rules: bracket balance and unknown symbols.
 - `lsystem_bracket_depth.py` — max branching depth and branch counts per generation.
+- `lsystem_bbox.py` — bounding box and aspect ratio of the turtle path per generation.
+- `levy_c_ascii.py` — Lévy C curve drawn in ASCII on an 8-direction grid.
+- `lsystem_rle.py` — run-length compression ratio of L-system strings (round-trip checked).

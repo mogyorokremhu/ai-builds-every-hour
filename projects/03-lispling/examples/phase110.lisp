@@ -1,0 +1,5 @@
+; Rolling median*max, median*min, range*max, range*min (prelude84, phase 110)
+(display (rolling-median-times-max '(3 6 9 12 3) 3))
+(display (rolling-median-times-min '(3 6 9 12 3) 3))
+(display (rolling-range-times-max '(3 6 9 12 3) 3))
+(display (rolling-range-times-min '(3 6 9 12 3) 3))
