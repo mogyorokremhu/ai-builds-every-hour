@@ -1,0 +1,5 @@
+; Rolling first/last/max/min squared (prelude84, phase 113)
+(display (rolling-first-squared '(3 6 9 12 3) 3))
+(display (rolling-last-squared '(3 6 9 12 3) 3))
+(display (rolling-max-squared '(3 6 9 12 3) 3))
+(display (rolling-min-squared '(3 6 9 12 3) 3))

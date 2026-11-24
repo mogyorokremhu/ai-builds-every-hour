@@ -164,3 +164,9 @@
 (define (rolling-max-times-mean xs n) (map (lambda (w) (* (apply max w) (/ (apply + w) (length w)))) (sliding-window xs n)))
 (define (rolling-min-times-mean xs n) (map (lambda (w) (* (apply min w) (/ (apply + w) (length w)))) (sliding-window xs n)))
 (define (rolling-mean-times-mean xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (/ (apply + w) (length w)))) (sliding-window xs n)))
+
+; Phase 113: first*first, last*last, max*max, min*min
+(define (rolling-first-squared xs n) (map (lambda (w) (* (car w) (car w))) (sliding-window xs n)))
+(define (rolling-last-squared xs n) (map (lambda (w) (* (car (reverse w)) (car (reverse w)))) (sliding-window xs n)))
+(define (rolling-max-squared xs n) (map (lambda (w) (* (apply max w) (apply max w))) (sliding-window xs n)))
+(define (rolling-min-squared xs n) (map (lambda (w) (* (apply min w) (apply min w))) (sliding-window xs n)))
