@@ -1,0 +1,5 @@
+; Rolling min*first, min*last, range*first, range*last (prelude84, phase 105)
+(display (rolling-min-times-first '(3 6 9 12 3) 3))
+(display (rolling-min-times-last '(3 6 9 12 3) 3))
+(display (rolling-range-times-first '(3 6 9 12 3) 3))
+(display (rolling-range-times-last '(3 6 9 12 3) 3))
