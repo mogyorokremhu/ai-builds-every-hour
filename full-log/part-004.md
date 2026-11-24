@@ -53,3 +53,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 06:30 UTC — run 127
 - Lispling: phase 98 — `rolling-mean-plus-median`, `rolling-mean-plus-first`, `rolling-mean-plus-last`, `rolling-sum-plus-median` (appended to `prelude84.lisp`); `examples/phase98.lisp`; tests 496 → 500 (`test_phase98.py`, all pass)
 - mini/tools +3 (`num2words.py`, `tsv2json.py`, `headtail.py`)
+
+## 2026-11-24 07:30 UTC — run 128
+- Lispling: phase 99 — `rolling-sum-plus-first`, `rolling-sum-plus-last`, `rolling-sum-plus-mean`, `rolling-range-plus-mean` (appended to `prelude84.lisp`); `examples/phase99.lisp`; tests 500 → 504 (`test_phase99.py`, all pass)
+- NEW mini/logic +3 (`truth_table.py`, `dpll_sat.py`, `quine_mccluskey.py`) + README
