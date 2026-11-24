@@ -1,0 +1,5 @@
+; Rolling sum*mean, first*mean, last*mean, median*mean (prelude84, phase 111)
+(display (rolling-sum-times-mean '(3 6 9 12 3) 3))
+(display (rolling-first-times-mean '(3 6 9 12 3) 3))
+(display (rolling-last-times-mean '(3 6 9 12 3) 3))
+(display (rolling-median-times-mean '(3 6 9 12 3) 3))
