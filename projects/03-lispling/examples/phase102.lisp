@@ -1,0 +1,5 @@
+; Rolling first*last, max*min, range-mean, range-median (prelude84, phase 102)
+(display (rolling-first-times-last '(3 6 9 12 3) 3))
+(display (rolling-max-times-min '(3 6 9 12 3) 3))
+(display (rolling-range-minus-mean '(3 6 9 12 3) 3))
+(display (rolling-range-minus-median '(3 6 9 12 3) 3))

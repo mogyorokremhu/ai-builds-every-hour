@@ -20,3 +20,6 @@ Tiny text-mode automata, each self-contained.
 - `fredkin.py` — Fredkin replicator (B1357/S02468): odd-neighbour rule that copies patterns.
 - `rule30_random.py` — Rule 30 centre column as a random bit/byte stream with run statistics.
 - `totalistic.py` — 3-colour 1D totalistic automaton (`python totalistic.py 777`).
+- `maze_ca.py` — Maze rule (B3/S12345): noise grows into corridors.
+- `diamoeba.py` — Diamoeba (B35678/S5678): blobby amoeba growth from a seed patch.
+- `rule184_traffic.py` — Rule 184 traffic model with per-step flow stat (`python rule184_traffic.py 0.6`).
