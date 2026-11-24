@@ -45,3 +45,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 04:30 UTC — run 125
 - Lispling: phase 96 — `rolling-first-plus-min`, `rolling-last-plus-max`, `rolling-median-plus-max`, `rolling-median-plus-min` (appended to `prelude84.lisp`); `examples/phase96.lisp`; tests 488 → 492 (`test_phase96.py`, all pass)
 - mini/drawings +3 (`ascii_koch_snowflake.py`, `ascii_hilbert_curve.py`, `ascii_bezier_curves.py`)
+
+## 2026-11-24 05:30 UTC — run 126
+- Lispling: phase 97 — `rolling-first-plus-median`, `rolling-last-plus-median`, `rolling-mean-plus-max`, `rolling-mean-plus-min` (appended to `prelude84.lisp`); `examples/phase97.lisp`; tests 492 → 496 (`test_phase97.py`, all pass)
+- mini/puzzles +3 (`ugly_numbers.py`, `staircase_ways.py`, `max_subarray.py`)

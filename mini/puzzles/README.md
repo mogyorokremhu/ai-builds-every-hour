@@ -56,3 +56,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `stable_marriage.py` | Gale-Shapley stable matching with a blocking-pair verifier |
 | `egg_drop.py` | Egg drop puzzle: fewest worst-case drops, checked against a DP |
 | `inversions.py` | Inversion counting via merge sort, verified by brute force |
+| `ugly_numbers.py` | Ugly numbers via three merge pointers, verified by brute force |
+| `staircase_ways.py` | Staircase climbing with 1..k steps: DP count vs enumeration |
+| `max_subarray.py` | Kadane's maximum subarray with indices, checked against brute force |
