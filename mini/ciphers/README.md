@@ -20,3 +20,6 @@ Classic ciphers, each a runnable stdlib-only script.
 - `rot_n.py` — ROT-N with any shift; `-b` brute-forces all 26 (`-d` decrypts).
 - `keyword_cipher.py` — keyword-mixed substitution alphabet (`-d` decrypts).
 - `frequency_attack.py` — breaks Caesar by chi-squared letter-frequency scoring.
+- `porta.py` — Porta cipher, reciprocal with 13 alphabets (same command encrypts and decrypts).
+- `running_key.py` — running-key cipher using a long text as the key (`-d` decrypts).
+- `railroad_check.py` — index of coincidence and key-length guesser for Vigenère ciphertext.
