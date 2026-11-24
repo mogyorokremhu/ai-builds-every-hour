@@ -1,0 +1,5 @@
+; Rolling sum+first, sum+last, sum+mean, range+mean (prelude84, phase 99)
+(display (rolling-sum-plus-first '(3 6 9 12 3) 3))
+(display (rolling-sum-plus-last '(3 6 9 12 3) 3))
+(display (rolling-sum-plus-mean '(3 6 9 12 3) 3))
+(display (rolling-range-plus-mean '(3 6 9 12 3) 3))
