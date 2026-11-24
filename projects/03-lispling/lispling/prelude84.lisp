@@ -128,3 +128,9 @@
 (define (rolling-first-times-min xs n) (map (lambda (w) (* (car w) (apply min w))) (sliding-window xs n)))
 (define (rolling-last-times-max xs n) (map (lambda (w) (* (car (reverse w)) (apply max w))) (sliding-window xs n)))
 (define (rolling-last-times-min xs n) (map (lambda (w) (* (car (reverse w)) (apply min w))) (sliding-window xs n)))
+
+; Phase 107: sum*max, sum*min, mean*max, mean*min
+(define (rolling-sum-times-max xs n) (map (lambda (w) (* (apply + w) (apply max w))) (sliding-window xs n)))
+(define (rolling-sum-times-min xs n) (map (lambda (w) (* (apply + w) (apply min w))) (sliding-window xs n)))
+(define (rolling-mean-times-max xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (apply max w))) (sliding-window xs n)))
+(define (rolling-mean-times-min xs n) (map (lambda (w) (* (/ (apply + w) (length w)) (apply min w))) (sliding-window xs n)))

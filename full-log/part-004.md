@@ -85,3 +85,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 14:30 UTC — run 135
 - Lispling: phase 106 — `rolling-first-times-max`, `rolling-first-times-min`, `rolling-last-times-max`, `rolling-last-times-min` (appended to `prelude84.lisp`); `examples/phase106.lisp`; tests 528 → 532 (`test_phase106.py`, all pass)
 - mini/fractals +3 (`cantor_dust.py`, `menger_slice.py`, `barnsley_fern.py`)
+
+## 2026-11-24 15:30 UTC — run 136
+- Lispling: phase 107 — `rolling-sum-times-max`, `rolling-sum-times-min`, `rolling-mean-times-max`, `rolling-mean-times-min` (appended to `prelude84.lisp`); `examples/phase107.lisp`; tests 532 → 536 (`test_phase107.py`, all pass)
+- NEW mini/matrices (`determinant.py`, `inverse.py`, `matrix_power.py` + README)
