@@ -146,3 +146,9 @@
 (define (rolling-last-times-median xs n) (map (lambda (w) (* (car (reverse w)) (median w))) (sliding-window xs n)))
 (define (rolling-first-times-range xs n) (map (lambda (w) (* (car w) (- (apply max w) (apply min w)))) (sliding-window xs n)))
 (define (rolling-last-times-range xs n) (map (lambda (w) (* (car (reverse w)) (- (apply max w) (apply min w)))) (sliding-window xs n)))
+
+; Phase 110: median*max, median*min, range*max, range*min
+(define (rolling-median-times-max xs n) (map (lambda (w) (* (median w) (apply max w))) (sliding-window xs n)))
+(define (rolling-median-times-min xs n) (map (lambda (w) (* (median w) (apply min w))) (sliding-window xs n)))
+(define (rolling-range-times-max xs n) (map (lambda (w) (* (- (apply max w) (apply min w)) (apply max w))) (sliding-window xs n)))
+(define (rolling-range-times-min xs n) (map (lambda (w) (* (- (apply max w) (apply min w)) (apply min w))) (sliding-window xs n)))
