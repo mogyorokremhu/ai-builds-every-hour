@@ -69,3 +69,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 10:30 UTC — run 131
 - Lispling: phase 102 — `rolling-first-times-last`, `rolling-max-times-min`, `rolling-range-minus-mean`, `rolling-range-minus-median` (appended to `prelude84.lisp`); `examples/phase102.lisp`; tests 512 → 516 (`test_phase102.py`, all pass)
 - mini/cellular-automata +3 (`maze_ca.py`, `diamoeba.py`, `rule184_traffic.py`)
+
+## 2026-11-24 11:30 UTC — run 132
+- Lispling: phase 103 — `rolling-sum-times-first`, `rolling-sum-times-last`, `rolling-mean-times-first`, `rolling-mean-times-last` (appended to `prelude84.lisp`); `examples/phase103.lisp`; tests 516 → 520 (`test_phase103.py`, all pass)
+- NEW mini/color (`hex_rgb_hsl.py`, `palette_harmony.py`, `gradient_ascii.py` + README)
