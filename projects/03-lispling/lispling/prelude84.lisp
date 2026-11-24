@@ -86,3 +86,9 @@
 (define (rolling-sum-plus-last xs n) (map (lambda (w) (+ (apply + w) (car (reverse w)))) (sliding-window xs n)))
 (define (rolling-sum-plus-mean xs n) (map (lambda (w) (+ (apply + w) (/ (apply + w) (length w)))) (sliding-window xs n)))
 (define (rolling-range-plus-mean xs n) (map (lambda (w) (+ (- (apply max w) (apply min w)) (/ (apply + w) (length w)))) (sliding-window xs n)))
+
+; Phase 100: max+first, max+last, min+first, min+last
+(define (rolling-max-plus-first xs n) (map (lambda (w) (+ (apply max w) (car w))) (sliding-window xs n)))
+(define (rolling-max-plus-last xs n) (map (lambda (w) (+ (apply max w) (car (reverse w)))) (sliding-window xs n)))
+(define (rolling-min-plus-first xs n) (map (lambda (w) (+ (apply min w) (car w))) (sliding-window xs n)))
+(define (rolling-min-plus-last xs n) (map (lambda (w) (+ (apply min w) (car (reverse w)))) (sliding-window xs n)))

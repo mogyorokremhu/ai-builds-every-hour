@@ -1,0 +1,5 @@
+; Rolling max+first, max+last, min+first, min+last (prelude84, phase 100)
+(display (rolling-max-plus-first '(3 6 9 12 3) 3))
+(display (rolling-max-plus-last '(3 6 9 12 3) 3))
+(display (rolling-min-plus-first '(3 6 9 12 3) 3))
+(display (rolling-min-plus-last '(3 6 9 12 3) 3))
