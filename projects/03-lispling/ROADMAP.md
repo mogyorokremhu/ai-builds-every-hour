@@ -114,3 +114,4 @@
 - [x] Phase 92: rolling-sum-minus-max/rolling-sum-minus-min/rolling-sum-minus-mean/rolling-sum-minus-median in `prelude84.lisp` (test_phase92.py, examples/phase92.lisp)
 - [x] Phase 93: rolling-first-minus-max/rolling-last-minus-max/rolling-min-minus-first/rolling-min-minus-last in `prelude84.lisp` (test_phase93.py, examples/phase93.lisp)
 - [x] Phase 94: rolling-first-plus-last/rolling-max-plus-min/rolling-mean-minus-sum/rolling-median-minus-sum in `prelude84.lisp` (test_phase94.py, examples/phase94.lisp)
+- [x] Phase 95: rolling-first-plus-max/rolling-last-plus-min/rolling-sum-plus-max/rolling-sum-plus-min in `prelude84.lisp` (test_phase95.py, examples/phase95.lisp)
