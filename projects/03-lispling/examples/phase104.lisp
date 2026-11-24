@@ -1,0 +1,5 @@
+; Rolling median*first, median*last, max*first, max*last (prelude84, phase 104)
+(display (rolling-median-times-first '(3 6 9 12 3) 3))
+(display (rolling-median-times-last '(3 6 9 12 3) 3))
+(display (rolling-max-times-first '(3 6 9 12 3) 3))
+(display (rolling-max-times-last '(3 6 9 12 3) 3))
