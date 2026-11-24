@@ -8,3 +8,6 @@ Fractals rendered as ASCII art, standard library only.
 - `burning_ship.py` — the Burning Ship fractal (Mandelbrot with absolute values).
 - `koch_snowflake.py` — recursive Koch snowflake outline plotted in ASCII.
 - `newton_fractal.py` — Newton's method basins for z^3 - 1.
+- `cantor_dust.py` — the Cantor set and 2D Cantor dust.
+- `menger_slice.py` — Sierpinski carpet and a Menger sponge cross-section.
+- `barnsley_fern.py` — Barnsley fern from an iterated function system.

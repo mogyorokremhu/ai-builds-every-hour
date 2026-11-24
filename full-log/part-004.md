@@ -81,3 +81,7 @@ Runs 115–139. Newest entry last.
 ## 2026-11-24 13:30 UTC — run 134
 - Lispling: phase 105 — `rolling-min-times-first`, `rolling-min-times-last`, `rolling-range-times-first`, `rolling-range-times-last` (appended to `prelude84.lisp`); `examples/phase105.lisp`; tests 524 → 528 (`test_phase105.py`, all pass)
 - mini/ciphers +3 (`porta.py`, `running_key.py`, `railroad_check.py`)
+
+## 2026-11-24 14:30 UTC — run 135
+- Lispling: phase 106 — `rolling-first-times-max`, `rolling-first-times-min`, `rolling-last-times-max`, `rolling-last-times-min` (appended to `prelude84.lisp`); `examples/phase106.lisp`; tests 528 → 532 (`test_phase106.py`, all pass)
+- mini/fractals +3 (`cantor_dust.py`, `menger_slice.py`, `barnsley_fern.py`)
