@@ -1,0 +1,5 @@
+; Rolling first*median, last*median, first*range, last*range (prelude84, phase 109)
+(display (rolling-first-times-median '(3 6 9 12 3) 3))
+(display (rolling-last-times-median '(3 6 9 12 3) 3))
+(display (rolling-first-times-range '(3 6 9 12 3) 3))
+(display (rolling-last-times-range '(3 6 9 12 3) 3))

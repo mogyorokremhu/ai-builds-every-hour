@@ -17,3 +17,6 @@ Tiny terminal games, standard library only. Each supports `--auto` so it can run
 - `dice_poker.py` — five-dice poker with one reroll; `--auto` simulates 1000 rounds.
 - `word_ladder.py` — word ladder solved by BFS over a built-in word list.
 - `battleship_auto.py` — 8x8 Battleship with a hunt/target AI; prints board and average shots.
+- `mastermind_solver.py` — Mastermind minimax solver; prints each guess and feedback.
+- `tower_of_hanoi.py` — Tower of Hanoi solved with ASCII pegs drawn after every move.
+- `rock_paper_scissors_ai.py` — RPS against a Markov predictor; `--auto` simulates 300 rounds.
