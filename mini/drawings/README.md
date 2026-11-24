@@ -53,3 +53,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_lissajous_curve.py` | Single phase-shifted Lissajous curve on a grid |
 | `ascii_checker_circle.py` | Checkerboard-filled ASCII circle |
 | `ascii_wave_interference.py` | Two-source wave interference shading |
+| `ascii_koch_snowflake.py` | Koch snowflake with Bresenham lines |
+| `ascii_hilbert_curve.py` | Hilbert space-filling curve path |
+| `ascii_bezier_curves.py` | Quadratic Bezier curves with control polygons |

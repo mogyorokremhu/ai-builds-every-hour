@@ -1,0 +1,5 @@
+; Rolling first+min, last+max, median+max, median+min (prelude84, phase 96)
+(display (rolling-first-plus-min '(3 6 9 12 3) 3))
+(display (rolling-last-plus-max '(3 6 9 12 3) 3))
+(display (rolling-median-plus-max '(3 6 9 12 3) 3))
+(display (rolling-median-plus-min '(3 6 9 12 3) 3))
