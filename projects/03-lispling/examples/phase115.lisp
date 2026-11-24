@@ -1,0 +1,5 @@
+; Rolling mean/last/max/min cubed (prelude84, phase 115)
+(display (rolling-mean-cubed '(3 6 9 12 3) 3))
+(display (rolling-last-cubed '(3 6 9 12 3) 3))
+(display (rolling-max-cubed '(3 6 9 12 3) 3))
+(display (rolling-min-cubed '(3 6 9 12 3) 3))

@@ -17,3 +17,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-24 22:30 UTC — run 143
 - Lispling: phase 114 — `rolling-sum-squared`, `rolling-median-squared`, `rolling-range-squared`, `rolling-first-cubed` (appended to `prelude84.lisp`); `examples/phase114.lisp`; tests 560 → 564 (`test_phase114.py`, all pass)
 - mini/sorting +3 (`insertion_sort.py`, `cocktail_sort.py`, `bucket_sort.py`)
+
+## 2026-11-24 23:30 UTC — run 144
+- Lispling: phase 115 — `rolling-mean-cubed`, `rolling-last-cubed`, `rolling-max-cubed`, `rolling-min-cubed` (appended to `prelude84.lisp`); `examples/phase115.lisp`; tests 564 → 568 (`test_phase115.py`, all pass)
+- NEW mini/calendar (`day_of_week.py`, `easter.py`, `calendar_print.py` + README)
