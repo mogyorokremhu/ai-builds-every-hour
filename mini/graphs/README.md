@@ -8,3 +8,6 @@ Classic graph algorithms, each self-contained and runnable.
 - `kruskal_mst.py` — Kruskal's minimum spanning tree with union-find.
 - `floyd_warshall.py` — all-pairs shortest paths with path reconstruction.
 - `connected_components.py` — connected components via iterative DFS, plus bridge detection.
+- `prim_mst.py` — Prim's minimum spanning tree with a heap.
+- `bellman_ford.py` — Bellman-Ford with negative edges and negative-cycle detection.
+- `bipartite.py` — bipartite check via BFS 2-colouring with a conflicting-edge witness.

@@ -1,0 +1,7 @@
+; List helpers (phase 134)
+(display (list-interleave '(1 2 3) '(a b c d e)))
+(display (list-chunk '(1 2 3 4 5 6 7) 3))
+(display (list-windows '(1 2 3 4) 2))
+(display (list-split-at '(1 2 3 4 5) 2))
+(display (list-cartesian '(1 2) '(a b)))
+(display (list-transpose '((1 2 3) (4 5 6))))
