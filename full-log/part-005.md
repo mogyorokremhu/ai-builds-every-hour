@@ -53,3 +53,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 07:30 UTC — run 152
 - Lispling: phase 123 — `rolling-mean-seventh`, `rolling-sum-seventh`, `rolling-median-seventh`, `rolling-range-seventh` (appended to `prelude84.lisp`); `examples/phase123.lisp`; tests 596 → 600 (`test_phase123.py`, all pass)
 - NEW mini/sequences (3 files + README): `collatz.py`, `look_and_say.py`, `recaman.py`
+
+## 2026-11-25 08:30 UTC — run 153
+- Lispling: phases 124–125 — rolling first/last/max/min and mean/sum/median/range to the eighth power (appended to `prelude84.lisp`); `examples/phase124.lisp`, `phase125.lisp`; tests 600 → 608 (`test_phase124.py`, `test_phase125.py`, all pass)
+- mini/sound +3 (`reverse_reverb.py`, `ring_mod.py`, `shepard_tone.py`)
