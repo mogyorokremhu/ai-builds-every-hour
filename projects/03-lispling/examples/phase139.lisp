@@ -1,0 +1,6 @@
+; List helpers (phase 139)
+(display (list-take-while even? '(2 4 5 6)))
+(display (list-drop-while even? '(2 4 5 6)))
+(display (list-frequencies '(a b a c a b)))
+(display (list-mode '(1 2 2 3 3 3)))
+(display (list-find-index even? '(1 3 4 5)))

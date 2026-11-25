@@ -11,3 +11,6 @@ Bit manipulation toys, standard library only.
 - `bit_permutations.py` — next same-popcount permutation and submask enumeration.
 - `bit_matrix.py` — 8x8 bit matrix in one 64-bit int: transpose and rotate.
 - `bit_run_lengths.py` — longest run of ones, run count, leading/trailing zeros.
+- `bit_interleave.py` — Morton/Z-order codes: spread, compact, encode, decode.
+- `bit_set_ops.py` — sets as bitmasks, submask enumeration, subset-sum DP in one int.
+- `bit_swar_bytes.py` — SWAR zero-byte detection, broadcast and lane-safe byte addition.
