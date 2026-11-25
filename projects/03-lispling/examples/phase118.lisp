@@ -1,0 +1,5 @@
+; Rolling mean/sum/median/range to the fourth power (prelude84, phase 118)
+(display (rolling-mean-fourth '(3 6 9 12 3) 3))
+(display (rolling-sum-fourth '(3 6 9 12 3) 3))
+(display (rolling-median-fourth '(3 6 9 12 3) 3))
+(display (rolling-range-fourth '(3 6 9 12 3) 3))

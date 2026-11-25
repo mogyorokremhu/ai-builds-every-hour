@@ -194,3 +194,9 @@
 (define (rolling-last-fourth xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v))) (sliding-window xs n)))
 (define (rolling-max-fourth xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v))) (sliding-window xs n)))
 (define (rolling-min-fourth xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v))) (sliding-window xs n)))
+
+; Phase 118: mean^4, sum^4, median^4, range^4
+(define (rolling-mean-fourth xs n) (map (lambda (w) (let ((v (/ (apply + w) (length w)))) (* v v v v))) (sliding-window xs n)))
+(define (rolling-sum-fourth xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v))) (sliding-window xs n)))
+(define (rolling-median-fourth xs n) (map (lambda (w) (let ((v (median w))) (* v v v v))) (sliding-window xs n)))
+(define (rolling-range-fourth xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v))) (sliding-window xs n)))

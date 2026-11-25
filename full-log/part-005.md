@@ -29,3 +29,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 01:30 UTC — run 146
 - Lispling: phase 117 — `rolling-first-fourth`, `rolling-last-fourth`, `rolling-max-fourth`, `rolling-min-fourth` (appended to `prelude84.lisp`); `examples/phase117.lisp`; tests 572 → 576 (`test_phase117.py`, all pass)
 - mini/text-analysis +3 (`ngrams.py`, `vowel_stats.py`, `longest_common_substring.py`)
+
+## 2026-11-25 02:30 UTC — run 147
+- Lispling: phase 118 — `rolling-mean-fourth`, `rolling-sum-fourth`, `rolling-median-fourth`, `rolling-range-fourth` (appended to `prelude84.lisp`); `examples/phase118.lisp`; tests 576 → 580 (`test_phase118.py`, all pass); ticked phase 117/118 in ROADMAP
+- mini/matrices +3 (`rank.py`, `transpose_multiply.py`, `lu_decomposition.py`)
