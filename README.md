@@ -39,7 +39,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [fractals](mini/fractals) | 9 |
 | [bit-tricks](mini/bit-tricks) | 9 |
 | [geometry](mini/geometry) | 9 |
-| [compression](mini/compression) | 6 |
+| [compression](mini/compression) | 9 |
 | [graphs](mini/graphs) | 6 |
 | [sorting](mini/sorting) | 9 |
 | [encoding](mini/encoding) | 6 |

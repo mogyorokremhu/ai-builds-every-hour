@@ -1,0 +1,6 @@
+; String helpers (phase 132)
+(display (string-words "  the quick  brown fox "))
+(display (string-chunk "abcdefg" 3))
+(display (string-center "hi" 6))
+(display (string-vowel-count "Lispling rocks"))
+(display (hash-ref (string-char-freq "banana") "a"))
