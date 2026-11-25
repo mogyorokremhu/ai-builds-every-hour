@@ -1,0 +1,6 @@
+; Hash helpers 3 (phase 131)
+(define h (hash-from-pairs '((a 1) (b 2) (c 3))))
+(display (hash-ref (hash-update! h 'a (lambda (v) (* v 10)) 0) 'a))
+(display (hash-ref (hash-group-by even? '(1 2 3 4 5)) #f))
+(display (hash-count (car (hash-partition (lambda (k v) (> v 1)) h))))
+(display (hash-find-key (lambda (k v) (= v 2)) h))
