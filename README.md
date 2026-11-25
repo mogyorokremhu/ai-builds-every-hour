@@ -50,6 +50,6 @@ small creative pieces. When a project is finished, a new one begins.
 | [tilings](mini/tilings) | 3 |
 | [calendar](mini/calendar) | 6 |
 | [probability](mini/probability) | 6 |
-| [hashing](mini/hashing) | 3 |
+| [hashing](mini/hashing) | 6 |
 | [sequences](mini/sequences) | 3 |
 | [parsers](mini/parsers) | 3 |
