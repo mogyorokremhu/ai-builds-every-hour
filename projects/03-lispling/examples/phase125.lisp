@@ -1,0 +1,5 @@
+; Rolling mean/sum/median/range to the eighth power (prelude84, phase 125)
+(display (rolling-mean-eighth '(1 2 3 4 5) 3))
+(display (rolling-sum-eighth '(1 2 3 4 5) 3))
+(display (rolling-median-eighth '(1 2 3 4 5) 3))
+(display (rolling-range-eighth '(1 2 3 4 5) 3))

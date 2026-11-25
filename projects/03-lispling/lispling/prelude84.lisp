@@ -229,3 +229,15 @@
 (define (rolling-sum-seventh xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v v v v))) (sliding-window xs n)))
 (define (rolling-median-seventh xs n) (map (lambda (w) (let ((v (median w))) (* v v v v v v v))) (sliding-window xs n)))
 (define (rolling-range-seventh xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v v v v))) (sliding-window xs n)))
+
+; Phase 124: first^8, last^8, max^8, min^8
+(define (rolling-first-eighth xs n) (map (lambda (w) (let ((v (car w))) (* v v v v v v v v))) (sliding-window xs n)))
+(define (rolling-last-eighth xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v v v v v))) (sliding-window xs n)))
+(define (rolling-max-eighth xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v v v v v))) (sliding-window xs n)))
+(define (rolling-min-eighth xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v v v v v))) (sliding-window xs n)))
+
+; Phase 125: mean^8, sum^8, median^8, range^8
+(define (rolling-mean-eighth xs n) (map (lambda (w) (let ((v (/ (apply + w) (length w)))) (* v v v v v v v v))) (sliding-window xs n)))
+(define (rolling-sum-eighth xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v v v v v))) (sliding-window xs n)))
+(define (rolling-median-eighth xs n) (map (lambda (w) (let ((v (median w))) (* v v v v v v v v))) (sliding-window xs n)))
+(define (rolling-range-eighth xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v v v v v))) (sliding-window xs n)))

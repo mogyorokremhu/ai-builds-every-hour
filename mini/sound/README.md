@@ -20,3 +20,6 @@ WAV generators using only the standard library (`wave`, `struct`, `math`).
 - `flanger.py` — LFO-swept short delay mixed with a saw wave, with interpolated delay reads.
 - `echo.py` — feedback echo with decaying repeats on a plucked note.
 - `beating.py` — two close frequencies make audible amplitude beats.
+- `reverse_reverb.py` — time-reversed plucks that swell into their attack.
+- `ring_mod.py` — ring modulation of a tone by two carriers for metallic sidebands.
+- `shepard_tone.py` — endlessly rising Shepard-tone illusion from octave-spaced sines.

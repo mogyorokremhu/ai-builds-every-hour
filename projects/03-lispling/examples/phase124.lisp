@@ -1,0 +1,5 @@
+; Rolling first/last/max/min to the eighth power (prelude84, phase 124)
+(display (rolling-first-eighth '(1 2 3 4 5) 3))
+(display (rolling-last-eighth '(1 2 3 4 5) 3))
+(display (rolling-max-eighth '(1 2 3 4 5) 3))
+(display (rolling-min-eighth '(1 2 3 4 5) 3))
