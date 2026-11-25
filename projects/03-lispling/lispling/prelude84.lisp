@@ -223,3 +223,9 @@
 (define (rolling-last-seventh xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v v v v))) (sliding-window xs n)))
 (define (rolling-max-seventh xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v v v v))) (sliding-window xs n)))
 (define (rolling-min-seventh xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v v v v))) (sliding-window xs n)))
+
+; Phase 123: mean^7, sum^7, median^7, range^7
+(define (rolling-mean-seventh xs n) (map (lambda (w) (let ((v (/ (apply + w) (length w)))) (* v v v v v v v))) (sliding-window xs n)))
+(define (rolling-sum-seventh xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v v v v))) (sliding-window xs n)))
+(define (rolling-median-seventh xs n) (map (lambda (w) (let ((v (median w))) (* v v v v v v v))) (sliding-window xs n)))
+(define (rolling-range-seventh xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v v v v))) (sliding-window xs n)))
