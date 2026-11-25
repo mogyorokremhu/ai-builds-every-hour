@@ -147,3 +147,4 @@
 - [x] Phase 125: rolling-mean-eighth/rolling-sum-eighth/rolling-median-eighth/rolling-range-eighth in `prelude84.lisp` (test_phase125.py, examples/phase125.lisp)
 - [x] Phase 126: rolling-first-ninth/rolling-last-ninth/rolling-max-ninth/rolling-min-ninth in `prelude84.lisp` (test_phase126.py, examples/phase126.lisp)
 - [x] Phase 127: rolling-mean-ninth/rolling-sum-ninth/rolling-median-ninth/rolling-range-ninth in `prelude84.lisp` (test_phase127.py, examples/phase127.lisp)
+- [x] Phase 128: generic rolling-first/last/max/min/mean/sum/median/range-pow with exponent arg in `prelude84.lisp` (test_phase128.py, examples/phase128.lisp)

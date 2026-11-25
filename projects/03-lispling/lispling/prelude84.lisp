@@ -253,3 +253,13 @@
 (define (rolling-sum-ninth xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v v v v v v))) (sliding-window xs n)))
 (define (rolling-median-ninth xs n) (map (lambda (w) (let ((v (median w))) (* v v v v v v v v v))) (sliding-window xs n)))
 (define (rolling-range-ninth xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v v v v v v))) (sliding-window xs n)))
+
+; Phase 128: generic rolling-<agg>-pow with a caller-supplied exponent k
+(define (rolling-first-pow xs n k) (map (lambda (w) (expt (car w) k)) (sliding-window xs n)))
+(define (rolling-last-pow xs n k) (map (lambda (w) (expt (car (reverse w)) k)) (sliding-window xs n)))
+(define (rolling-max-pow xs n k) (map (lambda (w) (expt (apply max w) k)) (sliding-window xs n)))
+(define (rolling-min-pow xs n k) (map (lambda (w) (expt (apply min w) k)) (sliding-window xs n)))
+(define (rolling-mean-pow xs n k) (map (lambda (w) (expt (/ (apply + w) (length w)) k)) (sliding-window xs n)))
+(define (rolling-sum-pow xs n k) (map (lambda (w) (expt (apply + w) k)) (sliding-window xs n)))
+(define (rolling-median-pow xs n k) (map (lambda (w) (expt (median w) k)) (sliding-window xs n)))
+(define (rolling-range-pow xs n k) (map (lambda (w) (expt (- (apply max w) (apply min w)) k)) (sliding-window xs n)))

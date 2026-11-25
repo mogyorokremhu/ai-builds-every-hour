@@ -11,3 +11,6 @@ Pictures from maths. Pure standard library, each file runnable on its own.
 - `dragon_curve_ascii.py` — Heighway dragon curve from its paper-folding turn sequence.
 - `barnsley_fern_ascii.py` — Barnsley fern via the chaos game, density plotted as characters.
 - `hilbert_curve_ascii.py` — Hilbert space-filling curve drawn with box characters.
+- `koch_snowflake_ascii.py` — Koch snowflake by recursive edge subdivision.
+- `lorenz_attractor_ascii.py` — Lorenz attractor (RK4) density plot of the x-z projection.
+- `golden_spiral_ascii.py` — golden spiral from quarter-circle arcs through Fibonacci squares.
