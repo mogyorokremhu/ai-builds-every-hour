@@ -200,3 +200,9 @@
 (define (rolling-sum-fourth xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v))) (sliding-window xs n)))
 (define (rolling-median-fourth xs n) (map (lambda (w) (let ((v (median w))) (* v v v v))) (sliding-window xs n)))
 (define (rolling-range-fourth xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v))) (sliding-window xs n)))
+
+; Phase 119: first^5, last^5, max^5, min^5
+(define (rolling-first-fifth xs n) (map (lambda (w) (let ((v (car w))) (* v v v v v))) (sliding-window xs n)))
+(define (rolling-last-fifth xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v v))) (sliding-window xs n)))
+(define (rolling-max-fifth xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v v))) (sliding-window xs n)))
+(define (rolling-min-fifth xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v v))) (sliding-window xs n)))
