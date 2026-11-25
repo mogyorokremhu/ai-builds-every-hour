@@ -48,3 +48,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [matrices](mini/matrices) | 6 |
 | [text-analysis](mini/text-analysis) | 6 |
 | [calendar](mini/calendar) | 3 |
+| [probability](mini/probability) | 3 |

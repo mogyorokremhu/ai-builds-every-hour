@@ -33,3 +33,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 02:30 UTC — run 147
 - Lispling: phase 118 — `rolling-mean-fourth`, `rolling-sum-fourth`, `rolling-median-fourth`, `rolling-range-fourth` (appended to `prelude84.lisp`); `examples/phase118.lisp`; tests 576 → 580 (`test_phase118.py`, all pass); ticked phase 117/118 in ROADMAP
 - mini/matrices +3 (`rank.py`, `transpose_multiply.py`, `lu_decomposition.py`)
+
+## 2026-11-25 03:30 UTC — run 148
+- Lispling: phase 119 — `rolling-first-fifth`, `rolling-last-fifth`, `rolling-max-fifth`, `rolling-min-fifth` (appended to `prelude84.lisp`); `examples/phase119.lisp`; tests 580 → 584 (`test_phase119.py`, all pass)
+- NEW mini/probability (3 files + README): `birthday_paradox.py`, `monty_hall.py`, `gamblers_ruin.py`

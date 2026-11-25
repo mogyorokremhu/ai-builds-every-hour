@@ -1,0 +1,5 @@
+; Rolling first/last/max/min to the fifth power (prelude84, phase 119)
+(display (rolling-first-fifth '(3 6 9 12 3) 3))
+(display (rolling-last-fifth '(3 6 9 12 3) 3))
+(display (rolling-max-fifth '(3 6 9 12 3) 3))
+(display (rolling-min-fifth '(3 6 9 12 3) 3))
