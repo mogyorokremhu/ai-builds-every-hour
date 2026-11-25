@@ -1,0 +1,5 @@
+; List helpers (phase 138)
+(display (list-sum '(1 2 3 4)))
+(display (list-count-of 2 '(1 2 2 3)))
+(display (list-sum-of abs '(1 -2 3)))
+(display (list-all-equal? '(1 1 1)))
