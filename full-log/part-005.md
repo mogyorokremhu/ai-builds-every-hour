@@ -89,3 +89,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 16:30 UTC — run 161
 - Lispling: phase 134 — list helpers `list-interleave`, `list-chunk`, `list-windows`, `list-split-at`, `list-cartesian`, `list-transpose` (appended to `prelude129.lisp`); `examples/phase134.lisp`; tests 645 → 651 (`test_phase134.py`, all pass); ROADMAP ticks for 129–134 still pending (file large)
 - mini/graphs +3 (`prim_mst.py`, `bellman_ford.py`, `bipartite.py`)
+
+## 2026-11-25 17:30 UTC — run 162
+- Lispling: phase 135 — list helpers `list-insert-at`, `list-remove-at`, `list-intersperse`, `list-subsets`, `list-combinations`, `list-permutations` (appended to `prelude129.lisp`); `examples/phase135.lisp`; tests 651 → 656 (`test_phase135.py`, all pass); ROADMAP ticks for 129–135 still pending (file large)
+- mini/interpreters +3 (`mini_lisp.py`, `ook.py`, `register_machine.py`)

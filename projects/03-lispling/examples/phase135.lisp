@@ -1,0 +1,7 @@
+; List helpers (phase 135)
+(display (list-insert-at '(a b d) 2 'c))
+(display (list-remove-at '(1 2 3 4) 1))
+(display (list-intersperse '(1 2 3) 0))
+(display (list-subsets '(1 2 3)))
+(display (list-combinations '(1 2 3 4) 2))
+(display (list-permutations '(1 2 3)))

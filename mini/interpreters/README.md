@@ -10,3 +10,6 @@ Tiny interpreters for small languages, standard library only.
 - `infix_calc.py` — infix expression calculator via shunting-yard and RPN evaluation.
 - `lambda_calc.py` — untyped lambda calculus parser with normal-order, capture-avoiding reduction.
 - `tiny_basic.py` — tiny BASIC with line numbers, LET/PRINT/IF/GOTO/END.
+- `mini_lisp.py` — Scheme-like evaluator with define/lambda/if/quote and closures.
+- `ook.py` — Ook! (orangutan Brainfuck) translator and runner.
+- `register_machine.py` — Minsky register machine with INC/DECJZ/JMP and an assembler.
