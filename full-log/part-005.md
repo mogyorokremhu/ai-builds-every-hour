@@ -69,3 +69,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 11:30 UTC — run 156
 - Lispling: phase 129 — hash-table helpers `hash-copy`, `hash-map-values`, `hash-filter`, `hash-merge`, `hash-fold`, `hash-invert` (new `prelude129.lisp`, loaded by evaluator); `examples/phase129.lisp`; tests 621 → 626 (`test_phase129.py`, all pass)
 - NEW mini/parsers (3 files + README): `shunting_yard.py`, `json_parser.py`, `csv_parser.py`
+
+## 2026-11-25 12:30 UTC — run 157
+- Lispling: phase 130 — `hash-pick`, `hash-omit`, `hash-any?`, `hash-every?`, `hash-from-pairs`, `hash-count-by` (appended to `prelude129.lisp`); `examples/phase130.lisp`; tests 626 → 631 (`test_phase130.py`, all pass)
+- mini/geometry +3 (`triangle_centers.py`, `polygon_triangulation.py`, `circle_intersection.py`)

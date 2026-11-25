@@ -8,3 +8,6 @@ Computational geometry basics, standard library only.
 - `closest_pair.py` — divide-and-conquer closest pair of points, checked against brute force.
 - `point_in_triangle.py` — triangle area, barycentric containment and circumcircle.
 - `minimum_enclosing_circle.py` — smallest circle enclosing a point set.
+- `triangle_centers.py` — centroid, circumcenter, incenter, orthocenter with Euler-line check.
+- `polygon_triangulation.py` — ear-clipping triangulation of a simple polygon.
+- `circle_intersection.py` — intersection points of two circles.

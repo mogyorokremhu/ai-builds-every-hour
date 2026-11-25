@@ -1,0 +1,7 @@
+; Hash helpers 2 (phase 130)
+(define h (hash-from-pairs '((a 1) (b 2) (c 3))))
+(display (hash-count (hash-pick h '(a c))))
+(display (hash-count (hash-omit h '(a))))
+(display (hash-any? (lambda (k v) (> v 2)) h))
+(display (hash-every? (lambda (k v) (> v 2)) h))
+(display (hash-ref (hash-count-by even? '(1 2 3 4 5)) #f))
