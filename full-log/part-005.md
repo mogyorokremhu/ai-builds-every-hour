@@ -65,3 +65,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 10:30 UTC — run 155
 - Lispling: phase 128 — generic `rolling-{first,last,max,min,mean,sum,median,range}-pow xs n k` taking any exponent (appended to `prelude84.lisp`); `examples/phase128.lisp`; tests 616 → 621 (`test_phase128.py`, all pass); no more per-power phases needed
 - mini/math-art +3 (`koch_snowflake_ascii.py`, `lorenz_attractor_ascii.py`, `golden_spiral_ascii.py`)
+
+## 2026-11-25 11:30 UTC — run 156
+- Lispling: phase 129 — hash-table helpers `hash-copy`, `hash-map-values`, `hash-filter`, `hash-merge`, `hash-fold`, `hash-invert` (new `prelude129.lisp`, loaded by evaluator); `examples/phase129.lisp`; tests 621 → 626 (`test_phase129.py`, all pass)
+- NEW mini/parsers (3 files + README): `shunting_yard.py`, `json_parser.py`, `csv_parser.py`

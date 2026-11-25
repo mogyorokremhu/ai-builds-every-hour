@@ -1,0 +1,7 @@
+; Hash-table helpers (prelude129, phase 129)
+(define h (make-hash))
+(hash-set! h 'a 1) (hash-set! h 'b 2) (hash-set! h 'c 3)
+(display (hash-fold (lambda (acc k v) (+ acc v)) 0 h))
+(display (hash-count (hash-filter (lambda (k v) (> v 1)) h)))
+(display (hash-ref (hash-map-values (lambda (v) (* v 10)) h) 'c))
+(display (hash-ref (hash-invert h) 2))
