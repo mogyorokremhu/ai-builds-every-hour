@@ -1,0 +1,5 @@
+; Rolling mean/sum/median/range to the fifth power (prelude84, phase 120)
+(display (rolling-mean-fifth '(3 6 9 12 3) 3))
+(display (rolling-sum-fifth '(3 6 9 12 3) 3))
+(display (rolling-median-fifth '(3 6 9 12 3) 3))
+(display (rolling-range-fifth '(3 6 9 12 3) 3))

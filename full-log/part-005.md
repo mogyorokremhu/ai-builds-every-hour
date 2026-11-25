@@ -37,3 +37,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 03:30 UTC — run 148
 - Lispling: phase 119 — `rolling-first-fifth`, `rolling-last-fifth`, `rolling-max-fifth`, `rolling-min-fifth` (appended to `prelude84.lisp`); `examples/phase119.lisp`; tests 580 → 584 (`test_phase119.py`, all pass)
 - NEW mini/probability (3 files + README): `birthday_paradox.py`, `monty_hall.py`, `gamblers_ruin.py`
+
+## 2026-11-25 04:30 UTC — run 149
+- Lispling: phase 120 — `rolling-mean-fifth`, `rolling-sum-fifth`, `rolling-median-fifth`, `rolling-range-fifth` (appended to `prelude84.lisp`); `examples/phase120.lisp`; tests 584 → 588 (`test_phase120.py`, all pass)
+- mini/calendar +3 (`week_number.py`, `julian_day.py`, `days_between.py`)

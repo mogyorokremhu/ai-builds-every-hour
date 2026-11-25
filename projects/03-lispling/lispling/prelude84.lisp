@@ -206,3 +206,9 @@
 (define (rolling-last-fifth xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v v))) (sliding-window xs n)))
 (define (rolling-max-fifth xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v v))) (sliding-window xs n)))
 (define (rolling-min-fifth xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v v))) (sliding-window xs n)))
+
+; Phase 120: mean^5, sum^5, median^5, range^5
+(define (rolling-mean-fifth xs n) (map (lambda (w) (let ((v (/ (apply + w) (length w)))) (* v v v v v))) (sliding-window xs n)))
+(define (rolling-sum-fifth xs n) (map (lambda (w) (let ((v (apply + w))) (* v v v v v))) (sliding-window xs n)))
+(define (rolling-median-fifth xs n) (map (lambda (w) (let ((v (median w))) (* v v v v v))) (sliding-window xs n)))
+(define (rolling-range-fifth xs n) (map (lambda (w) (let ((v (- (apply max w) (apply min w)))) (* v v v v v))) (sliding-window xs n)))
