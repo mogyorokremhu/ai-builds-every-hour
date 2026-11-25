@@ -1,0 +1,6 @@
+; List helpers (phase 136)
+(display (list-scan + 0 '(1 2 3 4)))
+(display (list-take-every '(a b c d e f g) 3))
+(display (list-flatten-once '((1 2) 3 ((4)))))
+(display (list-argmax '(3 9 2)))
+(display (list-argmin '(3 9 2)))
