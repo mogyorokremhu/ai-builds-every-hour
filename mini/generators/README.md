@@ -20,3 +20,6 @@ Small random generators. Each file is self-contained and runnable.
 - `coffee_order.py` — absurd coffee-shop orders (`python coffee_order.py 5 1`)
 - `license_plate.py` — license plates in several formats (`python license_plate.py 3 1`)
 - `pixel_sprite.py` — symmetric invader-style pixel sprites (`python pixel_sprite.py 3 1 7`)
+- `superhero.py` — heroes with powers and weaknesses (`python superhero.py 3 1`)
+- `weather.py` — Markov-chain weekly forecast (`python weather.py 7 1`)
+- `city_skyline.py` — ASCII city skyline (`python city_skyline.py 50 10 3`)

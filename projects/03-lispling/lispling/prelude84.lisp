@@ -182,3 +182,9 @@
 (define (rolling-last-cubed xs n) (map (lambda (w) (let ((l (car (reverse w)))) (* l l l))) (sliding-window xs n)))
 (define (rolling-max-cubed xs n) (map (lambda (w) (let ((m (apply max w))) (* m m m))) (sliding-window xs n)))
 (define (rolling-min-cubed xs n) (map (lambda (w) (let ((m (apply min w))) (* m m m))) (sliding-window xs n)))
+
+; Phase 116: sum^3, median^3, range^3, mean^2
+(define (rolling-sum-cubed xs n) (map (lambda (w) (let ((s (apply + w))) (* s s s))) (sliding-window xs n)))
+(define (rolling-median-cubed xs n) (map (lambda (w) (let ((m (median w))) (* m m m))) (sliding-window xs n)))
+(define (rolling-range-cubed xs n) (map (lambda (w) (let ((r (- (apply max w) (apply min w)))) (* r r r))) (sliding-window xs n)))
+(define (rolling-mean-squared xs n) (map (lambda (w) (let ((m (/ (apply + w) (length w)))) (* m m))) (sliding-window xs n)))
