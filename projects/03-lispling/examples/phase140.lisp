@@ -1,0 +1,6 @@
+; List helpers (phase 140)
+(display (list-span even? '(2 4 5 6)))
+(display (list-group-by even? '(1 2 3 4 5)))
+(display (list-count-by even? '(1 2 3 4 5)))
+(display (list-take-last 2 '(1 2 3 4)))
+(display (list-running-max '(1 3 2 5 4)))
