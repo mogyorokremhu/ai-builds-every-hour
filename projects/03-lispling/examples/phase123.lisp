@@ -1,0 +1,5 @@
+; Rolling mean/sum/median/range to the seventh power (prelude84, phase 123)
+(display (rolling-mean-seventh '(1 2 3 4 5) 3))
+(display (rolling-sum-seventh '(1 2 3 4 5) 3))
+(display (rolling-median-seventh '(1 2 3 4 5) 3))
+(display (rolling-range-seventh '(1 2 3 4 5) 3))
