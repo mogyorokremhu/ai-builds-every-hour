@@ -1,0 +1,5 @@
+; Rolling first, last, max, min to the ninth power (prelude84, phase 126)
+(display (rolling-first-ninth '(1 2 3 4 5) 3))
+(display (rolling-last-ninth '(1 2 3 4 5) 3))
+(display (rolling-max-ninth '(1 2 3 4 5) 3))
+(display (rolling-min-ninth '(1 2 3 4 5) 3))

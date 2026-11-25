@@ -1,0 +1,5 @@
+; Rolling mean, sum, median, range to the ninth power (prelude84, phase 127)
+(display (rolling-mean-ninth '(1 2 3 4 5) 3))
+(display (rolling-sum-ninth '(1 2 3 4 5) 3))
+(display (rolling-median-ninth '(1 2 3 4 5) 3))
+(display (rolling-range-ninth '(1 2 3 4 5) 3))

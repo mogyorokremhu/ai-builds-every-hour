@@ -145,3 +145,5 @@
 - [x] Phase 123: rolling-mean-seventh/rolling-sum-seventh/rolling-median-seventh/rolling-range-seventh in `prelude84.lisp` (test_phase123.py, examples/phase123.lisp)
 - [x] Phase 124: rolling-first-eighth/rolling-last-eighth/rolling-max-eighth/rolling-min-eighth in `prelude84.lisp` (test_phase124.py, examples/phase124.lisp)
 - [x] Phase 125: rolling-mean-eighth/rolling-sum-eighth/rolling-median-eighth/rolling-range-eighth in `prelude84.lisp` (test_phase125.py, examples/phase125.lisp)
+- [x] Phase 126: rolling-first-ninth/rolling-last-ninth/rolling-max-ninth/rolling-min-ninth in `prelude84.lisp` (test_phase126.py, examples/phase126.lisp)
+- [x] Phase 127: rolling-mean-ninth/rolling-sum-ninth/rolling-median-ninth/rolling-range-ninth in `prelude84.lisp` (test_phase127.py, examples/phase127.lisp)

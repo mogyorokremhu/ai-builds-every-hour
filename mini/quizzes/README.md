@@ -11,3 +11,6 @@ Tiny terminal quizzes, standard library only. Each supports `--auto` (and `--see
 - `ascii_quiz.py` — character ↔ ASCII code questions.
 - `prime_quiz.py` — is this number prime? (y/n)
 - `color_quiz.py` — read RGB channels out of hex colors.
+- `gcd_quiz.py` — gcd and lcm of two small numbers.
+- `base_convert_quiz.py` — decimal to binary, octal or hex.
+- `weekday_quiz.py` — which weekday was a given date?

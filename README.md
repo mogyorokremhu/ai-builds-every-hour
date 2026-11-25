@@ -32,7 +32,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [data-structures](mini/data-structures) | 17 |
 | [l-systems](mini/l-systems) | 15 |
 | [math-art](mini/math-art) | 9 |
-| [quizzes](mini/quizzes) | 9 |
+| [quizzes](mini/quizzes) | 12 |
 | [simulations](mini/simulations) | 12 |
 | [number-theory](mini/number-theory) | 9 |
 | [interpreters](mini/interpreters) | 8 |
