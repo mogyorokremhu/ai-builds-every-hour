@@ -1,1 +1,54 @@
-PLACEHOLDER
+# 🤖 ai-builds-every-hour
+
+An AI (Claude) works on this repo **every hour**, automatically. Each run adds a big
+batch of work: it pushes the current multi-day project forward and adds a handful of
+small creative pieces. When a project is finished, a new one begins.
+
+- **Big projects** (`projects/`): complex builds that take 2–3 days of hourly runs.
+- **Mini collections** (`mini/`): small self-contained pieces like Python drawings.
+- **What happened when:** [LOG.md](LOG.md) (daily files in [logs/](logs)) · **Right now:** [STATUS.md](STATUS.md) ·
+  **Rules the AI follows:** [AGENT_GUIDE.md](AGENT_GUIDE.md)
+
+## Projects
+| # | Project | Kind | Status |
+|---|---|---|---|
+| 01 | [Emberdeep](projects/01-emberdeep) | Python terminal roguelike | ✅ Complete (7 phases, 277 tests, mypy-clean) |
+| 02 | [Hexfall](projects/02-hexfall) | JS browser hex tactics game | ✅ Roadmap complete (8 phases, 209 tests, [guide](projects/02-hexfall/docs/GUIDE.md), browser smoke test, [BALANCE.md](projects/02-hexfall/BALANCE.md)) |
+| 03 | [Lispling](projects/03-lispling) | Python Lisp interpreter | 🚧 Bytecode VM + VM macros + inline/fused prims + lazy streams + error handling + vectors/records + sort + numeric library + variadic params/combinators + sets/combinatorics + stats helpers done; slot-resolved locals next |
+
+## Mini collections
+| Collection | Files |
+|---|---|
+| [drawings](mini/drawings) | 51 |
+| [puzzles](mini/puzzles) | 54 |
+| [tools](mini/tools) | 51 |
+| [ascii-animations](mini/ascii-animations) | 51 |
+| [ciphers](mini/ciphers) | 21 |
+| [generators](mini/generators) | 21 |
+| [cellular-automata](mini/cellular-automata) | 21 |
+| [sound](mini/sound) | 21 |
+| [web-toys](mini/web-toys) | 18 |
+| [games](mini/games) | 18 |
+| [data-structures](mini/data-structures) | 17 |
+| [l-systems](mini/l-systems) | 15 |
+| [math-art](mini/math-art) | 12 |
+| [quizzes](mini/quizzes) | 12 |
+| [simulations](mini/simulations) | 12 |
+| [number-theory](mini/number-theory) | 9 |
+| [interpreters](mini/interpreters) | 11 |
+| [fractals](mini/fractals) | 9 |
+| [bit-tricks](mini/bit-tricks) | 9 |
+| [geometry](mini/geometry) | 9 |
+| [compression](mini/compression) | 9 |
+| [graphs](mini/graphs) | 9 |
+| [sorting](mini/sorting) | 9 |
+| [encoding](mini/encoding) | 6 |
+| [color](mini/color) | 6 |
+| [logic](mini/logic) | 6 |
+| [matrices](mini/matrices) | 6 |
+| [text-analysis](mini/text-analysis) | 6 |
+| [calendar](mini/calendar) | 6 |
+| [probability](mini/probability) | 6 |
+| [hashing](mini/hashing) | 3 |
+| [sequences](mini/sequences) | 3 |
+| [parsers](mini/parsers) | 3 |
