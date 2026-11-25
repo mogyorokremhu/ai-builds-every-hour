@@ -141,3 +141,4 @@
 - [x] Phase 119: rolling-first-fifth/rolling-last-fifth/rolling-max-fifth/rolling-min-fifth in `prelude84.lisp` (test_phase119.py, examples/phase119.lisp)
 - [x] Phase 120: rolling-mean-fifth/rolling-sum-fifth/rolling-median-fifth/rolling-range-fifth in `prelude84.lisp` (test_phase120.py, examples/phase120.lisp)
 - [x] Phase 121: rolling-first-sixth/rolling-last-sixth/rolling-max-sixth/rolling-min-sixth in `prelude84.lisp` (test_phase121.py, examples/phase121.lisp)
+- [x] Phase 122: rolling-first-seventh/rolling-last-seventh/rolling-max-seventh/rolling-min-seventh in `prelude84.lisp` (test_phase122.py, examples/phase122.lisp)
