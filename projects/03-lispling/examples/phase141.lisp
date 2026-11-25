@@ -1,0 +1,6 @@
+; List helpers (phase 141)
+(display (list-running-min '(5 3 4 1 2)))
+(display (list-spread '(4 9 2 7)))
+(display (list-count-distinct '(1 2 2 3 3 3)))
+(display (list-replace-all 2 9 '(1 2 3 2)))
+(display (list-take-last-while odd? '(2 4 5 7)))
