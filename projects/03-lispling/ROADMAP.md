@@ -136,3 +136,5 @@
 - [x] Phase 114: rolling-sum-squared/rolling-median-squared/rolling-range-squared/rolling-first-cubed in `prelude84.lisp` (test_phase114.py, examples/phase114.lisp)
 - [x] Phase 115: rolling-mean-cubed/rolling-last-cubed/rolling-max-cubed/rolling-min-cubed in `prelude84.lisp` (test_phase115.py, examples/phase115.lisp)
 - [x] Phase 116: rolling-sum-cubed/rolling-median-cubed/rolling-range-cubed/rolling-mean-squared in `prelude84.lisp` (test_phase116.py, examples/phase116.lisp)
+- [x] Phase 117: rolling-first-fourth/rolling-last-fourth/rolling-max-fourth/rolling-min-fourth in `prelude84.lisp` (test_phase117.py, examples/phase117.lisp)
+- [x] Phase 118: rolling-mean-fourth/rolling-sum-fourth/rolling-median-fourth/rolling-range-fourth in `prelude84.lisp` (test_phase118.py, examples/phase118.lisp)
