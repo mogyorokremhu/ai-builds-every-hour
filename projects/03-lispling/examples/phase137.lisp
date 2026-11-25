@@ -1,0 +1,7 @@
+; List helpers (phase 137)
+(display (list-last '(1 2 3)))
+(display (list-count-if even? '(1 2 3 4)))
+(display (list-zip-with + '(1 2 3) '(10 20 30)))
+(display (list-partition even? '(1 2 3 4)))
+(display (list-unique '(1 2 1 3)))
+(display (list-drop-last '(1 2 3 4) 1))

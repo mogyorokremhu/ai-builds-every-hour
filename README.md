@@ -47,6 +47,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [logic](mini/logic) | 6 |
 | [matrices](mini/matrices) | 6 |
 | [text-analysis](mini/text-analysis) | 6 |
+| [tilings](mini/tilings) | 3 |
 | [calendar](mini/calendar) | 6 |
 | [probability](mini/probability) | 6 |
 | [hashing](mini/hashing) | 3 |
