@@ -54,6 +54,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [fireflies.py](fireflies.py) | Blinking fireflies drifting over a meadow (`--count`) |
 | [conveyor.py](conveyor.py) | Boxes on a belt, big ones hop a sorting gate |
 | [elevator.py](elevator.py) | Elevator car serving random floor calls with SCAN direction (`--floors`) |
+| [rule110.py](rule110.py) | Elementary cellular automaton scrolling down the screen (`--rule`, `--seed`) |
+| [kaleidoscope.py](kaleidoscope.py) | Drifting specks mirrored into 4-fold symmetry (`--size`, `--specks`) |
+| [windmill.py](windmill.py) | Windmill with four sails turning in gusty wind (`--speed`) |
 
 ```bash
 python fire.py
