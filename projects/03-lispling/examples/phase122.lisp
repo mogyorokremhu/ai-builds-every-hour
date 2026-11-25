@@ -1,0 +1,5 @@
+; Rolling first/last/max/min to the seventh power (prelude84, phase 122)
+(display (rolling-first-seventh '(1 2 3 4 5) 3))
+(display (rolling-last-seventh '(1 2 3 4 5) 3))
+(display (rolling-max-seventh '(1 2 3 4 5) 3))
+(display (rolling-min-seventh '(1 2 3 4 5) 3))

@@ -45,3 +45,7 @@ Runs 140–164. Newest entry last.
 ## 2026-11-25 05:30 UTC — run 150
 - Lispling: phase 121 — `rolling-first-sixth`, `rolling-last-sixth`, `rolling-max-sixth`, `rolling-min-sixth` (appended to `prelude84.lisp`); `examples/phase121.lisp`; tests 588 → 592 (`test_phase121.py`, all pass)
 - mini/logic +3 (`gray_code.py`, `half_full_adder.py`, `boolean_simplify.py`)
+
+## 2026-11-25 06:30 UTC — run 151
+- Lispling: phase 122 — `rolling-first-seventh`, `rolling-last-seventh`, `rolling-max-seventh`, `rolling-min-seventh` (appended to `prelude84.lisp`); `examples/phase122.lisp`; tests 592 → 596 (`test_phase122.py`, all pass)
+- mini/simulations +3 (`pendulum.py`, `game_of_life_density.py`, `diffusion_limited_aggregation.py`)

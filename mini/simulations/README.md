@@ -8,3 +8,6 @@ Small numeric simulations, standard library only.
 - `traffic_nasch.py` — Nagel-Schreckenberg ring-road traffic with phantom jams.
 - `random_walk_stats.py` — 2D random walkers; mean squared displacement grows linearly.
 - `gravity_orbit.py` — leapfrog planet orbit with ASCII plot and energy drift.
+- `pendulum.py` — RK4 pendulum; measured period vs the small-angle formula.
+- `game_of_life_density.py` — Conway's Life on a torus; final density vs initial density.
+- `diffusion_limited_aggregation.py` — DLA random-walker cluster drawn in ASCII.

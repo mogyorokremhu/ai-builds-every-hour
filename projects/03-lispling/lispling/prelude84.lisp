@@ -218,3 +218,8 @@
 (define (rolling-last-sixth xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v v v))) (sliding-window xs n)))
 (define (rolling-max-sixth xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v v v))) (sliding-window xs n)))
 (define (rolling-min-sixth xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v v v))) (sliding-window xs n)))
+; Phase 122: first^7, last^7, max^7, min^7
+(define (rolling-first-seventh xs n) (map (lambda (w) (let ((v (car w))) (* v v v v v v v))) (sliding-window xs n)))
+(define (rolling-last-seventh xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v v v v))) (sliding-window xs n)))
+(define (rolling-max-seventh xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v v v v))) (sliding-window xs n)))
+(define (rolling-min-seventh xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v v v v))) (sliding-window xs n)))
