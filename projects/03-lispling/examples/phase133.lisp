@@ -1,0 +1,5 @@
+; List helpers (phase 133)
+(display (list-rotate '(1 2 3 4 5) 2))
+(display (list-adjacent-pairs '(1 2 3 4)))
+(display (list-dedupe-runs '(1 1 2 2 2 3 1 1)))
+(display (list-run-lengths '(a a b c c c)))
