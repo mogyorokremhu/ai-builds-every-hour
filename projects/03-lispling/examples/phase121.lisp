@@ -1,0 +1,5 @@
+; Rolling first/last/max/min to the sixth power (prelude84, phase 121)
+(display (rolling-first-sixth '(1 2 3 4 5) 3))
+(display (rolling-last-sixth '(1 2 3 4 5) 3))
+(display (rolling-max-sixth '(1 2 3 4 5) 3))
+(display (rolling-min-sixth '(1 2 3 4 5) 3))
