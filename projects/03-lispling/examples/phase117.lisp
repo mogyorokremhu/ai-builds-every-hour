@@ -1,0 +1,5 @@
+; Rolling first/last/max/min to the fourth power (prelude84, phase 117)
+(display (rolling-first-fourth '(3 6 9 12 3) 3))
+(display (rolling-last-fourth '(3 6 9 12 3) 3))
+(display (rolling-max-fourth '(3 6 9 12 3) 3))
+(display (rolling-min-fourth '(3 6 9 12 3) 3))

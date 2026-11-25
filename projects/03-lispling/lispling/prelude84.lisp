@@ -188,3 +188,9 @@
 (define (rolling-median-cubed xs n) (map (lambda (w) (let ((m (median w))) (* m m m))) (sliding-window xs n)))
 (define (rolling-range-cubed xs n) (map (lambda (w) (let ((r (- (apply max w) (apply min w)))) (* r r r))) (sliding-window xs n)))
 (define (rolling-mean-squared xs n) (map (lambda (w) (let ((m (/ (apply + w) (length w)))) (* m m))) (sliding-window xs n)))
+
+; Phase 117: first^4, last^4, max^4, min^4
+(define (rolling-first-fourth xs n) (map (lambda (w) (let ((v (car w))) (* v v v v))) (sliding-window xs n)))
+(define (rolling-last-fourth xs n) (map (lambda (w) (let ((v (car (reverse w)))) (* v v v v))) (sliding-window xs n)))
+(define (rolling-max-fourth xs n) (map (lambda (w) (let ((v (apply max w))) (* v v v v))) (sliding-window xs n)))
+(define (rolling-min-fourth xs n) (map (lambda (w) (let ((v (apply min w))) (* v v v v))) (sliding-window xs n)))
