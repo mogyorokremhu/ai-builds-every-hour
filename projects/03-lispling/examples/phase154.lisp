@@ -1,0 +1,6 @@
+; List helpers (phase 154)
+(display (list-twelfth '(1 2 3 4 5 6 7 8 9 10 11 12 13)))
+(display (list-count-nonpos '(-1 0 2 -3 4)))
+(display (list-sum-nonpos '(-1 0 2 -3 4)))
+(display (list-product-odd '(1 2 3 4 5)))
+(display (list-count-below-mean '(1 2 3 4 10)))

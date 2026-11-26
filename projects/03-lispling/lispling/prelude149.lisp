@@ -134,3 +134,34 @@
           (cond ((null? rest) c)
                 ((> (* (car rest) n) total) (loop (cdr rest) (+ c 1)))
                 (else (loop (cdr rest) c)))))))
+
+(define (list-twelfth lst)
+  (let loop ((rest lst) (n 11))
+    (if (= n 0) (car rest) (loop (cdr rest) (- n 1)))))
+
+(define (list-count-nonpos lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((<= (car rest) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-nonpos lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((<= (car rest) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-odd lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 2) 0) (loop (cdr rest) p))
+          (else (loop (cdr rest) (* p (car rest)))))))
+
+(define (list-count-below-mean lst)
+  (if (null? lst)
+      0
+      (let ((n (length lst)) (total (apply + lst)))
+        (let loop ((rest lst) (c 0))
+          (cond ((null? rest) c)
+                ((< (* (car rest) n) total) (loop (cdr rest) (+ c 1)))
+                (else (loop (cdr rest) c)))))))
