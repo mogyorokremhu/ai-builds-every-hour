@@ -56,3 +56,6 @@ Small, self-contained Python art scripts. Most use the built-in `turtle` module
 | `ascii_koch_snowflake.py` | Koch snowflake with Bresenham lines |
 | `ascii_hilbert_curve.py` | Hilbert space-filling curve path |
 | `ascii_bezier_curves.py` | Quadratic Bezier curves with control polygons |
+| `ascii_hypotrochoid.py` | Spirograph-style hypotrochoid curve |
+| `ascii_tree_rings.py` | Wobbly growth rings of a tree cross-section |
+| `ascii_starfield.py` | Perspective starfield with streaking stars |
