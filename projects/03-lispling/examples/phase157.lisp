@@ -1,0 +1,6 @@
+; List helpers (phase 157)
+(display (list-fifteenth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16)))
+(display (list-count-positive-even '(-2 0 2 4 5 6)))
+(display (list-sum-squares-odd '(1 2 3 4 5)))
+(display (list-weighted-sum '(5 6 7)))
+(display (list-count-prime '(1 2 3 4 5 6 7 8 9 10)))

@@ -230,3 +230,31 @@
           (cond ((null? rest) c)
                 ((= (* (car rest) n) total) (loop (cdr rest) (+ c 1)))
                 (else (loop (cdr rest) c)))))))
+
+(define (list-fifteenth lst)
+  (let loop ((rest lst) (n 14))
+    (if (= n 0) (car rest) (loop (cdr rest) (- n 1)))))
+
+(define (list-count-positive-even lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((and (> (car rest) 0) (even? (car rest))) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-squares-odd lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((odd? (car rest)) (loop (cdr rest) (+ s (* (car rest) (car rest)))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-weighted-sum lst)
+  (let loop ((rest lst) (i 0) (s 0))
+    (if (null? rest)
+        s
+        (loop (cdr rest) (+ i 1) (+ s (* i (car rest)))))))
+
+(define (list-count-prime lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((prime? (car rest)) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
