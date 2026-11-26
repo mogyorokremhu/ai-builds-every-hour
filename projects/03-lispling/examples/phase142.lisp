@@ -1,0 +1,6 @@
+; List helpers (phase 142)
+(display (list-pad-left 5 0 '(1 2)))
+(display (list-pad-right 4 9 '(1 2)))
+(display (list-dedupe-adjacent '(1 1 2 2 2 1 3 3)))
+(display (list-index-of-all 2 '(2 1 2 3 2)))
+(display (list-sum-by (lambda (x) (* x x)) '(1 2 3)))
