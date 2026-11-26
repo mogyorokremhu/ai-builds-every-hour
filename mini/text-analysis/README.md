@@ -8,3 +8,6 @@ Tiny text-statistics scripts, each self-contained with a built-in check.
 - `ngrams.py` — character and word n-gram counters.
 - `vowel_stats.py` — vowel/consonant ratio and letter histogram.
 - `longest_common_substring.py` — DP longest common substring.
+- `palindromes.py` — palindromic words and longest palindromic substring.
+- `type_token_ratio.py` — lexical diversity: TTR, hapax legomena, moving-average TTR.
+- `levenshtein.py` — edit distance and nearest-word suggestions.

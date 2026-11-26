@@ -405,3 +405,26 @@
 
 (define (list-first-or default lst)
   (if (null? lst) default (car lst)))
+
+(define (list-fifth lst) (car (cdr (cdr (cdr (cdr lst))))))
+
+(define (list-count-eq x lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((equal? (car rest) x) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-positive lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((> (car rest) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-count-negative lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((< (car rest) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-last-or default lst)
+  (if (null? lst) default (list-last lst)))

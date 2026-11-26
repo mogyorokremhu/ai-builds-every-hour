@@ -1,0 +1,6 @@
+; List helpers (phase 147)
+(display (list-fifth '(a b c d e f)))
+(display (list-count-eq 2 '(1 2 2 3 2)))
+(display (list-sum-positive '(-1 2 -3 4)))
+(display (list-count-negative '(-1 2 -3 4 0)))
+(display (list-last-or 0 '()))
