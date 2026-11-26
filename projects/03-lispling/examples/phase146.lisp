@@ -1,0 +1,6 @@
+; List helpers (phase 146)
+(display (list-fourth '(a b c d e)))
+(display (list-sum-odd '(1 2 3 4 5)))
+(display (list-sum-even '(1 2 3 4 5)))
+(display (list-count-lt 3 '(1 2 3 4)))
+(display (list-first-or 0 '()))

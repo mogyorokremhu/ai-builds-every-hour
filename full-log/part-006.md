@@ -33,3 +33,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 03:30 UTC — run 172
 - Lispling: phase 145 — `list-third`, `list-sum-abs`, `list-last-index`, `list-repeat-each`, `list-count-gt` (appended to `prelude129.lisp`); `examples/phase145.lisp`; tests 700 → 705 (`test_phase145.py`, all pass)
 - New collection mini/mazes (`recursive_backtracker.py`, `maze_solver.py`, `kruskal_maze.py` + README)
+
+## 2026-11-26 04:30 UTC — run 173
+- Lispling: phase 146 — `list-fourth`, `list-sum-odd`, `list-sum-even`, `list-count-lt`, `list-first-or` (appended to `prelude129.lisp`); `examples/phase146.lisp`; tests 705 → 710 (`test_phase146.py`, all pass)
+- mini/matrices +3 (`trace_norms.py`, `spiral_matrix.py`, `gauss_jordan_solve.py`)

@@ -382,3 +382,26 @@
     (cond ((null? rest) c)
           ((> (car rest) n) (loop (cdr rest) (+ c 1)))
           (else (loop (cdr rest) c)))))
+
+(define (list-fourth lst) (car (cdr (cdr (cdr lst)))))
+
+(define (list-sum-odd lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((odd? (car rest)) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-sum-even lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((even? (car rest)) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-count-lt n lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((< (car rest) n) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-first-or default lst)
+  (if (null? lst) default (car lst)))

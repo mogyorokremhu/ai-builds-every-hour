@@ -8,3 +8,6 @@ Exact matrix algorithms, each self-contained with a built-in check.
 - `rank.py` — exact RREF and rank via fraction row reduction.
 - `transpose_multiply.py` — transpose, identity and matrix product.
 - `lu_decomposition.py` — Doolittle LU decomposition and linear-system solver.
+- `trace_norms.py` — trace, Frobenius, 1- and infinity-norms.
+- `spiral_matrix.py` — builds an n x n spiral and reads matrices in spiral order.
+- `gauss_jordan_solve.py` — exact linear system solver with fractions.
