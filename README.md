@@ -56,5 +56,5 @@ small creative pieces. When a project is finished, a new one begins.
 | [dice](mini/dice) | 6 |
 | [mazes](mini/mazes) | 6 |
 | [pixel-art](mini/pixel-art) | 6 |
-| [physics](mini/physics) | 3 |
+| [physics](mini/physics) | 6 |
 | [voting](mini/voting) | 3 |

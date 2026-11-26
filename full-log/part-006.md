@@ -16,7 +16,7 @@ Runs 165–189. Newest entry last.
 
 ## 2026-11-25 23:30 UTC — run 168
 - Lispling: phase 141 — `list-running-min`, `list-spread`, `list-count-distinct`, `list-replace-all`, `list-take-last-while` (appended to `prelude129.lisp`); `examples/phase141.lisp`; tests 680 → 685 (`test_phase141.py`, all pass)
-- New collection mini/dice (`dice_notation.py`, `yahtzee_score.py`, `dice_odds.py` + README)
+- mini/logic +3 (`truth_table.py`, `quine_mccluskey.py`, `sat_dpll.py`)
 
 ## 2026-11-26 00:30 UTC — run 169
 - Lispling: phase 142 — `list-pad-left`, `list-pad-right`, `list-dedupe-adjacent`, `list-index-of-all`, `list-sum-by` (appended to `prelude129.lisp`); `examples/phase142.lisp`; tests 685 → 690 (`test_phase142.py`, all pass)
@@ -81,3 +81,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 15:30 UTC — run 184
 - Lispling: phase 157 — `list-fifteenth`, `list-count-positive-even`, `list-sum-squares-odd`, `list-weighted-sum`, `list-count-prime` (appended to `prelude149.lisp`); `examples/phase157.lisp`; tests 760 → 765 (`test_phase157.py`, all pass)
 - New collection mini/voting (`ballots.py`, `irv.py`, `condorcet.py` + README): plurality vs IRV, Condorcet/Copeland/Borda
+
+## 2026-11-26 16:30 UTC — run 185
+- Lispling: phase 158 — `list-sixteenth`, `list-count-perfect-square`, `list-sum-cubes`, `list-product-positive`, `list-count-negative-even` (appended to `prelude149.lisp`); `examples/phase158.lisp`; tests 765 → 770 (`test_phase158.py`, all pass)
+- mini/physics +3 (`spring.py`, `collision.py`, `doppler.py`)

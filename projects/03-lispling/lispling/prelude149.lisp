@@ -258,3 +258,31 @@
     (cond ((null? rest) c)
           ((prime? (car rest)) (loop (cdr rest) (+ c 1)))
           (else (loop (cdr rest) c)))))
+
+(define (list-sixteenth lst)
+  (let loop ((rest lst) (n 15))
+    (if (= n 0) (car rest) (loop (cdr rest) (- n 1)))))
+
+(define (list-count-perfect-square lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((perfect-square? (car rest)) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-cubes lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest)
+        s
+        (loop (cdr rest) (+ s (* (car rest) (car rest) (car rest)))))))
+
+(define (list-product-positive lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((> (car rest) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+(define (list-count-negative-even lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((and (< (car rest) 0) (even? (car rest))) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
