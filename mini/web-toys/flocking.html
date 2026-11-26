@@ -1,0 +1,51 @@
+<!doctype html><meta charset="utf-8"><title>Flocking</title>
+<style>html,body{margin:0;background:#101018;overflow:hidden}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>
+// Boids: separation, alignment, cohesion. Mouse attracts; hold click to scare them.
+const c = document.getElementById('c'), g = c.getContext('2d');
+function resize(){ c.width = innerWidth; c.height = innerHeight; }
+addEventListener('resize', resize); resize();
+const N = 140, boids = [];
+for (let i = 0; i < N; i++) boids.push({x:Math.random()*c.width, y:Math.random()*c.height,
+  vx:Math.random()*2-1, vy:Math.random()*2-1});
+let mx = -1e4, my = -1e4, scare = false;
+c.addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; });
+c.addEventListener('pointerdown', () => scare = true);
+addEventListener('pointerup', () => scare = false);
+function step(){
+  for (const b of boids){
+    let sx=0, sy=0, ax=0, ay=0, cx=0, cy=0, n=0;
+    for (const o of boids){
+      if (o === b) continue;
+      const dx = o.x-b.x, dy = o.y-b.y, d2 = dx*dx+dy*dy;
+      if (d2 < 3600){
+        n++; ax += o.vx; ay += o.vy; cx += o.x; cy += o.y;
+        if (d2 < 400){ sx -= dx; sy -= dy; }
+      }
+    }
+    if (n){
+      b.vx += (ax/n-b.vx)*.05 + (cx/n-b.x)*.0015 + sx*.03;
+      b.vy += (ay/n-b.vy)*.05 + (cy/n-b.y)*.0015 + sy*.03;
+    }
+    const dx = mx-b.x, dy = my-b.y, d = Math.hypot(dx,dy)+1;
+    if (d < 250){ const f = (scare ? -1 : .4)*.08; b.vx += dx/d*f*3; b.vy += dy/d*f*3; }
+    const sp = Math.hypot(b.vx,b.vy), max = 3.2;
+    if (sp > max){ b.vx *= max/sp; b.vy *= max/sp; }
+    if (sp < 1){ b.vx *= 1.2; b.vy *= 1.2; }
+    b.x = (b.x + b.vx + c.width) % c.width; b.y = (b.y + b.vy + c.height) % c.height;
+  }
+}
+function frame(){
+  step();
+  g.fillStyle = 'rgba(16,16,24,.35)'; g.fillRect(0,0,c.width,c.height);
+  for (const b of boids){
+    const a = Math.atan2(b.vy,b.vx);
+    g.save(); g.translate(b.x,b.y); g.rotate(a);
+    g.fillStyle = `hsl(${(a*57+360)%360},70%,65%)`;
+    g.beginPath(); g.moveTo(8,0); g.lineTo(-5,4); g.lineTo(-5,-4); g.fill(); g.restore();
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>

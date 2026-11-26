@@ -1,0 +1,6 @@
+; List helpers (phase 143)
+(display (list-longest-run '(1 1 2 2 2 2 3)))
+(display (list-count-runs '(1 1 2 2 2 1 3 3)))
+(display (list-nth-or 5 'none '(1 2 3)))
+(display (list-product-by (lambda (x) (+ x 1)) '(1 2 3)))
+(display (list-swap 0 2 '(a b c d)))

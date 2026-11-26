@@ -1,0 +1,40 @@
+<!doctype html><meta charset="utf-8"><title>Mandelbrot zoom</title>
+<style>html,body{margin:0;background:#000;overflow:hidden;color:#ddd;font:13px monospace}
+canvas{display:block}#i{position:fixed;left:8px;top:6px;text-shadow:0 0 3px #000}</style>
+<canvas id="c"></canvas><div id="i"></div>
+<script>
+// Click to zoom in (2x) at the cursor, right-click / Backspace to zoom out, R to reset.
+const c = document.getElementById('c'), g = c.getContext('2d'), info = document.getElementById('i');
+let cx = -0.5, cy = 0, scale = 3.2, W, H;
+function palette(t){ return [Math.floor(9*(1-t)*t*t*t*255), Math.floor(15*(1-t)**2*t*t*255), Math.floor(8.5*(1-t)**3*t*255)]; }
+function render(){
+  W = c.width = innerWidth >> 1; H = c.height = innerHeight >> 1;
+  c.style.width = '100vw'; c.style.height = '100vh';
+  const img = g.createImageData(W, H), maxIt = Math.min(1500, 80 + Math.floor(Math.log2(3.2/scale)*40));
+  const px = scale / W;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){
+    const x0 = cx + (x - W/2)*px, y0 = cy + (y - H/2)*px;
+    let zx = 0, zy = 0, i = 0;
+    while (zx*zx + zy*zy <= 4 && i < maxIt){ const t = zx*zx - zy*zy + x0; zy = 2*zx*zy + y0; zx = t; i++; }
+    const o = (y*W + x)*4;
+    if (i === maxIt){ img.data[o+3] = 255; continue; }
+    const [r,gg,b] = palette((i % 64)/64);
+    img.data[o]=r; img.data[o+1]=gg; img.data[o+2]=b; img.data[o+3]=255;
+  }
+  g.putImageData(img, 0, 0);
+  info.textContent = `centre ${cx.toFixed(10)} ${cy.toFixed(10)}i  zoom ${(3.2/scale).toFixed(1)}x  iters ${maxIt}`;
+}
+c.addEventListener('click', e => {
+  cx += (e.clientX/innerWidth - .5)*scale; cy += (e.clientY/innerHeight - .5)*scale*(H/W);
+  scale /= 2; render();
+});
+c.addEventListener('contextmenu', e => { e.preventDefault(); scale *= 2; render(); });
+addEventListener('keydown', e => {
+  if (e.key === 'Backspace') scale *= 2;
+  else if (e.key.toLowerCase() === 'r'){ cx = -0.5; cy = 0; scale = 3.2; }
+  else return;
+  render();
+});
+addEventListener('resize', render);
+render();
+</script>

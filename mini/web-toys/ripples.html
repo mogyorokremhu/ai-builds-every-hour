@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><title>Ripples</title>
+<style>html,body{margin:0;background:#06121c;overflow:hidden}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>
+// Click or drag to drop raindrops; expanding rings fade out and overlap.
+const c = document.getElementById('c'), g = c.getContext('2d');
+function resize(){ c.width = innerWidth; c.height = innerHeight; }
+addEventListener('resize', resize); resize();
+const rings = [];
+function drop(x, y){ rings.push({x, y, r:0, a:1, h:180 + Math.random()*60}); }
+let down = false;
+c.addEventListener('pointerdown', e => { down = true; drop(e.clientX, e.clientY); });
+addEventListener('pointerup', () => down = false);
+c.addEventListener('pointermove', e => { if (down && Math.random() < .4) drop(e.clientX, e.clientY); });
+setInterval(() => drop(Math.random()*c.width, Math.random()*c.height), 700);
+function frame(){
+  g.fillStyle = 'rgba(6,18,28,.2)'; g.fillRect(0,0,c.width,c.height);
+  for (let i = rings.length-1; i >= 0; i--){
+    const o = rings[i]; o.r += 2.2; o.a -= .008;
+    if (o.a <= 0){ rings.splice(i,1); continue; }
+    for (let k = 0; k < 3; k++){
+      g.strokeStyle = `hsla(${o.h},80%,65%,${o.a*(1-k*.3)})`;
+      g.lineWidth = 2 - k*.5;
+      g.beginPath(); g.arc(o.x, o.y, Math.max(0, o.r - k*10), 0, 7); g.stroke();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>

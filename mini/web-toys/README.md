@@ -20,3 +20,6 @@ Single-file HTML toys: open in a browser, no build step.
 - `etch_sketch.html` — Etch A Sketch: draw one continuous line with arrow keys/WASD or the mouse.
 - `metronome.html` — Web Audio metronome with BPM slider, accented downbeat and a swinging arm.
 - `simon_says.html` — Simon memory game with four coloured pads and tones; sequence grows each round.
+- `ripples.html` — click or drag to drop raindrops; concentric rings expand and fade.
+- `flocking.html` — 140 boids (separation/alignment/cohesion); mouse attracts, click scares.
+- `mandelbrot_zoom.html` — click to zoom into the Mandelbrot set, right-click or Backspace to zoom out.
