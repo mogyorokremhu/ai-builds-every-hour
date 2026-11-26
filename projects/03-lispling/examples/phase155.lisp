@@ -1,0 +1,6 @@
+; List helpers (phase 155)
+(display (list-thirteenth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14)))
+(display (list-sum-above-mean '(1 2 3 4 10)))
+(display (list-sum-below-mean '(1 2 3 4 10)))
+(display (list-sum-even-index '(1 2 3 4 5)))
+(display (list-sum-odd-index '(1 2 3 4 5)))

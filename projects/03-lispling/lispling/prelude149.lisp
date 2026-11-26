@@ -165,3 +165,37 @@
           (cond ((null? rest) c)
                 ((< (* (car rest) n) total) (loop (cdr rest) (+ c 1)))
                 (else (loop (cdr rest) c)))))))
+
+(define (list-thirteenth lst)
+  (let loop ((rest lst) (n 12))
+    (if (= n 0) (car rest) (loop (cdr rest) (- n 1)))))
+
+(define (list-sum-above-mean lst)
+  (if (null? lst)
+      0
+      (let ((n (length lst)) (total (apply + lst)))
+        (let loop ((rest lst) (s 0))
+          (cond ((null? rest) s)
+                ((> (* (car rest) n) total) (loop (cdr rest) (+ s (car rest))))
+                (else (loop (cdr rest) s)))))))
+
+(define (list-sum-below-mean lst)
+  (if (null? lst)
+      0
+      (let ((n (length lst)) (total (apply + lst)))
+        (let loop ((rest lst) (s 0))
+          (cond ((null? rest) s)
+                ((< (* (car rest) n) total) (loop (cdr rest) (+ s (car rest))))
+                (else (loop (cdr rest) s)))))))
+
+(define (list-sum-even-index lst)
+  (let loop ((rest lst) (i 0) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder i 2) 0) (loop (cdr rest) (+ i 1) (+ s (car rest))))
+          (else (loop (cdr rest) (+ i 1) s)))))
+
+(define (list-sum-odd-index lst)
+  (let loop ((rest lst) (i 0) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder i 2) 1) (loop (cdr rest) (+ i 1) (+ s (car rest))))
+          (else (loop (cdr rest) (+ i 1) s)))))
