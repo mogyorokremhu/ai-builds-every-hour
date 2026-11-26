@@ -63,3 +63,34 @@
     (cond ((null? rest) p)
           ((= (remainder (car rest) 5) 0) (loop (cdr rest) (* p (car rest))))
           (else (loop (cdr rest) p)))))
+
+(define (list-twenty-second lst)
+  (let loop ((rest lst) (i 1))
+    (cond ((null? rest) '())
+          ((= i 22) (car rest))
+          (else (loop (cdr rest) (+ i 1))))))
+
+(define (list-sum-ninth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest)
+        s
+        (let* ((x (car rest)) (x2 (* x x)) (x4 (* x2 x2)))
+          (loop (cdr rest) (+ s (* x (* x4 x4))))))))
+
+(define (list-count-multiples-of-seven lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((= (remainder (car rest) 7) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-multiples-of-seven lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) 7) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-multiples-of-six lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 6) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))

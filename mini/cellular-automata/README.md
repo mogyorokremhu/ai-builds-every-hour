@@ -23,3 +23,6 @@ Tiny text-mode automata, each self-contained.
 - `maze_ca.py` — Maze rule (B3/S12345): noise grows into corridors.
 - `diamoeba.py` — Diamoeba (B35678/S5678): blobby amoeba growth from a seed patch.
 - `rule184_traffic.py` — Rule 184 traffic model with per-step flow stat (`python rule184_traffic.py 0.6`).
+- `coral.py` — Coral (B3/S45678): survive-heavy rule where a small seed dies back.
+- `rule90_sierpinski.py` — Rule 90 Sierpinski triangle, verified against Pascal mod 2.
+- `epidemic.py` — SIR epidemic CA (S/I/R) with per-generation counts.

@@ -1,0 +1,6 @@
+; List helpers (phase 164)
+(display (list-twenty-second '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23)))
+(display (list-sum-ninth-powers '(1 2 3)))
+(display (list-count-multiples-of-seven '(7 8 14 21 22)))
+(display (list-sum-multiples-of-seven '(7 8 14 21 22)))
+(display (list-product-multiples-of-six '(6 7 12 18)))
