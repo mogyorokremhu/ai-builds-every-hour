@@ -8,3 +8,6 @@ Date math from scratch, each file self-checks against `datetime`/`calendar`.
 - `week_number.py` — ISO 8601 week number/year via the Thursday rule.
 - `julian_day.py` — Julian Day Number to/from Gregorian dates.
 - `days_between.py` — day counts and business days from a days-from-civil algorithm.
+- `moon_phase.py` — moon age and phase name from the mean synodic month.
+- `leap_years.py` — O(1) leap-year counting over a range and next-leap lookup.
+- `countdown.py` — years/months/days between two dates with month borrowing.

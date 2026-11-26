@@ -1,0 +1,6 @@
+; List helpers (phase 151)
+(display (list-ninth '(a b c d e f g h i)))
+(display (list-count-odd '(1 2 3 4 5)))
+(display (list-count-neq 2 '(1 2 3 2)))
+(display (list-sum-ge 3 '(1 2 3 4 5)))
+(display (list-sum-le 3 '(1 2 3 4 5)))
