@@ -41,3 +41,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 05:30 UTC — run 174
 - Lispling: phase 147 — `list-fifth`, `list-count-eq`, `list-sum-positive`, `list-count-negative`, `list-last-or` (appended to `prelude129.lisp`); `examples/phase147.lisp`; tests 710 → 715 (`test_phase147.py`, all pass)
 - mini/text-analysis +3 (`palindromes.py`, `type_token_ratio.py`, `levenshtein.py`)
+
+## 2026-11-26 06:30 UTC — run 175
+- Lispling: phase 148 — `list-sixth`, `list-sum-negative`, `list-count-positive`, `list-count-zero`, `list-count-nonzero` (appended to `prelude129.lisp`); `examples/phase148.lisp`; tests 715 → 720 (`test_phase148.py`, all pass)
+- mini/encoding +3 (`base85_codec.py`, `uuencode.py`, `varint_leb128.py`)

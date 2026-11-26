@@ -428,3 +428,26 @@
 
 (define (list-last-or default lst)
   (if (null? lst) default (list-last lst)))
+
+(define (list-sixth lst) (car (cdr (cdr (cdr (cdr (cdr lst)))))))
+
+(define (list-sum-negative lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((< (car rest) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-count-positive lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((> (car rest) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-count-zero lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((= (car rest) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-count-nonzero lst)
+  (- (length lst) (list-count-zero lst)))

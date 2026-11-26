@@ -8,3 +8,6 @@ Byte/text encodings implemented by hand, each with a self-check.
 - `rot_and_atbash.py` — ROT-N (default ROT13) and Atbash letter substitutions.
 - `base32_codec.py` — Base32 encode/decode verified against the stdlib.
 - `morse_code.py` — Morse code encoder/decoder.
+- `base85_codec.py` — Ascii85 (base85) encoder/decoder checked against the stdlib.
+- `uuencode.py` — classic uuencode/uudecode with 45-byte lines.
+- `varint_leb128.py` — LEB128 (unsigned/signed) varints and ZigZag.

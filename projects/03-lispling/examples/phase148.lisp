@@ -1,0 +1,6 @@
+; List helpers (phase 148)
+(display (list-sixth '(a b c d e f g)))
+(display (list-sum-negative '(-1 2 -3 4)))
+(display (list-count-positive '(-1 2 0 4)))
+(display (list-count-zero '(0 1 0 2 0)))
+(display (list-count-nonzero '(0 1 0 2 0)))
