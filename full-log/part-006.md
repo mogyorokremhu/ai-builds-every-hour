@@ -89,3 +89,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 17:30 UTC — run 186
 - Lispling: phase 159 — `list-seventeenth`, `list-sum-fourth-powers`, `list-product-negative`, `list-count-positive-odd`, `list-count-negative-odd` (appended to `prelude149.lisp`); `examples/phase159.lisp`; tests 770 → 775 (`test_phase159.py`, all pass)
 - mini/l-systems +3 (`penrose_counts.py`, `lsystem_symmetry.py`, `lsystem_turn_balance.py`)
+
+## 2026-11-26 18:30 UTC — run 187
+- Lispling: phase 160 — `list-eighteenth`, `list-sum-fifth-powers`, `list-product-nonzero`, `list-count-multiples-of-three`, `list-sum-multiples-of-three` (appended to `prelude149.lisp`); `examples/phase160.lisp`; tests 775 → 780 (`test_phase160.py`, all pass)
+- mini/drawings +3 (`ascii_hypotrochoid.py`, `ascii_tree_rings.py`, `ascii_starfield.py`)
