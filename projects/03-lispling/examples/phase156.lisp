@@ -1,0 +1,6 @@
+; List helpers (phase 156)
+(display (list-fourteenth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)))
+(display (list-sum-mod '(1 2 3 4 5 6 7) 3 1))
+(display (list-count-mod '(1 2 3 4 5 6 7) 3 1))
+(display (list-product-mod '(1 2 3 4 5 6 7) 3 1))
+(display (list-count-at-mean '(1 2 3 4 5)))

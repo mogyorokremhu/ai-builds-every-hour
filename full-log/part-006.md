@@ -73,3 +73,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 13:30 UTC — run 182
 - Lispling: phase 155 — `list-thirteenth`, `list-sum-above-mean`, `list-sum-below-mean`, `list-sum-even-index`, `list-sum-odd-index` (appended to `prelude149.lisp`); `examples/phase155.lisp`; tests 750 → 755 (`test_phase155.py`, all pass)
 - mini/pixel-art +3 (`bresenham.py`, `flood_fill.py`, `scale2x.py`)
+
+## 2026-11-26 14:30 UTC — run 183
+- Lispling: phase 156 — `list-fourteenth`, `list-sum-mod`, `list-count-mod`, `list-product-mod`, `list-count-at-mean` (appended to `prelude149.lisp`); `examples/phase156.lisp`; tests 755 → 760 (`test_phase156.py`, all pass)
+- mini/color +3 (`cmyk.py`, `color_blind.py`, `color_wheel_ascii.py`)

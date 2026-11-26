@@ -199,3 +199,34 @@
     (cond ((null? rest) s)
           ((= (remainder i 2) 1) (loop (cdr rest) (+ i 1) (+ s (car rest))))
           (else (loop (cdr rest) (+ i 1) s)))))
+
+(define (list-fourteenth lst)
+  (let loop ((rest lst) (n 13))
+    (if (= n 0) (car rest) (loop (cdr rest) (- n 1)))))
+
+(define (list-sum-mod lst k r)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) k) r) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-count-mod lst k r)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((= (remainder (car rest) k) r) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-product-mod lst k r)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) k) r) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+(define (list-count-at-mean lst)
+  (if (null? lst)
+      0
+      (let ((n (length lst)) (total (apply + lst)))
+        (let loop ((rest lst) (c 0))
+          (cond ((null? rest) c)
+                ((= (* (car rest) n) total) (loop (cdr rest) (+ c 1)))
+                (else (loop (cdr rest) c)))))))
