@@ -1,0 +1,6 @@
+; List helpers (phase 145)
+(display (list-third '(a b c d)))
+(display (list-sum-abs '(-1 2 -3)))
+(display (list-last-index 2 '(2 1 2 3)))
+(display (list-repeat-each 2 '(1 2 3)))
+(display (list-count-gt 2 '(1 2 3 4)))
