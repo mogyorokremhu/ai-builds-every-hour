@@ -16,7 +16,7 @@ Runs 165–189. Newest entry last.
 
 ## 2026-11-25 23:30 UTC — run 168
 - Lispling: phase 141 — `list-running-min`, `list-spread`, `list-count-distinct`, `list-replace-all`, `list-take-last-while` (appended to `prelude129.lisp`); `examples/phase141.lisp`; tests 680 → 685 (`test_phase141.py`, all pass)
-- mini/logic +3 (`truth_table.py`, `quine_mccluskey.py`, `sat_dpll.py`)
+- New collection mini/dice (`dice_notation.py`, `yahtzee_score.py`, `dice_odds.py` + README)
 
 ## 2026-11-26 00:30 UTC — run 169
 - Lispling: phase 142 — `list-pad-left`, `list-pad-right`, `list-dedupe-adjacent`, `list-index-of-all`, `list-sum-by` (appended to `prelude129.lisp`); `examples/phase142.lisp`; tests 685 → 690 (`test_phase142.py`, all pass)
