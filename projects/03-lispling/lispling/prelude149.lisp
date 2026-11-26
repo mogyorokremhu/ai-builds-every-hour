@@ -286,3 +286,29 @@
     (cond ((null? rest) c)
           ((and (< (car rest) 0) (even? (car rest))) (loop (cdr rest) (+ c 1)))
           (else (loop (cdr rest) c)))))
+
+(define (list-seventeenth lst) (list-ref lst 16))
+
+(define (list-sum-fourth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest)
+        s
+        (loop (cdr rest) (+ s (* (car rest) (car rest) (car rest) (car rest)))))))
+
+(define (list-product-negative lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((< (car rest) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+(define (list-count-positive-odd lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((and (> (car rest) 0) (odd? (car rest))) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-count-negative-odd lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((and (< (car rest) 0) (odd? (car rest))) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))

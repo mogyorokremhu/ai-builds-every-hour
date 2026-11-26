@@ -1,0 +1,6 @@
+; List helpers (phase 159)
+(display (list-seventeenth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)))
+(display (list-sum-fourth-powers '(1 2 3)))
+(display (list-product-negative '(-2 3 -4 5)))
+(display (list-count-positive-odd '(-3 1 2 3 5 6)))
+(display (list-count-negative-odd '(-3 -2 -1 0 1)))

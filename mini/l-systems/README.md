@@ -17,3 +17,6 @@ Lindenmayer systems: string rewriting plus a turtle interpreter. Pure standard l
 - `lsystem_bbox.py` — bounding box and aspect ratio of the turtle path per generation.
 - `levy_c_ascii.py` — Lévy C curve drawn in ASCII on an 8-direction grid.
 - `lsystem_rle.py` — run-length compression ratio of L-system strings (round-trip checked).
+- `penrose_counts.py` — thin/thick rhombus substitution counts converging to the golden ratio.
+- `lsystem_symmetry.py` — palindrome and mirror-symmetry checks on expanded strings.
+- `lsystem_turn_balance.py` — net turning angle and closed-heading check per generation.
