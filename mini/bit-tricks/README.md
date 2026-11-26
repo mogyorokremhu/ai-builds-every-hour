@@ -14,3 +14,6 @@ Bit manipulation toys, standard library only.
 - `bit_interleave.py` — Morton/Z-order codes: spread, compact, encode, decode.
 - `bit_set_ops.py` — sets as bitmasks, submask enumeration, subset-sum DP in one int.
 - `bit_swar_bytes.py` — SWAR zero-byte detection, broadcast and lane-safe byte addition.
+- `bit_reverse.py` — reverse bits by loop and 32-bit mask swaps; FFT bit-reversal order.
+- `bit_next_pow2.py` — power-of-two test, round up/down, lowest set bit, floor log2.
+- `bit_saturating.py` — wrapping vs saturating add/sub and signed overflow detection.

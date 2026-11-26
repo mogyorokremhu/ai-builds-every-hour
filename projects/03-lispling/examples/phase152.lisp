@@ -1,0 +1,6 @@
+; List helpers (phase 152)
+(display (list-tenth '(1 2 3 4 5 6 7 8 9 10 11)))
+(display (list-product-lt 4 '(1 2 3 4 5)))
+(display (list-product-ge 4 '(1 2 3 4 5)))
+(display (list-count-divisible 3 '(3 4 6 9 10)))
+(display (list-sum-divisible 3 '(3 4 6 9 10)))

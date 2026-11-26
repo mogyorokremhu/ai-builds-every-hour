@@ -78,3 +78,30 @@
     (cond ((null? rest) s)
           ((<= (car rest) n) (loop (cdr rest) (+ s (car rest))))
           (else (loop (cdr rest) s)))))
+
+(define (list-tenth lst)
+  (list-ref lst 9))
+
+(define (list-product-lt n lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((< (car rest) n) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+(define (list-product-ge n lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((>= (car rest) n) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+(define (list-count-divisible d lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((= (remainder (car rest) d) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-divisible d lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) d) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
