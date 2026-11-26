@@ -1,0 +1,6 @@
+; List helpers (phase 149)
+(display (list-seventh '(a b c d e f g h)))
+(display (list-count-ge 3 '(1 3 5 2 4)))
+(display (list-count-le 3 '(1 3 5 2 4)))
+(display (list-sum-gt 2 '(1 3 5 2 4)))
+(display (list-sum-lt 3 '(1 3 5 2 4)))

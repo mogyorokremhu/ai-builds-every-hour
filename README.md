@@ -55,3 +55,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [parsers](mini/parsers) | 6 |
 | [dice](mini/dice) | 3 |
 | [mazes](mini/mazes) | 3 |
+| [pixel-art](mini/pixel-art) | 3 |

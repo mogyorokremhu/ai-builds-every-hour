@@ -45,3 +45,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 06:30 UTC — run 175
 - Lispling: phase 148 — `list-sixth`, `list-sum-negative`, `list-count-positive`, `list-count-zero`, `list-count-nonzero` (appended to `prelude129.lisp`); `examples/phase148.lisp`; tests 715 → 720 (`test_phase148.py`, all pass)
 - mini/encoding +3 (`base85_codec.py`, `uuencode.py`, `varint_leb128.py`)
+
+## 2026-11-26 07:30 UTC — run 176
+- Lispling: phase 149 — `list-seventh`, `list-count-ge`, `list-count-le`, `list-sum-gt`, `list-sum-lt` in new small `prelude149.lisp` (loaded by `evaluator.py`); `examples/phase149.lisp`; tests 720 → 725 (`test_phase149.py`, all pass)
+- New collection mini/pixel-art (`sprite_to_ascii.py`, `pbm_writer.py`, `dither.py` + README)
