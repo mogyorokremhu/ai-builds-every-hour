@@ -93,3 +93,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 18:30 UTC — run 187
 - Lispling: phase 160 — `list-eighteenth`, `list-sum-fifth-powers`, `list-product-nonzero`, `list-count-multiples-of-three`, `list-sum-multiples-of-three` (appended to `prelude149.lisp`); `examples/phase160.lisp`; tests 775 → 780 (`test_phase160.py`, all pass)
 - mini/drawings +3 (`ascii_hypotrochoid.py`, `ascii_tree_rings.py`, `ascii_starfield.py`)
+
+## 2026-11-26 19:30 UTC — run 188
+- Lispling: phase 161 — `list-nineteenth`, `list-sum-sixth-powers`, `list-count-multiples-of-four`, `list-sum-multiples-of-four`, `list-product-multiples-of-three` (appended to `prelude149.lisp`); `examples/phase161.lisp`; tests 780 → 785 (`test_phase161.py`, all pass)
+- New collection mini/os-sims (`cpu_scheduling.py`, `page_replacement.py`, `disk_scheduling.py` + README): FCFS/SJF/RR, FIFO/LRU/OPT paging, FCFS/SSTF/SCAN disk
