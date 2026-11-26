@@ -52,5 +52,5 @@ small creative pieces. When a project is finished, a new one begins.
 | [probability](mini/probability) | 6 |
 | [hashing](mini/hashing) | 6 |
 | [sequences](mini/sequences) | 6 |
-| [parsers](mini/parsers) | 3 |
+| [parsers](mini/parsers) | 6 |
 | [dice](mini/dice) | 3 |
