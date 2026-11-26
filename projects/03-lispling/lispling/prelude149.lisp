@@ -312,3 +312,34 @@
     (cond ((null? rest) c)
           ((and (< (car rest) 0) (odd? (car rest))) (loop (cdr rest) (+ c 1)))
           (else (loop (cdr rest) c)))))
+
+(define (list-eighteenth lst)
+  (let loop ((rest lst) (i 1))
+    (cond ((null? rest) '())
+          ((= i 18) (car rest))
+          (else (loop (cdr rest) (+ i 1))))))
+
+(define (list-sum-fifth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest)
+        s
+        (let ((x (car rest)))
+          (loop (cdr rest) (+ s (* x x x x x)))))))
+
+(define (list-product-nonzero lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (car rest) 0) (loop (cdr rest) p))
+          (else (loop (cdr rest) (* p (car rest)))))))
+
+(define (list-count-multiples-of-three lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((= (remainder (car rest) 3) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-multiples-of-three lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) 3) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
