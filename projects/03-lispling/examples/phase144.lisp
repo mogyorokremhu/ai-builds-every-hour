@@ -1,0 +1,6 @@
+; List helpers (phase 144)
+(display (list-second '(a b c)))
+(display (list-sum-squares '(1 2 3)))
+(display (list-index-where (lambda (x) (> x 2)) '(1 2 3 4)))
+(display (list-min-max '(3 1 4 1 5)))
+(display (list-clamp-all 0 10 '(-5 3 15)))
