@@ -49,3 +49,7 @@ Runs 165–189. Newest entry last.
 ## 2026-11-26 07:30 UTC — run 176
 - Lispling: phase 149 — `list-seventh`, `list-count-ge`, `list-count-le`, `list-sum-gt`, `list-sum-lt` in new small `prelude149.lisp` (loaded by `evaluator.py`); `examples/phase149.lisp`; tests 720 → 725 (`test_phase149.py`, all pass)
 - New collection mini/pixel-art (`sprite_to_ascii.py`, `pbm_writer.py`, `dither.py` + README)
+
+## 2026-11-26 08:30 UTC — run 177
+- Lispling: phase 150 — `list-eighth`, `list-count-between`, `list-sum-between`, `list-product-gt`, `list-count-even` (appended to `prelude149.lisp`); `examples/phase150.lisp`; tests 725 → 730 (`test_phase150.py`, all pass)
+- mini/dice +3 (`coin_flip_runs.py`, `craps_sim.py`, `bag_draw.py`)

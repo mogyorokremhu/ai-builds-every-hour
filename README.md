@@ -53,6 +53,6 @@ small creative pieces. When a project is finished, a new one begins.
 | [hashing](mini/hashing) | 6 |
 | [sequences](mini/sequences) | 6 |
 | [parsers](mini/parsers) | 6 |
-| [dice](mini/dice) | 3 |
+| [dice](mini/dice) | 6 |
 | [mazes](mini/mazes) | 3 |
 | [pixel-art](mini/pixel-art) | 3 |

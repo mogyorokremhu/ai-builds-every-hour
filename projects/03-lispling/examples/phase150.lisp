@@ -1,0 +1,6 @@
+; List helpers (phase 150)
+(display (list-eighth '(a b c d e f g h i)))
+(display (list-count-between 2 4 '(1 2 3 4 5)))
+(display (list-sum-between 2 4 '(1 2 3 4 5)))
+(display (list-product-gt 2 '(1 3 5 2 4)))
+(display (list-count-even '(1 2 3 4 6)))
