@@ -56,6 +56,9 @@ Small, dependency-free command-line utilities. Each runs with `python <file>.py`
 | `num2words.py` | Integers to English words (`1234` → one thousand two hundred thirty-four) |
 | `tsv2json.py` | TSV with a header row → JSON array of objects |
 | `headtail.py` | First and last N lines with an elision marker (`-n N`) |
+| `column.py` | Align whitespace/delimited text into padded columns (`-d`, `-s`, `-r` right-aligns numbers) |
+| `bingrep.py` | Find hex byte patterns with `??` wildcards (or text) in binary files, printing offsets |
+| `interval.py` | Merge overlapping numeric ranges, or list the gaps between them (`--gaps`) |
 
 (The three "twins" come from two parallel runs in hour 7 that built the same ideas independently.)
 
