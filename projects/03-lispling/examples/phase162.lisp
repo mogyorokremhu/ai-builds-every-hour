@@ -1,0 +1,6 @@
+; List helpers (phase 162)
+(display (list-twentieth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21)))
+(display (list-sum-seventh-powers '(1 2 3)))
+(display (list-count-multiples-of-five '(5 6 10 15 16)))
+(display (list-sum-multiples-of-five '(5 6 10 15 16)))
+(display (list-product-multiples-of-four '(4 5 8 12)))

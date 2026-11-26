@@ -59,3 +59,6 @@ Self-contained Python puzzle solvers and toys. Each runs with `python <file>.py`
 | `ugly_numbers.py` | Ugly numbers via three merge pointers, verified by brute force |
 | `staircase_ways.py` | Staircase climbing with 1..k steps: DP count vs enumeration |
 | `max_subarray.py` | Kadane's maximum subarray with indices, checked against brute force |
+| `rod_cutting.py` | Rod cutting for maximum revenue: DP with piece list, checked against brute force |
+| `partition_equal.py` | Split numbers into two equal-sum groups via subset-sum DP |
+| `edit_distance.py` | Levenshtein distance with a readable edit script |

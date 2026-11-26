@@ -15,6 +15,7 @@ PRELUDE55 = Path(__file__).with_name("prelude55.lisp")  # phase 55+ additions
 PRELUDE84 = Path(__file__).with_name("prelude84.lisp")  # phase 84+ additions
 PRELUDE129 = Path(__file__).with_name("prelude129.lisp")  # phase 129+ additions
 PRELUDE149 = Path(__file__).with_name("prelude149.lisp")  # phase 149+ additions
+PRELUDE162 = Path(__file__).with_name("prelude162.lisp")  # phase 162+ additions
 
 
 def global_env(out=print, prelude=True) -> Env:
@@ -24,7 +25,7 @@ def global_env(out=print, prelude=True) -> Env:
     env.update(stdlib.make())
     env.update(vectors.make())
     if prelude:
-        for path in (PRELUDE, PRELUDE28, PRELUDE55, PRELUDE84, PRELUDE129, PRELUDE149):
+        for path in (PRELUDE, PRELUDE28, PRELUDE55, PRELUDE84, PRELUDE129, PRELUDE149, PRELUDE162):
             for e in parse(path.read_text()):
                 evaluate(e, env)
     return env
