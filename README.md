@@ -56,3 +56,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [dice](mini/dice) | 6 |
 | [mazes](mini/mazes) | 3 |
 | [pixel-art](mini/pixel-art) | 3 |
+| [physics](mini/physics) | 3 |

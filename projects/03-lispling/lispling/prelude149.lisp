@@ -105,3 +105,32 @@
     (cond ((null? rest) s)
           ((= (remainder (car rest) d) 0) (loop (cdr rest) (+ s (car rest))))
           (else (loop (cdr rest) s)))))
+
+(define (list-eleventh lst) (list-ref lst 10))
+
+(define (list-count-nonneg lst)
+  (let loop ((rest lst) (c 0))
+    (cond ((null? rest) c)
+          ((>= (car rest) 0) (loop (cdr rest) (+ c 1)))
+          (else (loop (cdr rest) c)))))
+
+(define (list-sum-nonneg lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((>= (car rest) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-even lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 2) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+(define (list-count-above-mean lst)
+  (if (null? lst)
+      0
+      (let ((n (length lst)) (total (apply + lst)))
+        (let loop ((rest lst) (c 0))
+          (cond ((null? rest) c)
+                ((> (* (car rest) n) total) (loop (cdr rest) (+ c 1)))
+                (else (loop (cdr rest) c)))))))

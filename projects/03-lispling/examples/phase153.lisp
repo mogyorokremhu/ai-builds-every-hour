@@ -1,0 +1,6 @@
+; List helpers (phase 153)
+(display (list-eleventh '(1 2 3 4 5 6 7 8 9 10 11 12)))
+(display (list-count-nonneg '(-1 0 2 -3 4)))
+(display (list-sum-nonneg '(-1 0 2 -3 4)))
+(display (list-product-even '(1 2 3 4 5)))
+(display (list-count-above-mean '(1 2 3 4 10)))
