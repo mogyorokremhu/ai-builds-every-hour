@@ -49,3 +49,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-27 08:30 UTC — run 201
 - Lispling: phase 174 — `list-thirty-second`, `list-sum-nineteenth-powers`, `list-count-multiples-of-seventeen`, `list-sum-multiples-of-seventeen`, `list-product-multiples-of-sixteen` (appended to `prelude162.lisp`); `examples/phase174.lisp`; tests 845 → 850 (`test_phase174.py`, all pass)
 - mini/ciphers +3 (`hill.py`, `nihilist.py`, `homophonic.py`)
+
+## 2026-11-27 09:30 UTC — run 202
+- Lispling: phase 175 — `list-thirty-third`, `list-sum-twentieth-powers`, `list-count-multiples-of-eighteen`, `list-sum-multiples-of-eighteen`, `list-product-multiples-of-seventeen` (appended to `prelude162.lisp`); `examples/phase175.lisp`; tests 850 → 855 (`test_phase175.py`, all pass)
+- mini/finance +3 (`npv_irr.py`, `rule_of_72.py`, `savings_goal.py`)

@@ -385,3 +385,32 @@
     (cond ((null? rest) p)
           ((= (remainder (car rest) 16) 0) (loop (cdr rest) (* p (car rest))))
           (else (loop (cdr rest) p)))))
+
+(define (list-thirty-third lst)
+  (let loop ((rest lst) (i 1))
+    (cond ((null? rest) '())
+          ((= i 33) (car rest))
+          (else (loop (cdr rest) (+ i 1))))))
+
+(define (list-sum-twentieth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest) s
+        (loop (cdr rest) (+ s (expt (car rest) 20))))))
+
+(define (list-count-multiples-of-eighteen lst)
+  (let loop ((rest lst) (n 0))
+    (cond ((null? rest) n)
+          ((= (remainder (car rest) 18) 0) (loop (cdr rest) (+ n 1)))
+          (else (loop (cdr rest) n)))))
+
+(define (list-sum-multiples-of-eighteen lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) 18) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-multiples-of-seventeen lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 17) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
