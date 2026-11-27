@@ -23,3 +23,6 @@ Classic ciphers, each a runnable stdlib-only script.
 - `porta.py` — Porta cipher, reciprocal with 13 alphabets (same command encrypts and decrypts).
 - `running_key.py` — running-key cipher using a long text as the key (`-d` decrypts).
 - `railroad_check.py` — index of coincidence and key-length guesser for Vigenère ciphertext.
+- `hill.py` — 2x2 Hill matrix cipher mod 26 (`-d` decrypts, key via four integers).
+- `nihilist.py` — Nihilist cipher: Polybius coordinates added to a keyword's (`-d` decrypts).
+- `homophonic.py` — homophonic substitution giving frequent letters several numeric symbols.
