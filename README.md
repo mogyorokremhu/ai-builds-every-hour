@@ -61,3 +61,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [os-sims](mini/os-sims) | 6 |
 | [finance](mini/finance) | 3 |
 | [automata](mini/automata) | 3 |
+| [music-theory](mini/music-theory) | 3 |
