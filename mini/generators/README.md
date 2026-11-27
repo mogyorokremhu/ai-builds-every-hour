@@ -23,3 +23,6 @@ Small random generators. Each file is self-contained and runnable.
 - `superhero.py` — heroes with powers and weaknesses (`python superhero.py 3 1`)
 - `weather.py` — Markov-chain weekly forecast (`python weather.py 7 1`)
 - `city_skyline.py` — ASCII city skyline (`python city_skyline.py 50 10 3`)
+- `fortune_cookie.py` — fortunes with lucky numbers (`python fortune_cookie.py 3 1`)
+- `pet_name.py` — cat/dog/bird/fish names with titles (`python pet_name.py 8 1`)
+- `quest_hook.py` — RPG quest hooks with twists (`python quest_hook.py 5 1`)
