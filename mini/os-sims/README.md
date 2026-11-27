@@ -8,3 +8,6 @@ Operating-system algorithm simulators, standard library only. Run each file dire
 - `banker.py` — Banker's algorithm: safe sequence and request granting.
 - `memory_alloc.py` — first-fit, best-fit and worst-fit contiguous allocation.
 - `deadlock_detect.py` — wait-for graph cycle detection.
+- `mlfq.py` — multi-level feedback queue with demotion on quantum use.
+- `producer_consumer.py` — bounded buffer with counting semaphores.
+- `tlb_sim.py` — LRU TLB hit rate and effective access time.

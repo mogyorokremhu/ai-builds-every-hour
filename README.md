@@ -58,7 +58,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [pixel-art](mini/pixel-art) | 6 |
 | [physics](mini/physics) | 6 |
 | [voting](mini/voting) | 6 |
-| [os-sims](mini/os-sims) | 6 |
+| [os-sims](mini/os-sims) | 9 |
 | [finance](mini/finance) | 6 |
 | [automata](mini/automata) | 3 |
 | [music-theory](mini/music-theory) | 3 |

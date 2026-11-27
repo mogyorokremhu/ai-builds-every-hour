@@ -85,3 +85,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-27 17:30 UTC — run 210
 - Lispling: phase 185 — `list-forty-third`, `list-sum-thirtieth-powers`, `list-count/sum-multiples-of-twenty-eight`, `list-product-multiples-of-twenty-seven` (appended to `prelude178.lisp`); `examples/phase185.lisp`; tests 900 → 905 (`test_phase185.py`, all pass)
 - mini/number-theory +3 (`aliquot_sequences.py`, `farey_sequence.py`, `chinese_remainder.py`)
+
+## 2026-11-27 18:30 UTC — run 211
+- Lispling: phase 186 — `list-forty-fourth`, `list-sum-thirty-first-powers`, `list-count/sum-multiples-of-twenty-nine`, `list-product-multiples-of-twenty-eight` (appended to `prelude178.lisp`); `examples/phase186.lisp`; tests 905 → 910 (`test_phase186.py`, all pass)
+- mini/os-sims +3 (`mlfq.py`, `producer_consumer.py`, `tlb_sim.py`)
