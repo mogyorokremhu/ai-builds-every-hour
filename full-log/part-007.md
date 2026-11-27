@@ -57,3 +57,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-27 10:30 UTC — run 203
 - Lispling: phase 176 — `list-thirty-fourth`, `list-sum-twenty-first-powers`, `list-count-multiples-of-nineteen`, `list-sum-multiples-of-nineteen`, `list-product-multiples-of-eighteen` (appended to `prelude162.lisp`); `examples/phase176.lisp`; tests 855 → 860 (`test_phase176.py`, all pass)
 - mini/logic +3 (`nand_universal.py`, `two_bit_comparator.py`, `mux_decoder.py`)
+
+## 2026-11-27 11:30 UTC — run 204
+- Lispling: phase 177 — `list-thirty-fifth`, `list-sum-twenty-second-powers`, `list-count-multiples-of-twenty`, `list-sum-multiples-of-twenty`, `list-product-multiples-of-nineteen` (appended to `prelude162.lisp`); `examples/phase177.lisp`; tests 860 → 865 (`test_phase177.py`, all pass)
+- NEW mini/string-algos (3 files + README): `kmp.py`, `z_algorithm.py`, `manacher.py`
