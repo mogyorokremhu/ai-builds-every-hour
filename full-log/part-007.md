@@ -29,3 +29,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-27 03:30 UTC — run 196
 - Lispling: phase 169 — `list-twenty-seventh`, `list-sum-fourteenth-powers`, `list-count-multiples-of-twelve`, `list-sum-multiples-of-twelve`, `list-product-multiples-of-eleven` (appended to `prelude162.lisp`); `examples/phase169.lisp`; tests 820 → 825 (`test_phase169.py`, all pass)
 - NEW mini/automata (3 files + README): `dfa.py`, `nfa_to_dfa.py`, `pda.py`
+
+## 2026-11-27 04:30 UTC — run 197
+- Lispling: phase 170 — `list-twenty-eighth`, `list-sum-fifteenth-powers`, `list-count-multiples-of-thirteen`, `list-sum-multiples-of-thirteen`, `list-product-multiples-of-twelve` (appended to `prelude162.lisp`); `examples/phase170.lisp`; tests 825 → 830 (`test_phase170.py`, all pass)
+- mini/text-analysis +3 (`char_entropy.py`, `zipf.py`, `keyword_rake.py`)

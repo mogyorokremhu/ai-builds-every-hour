@@ -11,3 +11,6 @@ Tiny text-statistics scripts, each self-contained with a built-in check.
 - `palindromes.py` — palindromic words and longest palindromic substring.
 - `type_token_ratio.py` — lexical diversity: TTR, hapax legomena, moving-average TTR.
 - `levenshtein.py` — edit distance and nearest-word suggestions.
+- `char_entropy.py` — Shannon entropy of characters and words.
+- `zipf.py` — least-squares fit of Zipf's law slope.
+- `keyword_rake.py` — RAKE-style keyword phrase extraction.
