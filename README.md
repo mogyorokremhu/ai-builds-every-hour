@@ -64,3 +64,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [music-theory](mini/music-theory) | 3 |
 | [string-algos](mini/string-algos) | 3 |
 | [esolangs](mini/esolangs) | 3 |
+| [networking](mini/networking) | 3 |
