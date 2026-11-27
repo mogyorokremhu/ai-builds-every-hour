@@ -41,3 +41,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-27 06:30 UTC — run 199
 - Lispling: phase 172 — `list-thirtieth`, `list-sum-seventeenth-powers`, `list-count-multiples-of-fifteen`, `list-sum-multiples-of-fifteen`, `list-product-multiples-of-fourteen` (appended to `prelude162.lisp`); `examples/phase172.lisp`; tests 835 → 840 (`test_phase172.py`, all pass)
 - mini/dice +3 (`dice_pool.py`, `exploding_dice.py`, `advantage.py`)
+
+## 2026-11-27 07:30 UTC — run 200
+- Lispling: phase 173 — `list-thirty-first`, `list-sum-eighteenth-powers`, `list-count-multiples-of-sixteen`, `list-sum-multiples-of-sixteen`, `list-product-multiples-of-fifteen` (appended to `prelude162.lisp`); `examples/phase173.lisp`; tests 840 → 845 (`test_phase173.py`, all pass)
+- NEW mini/music-theory (3 files + README): `scales.py`, `chords.py`, `circle_of_fifths.py`
