@@ -149,3 +149,4 @@
 - [x] Phase 127: rolling-mean-ninth/rolling-sum-ninth/rolling-median-ninth/rolling-range-ninth in `prelude84.lisp` (test_phase127.py, examples/phase127.lisp)
 - [x] Phase 128: generic rolling-first/last/max/min/mean/sum/median/range-pow with exponent arg in `prelude84.lisp` (test_phase128.py, examples/phase128.lisp)
 - [x] Phases 129–160: hash-table, string, list, counting/summing and nth-element helpers in `prelude129.lisp` / `prelude149.lisp` (see tests/test_phaseNNN.py, examples/phaseNNN.lisp)
+- [x] Phases 161–191: counting/summing helpers (nth, power sums, multiples) in `prelude178.lisp` (see tests/test_phaseNNN.py)
