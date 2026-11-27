@@ -306,3 +306,31 @@
     (cond ((null? rest) p)
           ((= (remainder (car rest) 30) 0) (loop (cdr rest) (* p (car rest))))
           (else (loop (cdr rest) p)))))
+
+(define (list-forty-seventh lst)
+  (let loop ((rest lst) (i 1))
+    (cond ((null? rest) '())
+          ((= i 47) (car rest))
+          (else (loop (cdr rest) (+ i 1))))))
+
+(define (list-sum-thirty-fourth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest) s (loop (cdr rest) (+ s (expt (car rest) 34))))))
+
+(define (list-count-multiples-of-thirty-two lst)
+  (let loop ((rest lst) (n 0))
+    (cond ((null? rest) n)
+          ((= (remainder (car rest) 32) 0) (loop (cdr rest) (+ n 1)))
+          (else (loop (cdr rest) n)))))
+
+(define (list-sum-multiples-of-thirty-two lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) 32) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-multiples-of-thirty-one lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 31) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))

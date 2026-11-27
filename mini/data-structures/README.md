@@ -19,3 +19,6 @@ Classic data structures from scratch, standard library only. Each file runs a sm
 - `treap.py` — randomized BST using split/merge with heap priorities.
 - `lfu_cache.py` — O(1) least-frequently-used cache with frequency buckets.
 - `interval_merge.py` — set of disjoint ranges with merging add and coverage queries.
+- `splay_tree.py` — top-down splay tree; recently accessed keys rise to the root.
+- `count_min_sketch.py` — approximate frequency counts in fixed memory (never underestimates).
+- `order_statistic_tree.py` — k-th smallest and rank queries via binary descent on a Fenwick tree.
