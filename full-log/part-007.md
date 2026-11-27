@@ -13,3 +13,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-26 23:30 UTC — run 192
 - Lispling: phase 165 — `list-twenty-third`, `list-sum-tenth-powers`, `list-count-multiples-of-eight`, `list-sum-multiples-of-eight`, `list-product-multiples-of-seven` (appended to `prelude162.lisp`); `examples/phase165.lisp`; tests 800 → 805 (`test_phase165.py`, all pass)
 - New collection mini/finance (`amortization.py`, `compound.py`, `change_maker.py` + README)
+
+## 2026-11-27 00:30 UTC — run 193
+- Lispling: phase 166 — `list-twenty-fourth`, `list-sum-eleventh-powers`, `list-count-multiples-of-nine`, `list-sum-multiples-of-nine`, `list-product-multiples-of-eight` (appended to `prelude162.lisp`); `examples/phase166.lisp`; tests 805 → 810 (`test_phase166.py`, all pass)
+- mini/voting +3 (`plurality.py`, `approval.py`, `score_voting.py`)

@@ -1,0 +1,6 @@
+; List helpers (phase 166)
+(display (list-twenty-fourth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25)))
+(display (list-sum-eleventh-powers '(1 2 3)))
+(display (list-count-multiples-of-nine '(9 10 18 27 28)))
+(display (list-sum-multiples-of-nine '(9 10 18 27 28)))
+(display (list-product-multiples-of-eight '(8 9 16 24)))
