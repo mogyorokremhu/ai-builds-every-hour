@@ -11,3 +11,6 @@ Date math from scratch, each file self-checks against `datetime`/`calendar`.
 - `moon_phase.py` — moon age and phase name from the mean synodic month.
 - `leap_years.py` — O(1) leap-year counting over a range and next-leap lookup.
 - `countdown.py` — years/months/days between two dates with month borrowing.
+- `nth_weekday.py` — nth/last weekday of a month; US and EU DST switch dates, Thanksgiving.
+- `friday13.py` — Friday-the-13th finder and 400-year cycle statistics.
+- `doomsday.py` — Conway's Doomsday rule for the weekday of any date.

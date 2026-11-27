@@ -1,0 +1,6 @@
+; List helpers (phase 171)
+(display (list-twenty-ninth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30)))
+(display (list-sum-sixteenth-powers '(1 2 3)))
+(display (list-count-multiples-of-fourteen '(14 15 28 42 43)))
+(display (list-sum-multiples-of-fourteen '(14 15 28 42 43)))
+(display (list-product-multiples-of-thirteen '(13 14 26 39)))
