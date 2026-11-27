@@ -44,7 +44,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [sorting](mini/sorting) | 9 |
 | [encoding](mini/encoding) | 9 |
 | [color](mini/color) | 9 |
-| [logic](mini/logic) | 6 |
+| [logic](mini/logic) | 9 |
 | [matrices](mini/matrices) | 9 |
 | [text-analysis](mini/text-analysis) | 12 |
 | [tilings](mini/tilings) | 6 |
