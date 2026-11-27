@@ -14,3 +14,6 @@ Small number-theory toys, standard library only.
 - `lucas_lehmer.py` — Lucas-Lehmer test for Mersenne primes and the perfect numbers they give.
 - `quadratic_residues.py` — squares mod n, primitive roots and an Euler-criterion check.
 - `digital_root.py` — digital roots, multiplicative persistence and Harshad numbers.
+- `aliquot_sequences.py` — aliquot sequences s(n)=σ(n)−n, classified as perfect/amicable/sociable/terminating.
+- `farey_sequence.py` — Farey sequences via the next-term recurrence plus the neighbor-determinant check.
+- `chinese_remainder.py` — CRT solver for congruences with possibly non-coprime moduli.
