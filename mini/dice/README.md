@@ -8,3 +8,6 @@ Tiny dice utilities (standard library only).
 - `coin_flip_runs.py` — simulate coin flips and histogram the run lengths.
 - `craps_sim.py` — pass-line craps simulation vs. the exact 244/495 win rate.
 - `bag_draw.py` — shuffled-bag die roller that avoids long streaks.
+- `dice_pool.py` — dice-pool success counting, simulated vs. exact binomial.
+- `exploding_dice.py` — exploding dN simulation vs. the exact mean.
+- `advantage.py` — exact d20 advantage/disadvantage distributions.
