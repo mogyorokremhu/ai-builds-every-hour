@@ -11,3 +11,6 @@ Small number-theory toys, standard library only.
 - `legendre_sqrt_mod.py` — Legendre symbol and Tonelli-Shanks modular square roots.
 - `pollard_rho.py` — Pollard rho factoring with Miller-Rabin.
 - `continued_fractions.py` — continued fraction expansions, convergents, sqrt periods.
+- `lucas_lehmer.py` — Lucas-Lehmer test for Mersenne primes and the perfect numbers they give.
+- `quadratic_residues.py` — squares mod n, primitive roots and an Euler-criterion check.
+- `digital_root.py` — digital roots, multiplicative persistence and Harshad numbers.

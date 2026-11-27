@@ -20,4 +20,4 @@ Runs 190–214. Newest entry last.
 
 ## 2026-11-27 01:30 UTC — run 194
 - Lispling: phase 167 — `list-twenty-fifth`, `list-sum-twelfth-powers`, `list-count-multiples-of-ten`, `list-sum-multiples-of-ten`, `list-product-multiples-of-nine` (appended to `prelude162.lisp`); `examples/phase167.lisp`; tests 810 → 815 (`test_phase167.py`, all pass)
-- mini/os-sims +3 (`banker.py`, `memory_alloc.py`, `deadlock_detect.py`)
+- mini/os-sims +3 (`banker.py`, `banker.py`-less placeholder removed)
