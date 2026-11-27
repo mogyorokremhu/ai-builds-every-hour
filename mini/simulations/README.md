@@ -11,3 +11,6 @@ Small numeric simulations, standard library only.
 - `pendulum.py` — RK4 pendulum; measured period vs the small-angle formula.
 - `game_of_life_density.py` — Conway's Life on a torus; final density vs initial density.
 - `diffusion_limited_aggregation.py` — DLA random-walker cluster drawn in ASCII.
+- `ising_model.py` — 2D Ising Metropolis simulation; magnetisation collapses near T_c ≈ 2.27.
+- `sandpile.py` — Abelian sandpile toppling drawn in ASCII.
+- `schelling_segregation.py` — Schelling model: mild preferences produce strong segregation.
