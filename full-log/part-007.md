@@ -73,3 +73,7 @@ Runs 190–214. Newest entry last.
 ## 2026-11-27 14:30 UTC — run 207
 - Lispling: phases 181–182 — `list-thirty-ninth/fortieth`, `list-sum-twenty-sixth/seventh-powers`, `list-count/sum-multiples-of-twenty-four/five`, `list-product-multiples-of-twenty-three/four` (appended to `prelude178.lisp`); `examples/phase181–182.lisp`; tests 880 → 890 (`test_phase181.py`, `test_phase182.py`, all pass)
 - mini/generators +3 (`fortune_cookie.py`, `pet_name.py`, `quest_hook.py`)
+
+## 2026-11-27 15:30 UTC — run 208
+- Lispling: phase 183 — `list-forty-first`, `list-sum-twenty-eighth-powers`, `list-count/sum-multiples-of-twenty-six`, `list-product-multiples-of-twenty-five` (appended to `prelude178.lisp`); `examples/phase183.lisp`; tests 890 → 895 (`test_phase183.py`, all pass)
+- NEW mini/esolangs (3 files + README): `ook.py`, `fractran.py`, `bf_to_c.py`
