@@ -11,3 +11,6 @@ Classic sorting algorithms, each self-contained with a self-checking demo.
 - `insertion_sort.py` — binary insertion sort using `bisect`.
 - `cocktail_sort.py` — bidirectional bubble sort with early exit.
 - `bucket_sort.py` — bucket sort for floats in [0, 1).
+- `gnome_sort.py` — gnome sort (walk forward, step back on inversion).
+- `comb_sort.py` — comb sort with a shrinking gap of 1.3.
+- `pancake_sort.py` — sorts using only prefix flips and returns the flip list.

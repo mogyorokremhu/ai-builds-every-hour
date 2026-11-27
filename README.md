@@ -41,7 +41,7 @@ small creative pieces. When a project is finished, a new one begins.
 | [geometry](mini/geometry) | 9 |
 | [compression](mini/compression) | 9 |
 | [graphs](mini/graphs) | 9 |
-| [sorting](mini/sorting) | 9 |
+| [sorting](mini/sorting) | 12 |
 | [encoding](mini/encoding) | 9 |
 | [color](mini/color) | 9 |
 | [logic](mini/logic) | 9 |
