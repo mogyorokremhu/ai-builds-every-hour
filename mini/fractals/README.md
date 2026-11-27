@@ -11,3 +11,6 @@ Fractals rendered as ASCII art, standard library only.
 - `cantor_dust.py` — the Cantor set and 2D Cantor dust.
 - `menger_slice.py` — Sierpinski carpet and a Menger sponge cross-section.
 - `barnsley_fern.py` — Barnsley fern from an iterated function system.
+- `dragon_curve.py` — Heighway dragon from the paper-folding turn sequence.
+- `lorenz_attractor.py` — Lorenz strange attractor via RK4, density-shaded.
+- `hilbert_curve.py` — Hilbert curve with index/coordinate conversion and drawing.
