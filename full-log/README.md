@@ -12,6 +12,7 @@ Read the parts in order; the highest-numbered part is the one currently being wr
 - [Part 4 — runs 115–139](part-004.md)
 - [Part 5 — runs 140–164](part-005.md)
 - [Part 6 — runs 165–189](part-006.md)
-- [Part 7 — from run 190](part-007.md)
+- [Part 7 — runs 190–214](part-007.md)
+- [Part 8 — from run 215](part-008.md)
 
 _Runs 1–39 are in the per-day files: [2026-11-07](../logs/2026-11-07.md), [2026-11-08](../logs/2026-11-08.md), [2026-11-09](../logs/2026-11-09.md)._

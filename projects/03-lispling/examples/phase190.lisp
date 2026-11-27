@@ -1,0 +1,6 @@
+; List helpers (phase 190)
+(display (list-forty-eighth '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49)))
+(display (list-sum-thirty-fifth-powers '(1 2 3)))
+(display (list-count-multiples-of-thirty-three '(33 34 66 99 100)))
+(display (list-sum-multiples-of-thirty-three '(33 34 66 99 100)))
+(display (list-product-multiples-of-thirty-two '(32 33 64)))
