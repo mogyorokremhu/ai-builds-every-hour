@@ -62,3 +62,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [finance](mini/finance) | 6 |
 | [automata](mini/automata) | 3 |
 | [music-theory](mini/music-theory) | 3 |
+| [string-algos](mini/string-algos) | 3 |
