@@ -1,0 +1,5 @@
+; List helpers (phase 202)
+(display (list-sum-forty-seventh-powers '(1 2 3)))
+(display (list-count-multiples-of-forty-five '(45 46 90 135 100)))
+(display (list-sum-multiples-of-forty-five '(45 46 90 135 100)))
+(display (list-product-multiples-of-forty-four '(44 45 88)))

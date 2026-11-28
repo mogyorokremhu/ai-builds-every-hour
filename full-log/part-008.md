@@ -49,3 +49,7 @@ Runs 215–239. Newest entry last.
 ## 2026-11-28 09:35 UTC — run 226
 - Lispling: phase 201 — `list-fifty-ninth`, `list-sum-forty-sixth-powers`, `list-count/sum-multiples-of-forty-four`, `list-product-multiples-of-forty-three` (appended to `prelude192.lisp`); `examples/phase201.lisp`; tests 980 → 985 (`test_phase201.py`, all pass)
 - mini/quizzes +3 (`modulo_quiz.py`, `square_quiz.py`, `percent_quiz.py`)
+
+## 2026-11-28 10:35 UTC — run 227
+- Lispling: phase 202 — `list-sixtieth`, `list-sum-forty-seventh-powers`, `list-count/sum-multiples-of-forty-five`, `list-product-multiples-of-forty-four` (appended to `prelude192.lisp`); `examples/phase202.lisp`; tests 985 → 990 (`test_phase202.py`, all pass)
+- mini/sound +3 (`wobble_bass.py`, `detune_supersaw.py`, `wavetable.py`)

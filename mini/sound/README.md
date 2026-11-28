@@ -23,3 +23,6 @@ WAV generators using only the standard library (`wave`, `struct`, `math`).
 - `reverse_reverb.py` — time-reversed plucks that swell into their attack.
 - `ring_mod.py` — ring modulation of a tone by two carriers for metallic sidebands.
 - `shepard_tone.py` — endlessly rising Shepard-tone illusion from octave-spaced sines.
+- `wobble_bass.py` — saw bass through a low-pass filter whose cutoff is swept by an LFO.
+- `detune_supersaw.py` — seven detuned saws summed into a thick supersaw tone.
+- `wavetable.py` — wavetable oscillator morphing sine → triangle → square with interpolation.
