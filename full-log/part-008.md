@@ -45,3 +45,7 @@ Runs 215–239. Newest entry last.
 ## 2026-11-28 08:35 UTC — run 225
 - Lispling: phase 200 — `list-fifty-eighth`, `list-sum-forty-fifth-powers`, `list-count/sum-multiples-of-forty-three`, `list-product-multiples-of-forty-two` (appended to `prelude192.lisp`); `examples/phase200.lisp`; tests 975 → 980 (`test_phase200.py`, all pass)
 - mini/math-art +3 (`newton_fractal_ascii.py`, `pythagoras_tree_svg.py`, `cardioid_string_art_svg.py`)
+
+## 2026-11-28 09:35 UTC — run 226
+- Lispling: phase 201 — `list-fifty-ninth`, `list-sum-forty-sixth-powers`, `list-count/sum-multiples-of-forty-four`, `list-product-multiples-of-forty-three` (appended to `prelude192.lisp`); `examples/phase201.lisp`; tests 980 → 985 (`test_phase201.py`, all pass)
+- mini/quizzes +3 (`modulo_quiz.py`, `square_quiz.py`, `percent_quiz.py`)

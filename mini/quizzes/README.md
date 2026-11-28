@@ -14,3 +14,6 @@ Tiny terminal quizzes, standard library only. Each supports `--auto` (and `--see
 - `gcd_quiz.py` — gcd and lcm of two small numbers.
 - `base_convert_quiz.py` — decimal to binary, octal or hex.
 - `weekday_quiz.py` — which weekday was a given date?
+- `modulo_quiz.py` — remainders of small division problems.
+- `square_quiz.py` — squares up to 25 and cubes up to 10.
+- `percent_quiz.py` — percentage-of questions.
