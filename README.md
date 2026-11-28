@@ -68,3 +68,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [esolangs](mini/esolangs) | 3 |
 | [networking](mini/networking) | 3 |
 | [recursion](mini/recursion) | 3 |
+| [noise](mini/noise) | 3 |
