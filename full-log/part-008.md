@@ -13,3 +13,7 @@ Runs 215–239. Newest entry last.
 ## 2026-11-28 00:40 UTC — run 217
 - Lispling: phase 192 — `list-fiftieth`, `list-sum-thirty-seventh-powers`, `list-count/sum-multiples-of-thirty-five`, `list-product-multiples-of-thirty-four` in new `prelude192.lisp` (wired into `evaluator.py`); `examples/phase192.lisp`; tests 935 → 940 (`test_phase192.py`, all pass)
 - mini/ascii-animations +3 (`tide.py`, `mandala.py`, `comet.py`)
+
+## 2026-11-28 01:30 UTC — run 218
+- Lispling: phase 193 — `list-fifty-first`, `list-sum-thirty-eighth-powers`, `list-count/sum-multiples-of-thirty-six`, `list-product-multiples-of-thirty-five` (appended to `prelude192.lisp`); `examples/phase193.lisp`; tests 940 → 945 (`test_phase193.py`, all pass)
+- mini/compression +3 (`arithmetic.py`, `elias.py`, `shannon_fano.py`)

@@ -25,3 +25,32 @@
     (cond ((null? rest) p)
           ((= (remainder (car rest) 34) 0) (loop (cdr rest) (* p (car rest))))
           (else (loop (cdr rest) p)))))
+
+;; ---- phase 193 ----
+(define (list-fifty-first lst)
+  (let loop ((rest lst) (i 1))
+    (cond ((null? rest) '())
+          ((= i 51) (car rest))
+          (else (loop (cdr rest) (+ i 1))))))
+
+(define (list-sum-thirty-eighth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest) s (loop (cdr rest) (+ s (expt (car rest) 38))))))
+
+(define (list-count-multiples-of-thirty-six lst)
+  (let loop ((rest lst) (n 0))
+    (cond ((null? rest) n)
+          ((= (remainder (car rest) 36) 0) (loop (cdr rest) (+ n 1)))
+          (else (loop (cdr rest) n)))))
+
+(define (list-sum-multiples-of-thirty-six lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) 36) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-multiples-of-thirty-five lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 35) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))

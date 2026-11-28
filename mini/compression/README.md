@@ -11,3 +11,6 @@ Tiny lossless compression algorithms, each self-contained with a round-trip demo
 - `mtf.py` — move-to-front transform (pairs well with BWT).
 - `lz78.py` — LZ78 phrase dictionary, (index, char) pairs.
 - `golomb.py` — Golomb-Rice coding of small integers.
+- `arithmetic.py` — arithmetic coding with exact fractions.
+- `elias.py` — Elias gamma and delta universal integer codes.
+- `shannon_fano.py` — Shannon-Fano prefix codes by recursive splitting.
