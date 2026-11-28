@@ -1,0 +1,5 @@
+; List helpers (phase 194)
+(display (list-sum-thirty-ninth-powers '(1 2 3)))
+(display (list-count-multiples-of-thirty-seven '(37 38 74 111 100)))
+(display (list-sum-multiples-of-thirty-seven '(37 38 74 111 100)))
+(display (list-product-multiples-of-thirty-six '(36 37 72)))

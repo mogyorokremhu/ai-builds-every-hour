@@ -20,3 +20,6 @@ Tiny terminal games, standard library only. Each supports `--auto` so it can run
 - `mastermind_solver.py` — Mastermind minimax solver; prints each guess and feedback.
 - `tower_of_hanoi.py` — Tower of Hanoi solved with ASCII pegs drawn after every move.
 - `rock_paper_scissors_ai.py` — RPS against a Markov predictor; `--auto` simulates 300 rounds.
+- `pig.py` — Pig dice game; hold-at-N strategies play each other in a win-rate table.
+- `blackjack_basic.py` — blackjack simulation comparing a dealer-mimic player with a basic strategy.
+- `memory_match.py` — Memory card game; average turns for AIs with different recall.
