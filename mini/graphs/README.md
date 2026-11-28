@@ -11,3 +11,6 @@ Classic graph algorithms, each self-contained and runnable.
 - `prim_mst.py` — Prim's minimum spanning tree with a heap.
 - `bellman_ford.py` — Bellman-Ford with negative edges and negative-cycle detection.
 - `bipartite.py` — bipartite check via BFS 2-colouring with a conflicting-edge witness.
+- `articulation_points.py` — cut vertices via Tarjan's low-link DFS.
+- `scc_tarjan.py` — strongly connected components of a digraph (Kosaraju).
+- `euler_path.py` — Eulerian path/circuit with Hierholzer's algorithm.
