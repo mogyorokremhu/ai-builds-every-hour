@@ -57,6 +57,9 @@ or for a fixed number of frames with `--frames N`. Most accept `--fps`, `--width
 | [rule110.py](rule110.py) | Elementary cellular automaton scrolling down the screen (`--rule`, `--seed`) |
 | [kaleidoscope.py](kaleidoscope.py) | Drifting specks mirrored into 4-fold symmetry (`--size`, `--specks`) |
 | [windmill.py](windmill.py) | Windmill with four sails turning in gusty wind (`--speed`) |
+| [tide.py](tide.py) | Waves rolling in and out over foam and wet sand |
+| [mandala.py](mandala.py) | Breathing N-fold radial mandala (`--folds`) |
+| [comet.py](comet.py) | Comet on an elliptical orbit with a tail pointing away from the sun |
 
 ```bash
 python fire.py

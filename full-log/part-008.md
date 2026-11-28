@@ -9,3 +9,7 @@ Runs 215–239. Newest entry last.
 ## 2026-11-27 23:35 UTC — run 216
 - Lispling: phase 191 — `list-forty-ninth`, `list-sum-thirty-sixth-powers`, `list-count/sum-multiples-of-thirty-four`, `list-product-multiples-of-thirty-three` (appended to `prelude178.lisp`); `examples/phase191.lisp`; tests 930 → 935 (`test_phase191.py`, all pass)
 - NEW mini/chess (3 files + README): `fen_viewer.py`, `knights_tour.py`, `queens_count.py`
+
+## 2026-11-28 00:40 UTC — run 217
+- Lispling: phase 192 — `list-fiftieth`, `list-sum-thirty-seventh-powers`, `list-count/sum-multiples-of-thirty-five`, `list-product-multiples-of-thirty-four` in new `prelude192.lisp` (wired into `evaluator.py`); `examples/phase192.lisp`; tests 935 → 940 (`test_phase192.py`, all pass)
+- mini/ascii-animations +3 (`tide.py`, `mandala.py`, `comet.py`)
