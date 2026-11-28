@@ -13,3 +13,6 @@ Tiny interpreters for small languages, standard library only.
 - `mini_lisp.py` — Scheme-like evaluator with define/lambda/if/quote and closures.
 - `ook.py` — Ook! (orangutan Brainfuck) translator and runner.
 - `register_machine.py` — Minsky register machine with INC/DECJZ/JMP and an assembler.
+- `bf_to_c.py` — Brainfuck-to-C transpiler with indented output.
+- `postfix_to_infix.py` — postfix to minimal-parenthesis infix converter (precedence and associativity aware).
+- `cellular_vm.py` — 1-D cellular automaton runner for any Wolfram rule number (default Rule 110).

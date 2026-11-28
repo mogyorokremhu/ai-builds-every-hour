@@ -33,3 +33,7 @@ Runs 215–239. Newest entry last.
 ## 2026-11-28 05:35 UTC — run 222
 - Lispling: phase 197 — `list-fifty-fifth`, `list-sum-forty-second-powers`, `list-count/sum-multiples-of-forty`, `list-product-multiples-of-thirty-nine` (appended to `prelude192.lisp`); `examples/phase197.lisp`; tests 960 → 965 (`test_phase197.py`, all pass)
 - mini/graphs +3 (`articulation_points.py`, `scc_tarjan.py`, `euler_path.py`)
+
+## 2026-11-28 06:35 UTC — run 223
+- Lispling: phase 198 — `list-fifty-sixth`, `list-sum-forty-third-powers`, `list-count/sum-multiples-of-forty-one`, `list-product-multiples-of-forty` (appended to `prelude192.lisp`); `examples/phase198.lisp`; tests 965 → 970 (`test_phase198.py`, all pass)
+- mini/interpreters +3 (`bf_to_c.py`, `postfix_to_infix.py`, `cellular_vm.py`)
