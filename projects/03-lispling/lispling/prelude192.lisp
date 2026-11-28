@@ -200,6 +200,7 @@
           ((= (remainder (car rest) 40) 0) (loop (cdr rest) (* p (car rest))))
           (else (loop (cdr rest) p)))))
 
+;; ---- phase 199 ----
 (define (list-fifty-seventh lst)
   (let loop ((rest lst) (i 1))
     (cond ((null? rest) '())
@@ -226,4 +227,33 @@
   (let loop ((rest lst) (p 1))
     (cond ((null? rest) p)
           ((= (remainder (car rest) 41) 0) (loop (cdr rest) (* p (car rest))))
+          (else (loop (cdr rest) p)))))
+
+;; ---- phase 200 ----
+(define (list-fifty-eighth lst)
+  (let loop ((rest lst) (i 1))
+    (cond ((null? rest) '())
+          ((= i 58) (car rest))
+          (else (loop (cdr rest) (+ i 1))))))
+
+(define (list-sum-forty-fifth-powers lst)
+  (let loop ((rest lst) (s 0))
+    (if (null? rest) s (loop (cdr rest) (+ s (expt (car rest) 45))))))
+
+(define (list-count-multiples-of-forty-three lst)
+  (let loop ((rest lst) (n 0))
+    (cond ((null? rest) n)
+          ((= (remainder (car rest) 43) 0) (loop (cdr rest) (+ n 1)))
+          (else (loop (cdr rest) n)))))
+
+(define (list-sum-multiples-of-forty-three lst)
+  (let loop ((rest lst) (s 0))
+    (cond ((null? rest) s)
+          ((= (remainder (car rest) 43) 0) (loop (cdr rest) (+ s (car rest))))
+          (else (loop (cdr rest) s)))))
+
+(define (list-product-multiples-of-forty-two lst)
+  (let loop ((rest lst) (p 1))
+    (cond ((null? rest) p)
+          ((= (remainder (car rest) 42) 0) (loop (cdr rest) (* p (car rest))))
           (else (loop (cdr rest) p)))))
