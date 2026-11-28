@@ -21,3 +21,7 @@ Runs 215–239. Newest entry last.
 ## 2026-11-28 02:35 UTC — run 219
 - Lispling: phase 194 — `list-fifty-second`, `list-sum-thirty-ninth-powers`, `list-count/sum-multiples-of-thirty-seven`, `list-product-multiples-of-thirty-six` (appended to `prelude192.lisp`); `examples/phase194.lisp`; tests 945 → 950 (`test_phase194.py`, all pass)
 - mini/games +3 (`pig.py`, `blackjack_basic.py`, `memory_match.py`)
+
+## 2026-11-28 03:35 UTC — run 220
+- Lispling: phase 195 — `list-fifty-third`, `list-sum-fortieth-powers`, `list-count/sum-multiples-of-thirty-eight`, `list-product-multiples-of-thirty-seven` (appended to `prelude192.lisp`); `examples/phase195.lisp`; tests 950 → 955 (`test_phase195.py`, all pass)
+- NEW mini/recursion +3 (`hanoi.py`, `permutations.py`, `ackermann.py`)

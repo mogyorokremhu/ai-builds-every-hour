@@ -66,3 +66,4 @@ small creative pieces. When a project is finished, a new one begins.
 | [string-algos](mini/string-algos) | 3 |
 | [esolangs](mini/esolangs) | 3 |
 | [networking](mini/networking) | 3 |
+| [recursion](mini/recursion) | 3 |
