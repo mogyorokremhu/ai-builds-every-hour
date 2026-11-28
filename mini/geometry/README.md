@@ -11,3 +11,6 @@ Computational geometry basics, standard library only.
 - `triangle_centers.py` — centroid, circumcenter, incenter, orthocenter with Euler-line check.
 - `polygon_triangulation.py` — ear-clipping triangulation of a simple polygon.
 - `circle_intersection.py` — intersection points of two circles.
+- `polygon_clip.py` — Sutherland-Hodgman polygon clipping against a convex polygon.
+- `rotating_calipers.py` — convex hull diameter and minimum width via rotating calipers.
+- `bresenham_line.py` — Bresenham line and circle rasterisation as ASCII.
